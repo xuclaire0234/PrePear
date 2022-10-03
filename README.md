@@ -1,2 +1,2 @@
-# 301-Project
-CMPUT 301 Project
+# PrePear
+Fall 2022 CMPUT 301 Project
