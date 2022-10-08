@@ -17,3 +17,5 @@ Jingyi Xu
 Jiayin He
 
 Yingyue Cao
+
+This is the repository containing our project.
