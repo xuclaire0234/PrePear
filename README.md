@@ -7,3 +7,4 @@ An Android app to assist the user's meal planning, allows one to track their foo
 Create by 
 
 Shihao Liu
+Marafi Mergani
