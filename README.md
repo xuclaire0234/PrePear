@@ -6,16 +6,18 @@ This is the repository containing our project.
 
 An Android app to assist the user's meal planning, allows one to track their food storage, record their recipes, plan their meals for several days, and prepare shopping lists.
 
-Create by 
 
-Shihao Liu
 
-Marafi Mergani
+**Create by**
 
-Jamie Lee
+* Shihao Liu
 
-Jingyi Xu
+* Marafi Mergani
 
-Jiayin He
+* Jamie Lee
 
-Yingyue Cao
+* Jingyi Xu
+
+* Jiayin He
+
+* Yingyue Cao
