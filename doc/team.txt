@@ -1,4 +1,4 @@
-CCID GitHub UserName
+CCID GitHub_UserName
 yingyue3 yingyue3
 shihao8 MichaelLsh
 jungeun4 jamielee0629
