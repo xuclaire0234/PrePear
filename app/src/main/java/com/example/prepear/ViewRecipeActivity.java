@@ -3,10 +3,15 @@ package com.example.prepear;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -17,14 +22,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ViewRecipeActivity extends AppCompatActivity {
+public class ViewRecipeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     ListView recipeList;
     CustomRecipeList recipeAdapter;
     ArrayList<Recipe> recipeDataList;
     Integer sortItemRecipe = 0;
-
-    String[] sortItemsRecipe = {"title", "preparation time", "number of servings", "recipe category"};
+    Integer recipePosition = -1;
 
 
     @Override
@@ -32,14 +36,54 @@ public class ViewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
-        recipeDataList = new ArrayList<>();
-        recipeAdapter = new CustomRecipeList(this, recipeDataList);
+        final Spinner sortItemSpinner;
+        final Button mainPage;
+        final Button viewIngredients;
+        final Button viewMealPlan;
+        final Button viewShoppingList;
+        final Button addRecipe;
+        final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
 
 
         final String TAG = "Recipe";
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("Recipes");
+
+
+        recipeDataList = new ArrayList<>();
+        recipeAdapter = new CustomRecipeList(this, recipeDataList);
+        recipeList.setAdapter(recipeAdapter);
+
+        addRecipe = null; // set button, change later
+        addRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipePosition = -1;
+                // Intent intent = new Intent(ViewRecipeActivity.this,AddRecipeActivity.class);
+                // startActivity(intent);
+            }
+        });
+
+        recipeList = null; // set ListView, change later
+        recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                recipePosition = i;
+                Recipe recipe;
+                recipe = recipeAdapter.getItem(i);
+                // Intent intent = new Intent(ViewRecipeActivity.this,EditRecipeActivity.class);
+                // intent.putExtra("recipeList", recipe);
+                // startActivity(intent);
+            }
+        });
+
+        sortItemSpinner = null; // set to null first, change next.
+        sortItemSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sortItemSpinnerContent);
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sortItemSpinner.setAdapter(ad);
 
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -64,4 +108,13 @@ public class ViewRecipeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        sortItemRecipe = i;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
