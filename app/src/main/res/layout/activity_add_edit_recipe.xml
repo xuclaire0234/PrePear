@@ -8,45 +8,49 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="197dp"
-        android:scaleType="center"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        android:cropToPadding="true"
+        android:background="@drawable/below"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        tools:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit_image_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_launcher_foreground"
         app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintRight_toRightOf="@id/imageView"/>
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        app:srcCompat="@drawable/ic_baseline_cloud_upload_24" />
 
     <LinearLayout
         android:id="@+id/title_LinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title: "
-            android:textSize="16sp"/>
+            android:text="Title:"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/title_EditText"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:ems="10"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,26 +58,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_LinearLayout">
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preparation Time (/min): "
-            android:textSize="16sp"/>
+            android:text="Preparation Time (/min):"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/preparation_time_EditText"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:ems="10"
             android:inputType="number"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -81,26 +85,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preparation_time_LinearLayout">
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number of Servings: "
-            android:textSize="16sp"/>
+            android:text="Number of Servings:"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/number_of_servings_EditText"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:ems="10"
             android:inputType="number"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -108,25 +112,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/number_of_servings_LinearLayout">
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recipe Category: "
-            android:textSize="16sp"/>
+            android:text="Recipe Category:"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/recipe_category_EditText"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:ems="10"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -134,60 +138,60 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout">
 
         <TextView
             android:id="@+id/textView5"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comments: "
-            android:textSize="16sp"/>
+            android:text="Comments:"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/comments_EditText"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:ems="10"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingredients: "
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Ingredients:"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comments_LinearLayout"
-        android:textSize="16sp"/>
+        app:layout_constraintTop_toBottomOf="@+id/comments_LinearLayout" />
 
     <Button
         android:id="@+id/add_ingredient_in_recipe_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="+ Add Ingredient"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
+        android:text="+ Add Ingredient"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        android:textSize="16sp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <ListView
         android:id="@+id/ingredient_in_recipe_ListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_ingredient_in_recipe_button"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/commit_button"
-        android:textSize="16sp" >
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_ingredient_in_recipe_button">
 
     </ListView>
 
@@ -195,23 +199,23 @@
         android:id="@+id/commit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Commit"
-        android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Commit"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:textSize="16sp"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Cancel"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:textSize="16sp"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
