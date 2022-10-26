@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class CustomRecipeList extends ArrayAdapter<Recipe> implements SortRecipe {
+public class CustomRecipeList extends ArrayAdapter<Recipe> {
     private ArrayList<Recipe> recipes;
     private Context context;
     private int sortItemRecipe = 0;
@@ -26,12 +26,11 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> implements SortRecipe
     }
 
 
-    @Override
     public int getSortItemRecipe() {
         return this.sortItemRecipe;
     }
+    public void setSortItemRecipe(int index) {this.sortItemRecipe = index;}
 
-    @Override
     public void sortRecipe(int index) {
         this.sortItemRecipe = index;
         if (index == 0) {
@@ -72,7 +71,7 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> implements SortRecipe
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.content_view_recipe, parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.content_recipe, parent,false);
         }
 
         Recipe recipe = recipes.get(position);
@@ -84,9 +83,9 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> implements SortRecipe
         if (this.sortItemRecipe == 0) {
             sortValue.setText("");
         }else if (this.sortItemRecipe == 1) {
-            sortValue.setText(recipe.getPreparationTime());
+            sortValue.setText(String.valueOf(recipe.getPreparationTime()));
         }else if (this.sortItemRecipe == 2) {
-            sortValue.setText(recipe.getNumberOfServings());
+            sortValue.setText(String.valueOf(recipe.getNumberOfServings()));
         }else if (this.sortItemRecipe == 3) {
             sortValue.setText(recipe.getRecipeCategory());
         }

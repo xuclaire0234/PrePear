@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,10 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ViewRecipeListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -33,33 +36,39 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     Integer sortItemRecipe = 0;
     Integer recipePosition = -1;
     int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
+    final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_recipe);
+        setContentView(R.layout.activity_view_recipe_list);
 
         final Spinner sortItemSpinner;
-        final Button mainPage;
-        final Button viewIngredients;
-        final Button viewMealPlan;
-        final Button viewShoppingList;
-        final Button addRecipe;
-        final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
+        final ImageButton mainPage;
+        final ImageButton viewIngredients;
+        final ImageButton viewMealPlan;
+        final ImageButton viewShoppingList;
+        final FloatingActionButton addRecipe;
 
 
-        final String TAG = "Recipe";
+        final String TAG = "Recipes";
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("Recipes");
 
+        sortItemSpinner = findViewById(R.id.sort_spinner);
+        viewIngredients = findViewById(R.id.ingredient_storage_button);
+        mainPage = findViewById(R.id.home_button);
+        viewMealPlan = findViewById(R.id.meal_planner_button);
+        viewShoppingList = findViewById(R.id.shopping_list_button);
+        addRecipe = findViewById(R.id.add_recipe_button);
+        recipeList = findViewById(R.id.recipe_listview);
 
         recipeDataList = new ArrayList<>();
         recipeAdapter = new CustomRecipeList(this, recipeDataList);
         recipeList.setAdapter(recipeAdapter);
 
-        addRecipe = null; // set button, change later
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +78,6 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
         });
 
-        recipeList = null; // set ListView, change later
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -81,9 +89,8 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
         });
 
-        sortItemSpinner = null; // set to null first, change next.
         sortItemSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sortItemSpinnerContent);
+        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         sortItemSpinner.setAdapter(ad);
@@ -94,27 +101,31 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     FirebaseFirestoreException error) {
                 // Clear the old list
                 recipeDataList.clear();
-                sortItemRecipe = recipeAdapter.getSortItemRecipe();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time")));
                     String title = doc.getId();
-                    Integer preparationTime = (Integer) doc.getData().get("Preparation Time");
-                    Integer numberOfServings = (Integer) doc.getData().get("Number of Servings");
+                    Number preparationTime = (Number) doc.getData().get("Preparation Time");
+                    Number numberOfServings = (Number) doc.getData().get("Number of Servings");
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
-                    ArrayList<IngredientInRecipe> ingredients = (ArrayList<IngredientInRecipe>) doc.getData().get("Ingredients");
                     Uri imageURI = (Uri) doc.getData().get("ImageURI");
-                    recipeDataList.add(new Recipe(imageURI, title, preparationTime, numberOfServings, recipeCategory, comments, ingredients));
+                    //ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) doc.getData().get("Ingredients");
+                    recipeDataList.add(new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments)
+
+                    );
                 }
-                recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
                 recipeAdapter.sortRecipe(sortItemRecipe);
+                recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         sortItemRecipe = i;
+        recipeAdapter.sortRecipe(sortItemRecipe);
+        recipeAdapter.notifyDataSetChanged();
     }
 
     @Override
