@@ -16,13 +16,14 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import javax.annotation.Nullable;
 
 /*
 
  */
-public class RecipeEditIngredientFragment {
+public class RecipeEditIngredientFragment extends DialogFragment {
     // declare variables
     private EditText descriptionText;
     private EditText amountText;
