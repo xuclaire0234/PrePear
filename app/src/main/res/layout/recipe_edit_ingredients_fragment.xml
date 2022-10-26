@@ -127,7 +127,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="181dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="1dp"
             android:backgroundTint="@color/green_pear"
             android:text="Cancel"
             android:textColor="@color/black" />
@@ -139,6 +139,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:textColor="@color/black"
+            android:layout_marginBottom="1dp"
             android:backgroundTint="@color/green_pear"
             android:text="Confirm" />
 
@@ -146,7 +147,9 @@
             android:id="@+id/delete_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom|start"
+            android:layout_marginBottom="1dp"
             android:backgroundTint="@color/green_pear"
             android:text="Delete"
             android:textColor="@color/black" />
