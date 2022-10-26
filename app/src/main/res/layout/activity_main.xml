@@ -33,8 +33,15 @@
             android:text="Add City"></Button>
 
     </LinearLayout>
+    <Button
+        android:id="@+id/view_recipe_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "View Recipe">
+    </Button>
     <ListView
         android:id="@+id/city_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

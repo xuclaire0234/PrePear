@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // declare new added
         final String TAG = "Sample";
         Button addCityButton;
+        Button viewRecipeButton;
         final EditText addCityEditText;
         final EditText addProvinceEditText;
         FirebaseFirestore db;
@@ -108,6 +110,15 @@ public class MainActivity extends AppCompatActivity {
                     addCityEditText.setText("");
                     addProvinceEditText.setText("");
                 }
+            }
+        });
+
+        viewRecipeButton = findViewById(R.id.view_recipe_button);
+        viewRecipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ViewRecipeActivity.class);
+                startActivity(intent);
             }
         });
 

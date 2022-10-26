@@ -10,7 +10,7 @@ public class Recipe {
     String comments;
     ArrayList<Ingredient> listOfIngredients;
 
-    public Recipe(String title, Integer preparationTime,Integer numberOfServings, String recipeCategory, String comments, ArrayList<Ingredient> listOfIngredients) {
+    public Recipe(String title, Integer preparationTime,Integer numberOfServings, String recipeCategory, String comments) {
         this.title = title;
         this.preparationTime = preparationTime;
         this.numberOfServings = numberOfServings;
