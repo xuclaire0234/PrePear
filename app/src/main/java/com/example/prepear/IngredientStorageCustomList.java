@@ -63,7 +63,7 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
     }
 
     /*method comment*/
-    public void sortInStorageIngredients(){
+    public void sortInStorageIngredients(String userSortingChoice){
 
     }
 }
