@@ -8,8 +8,14 @@
 package com.example.prepear;
 
 
+import java.util.ArrayList;
 
 /**/
 public class IngredientStorageController {
+    private ArrayList<IngredientInStorage> IngredientStorageDataList;
 
+    /**/
+    public void sortIngredients() {
+
+    }
 }

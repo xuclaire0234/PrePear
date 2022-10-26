@@ -11,4 +11,10 @@ package com.example.prepear;
 
 /**/
 public class IngredientInStorage extends Ingredient{
+
+    public IngredientInStorage(String briefDescription, int amount, int unit, String ingredientCategory) {
+        super(briefDescription, amount, unit, ingredientCategory);
+    }
+
+
 }
