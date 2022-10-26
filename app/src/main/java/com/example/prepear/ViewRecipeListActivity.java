@@ -3,6 +3,7 @@ package com.example.prepear;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -44,9 +46,6 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         final ImageButton viewMealPlan;
         final ImageButton viewShoppingList;
         final FloatingActionButton addRecipe;
-
-        final TextView testForSpinner;
-        testForSpinner = findViewById(R.id.testSpinner);
 
 
         final String TAG = "Recipes";
@@ -88,7 +87,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         });
 
         sortItemSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sortItemSpinnerContent);
+        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         sortItemSpinner.setAdapter(ad);
@@ -99,7 +98,6 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     FirebaseFirestoreException error) {
                 // Clear the old list
                 recipeDataList.clear();
-                // sortItemRecipe = recipeAdapter.getSortItemRecipe();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time")));
                     String title = doc.getId();
@@ -108,22 +106,26 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
                     //ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) doc.getData().get("Ingredients");
-                    recipeDataList.add(new Recipe(title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments));
+                    recipeDataList.add(new Recipe(title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments)
+
+                    );
                 }
-                recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
                 recipeAdapter.sortRecipe(sortItemRecipe);
-                testForSpinner.setText(String.valueOf(sortItemRecipe));
+                recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        this.sortItemRecipe = i;
-
+        sortItemRecipe = i;
+        recipeAdapter.sortRecipe(sortItemRecipe);
+        recipeAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
