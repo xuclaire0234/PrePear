@@ -77,14 +77,14 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // new AddEditIngredientInRecipeFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                new RecipeAddIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
             }
         });
 
         ingredientInRecipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // AddEditIngredientInRecipeFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
+                RecipeEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
             }
         });
 
