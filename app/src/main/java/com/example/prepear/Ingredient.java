@@ -3,10 +3,10 @@ package com.example.prepear;
 public class Ingredient {
     String briefDescription;
     Integer amount;
-    Integer unit;
+    String unit;
     String ingredientCategory;
 
-    public Ingredient(String briefDescription, int amount, int unit, String ingredientCategory) {
+    public Ingredient(String briefDescription, int amount, String unit, String ingredientCategory) {
         this.briefDescription = briefDescription;
         this.amount = amount;
         this.unit = unit;
@@ -29,11 +29,11 @@ public class Ingredient {
         this.amount = amount;
     }
 
-    public Integer getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Integer unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 

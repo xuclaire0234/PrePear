@@ -16,12 +16,16 @@ public class Recipe {
         this.numberOfServings = numberOfServings;
         this.recipeCategory = recipeCategory;
         this.comments = comments;
-        this.listOfIngredients = listOfIngredients;
+        this.listOfIngredients = new ArrayList<Ingredient>();
     }
 
 
     public Ingredient getIngredientsByIndex(Integer indexOfIngredient) {
         return this.listOfIngredients.get(indexOfIngredient);
+    }
+
+    public int getIngredientsSize(){
+        return this.listOfIngredients.size();
     }
 
     public void setIngredient(Ingredient ingredient){

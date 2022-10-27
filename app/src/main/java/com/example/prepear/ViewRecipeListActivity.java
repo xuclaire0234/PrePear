@@ -1,5 +1,6 @@
 package com.example.prepear;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -33,6 +36,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     Integer sortItemRecipe = 0;
     Integer recipePosition = -1;
     final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
+    Recipe newRecipe;
 
 
     @Override
@@ -98,6 +102,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     FirebaseFirestoreException error) {
                 // Clear the old list
                 recipeDataList.clear();
+
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time")));
                     String title = doc.getId();
@@ -106,10 +111,24 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
                     //ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) doc.getData().get("Ingredients");
-                    recipeDataList.add(new Recipe(title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments)
+                    newRecipe = new Recipe(title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
+                    final CollectionReference innerIngredientCollection = collectionReference.document(title).collection("Ingredient");
+                    innerIngredientCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            for (QueryDocumentSnapshot document : value){
+                                String briefDescription = document.getId();
+                                Number amount = (Number) document.getData().get("Amount");
+                                String unit = (String) document.getData().get("Unit");
+                                String ingredientCategory = (String) document.getData().get("Ingredient Category");
+                                newRecipe.setIngredient(new Ingredient(briefDescription,amount.intValue(),unit,ingredientCategory));
 
-                    );
+                            }
+                        }
+                    });
+                    recipeDataList.add(newRecipe);
                 }
+
                 recipeAdapter.sortRecipe(sortItemRecipe);
                 recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
@@ -122,6 +141,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         sortItemRecipe = i;
         recipeAdapter.sortRecipe(sortItemRecipe);
         recipeAdapter.notifyDataSetChanged();
+
     }
 
     @Override
