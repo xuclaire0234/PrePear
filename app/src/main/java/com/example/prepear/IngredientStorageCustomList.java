@@ -21,7 +21,9 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-/* CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs */
+/* CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
+* Substitution of IngredientStorageController Class
+* */
 public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorage> {
 
     private ArrayList<IngredientInStorage> ingredientsInStorage; // holds for ingredients in storage entries
@@ -63,7 +65,22 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
     }
 
     /*method comment*/
-    public void sortInStorageIngredients(String userSortingChoice){
+    public void SortInStorageIngredients(String userSelectedSortChoice){
+        // the in-storage ingredient in default order iff userSelectedSortChoice == " "
+        if (userSelectedSortChoice == " "){
 
+        } else if  (userSelectedSortChoice == "description(ascending)") {
+
+        } else if (userSelectedSortChoice == "description(descending)") {
+
+        } else if (userSelectedSortChoice ==  "best before (oldest to newest)") {
+
+        } else if (userSelectedSortChoice ==  "best before (newest to oldest)") {
+
+        } else if (userSelectedSortChoice == "location(ascending by default)") {
+
+        } else if (userSelectedSortChoice == "category") {
+
+        }
     }
 }

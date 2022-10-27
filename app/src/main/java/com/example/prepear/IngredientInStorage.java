@@ -9,12 +9,17 @@
 package com.example.prepear;
 
 
+
 /**/
 public class IngredientInStorage extends Ingredient{
+    private String bestBeforeDate;
+    private String location;
 
-    public IngredientInStorage(String briefDescription, int amount, int unit, String ingredientCategory) {
+    public IngredientInStorage(String briefDescription, String bestBeforeDate, String location, String unit, int amount, String ingredientCategory) {
         super(briefDescription, amount, unit, ingredientCategory);
-    }
+        this.bestBeforeDate = bestBeforeDate;
+        this.ingredientCategory = ingredientCategory;
 
+    }
 
 }

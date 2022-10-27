@@ -8,8 +8,10 @@
 
 package com.example.prepear;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,8 +20,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**/
 public class ViewIngredientStorage extends AppCompatActivity implements
@@ -28,11 +38,14 @@ public class ViewIngredientStorage extends AppCompatActivity implements
     private ListView ingredientStorageList;
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
-    private String[] userSortChoices = {"description(ascending)","description(descending)",
+    private String[] userSortChoices = {" ","description(ascending)","description(descending)",
                                         "best before (oldest to newest)", "best before (newest to oldest)",
                                         "location(ascending by default)", "category"}; // used for Spinner
-    String userSelectedSortChoice;
+    private String userSelectedSortChoice;
 
+    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "IngredientsInStorage";
+    FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
+    final CollectionReference collectionReferenceForInStorageIngredients = dbForInStorageIngredients.collection(IN_STORAGE_INGREDIENTS_COLLECTION_NAME);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +98,33 @@ public class ViewIngredientStorage extends AppCompatActivity implements
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
 
+        collectionReferenceForInStorageIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException error) {
+                ingredientStorageDataList.clear(); // clear the previous data for storing new data
 
+                for (QueryDocumentSnapshot doc: value){
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(doc.getData().get("Description")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(doc.getData().get("Best Before Date")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(doc.getData().get("Category")));
+
+                    String description = doc.getId();
+                    String bestBeforeDate = (String) doc.getData().get("Best Before Date");
+                    String location = (String) doc.getData().get("Location");
+                    String unit = (String) doc.getData().get("Unit");
+                    int amount = (int) doc.getData().get("Amount");
+                    String category = (String) doc.getData().get("Category");
+                    ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, amount, category));
+
+                    SortInStorageIngredients(userSelectedSortChoice);
+                    ingredientStorageList.notifyAll();
+                }
+            }
+        });
     }
+
+
 
     /**
      * <p>Callback method to be invoked when an item in this view has been
@@ -106,6 +144,7 @@ public class ViewIngredientStorage extends AppCompatActivity implements
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         userSelectedSortChoice = userSortChoices[position];
         SortInStorageIngredients(userSelectedSortChoice);
+        ingredientStorageListAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -120,8 +159,54 @@ public class ViewIngredientStorage extends AppCompatActivity implements
 
     }
 
-    public void SortInStorageIngredients(String userSelectedSortChoice){
 
+    public void SortInStorageIngredients(String userSelectedSortChoice){
+        // the in-storage ingredient in default order iff userSelectedSortChoice == " "
+        if (userSelectedSortChoice == " "){
+
+        } else if  (userSelectedSortChoice == "description(ascending)") {
+            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
+                @Override
+                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
+                    return ingredient1.getBriefDescription().compareTo(ingredient2.getBriefDescription());
+                }
+            });
+        } else if (userSelectedSortChoice == "description(descending)") {
+            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
+                @Override
+                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
+                    return ingredient2.getBriefDescription().compareTo(ingredient1.getBriefDescription());
+                }
+            });
+        } else if (userSelectedSortChoice ==  "best before (oldest to newest)") {
+            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
+                @Override
+                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
+                    return ingredient1.getBestBeforeDate().compareTo(ingredient2.getBestBeforeDate());
+                }
+            });
+        } else if (userSelectedSortChoice ==  "best before (newest to oldest)") {
+            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
+                @Override
+                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
+                    return ingredient2.getBestBeforeDate().compareTo(ingredient1.getBestBeforeDate());
+                }
+            });
+        } else if (userSelectedSortChoice == "location(ascending by default)") {
+            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
+                @Override
+                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
+                    return ingredient2.getIngredientLocation().compareTo(ingredient1.getIngredientLocation());
+                }
+            });
+        } else if (userSelectedSortChoice == "category") {
+            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
+                @Override
+                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
+                    return ingredient2.getIngredientCategory().compareTo(ingredient1.getIngredientCategory());
+                }
+            });
+        }
     }
 }
 
