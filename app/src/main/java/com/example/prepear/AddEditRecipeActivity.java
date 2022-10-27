@@ -21,7 +21,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class AddEditRecipeActivity extends AppCompatActivity {
+public class AddEditRecipeActivity extends AppCompatActivity
+        implements RecipeAddIngredientFragment.OnFragmentInteractionListener, RecipeEditIngredientFragment.OnFragmentInteractionListener{
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
     private EditText titleEditText;
@@ -159,13 +160,18 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         imageImageView.setImageURI(currentImageURI);
     }
 
+    @Override
     public void onConfirmPressed(IngredientInRecipe ingredientToAdd) {
         ingredientInRecipeArrayAdapter.add(ingredientToAdd);
     }
 
-    public void onOkPressed() {};
-
+    @Override
     public void onDeletePressed(IngredientInRecipe ingredientToDelete) {
         ingredientInRecipeArrayAdapter.remove(ingredientToDelete);
+    }
+
+    @Override
+    public void onOkPressed(IngredientInRecipe ingredient) {
+
     }
 }

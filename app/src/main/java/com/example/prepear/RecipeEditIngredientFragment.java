@@ -81,7 +81,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
-                        Integer amount = Integer.parseInt(amountText.getText().toString());
+                        int amount = Integer.parseInt(amountText.getText().toString());
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
                         listener.onDeletePressed(new IngredientInRecipe(description, amount, unit, category));
@@ -91,7 +91,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
-                        Integer amount = Integer.parseInt(amountText.getText().toString());
+                        int amount = Integer.parseInt(amountText.getText().toString());
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
                         ingredient.setBriefDescription(description);
