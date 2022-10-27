@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,13 +14,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AddEditRecipeActivity extends AppCompatActivity {
     private ImageView imageImageView;
@@ -43,6 +50,11 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_recipe);
 
+        final String TAG = "Recipes";
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Recipes");
+
         imageImageView = findViewById(R.id.imageView);
         editImageButton = findViewById(R.id.edit_image_button);
         titleEditText = findViewById(R.id.title_EditText);
@@ -55,10 +67,14 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         commitButton = findViewById(R.id.commit_button);
         cancelButton = findViewById(R.id.cancel_button);
 
-        if (getCallingActivity().getClassName().equals("ViewRecipeActivity")) {
+        currentImageURI =Uri.parse("android.resource://com.example.prepear/" + R.drawable.ic_baseline_add_photo_alternate_24);
+
+        if (getIntent().getStringExtra("calling activity").equals("2")) {
             viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
-            currentImageURI = viewedRecipe.getImageURI();
+
+            // currentImageURI = Uri.parse(viewedRecipe.getImageURI());
             imageImageView.setImageURI(currentImageURI);
+
             titleEditText.setText(viewedRecipe.getTitle());
             preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString());
             numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
@@ -67,12 +83,11 @@ public class AddEditRecipeActivity extends AppCompatActivity {
             ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
             ingredientInRecipeDataList = new ArrayList<>();
-            ingredientInRecipeDataList.add(new IngredientInRecipe("banana", 2,
-                    "piece", "Need to be fresh."));
         }
 
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
+
 
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,34 +118,46 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Uri imageURI = currentImageURI;
+                final String imageURI = currentImageURI.toString();
                 final String title = titleEditText.getText().toString();
                 final Integer preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
                 final Integer numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
                 final String recipeCategory = recipeCategoryEditText.getText().toString();
                 final String comments = commentsEditText.getText().toString();
                 final ArrayList<IngredientInRecipe> listOfIngredients = ingredientInRecipeDataList;
+                HashMap<String, Object> data = new HashMap<>();
 
                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                         || recipeCategory.equals("") || comments.equals("")) {
                     Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
                 } else {
-                    if (getCallingActivity().getClassName().equals("ViewRecipeListActivity")) {
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra("new recipe", new Recipe(imageURI, title, preparationTime,
-                                numberOfServings, recipeCategory, comments, listOfIngredients));
-                        setResult(Activity.RESULT_OK, returnIntent);
-                        finish();
-                    } else {
-                        viewedRecipe.setImageURI(imageURI);
-                        viewedRecipe.setTitle(title);
-                        viewedRecipe.setPreparationTime(preparationTime);
-                        viewedRecipe.setNumberOfServings(numberOfServings);
-                        viewedRecipe.setRecipeCategory(recipeCategory);
-                        viewedRecipe.setComments(comments);
-                        viewedRecipe.setListOfIngredients(listOfIngredients);
-                        finish();
-                    }
+                    data.put("Preparation Time", preparationTime);
+                    // data.put("Image URI", imageURI);
+                    data.put("Number of Servings", numberOfServings);
+                    data.put("Recipe Category", recipeCategory);
+                    data.put("Comments", comments);
+
+                    collectionReference
+                            .document(title)
+                            .set(data)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d(TAG, "Data has been added successfully!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Data could not be added!" + e.toString());
+                                }
+                            });
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("new recipe", new Recipe(imageURI, title, preparationTime,
+                            numberOfServings, recipeCategory, comments));
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
                 }
             }
         });
@@ -138,7 +165,7 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getCallingActivity().getClassName().equals("ViewRecipeListActivity")) {
+                if (getIntent().getStringExtra("calling activity").equals("1")) {
                     Intent returnIntent = new Intent();
                     setResult(Activity.RESULT_CANCELED, returnIntent);
                     finish();

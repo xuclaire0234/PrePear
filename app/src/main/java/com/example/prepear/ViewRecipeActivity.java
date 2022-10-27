@@ -2,7 +2,9 @@ package com.example.prepear;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,8 +13,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -36,6 +44,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
+        final String TAG = "Recipes";
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Recipes");
+
         imageImageView = findViewById(R.id.imageView);
         titleTextView = findViewById(R.id.title_TextView);
         preparationTimeTextView = findViewById(R.id.preparation_time_TextView);
@@ -48,7 +61,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         returnButton = findViewById(R.id.return_button);
 
         viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
-        imageImageView.setImageURI(viewedRecipe.getImageURI());
+        imageImageView.setImageURI(Uri.parse("android.resource://com.example.prepear/" + R.drawable.ic_baseline_add_photo_alternate_24));
+        // imageImageView.setImageURI(Uri.parse(viewedRecipe.getImageURI()));
         titleTextView.setText(viewedRecipe.getTitle());
         preparationTimeTextView.setText(viewedRecipe.getPreparationTime().toString());
         numberOfServingsTextView.setText(viewedRecipe.getNumberOfServings().toString());
@@ -64,6 +78,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent switchActivityIntent = new Intent(ViewRecipeActivity.this, AddEditRecipeActivity.class);
                 switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
+                switchActivityIntent.putExtra("calling activity", "2");
                 startActivity(switchActivityIntent);
             }
         });
@@ -71,6 +86,21 @@ public class ViewRecipeActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                collectionReference.document(viewedRecipe.getTitle())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("delete recipe", viewedRecipe);
                 setResult(Activity.RESULT_OK, returnIntent);
