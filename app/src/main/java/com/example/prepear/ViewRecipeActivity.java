@@ -80,6 +80,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
                 switchActivityIntent.putExtra("calling activity", "2");
                 startActivity(switchActivityIntent);
+
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                finish();
             }
         });
 
