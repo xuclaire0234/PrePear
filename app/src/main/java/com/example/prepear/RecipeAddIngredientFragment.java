@@ -32,10 +32,10 @@ public class RecipeAddIngredientFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener {
-        void onConfirmPressed(Ingredient ingredient);
+        void onConfirmPressed(IngredientInRecipe ingredient);
     }
 
-    static RecipeAddIngredientFragment newInstance(Ingredient ingredient) {
+    static RecipeAddIngredientFragment newInstance(IngredientInRecipe ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
 
@@ -75,9 +75,9 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
                         Integer amount = Integer.parseInt(amountText.getText().toString());
-                        Integer unit = Integer.parseInt(unitText.getText().toString());
+                        String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
-                        listener.onConfirmPressed(new Ingredient(description, amount, unit, category));
+                        listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
                     }
                 }).create();
     }

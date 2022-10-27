@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="title_TextView" type="id" />
+    <item name="preparation_time_TextView" type="id" />
+    <item name="number_of_servings_TextView" type="id" />
+    <item name="recipe_category_TextView" type="id" />
+    <item name="comments_TextView" type="id" />
+    <item name="edit_button" type="id" />
+    <item name="return_button" type="id" />
+</resources>

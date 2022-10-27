@@ -32,11 +32,11 @@ public class RecipeEditIngredientFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener {
-        void onDeletePressed(Ingredient ingredient);
-        void onOkPressed(Ingredient ingredient);
+        void onDeletePressed(IngredientInRecipe ingredient);
+        void onOkPressed(IngredientInRecipe ingredient);
     }
 
-    static RecipeEditIngredientFragment newInstance(Ingredient ingredient) {
+    static RecipeEditIngredientFragment newInstance(IngredientInRecipe ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
 
@@ -67,7 +67,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         Bundle bundle = getArguments();
 
-        Ingredient ingredient = (Ingredient) bundle.getSerializable("ingredient");
+        IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
         amountText.setText(ingredient.getAmount());
         unitText.setText(ingredient.getUnit());
@@ -82,9 +82,9 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
                         Integer amount = Integer.parseInt(amountText.getText().toString());
-                        Integer unit = Integer.parseInt(unitText.getText().toString());
+                        String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
-                        listener.onDeletePressed(new Ingredient(description, amount, unit, category));
+                        listener.onDeletePressed(new IngredientInRecipe(description, amount, unit, category));
                     }
                 })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -92,13 +92,13 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
                         Integer amount = Integer.parseInt(amountText.getText().toString());
-                        Integer unit = Integer.parseInt(unitText.getText().toString());
+                        String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
                         ingredient.setBriefDescription(description);
                         ingredient.setAmount(amount);
                         ingredient.setUnit(unit);
                         ingredient.setIngredientCategory(category);
-                        listener.onOkPressed(new Ingredient(description, amount, unit, category));
+                        listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
                     }
                 }).create();
     }

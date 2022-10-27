@@ -1,5 +1,6 @@
 package com.example.prepear;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private ArrayList<IngredientInRecipe> ingredientInRecipeDataList;
     private Recipe viewedRecipe;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
