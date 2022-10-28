@@ -1,8 +1,10 @@
 package com.example.prepear;
 
+import java.io.Serializable;
+
 import io.grpc.internal.DnsNameResolver;
 
-public class IngredientInRecipe {
+public class IngredientInRecipe implements Serializable {
     String briefDescription;
     Integer amount;
     String unit;

@@ -39,6 +39,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     Integer sortItemRecipe = 0;
     Integer recipePosition = -1;
     int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
+    int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
 
@@ -89,7 +90,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                 Recipe viewedRecipe = recipeAdapter.getItem(i);
                 Intent intent = new Intent(ViewRecipeListActivity.this, ViewRecipeActivity.class);
                 intent.putExtra("viewed recipe", viewedRecipe);
-                startActivity(intent);
+                startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
             }
         });
 
@@ -115,7 +116,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     String comments = (String) doc.getData().get("Comments");
                     String imageURI = (String) doc.getData().get("Image URI");
                     newRecipe = new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
-                    /*
+
                     final CollectionReference innerIngredientCollection = collectionReference.document(title).collection("Ingredient");
                     innerIngredientCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
@@ -129,7 +130,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                             }
                         }
                     });
-                     */
+
                     recipeDataList.add(newRecipe);
                 }
                 recipeAdapter.sortRecipe(sortItemRecipe);
@@ -162,6 +163,12 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 // No action
+            }
+        }
+
+        if (requestCode == LAUNCH_VIEW_RECIPE_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
+                Recipe recipeToDelete = (Recipe) data.getSerializableExtra("delete recipe");
             }
         }
     }

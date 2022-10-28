@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AddEditRecipeActivity extends AppCompatActivity {
+public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEditIngredientFragment.OnFragmentInteractionListener, RecipeAddIngredientFragment.OnFragmentInteractionListener{
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
     private EditText titleEditText;
@@ -92,14 +92,14 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // new AddEditIngredientInRecipeFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                new RecipeAddIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
             }
         });
 
         ingredientInRecipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // AddEditIngredientInRecipeFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
+                RecipeEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
             }
         });
 
@@ -120,8 +120,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String imageURI = currentImageURI.toString();
                 final String title = titleEditText.getText().toString();
-                final Integer preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
-                final Integer numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
+                final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
+                final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
                 final String recipeCategory = recipeCategoryEditText.getText().toString();
                 final String comments = commentsEditText.getText().toString();
                 final ArrayList<IngredientInRecipe> listOfIngredients = ingredientInRecipeDataList;
@@ -154,8 +154,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                             });
 
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("new recipe", new Recipe(imageURI, title, preparationTime,
-                            numberOfServings, recipeCategory, comments));
+                    returnIntent.putExtra("new recipe", new Recipe(imageURI, title, preparationTime.intValue(),
+                            numberOfServings.intValue(), recipeCategory, comments));
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
@@ -188,7 +188,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         ingredientInRecipeArrayAdapter.add(ingredientToAdd);
     }
 
-    public void onOkPressed() {};
+    @Override
+    public void onOkPressed(IngredientInRecipe ingredient) {};
 
     public void onDeletePressed(IngredientInRecipe ingredientToDelete) {
         ingredientInRecipeArrayAdapter.remove(ingredientToDelete);
