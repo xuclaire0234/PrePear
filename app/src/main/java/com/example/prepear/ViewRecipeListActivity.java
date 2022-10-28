@@ -33,13 +33,14 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     Integer sortItemRecipe = 0;
     Integer recipePosition = -1;
     int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
+    int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
-
+    Recipe newRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_recipe_activity);
+        setContentView(R.layout.activity_view_recipe_list);
 
         final Spinner sortItemSpinner;
         final ImageButton mainPage;
@@ -71,6 +72,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             public void onClick(View view) {
                 recipePosition = -1;
                 Intent intent = new Intent(ViewRecipeListActivity.this, AddEditRecipeActivity.class);
+                intent.putExtra("calling activity", "1");
                 startActivityForResult(intent, LAUNCH_ADD_RECIPE_ACTIVITY);
             }
         });
@@ -82,7 +84,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                 Recipe viewedRecipe = recipeAdapter.getItem(i);
                 Intent intent = new Intent(ViewRecipeListActivity.this, ViewRecipeActivity.class);
                 intent.putExtra("viewed recipe", viewedRecipe);
-                startActivity(intent);
+                startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
             }
         });
 
@@ -98,6 +100,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     FirebaseFirestoreException error) {
                 // Clear the old list
                 recipeDataList.clear();
+
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time")));
                     String title = doc.getId();
@@ -105,17 +108,30 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     Number numberOfServings = (Number) doc.getData().get("Number of Servings");
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
-                    Uri imageURI = (Uri) doc.getData().get("ImageURI");
-                    //ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) doc.getData().get("Ingredients");
-                    recipeDataList.add(new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments)
-                    );
+                    Uri imageURI = (Uri) doc.getData().get("Image URI");
+                    newRecipe = new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
+
+                    final CollectionReference innerIngredientCollection = collectionReference.document(title).collection("Ingredient");
+                    innerIngredientCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            for (QueryDocumentSnapshot document : value) {
+                                String briefDescription = document.getId();
+                                Number amount = (Number) document.getData().get("Amount");
+                                String unit = (String) document.getData().get("Unit");
+                                String ingredientCategory = (String) document.getData().get("Ingredient Category");
+                                newRecipe.addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
+                            }
+                        }
+                    });
+
+                    recipeDataList.add(newRecipe);
                 }
                 recipeAdapter.sortRecipe(sortItemRecipe);
                 recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -133,12 +149,20 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        recipeAdapter.notifyDataSetChanged();
+
         if (requestCode == LAUNCH_ADD_RECIPE_ACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
                 Recipe recipeToAdd = (Recipe) data.getSerializableExtra("new recipe");
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 // No action
+            }
+        }
+
+        if (requestCode == LAUNCH_VIEW_RECIPE_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
+                Recipe recipeToDelete = (Recipe) data.getSerializableExtra("delete recipe");
             }
         }
     }

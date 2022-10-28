@@ -168,12 +168,16 @@
         android:id="@+id/ingredient_in_recipe_ListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:layout_marginTop="20dp"
+        tools:listitem="@android:layout/simple_list_item_1"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/edit_button"
-        android:textSize="16sp" >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintVertical_bias="0.055">
 
     </ListView>
 

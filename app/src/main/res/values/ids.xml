@@ -7,4 +7,12 @@
     <item name="comments_TextView" type="id" />
     <item name="edit_button" type="id" />
     <item name="return_button" type="id" />
+    <item name="edit_image_button" type="id" />
+    <item name="title_EditText" type="id" />
+    <item name="preparation_time_EditText" type="id" />
+    <item name="number_of_servings_EditText" type="id" />
+    <item name="recipe_category_EditText" type="id" />
+    <item name="comments_EditText" type="id" />
+    <item name="add_ingredient_in_recipe_button" type="id" />
+    <item name="commit_button" type="id" />
 </resources>

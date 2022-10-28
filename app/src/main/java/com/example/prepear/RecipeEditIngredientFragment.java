@@ -45,6 +45,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         return fragment;
     }
 
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -56,6 +57,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         }
     }
 
+    @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
