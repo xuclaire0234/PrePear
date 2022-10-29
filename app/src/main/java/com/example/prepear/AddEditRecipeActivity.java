@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,17 +91,17 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
             recipeCategoryEditText.setText(viewedRecipe.getRecipeCategory());
             commentsEditText.setText(viewedRecipe.getComments());
-            // ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
+            ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
-            // ingredientInRecipeDataList = new ArrayList<>();
+            ingredientInRecipeDataList = new ArrayList<>();
         }
 
 
-        /*
+
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
 
-         */
+
 
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             }
         });
 
-        /*
+
         ingredientInRecipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -117,7 +118,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             }
         });
 
-         */
+
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
