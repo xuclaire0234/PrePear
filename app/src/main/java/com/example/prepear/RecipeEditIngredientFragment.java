@@ -76,7 +76,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
 
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
-        amountText.setText(ingredient.getAmount());
+        amountText.setText(ingredient.getAmount().toString());
         unitText.setText(ingredient.getUnit());
         categoryText.setText(ingredient.getIngredientCategory());
 
