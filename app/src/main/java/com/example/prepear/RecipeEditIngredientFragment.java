@@ -101,7 +101,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
                         if (description.isEmpty() || amount == 0 || unit.isEmpty() || category.isEmpty()) {
-                            Toast.makeText(getActivity(), "Missing information",
+                            Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                     Toast.LENGTH_LONG).show();
                         }
                         ingredient.setBriefDescription(description);

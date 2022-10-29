@@ -85,7 +85,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                         String category = categoryText.getText().toString();
                         listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
                         if (description.isEmpty() || amount == 0 || unit.isEmpty() || category.isEmpty()) {
-                            Toast.makeText(getActivity(), "Missing information",
+                            Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
