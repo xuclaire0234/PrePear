@@ -124,15 +124,15 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                 for (int i = 0; i < recipeDataList.size(); i++) {
                     int index = i;
                     db.collection("Recipes").document(recipeDataList.get(index).getTitle()).collection("Ingredient")
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        String briefDescription = document.getId();
-                                        Number amount = (Number) document.getData().get("Amount");
-                                        String unit = (String) document.getData().get("Unit");
-                                        String ingredientCategory = (String) document.getData().get("Ingredient Category");
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    recipeDataList.get(index).deleteAllIngredients();
+                                    for (QueryDocumentSnapshot doc : value) {
+                                        String briefDescription = doc.getId();
+                                        Number amount = (Number) doc.getData().get("Amount");
+                                        String unit = (String) doc.getData().get("Unit");
+                                        String ingredientCategory = (String) doc.getData().get("Ingredient Category");
                                         recipeDataList.get(index).addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
                                     }
                                 }
