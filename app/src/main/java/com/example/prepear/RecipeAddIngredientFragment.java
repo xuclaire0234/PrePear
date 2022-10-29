@@ -1,8 +1,8 @@
 /*
-* Class Name: RecipeAddIngredientFragment
-* Version Information: Version 1.0
-* Date: Oct 26th, 2022
-* Author: Jamie Lee
+ * Class Name: RecipeAddIngredientFragment
+ * Version Information: Version 1.0
+ * Date: Oct 26th, 2022
+ * Author: Jamie Lee
  */
 package com.example.prepear;
 
@@ -74,6 +74,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
 
         return builder
                 .setView(view)
+                .setTitle("Add Ingredient")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override

@@ -41,7 +41,7 @@ public class CustomIngredientInRecipeList extends ArrayAdapter<IngredientInRecip
         TextView ingredientCategoryTextView = view.findViewById(R.id.ingredient_category_TextView);
 
         briefDescriptionTextView.setText(ingredientInRecipe.getBriefDescription());
-        amountTextView.setText(ingredientInRecipe.getAmount());
+        amountTextView.setText(ingredientInRecipe.getAmount().toString());
         unitTextView.setText(ingredientInRecipe.getUnit());
         ingredientCategoryTextView.setText(ingredientInRecipe.getIngredientCategory());
 
