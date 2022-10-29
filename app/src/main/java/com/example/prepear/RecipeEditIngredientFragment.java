@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -61,12 +62,15 @@ public class RecipeEditIngredientFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
+        TextView title = titleView.findViewById(R.id.exemptionSubHeading);
         descriptionText = view.findViewById(R.id.description_edit_text);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitText = view.findViewById(R.id.ingredient_unit_edit_text);
         categoryText = view.findViewById(R.id.ingredient_category_edit_text);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
+        title.setText("Edit Ingredient");
         Bundle bundle = getArguments();
 
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
@@ -77,9 +81,8 @@ public class RecipeEditIngredientFragment extends DialogFragment {
 
         return builder
                 .setView(view)
-                .setTitle("View/Edit Ingredient")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();

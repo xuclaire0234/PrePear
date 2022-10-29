@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -59,12 +60,15 @@ public class RecipeAddIngredientFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
+        TextView title = titleView.findViewById(R.id.exemptionSubHeading);
         descriptionText = view.findViewById(R.id.description_edit_text);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitText = view.findViewById(R.id.ingredient_unit_edit_text);
         categoryText = view.findViewById(R.id.ingredient_category_edit_text);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
+        title.setText("Add Ingredient");
         Bundle bundle = getArguments();
 
         return builder
