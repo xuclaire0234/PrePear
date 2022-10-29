@@ -2,11 +2,9 @@ package com.example.prepear;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -61,17 +60,20 @@ public class ViewRecipeActivity extends AppCompatActivity {
         returnButton = findViewById(R.id.return_button);
 
         viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
-        imageImageView.setImageURI(Uri.parse("android.resource://com.example.prepear/" + R.drawable.ic_baseline_add_photo_alternate_24));
-        // imageImageView.setImageURI(Uri.parse(viewedRecipe.getImageURI()));
+        Glide.with(ViewRecipeActivity.this)
+                .load(viewedRecipe.getImageURI()).into(imageImageView);
         titleTextView.setText(viewedRecipe.getTitle());
         preparationTimeTextView.setText(viewedRecipe.getPreparationTime().toString());
         numberOfServingsTextView.setText(viewedRecipe.getNumberOfServings().toString());
         recipeCategoryTextView.setText(viewedRecipe.getRecipeCategory());
         commentsTextView.setText(viewedRecipe.getComments());
 
+        /*
         ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
+
+         */
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
