@@ -1,39 +1,39 @@
 package com.example.prepear;
 
+import android.net.Uri;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Recipe {
+public class Recipe implements Serializable {
+    String imageURI;
     String title;
     Integer preparationTime;
     Integer numberOfServings;
     String recipeCategory;
     String comments;
-    ArrayList<Ingredient> listOfIngredients;
+    ArrayList<IngredientInRecipe> listOfIngredients;
 
-    public Recipe(String title, Integer preparationTime,Integer numberOfServings, String recipeCategory, String comments) {
+    public Recipe(String imageURI, String title, Integer preparationTime,Integer numberOfServings, String recipeCategory, String comments) {
+        this.imageURI = imageURI;
         this.title = title;
         this.preparationTime = preparationTime;
         this.numberOfServings = numberOfServings;
         this.recipeCategory = recipeCategory;
         this.comments = comments;
-        this.listOfIngredients = new ArrayList<Ingredient>();
+        this.listOfIngredients = new ArrayList<IngredientInRecipe>();
     }
 
-
-    public Ingredient getIngredientsByIndex(Integer indexOfIngredient) {
-        return this.listOfIngredients.get(indexOfIngredient);
+    public String getImageURI() {
+        return this.imageURI;
     }
 
-    public int getIngredientsSize(){
-        return this.listOfIngredients.size();
-    }
-
-    public void setIngredient(Ingredient ingredient){
-        this.listOfIngredients.add(ingredient);
+    public void setImageURI(String imageURI) {
+        this.imageURI = imageURI;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -41,7 +41,7 @@ public class Recipe {
     }
 
     public Integer getPreparationTime() {
-        return preparationTime;
+        return this.preparationTime;
     }
 
     public void setPreparationTime(Integer preparationTime) {
@@ -49,7 +49,7 @@ public class Recipe {
     }
 
     public Integer getNumberOfServings() {
-        return numberOfServings;
+        return this.numberOfServings;
     }
 
     public void setNumberOfServings(Integer numberOfServings) {
@@ -57,7 +57,7 @@ public class Recipe {
     }
 
     public String getRecipeCategory() {
-        return recipeCategory;
+        return this.recipeCategory;
     }
 
     public void setRecipeCategory(String recipeCategory) {
@@ -65,11 +65,26 @@ public class Recipe {
     }
 
     public String getComments() {
-        return comments;
+        return this.comments;
     }
 
     public void setComments(String comments) {
         this.comments = comments;
     }
-}
 
+    public ArrayList<IngredientInRecipe> getListOfIngredients() {
+        return this.listOfIngredients;
+    }
+
+    public void setListOfIngredients(ArrayList<IngredientInRecipe> listOfIngredients) {
+        this.listOfIngredients = listOfIngredients;
+    }
+
+    public IngredientInRecipe getIngredientByIndex(Integer indexOfIngredient) {
+        return this.listOfIngredients.get(indexOfIngredient);
+    }
+
+    public void addIngredientToRecipe(IngredientInRecipe ingredient){
+        this.listOfIngredients.add(ingredient);
+    }
+}

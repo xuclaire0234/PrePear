@@ -1,14 +1,18 @@
 package com.example.prepear;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,23 +75,36 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.content_view_recipe, parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.content_recipe, parent,false);
         }
 
         Recipe recipe = recipes.get(position);
 
         TextView recipeTitle = view.findViewById(R.id.recipe_text);
-        TextView sortValue = view.findViewById(R.id.sort_value_text);
+        TextView recipeNumberOfServings = view.findViewById(R.id.number_of_servings_texts_view_recipe_list);
+        TextView recipePreparationTime = view.findViewById(R.id.preparation_time_texts_view_recipe_list);
+        TextView recipeCategory = view.findViewById(R.id.recipe_category_texts_view_recipe_list);
+        ImageView recipeImageView = view.findViewById(R.id.imageView_in_recipe_list);
+
+        recipeNumberOfServings.setTextColor(Color.parseColor("#ACACAC"));
+        recipePreparationTime.setTextColor(Color.parseColor("#ACACAC"));
+        recipeCategory.setTextColor(Color.parseColor("#ACACAC"));
+
 
         recipeTitle.setText(recipe.getTitle());
+        recipeNumberOfServings.setText("Number Of Servings: " + recipe.getNumberOfServings().toString());
+        recipePreparationTime.setText("Preparation Time: "+recipe.getPreparationTime().toString());
+        recipeCategory.setText("Recipe Category: " + recipe.getRecipeCategory());
+        Glide.with(getContext())
+                .load(recipe.getImageURI()).into(recipeImageView);
         if (this.sortItemRecipe == 0) {
-            sortValue.setText("");
+
         }else if (this.sortItemRecipe == 1) {
-            sortValue.setText(String.valueOf(recipe.getPreparationTime()));
+            recipePreparationTime.setTextColor(Color.parseColor("#FF000000"));
         }else if (this.sortItemRecipe == 2) {
-            sortValue.setText(String.valueOf(recipe.getNumberOfServings()));
+            recipeNumberOfServings.setTextColor(Color.parseColor("#FF000000"));
         }else if (this.sortItemRecipe == 3) {
-            sortValue.setText(recipe.getRecipeCategory());
+            recipeCategory.setTextColor(Color.parseColor("#FF000000"));
         }
 
         return view;

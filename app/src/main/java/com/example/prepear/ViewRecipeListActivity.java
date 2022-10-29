@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -27,6 +29,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ViewRecipeListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -35,9 +38,10 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     ArrayList<Recipe> recipeDataList;
     Integer sortItemRecipe = 0;
     Integer recipePosition = -1;
+    int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
+    int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +77,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             @Override
             public void onClick(View view) {
                 recipePosition = -1;
-                // Intent intent = new Intent(ViewRecipeActivity.this,AddRecipeActivity.class);
-                // startActivity(intent);
+                Intent intent = new Intent(ViewRecipeListActivity.this, AddEditRecipeActivity.class);
+                intent.putExtra("calling activity", "1");
+                startActivityForResult(intent, LAUNCH_ADD_RECIPE_ACTIVITY);
             }
         });
 
@@ -82,11 +87,10 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 recipePosition = i;
-                Recipe recipe;
-                recipe = recipeAdapter.getItem(i);
-                // Intent intent = new Intent(ViewRecipeActivity.this,EditRecipeActivity.class);
-                // intent.putExtra("recipeList", recipe);
-                // startActivity(intent);
+                Recipe viewedRecipe = recipeAdapter.getItem(i);
+                Intent intent = new Intent(ViewRecipeListActivity.this, ViewRecipeActivity.class);
+                intent.putExtra("viewed recipe", viewedRecipe);
+                startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
             }
         });
 
@@ -110,42 +114,62 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     Number numberOfServings = (Number) doc.getData().get("Number of Servings");
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
-                    //ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) doc.getData().get("Ingredients");
-                    newRecipe = new Recipe(title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
+                    String imageURI = (String) doc.getData().get("Image URI");
+                    newRecipe = new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
+
                     final CollectionReference innerIngredientCollection = collectionReference.document(title).collection("Ingredient");
                     innerIngredientCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            for (QueryDocumentSnapshot document : value){
+                            for (QueryDocumentSnapshot document : value) {
                                 String briefDescription = document.getId();
                                 Number amount = (Number) document.getData().get("Amount");
                                 String unit = (String) document.getData().get("Unit");
                                 String ingredientCategory = (String) document.getData().get("Ingredient Category");
-                                newRecipe.setIngredient(new Ingredient(briefDescription,amount.intValue(),unit,ingredientCategory));
-
+                                newRecipe.addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
                             }
                         }
                     });
+
                     recipeDataList.add(newRecipe);
                 }
-
                 recipeAdapter.sortRecipe(sortItemRecipe);
                 recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         sortItemRecipe = i;
         recipeAdapter.sortRecipe(sortItemRecipe);
         recipeAdapter.notifyDataSetChanged();
-
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        recipeAdapter.notifyDataSetChanged();
+
+        if (requestCode == LAUNCH_ADD_RECIPE_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
+                Recipe recipeToAdd = (Recipe) data.getSerializableExtra("new recipe");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // No action
+            }
+        }
+
+        if (requestCode == LAUNCH_VIEW_RECIPE_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
+                Recipe recipeToDelete = (Recipe) data.getSerializableExtra("delete recipe");
+            }
+        }
     }
 }
