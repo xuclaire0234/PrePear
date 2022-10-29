@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -45,6 +47,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         return fragment;
     }
 
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -56,15 +59,19 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         }
     }
 
+    @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
+        TextView title = titleView.findViewById(R.id.exemptionSubHeading);
         descriptionText = view.findViewById(R.id.description_edit_text);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitText = view.findViewById(R.id.ingredient_unit_edit_text);
         categoryText = view.findViewById(R.id.ingredient_category_edit_text);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
+        title.setText("Edit Ingredient");
         Bundle bundle = getArguments();
 
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
@@ -75,9 +82,8 @@ public class RecipeEditIngredientFragment extends DialogFragment {
 
         return builder
                 .setView(view)
-                .setTitle("View/Edit Ingredient")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
@@ -94,6 +100,10 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                         int amount = Integer.parseInt(amountText.getText().toString());
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
+                        if (description.isEmpty() || amount == 0 || unit.isEmpty() || category.isEmpty()) {
+                            Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                    Toast.LENGTH_LONG).show();
+                        }
                         ingredient.setBriefDescription(description);
                         ingredient.setAmount(amount);
                         ingredient.setUnit(unit);

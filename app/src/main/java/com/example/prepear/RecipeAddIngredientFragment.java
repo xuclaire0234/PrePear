@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -21,6 +23,7 @@ import androidx.fragment.app.DialogFragment;
 import javax.annotation.Nullable;
 
 /*
+
  */
 public class RecipeAddIngredientFragment extends DialogFragment {
     // declare variables
@@ -49,19 +52,24 @@ public class RecipeAddIngredientFragment extends DialogFragment {
             listener = (OnFragmentInteractionListener) context;
         }
         else {
-            throw new RuntimeException(context.toString() + "must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + "must implement OnFragmentInteractionListener");
         }
     }
 
+    @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
+        TextView title = titleView.findViewById(R.id.exemptionSubHeading);
         descriptionText = view.findViewById(R.id.description_edit_text);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitText = view.findViewById(R.id.ingredient_unit_edit_text);
         categoryText = view.findViewById(R.id.ingredient_category_edit_text);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
+        title.setText("Add Ingredient");
         Bundle bundle = getArguments();
 
         return builder
@@ -76,6 +84,10 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
                         listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
+                        if (description.isEmpty() || amount == 0 || unit.isEmpty() || category.isEmpty()) {
+                            Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
                 }).create();
     }
