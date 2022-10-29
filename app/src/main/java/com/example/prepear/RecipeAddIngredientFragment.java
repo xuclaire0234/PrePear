@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -83,6 +84,10 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
                         listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
+                        if (description.isEmpty() || amount == 0 || unit.isEmpty() || category.isEmpty()) {
+                            Toast.makeText(getActivity(), "Missing information",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
                 }).create();
     }

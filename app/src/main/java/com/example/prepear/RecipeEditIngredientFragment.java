@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -99,6 +100,10 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                         int amount = Integer.parseInt(amountText.getText().toString());
                         String unit = unitText.getText().toString();
                         String category = categoryText.getText().toString();
+                        if (description.isEmpty() || amount == 0 || unit.isEmpty() || category.isEmpty()) {
+                            Toast.makeText(getActivity(), "Missing information",
+                                    Toast.LENGTH_LONG).show();
+                        }
                         ingredient.setBriefDescription(description);
                         ingredient.setAmount(amount);
                         ingredient.setUnit(unit);
