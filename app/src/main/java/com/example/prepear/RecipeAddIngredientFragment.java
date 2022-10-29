@@ -74,7 +74,6 @@ public class RecipeAddIngredientFragment extends DialogFragment {
 
         return builder
                 .setView(view)
-                .setTitle("Add Ingredient")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override

@@ -15,4 +15,8 @@
     <item name="comments_EditText" type="id" />
     <item name="add_ingredient_in_recipe_button" type="id" />
     <item name="commit_button" type="id" />
+    <item name="number_of_servings_texts_view_recipe_list" type="id" />
+    <item name="preparation_time_texts_view_recipe_list" type="id" />
+    <item name="recipe_category_texts_view_recipe_list" type="id" />
+    <item name="imageView_in_recipe_list" type="id" />
 </resources>

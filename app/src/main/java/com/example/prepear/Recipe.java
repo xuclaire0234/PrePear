@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Recipe implements Serializable {
-    Uri imageURI;
+    String imageURI;
     String title;
     Integer preparationTime;
     Integer numberOfServings;
@@ -14,21 +14,21 @@ public class Recipe implements Serializable {
     String comments;
     ArrayList<IngredientInRecipe> listOfIngredients;
 
-    public Recipe(Uri imageURI, String title, Integer preparationTime, Integer numberOfServings, String recipeCategory, String comments) {
+    public Recipe(String imageURI, String title, Integer preparationTime,Integer numberOfServings, String recipeCategory, String comments) {
         this.imageURI = imageURI;
         this.title = title;
         this.preparationTime = preparationTime;
         this.numberOfServings = numberOfServings;
         this.recipeCategory = recipeCategory;
         this.comments = comments;
-        this.listOfIngredients = listOfIngredients;
+        this.listOfIngredients = new ArrayList<IngredientInRecipe>();
     }
 
-    public Uri getImageURI() {
+    public String getImageURI() {
         return this.imageURI;
     }
 
-    public void setImageURI(Uri imageURI) {
+    public void setImageURI(String imageURI) {
         this.imageURI = imageURI;
     }
 
@@ -86,5 +86,9 @@ public class Recipe implements Serializable {
 
     public void addIngredientToRecipe(IngredientInRecipe ingredient){
         this.listOfIngredients.add(ingredient);
+    }
+
+    public void deleteAllIngredients(){
+        this.listOfIngredients = new ArrayList<IngredientInRecipe>();
     }
 }

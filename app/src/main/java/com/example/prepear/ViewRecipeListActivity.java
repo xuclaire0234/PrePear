@@ -1,8 +1,12 @@
 package com.example.prepear;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,10 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -24,6 +31,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ViewRecipeListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -108,25 +116,29 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     Number numberOfServings = (Number) doc.getData().get("Number of Servings");
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
-                    Uri imageURI = (Uri) doc.getData().get("Image URI");
+                    String imageURI = (String) doc.getData().get("Image URI");
                     newRecipe = new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
-
-                    final CollectionReference innerIngredientCollection = collectionReference.document(title).collection("Ingredient");
-                    innerIngredientCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            for (QueryDocumentSnapshot document : value) {
-                                String briefDescription = document.getId();
-                                Number amount = (Number) document.getData().get("Amount");
-                                String unit = (String) document.getData().get("Unit");
-                                String ingredientCategory = (String) document.getData().get("Ingredient Category");
-                                newRecipe.addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
-                            }
-                        }
-                    });
-
                     recipeDataList.add(newRecipe);
                 }
+
+                for (int i = 0; i < recipeDataList.size(); i++) {
+                    int index = i;
+                    db.collection("Recipes").document(recipeDataList.get(index).getTitle()).collection("Ingredient")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    recipeDataList.get(index).deleteAllIngredients();
+                                    for (QueryDocumentSnapshot doc : value) {
+                                        String briefDescription = doc.getId();
+                                        Number amount = (Number) doc.getData().get("Amount");
+                                        String unit = (String) doc.getData().get("Unit");
+                                        String ingredientCategory = (String) doc.getData().get("Ingredient Category");
+                                        recipeDataList.get(index).addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
+                                    }
+                                }
+                            });
+                }
+
                 recipeAdapter.sortRecipe(sortItemRecipe);
                 recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
