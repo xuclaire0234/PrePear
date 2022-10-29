@@ -87,4 +87,8 @@ public class Recipe implements Serializable {
     public void addIngredientToRecipe(IngredientInRecipe ingredient){
         this.listOfIngredients.add(ingredient);
     }
+
+    public void deleteAllIngredients(){
+        this.listOfIngredients = new ArrayList<IngredientInRecipe>();
+    }
 }

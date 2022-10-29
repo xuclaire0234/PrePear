@@ -117,22 +117,27 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     String imageURI = (String) doc.getData().get("Image URI");
                     newRecipe = new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
 
-                    final CollectionReference innerIngredientCollection = collectionReference.document(title).collection("Ingredient");
-                    innerIngredientCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            for (QueryDocumentSnapshot document : value) {
-                                String briefDescription = document.getId();
-                                Number amount = (Number) document.getData().get("Amount");
-                                String unit = (String) document.getData().get("Unit");
-                                String ingredientCategory = (String) document.getData().get("Ingredient Category");
-                                newRecipe.addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
-                            }
-                        }
-                    });
-
                     recipeDataList.add(newRecipe);
                 }
+
+                for (int i = 0; i < recipeDataList.size(); i++) {
+                    int index = i;
+                    db.collection("Recipes").document(recipeDataList.get(index).getTitle()).collection("Ingredient")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    recipeDataList.get(index).deleteAllIngredients();
+                                    for (QueryDocumentSnapshot doc : value) {
+                                        String briefDescription = doc.getId();
+                                        Number amount = (Number) doc.getData().get("Amount");
+                                        String unit = (String) doc.getData().get("Unit");
+                                        String ingredientCategory = (String) doc.getData().get("Ingredient Category");
+                                        recipeDataList.get(index).addIngredientToRecipe(new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory));
+                                    }
+                                }
+                            });
+                }
+
                 recipeAdapter.sortRecipe(sortItemRecipe);
                 recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }

@@ -5,15 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/add_ingredient"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="30dp"
-        android:background="@color/green_pear"
-        android:text="ADD INGREDIENT" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="number"
+            android:inputType= "textPersonName"
             android:minHeight="48dp" />
     </LinearLayout>
 
@@ -125,31 +116,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="\nPlease fill in each blank \nproperly according to the hints" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/green_pear"
-            android:text="Cancel" />
-
-        <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/green_pear"
-            android:text="Confirm" />
-    </RelativeLayout>
 
 </LinearLayout>

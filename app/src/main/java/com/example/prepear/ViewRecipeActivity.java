@@ -68,12 +68,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
         recipeCategoryTextView.setText(viewedRecipe.getRecipeCategory());
         commentsTextView.setText(viewedRecipe.getComments());
 
-        /*
         ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
 
-         */
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

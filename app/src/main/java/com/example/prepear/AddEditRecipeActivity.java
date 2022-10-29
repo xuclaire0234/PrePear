@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,6 +57,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     Uri imageLocationPath;
     FirebaseFirestore db;
     private boolean pictureSelected;
+    private Integer positionToEditInViewIngredient = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,34 +92,36 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
             recipeCategoryEditText.setText(viewedRecipe.getRecipeCategory());
             commentsEditText.setText(viewedRecipe.getComments());
-            // ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
+            ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
-            // ingredientInRecipeDataList = new ArrayList<>();
+            ingredientInRecipeDataList = new ArrayList<>();
         }
 
 
-        /*
+
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
 
-         */
+
 
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                positionToEditInViewIngredient = -1;
                 new RecipeAddIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
             }
         });
 
-        /*
+
         ingredientInRecipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                positionToEditInViewIngredient = position;
                 RecipeEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
             }
         });
 
-         */
+
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,14 +138,25 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     }
 
     public void onConfirmPressed(IngredientInRecipe ingredientToAdd) {
-        ingredientInRecipeArrayAdapter.add(ingredientToAdd);
+        ingredientInRecipeDataList.add(ingredientToAdd);
+        ingredientInRecipeArrayAdapter.notifyDataSetChanged();
+        positionToEditInViewIngredient = -1;
     }
 
     @Override
-    public void onOkPressed(IngredientInRecipe ingredient) {};
+    public void onOkPressed(IngredientInRecipe ingredient) {
+        if (positionToEditInViewIngredient != -1) {
+            ingredientInRecipeDataList.remove(positionToEditInViewIngredient);
+            ingredientInRecipeDataList.add(ingredient);
+            ingredientInRecipeArrayAdapter.notifyDataSetChanged();
+            positionToEditInViewIngredient = -1;
+        }
+    };
 
     public void onDeletePressed(IngredientInRecipe ingredientToDelete) {
-        ingredientInRecipeArrayAdapter.remove(ingredientToDelete);
+        ingredientInRecipeDataList.remove(positionToEditInViewIngredient);
+        ingredientInRecipeArrayAdapter.notifyDataSetChanged();
+        positionToEditInViewIngredient = -1;
     }
 
     public void selectImage(View view) {
@@ -288,6 +303,8 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                                     setResult(Activity.RESULT_OK, returnIntent);
                                     finish();
                                 }
+
+
                             } else if (!task.isSuccessful()) {
                                 Toast.makeText(AddEditRecipeActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                             }
@@ -298,6 +315,43 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                 }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        HashMap<String, Object> data = new HashMap<>();
+        String title = titleEditText.getText().toString();
+        for (IngredientInRecipe ingredient: ingredientInRecipeDataList) {
+            data = new HashMap<>();
+            String briefDescription = ingredient.getBriefDescription();
+            Number amount = ingredient.getAmount();
+            String unit = ingredient.getUnit();
+            String ingredientCategory = ingredient.getIngredientCategory();
+
+            if (briefDescription.equals("") || amount.equals("") || unit.equals("")
+                    || ingredientCategory.equals("")) {
+                Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
+            } else {
+                data.put("Amount", amount);
+                data.put("Unit", unit);
+                data.put("Ingredient Category", ingredientCategory);
+                db
+                        .collection("Recipes")
+                        .document(title)
+                        .collection("Ingredient")
+                        .document(briefDescription)
+                        .set(data)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(AddEditRecipeActivity.this, "Ingredients are uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(AddEditRecipeActivity.this, "Fails to upload ingredients", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         }
     }
