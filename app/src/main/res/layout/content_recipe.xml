@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="5dp"
                 android:text="Preparation Time: "
                 android:textColor="@color/dark_grey">
             </TextView>
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="5dp"
                 android:text="Number Of Servings: "
                 android:textColor="@color/dark_grey">
             </TextView>
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="5dp"
                 android:text="Recipe Category: "
                 android:textColor="@color/dark_grey">
             </TextView>
