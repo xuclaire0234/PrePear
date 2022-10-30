@@ -10,6 +10,8 @@ package com.example.prepear;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -30,24 +31,24 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**/
-public class ViewIngredientStorage extends AppCompatActivity implements
-        AdapterView.OnItemSelectedListener {
+public class ViewIngredientStorage extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener,
+        AddEditIngredientFragment.OnFragmentInteractionListener {
 
     private ListView ingredientStorageList;
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
     private String[] userSortChoices = {" ","description(ascending)","description(descending)",
-                                        "best before (oldest to newest)",
-                                        "best before (newest to oldest)",
-                                        "location(ascending by default)", "category"}; // used for Spinner
+            "best before (oldest to newest)", "best before (newest to oldest)",
+            "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
 
-    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "IngredientsInStorage";
-    FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
-    final CollectionReference collectionReferenceForInStorageIngredients =
-            dbForInStorageIngredients.collection(IN_STORAGE_INGREDIENTS_COLLECTION_NAME);
+    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "In-storage ingredients";
+    private final FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
+    final CollectionReference inStorageIngredientsCollection = dbForInStorageIngredients.collection("Ingredient Storage");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class ViewIngredientStorage extends AppCompatActivity implements
         ingredientStorageList = findViewById(R.id.ingredients_in_storage_listview);
         // on below line initialize the used-defined ArrayAdapter for use
         ingredientStorageListAdapter = new IngredientStorageCustomList(this,
-                                                                        ingredientStorageDataList);
+                ingredientStorageDataList);
         // on below line build a connection between the in-storage ingredients data list and the ArrayAdapter
         ingredientStorageList.setAdapter(ingredientStorageListAdapter);
 
@@ -68,6 +69,7 @@ public class ViewIngredientStorage extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 // on below the addition Fragment for new in-storage ingredient
+                new AddEditIngredientFragment(inStorageIngredientsCollection).show(getSupportFragmentManager(), "Add Ingredient");
             }
         });
 
@@ -78,9 +80,14 @@ public class ViewIngredientStorage extends AppCompatActivity implements
                 Object clickedItem = ingredientStorageList.getItemAtPosition(position);
                 // casting this clicked item to FoodEntry type from Object type
                 IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                AddEditIngredientFragment newFragment = AddEditIngredientFragment.newInstance((IngredientInStorage) clickedItem,
+                                                        inStorageIngredientsCollection);
+                newFragment.show(transaction, "Edit_Ingredient");
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
-                AddEditFoodFragment foodFragment = AddEditFoodFragment.newInstance(clickedFood);
+                AddEditIngredientFragment foodFragment = AddEditIngredientFragment.newInstance(clickedFood,
+                        inStorageIngredientsCollection);
                 // use Fragment Transaction
                 getSupportFragmentManager().beginTransaction()
                         // on below line fill with the correct Fragment object
@@ -90,37 +97,43 @@ public class ViewIngredientStorage extends AppCompatActivity implements
             }
         });
 
+        // on below code part: Sort-by Spinner Initialization
         final Spinner sortBySpinner = (Spinner) findViewById(R.id.sort_spinner);
         sortBySpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
 
         ArrayAdapter adapterForSpinner = new ArrayAdapter(this,
-                                                            android.R.layout.simple_spinner_item,
-                                                            userSortChoices);
+                android.R.layout.simple_spinner_item,
+                userSortChoices);
         adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
 
-        collectionReferenceForInStorageIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        inStorageIngredientsCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
                                 @Nullable FirebaseFirestoreException error) {
                 ingredientStorageDataList.clear(); // clear the previous data for storing new data
 
-                for (QueryDocumentSnapshot doc: value){
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(doc.getData().get("Description")));
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(doc.getData().get("Best Before Date")));
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(doc.getData().get("Category")));
+                for (QueryDocumentSnapshot documentSnapshot: value){
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Description")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Best Before Date")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Location")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Category")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Amount")));
 
-                    String description = doc.getId();
-                    String bestBeforeDate = (String) doc.getData().get("Best Before Date");
-                    String location = (String) doc.getData().get("Location");
-                    String unit = (String) doc.getData().get("Unit");
-                    int amount = (int) doc.getData().get("Amount");
-                    String category = (String) doc.getData().get("Category");
-                    ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, amount, category));
-
+                    String description = documentSnapshot.getId(); //
+                    String bestBeforeDate = (String) documentSnapshot.getData().get("Best Before Date"); //
+                    String location = (String) documentSnapshot.getData().get("Location"); //
+                    String unit = (String) documentSnapshot.getData().get("Unit"); //
+                    String amount = (String) documentSnapshot.getData().get("Amount");//
+                    String category = (String) documentSnapshot.getData().get("Category"); //
+                    ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, Integer.parseInt(amount), category));
+                    // Notifying the adapter to render any new data fetched from the cloud
+                    ingredientStorageListAdapter.notifyDataSetChanged();
+                    // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
+                    // sort all retrieved ingredients based on user's picked sort-by choice
                     SortInStorageIngredients(userSelectedSortChoice);
-                    ingredientStorageList.notifyAll();
+                    ingredientStorageListAdapter.notifyDataSetChanged(); // for purpose of updating data in the ArrayAdapter
                 }
             }
         });
@@ -158,14 +171,13 @@ public class ViewIngredientStorage extends AppCompatActivity implements
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        // Auto
     }
 
-
+    /* Sort-by functionality */
     public void SortInStorageIngredients(String userSelectedSortChoice){
-        // the in-storage ingredient in default order iff userSelectedSortChoice == " "
         if (userSelectedSortChoice == " "){
-
+            // the in-storage ingredient in default order iff userSelectedSortChoice == " "
         } else if  (userSelectedSortChoice == "description(ascending)") {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
@@ -198,7 +210,7 @@ public class ViewIngredientStorage extends AppCompatActivity implements
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getIngredientLocation().compareTo(ingredient1.getIngredientLocation());
+                    return ingredient2.getLocation().compareTo(ingredient1.getLocation());
                 }
             });
         } else if (userSelectedSortChoice == "category") {
@@ -209,6 +221,24 @@ public class ViewIngredientStorage extends AppCompatActivity implements
                 }
             });
         }
+    }
+
+    /**/
+    @Override
+    public void onOkPressed (IngredientInStorage newIngredientInStorage) {
+        ingredientStorageListAdapter.add(newIngredientInStorage);
+    }
+
+    /**/
+    @Override
+    public void onDeletePressed (IngredientInStorage ingredientInStorage) {
+        ingredientStorageListAdapter.remove(ingredientInStorage);
+    }
+
+    /**/
+    @Override
+    public void onEditPressed (IngredientInStorage ingredientInStorage) {
+        ingredientStorageListAdapter.notifyDataSetChanged();
     }
 }
 

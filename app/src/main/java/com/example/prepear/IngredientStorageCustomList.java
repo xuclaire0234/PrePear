@@ -22,8 +22,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 /* CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
-* Substitution of IngredientStorageController Class
-* */
+ * Substitution of IngredientStorageController Class
+ * */
 public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorage> {
 
     private ArrayList<IngredientInStorage> ingredientsInStorage; // holds for ingredients in storage entries
