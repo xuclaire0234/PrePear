@@ -9,6 +9,7 @@ public class IngredientInRecipe implements Serializable {
     Integer amount;
     String unit;
     String ingredientCategory;
+    String id;
 
     public IngredientInRecipe(String briefDescription, int amount, String unit, String ingredientCategory) {
         this.briefDescription = briefDescription;
@@ -47,5 +48,13 @@ public class IngredientInRecipe implements Serializable {
 
     public void setIngredientCategory(String ingredientCategory) {
         this.ingredientCategory = ingredientCategory;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
