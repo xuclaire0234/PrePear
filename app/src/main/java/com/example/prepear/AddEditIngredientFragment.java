@@ -226,7 +226,8 @@ public class AddEditIngredientFragment extends DialogFragment {
         });
 
         Bundle args = getArguments();
-        if (args != null) { // if object already exists (the case of editing an item)
+        // on below: if object already exists (the case of editing an item)
+        if (args != null) {
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
             /* set the old values of the text fields */
@@ -249,6 +250,10 @@ public class AddEditIngredientFragment extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             listener.onDeletePressed(ingredientInStorage);
+                            // delete this clicked ingredient from "Ingredient Storage" Collection
+                            collectionReferenceForInStorageIngredients
+                                    .document(ingredientInStorage.getBriefDescription())
+                                    .delete();
                         }
                     })
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -293,7 +298,8 @@ public class AddEditIngredientFragment extends DialogFragment {
                             ingredientInStorage.setAmount(amount_int);
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
-                            listener.onEditPressed(ingredientInStorage);  // call function to update list adapter
+                            listener.onEditPressed(ingredientInStorage);  // call method to update list adapter
+
 
                         }
                     }).create();

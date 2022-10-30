@@ -46,7 +46,7 @@ public class ViewIngredientStorage extends AppCompatActivity
             "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
 
-    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "In-storage ingredients";
+    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
     private final FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
     final CollectionReference inStorageIngredientsCollection = dbForInStorageIngredients.collection("Ingredient Storage");
 
@@ -83,7 +83,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 AddEditIngredientFragment newFragment = AddEditIngredientFragment.newInstance((IngredientInStorage) clickedItem,
                                                         inStorageIngredientsCollection);
-                newFragment.show(transaction, "Edit_Ingredient");
+                newFragment.show(transaction, "Edit Ingredient");
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
                 AddEditIngredientFragment foodFragment = AddEditIngredientFragment.newInstance(clickedFood,
@@ -227,12 +227,14 @@ public class ViewIngredientStorage extends AppCompatActivity
     @Override
     public void onOkPressed (IngredientInStorage newIngredientInStorage) {
         ingredientStorageListAdapter.add(newIngredientInStorage);
+        ingredientStorageListAdapter.notifyDataSetChanged();
     }
 
     /**/
     @Override
     public void onDeletePressed (IngredientInStorage ingredientInStorage) {
         ingredientStorageListAdapter.remove(ingredientInStorage);
+        ingredientStorageListAdapter.notifyDataSetChanged();
     }
 
     /**/
