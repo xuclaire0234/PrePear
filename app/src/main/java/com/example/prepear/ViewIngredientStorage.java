@@ -39,13 +39,15 @@ public class ViewIngredientStorage extends AppCompatActivity implements
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
     private String[] userSortChoices = {" ","description(ascending)","description(descending)",
-                                        "best before (oldest to newest)", "best before (newest to oldest)",
+                                        "best before (oldest to newest)",
+                                        "best before (newest to oldest)",
                                         "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
 
     final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "IngredientsInStorage";
     FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
-    final CollectionReference collectionReferenceForInStorageIngredients = dbForInStorageIngredients.collection(IN_STORAGE_INGREDIENTS_COLLECTION_NAME);
+    final CollectionReference collectionReferenceForInStorageIngredients =
+            dbForInStorageIngredients.collection(IN_STORAGE_INGREDIENTS_COLLECTION_NAME);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +78,15 @@ public class ViewIngredientStorage extends AppCompatActivity implements
                 Object clickedItem = ingredientStorageList.getItemAtPosition(position);
                 // casting this clicked item to FoodEntry type from Object type
                 IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
-//                // use it as newInstance argument to create its associated AddEditIngredientFragment object
-//                // on below necessarily required to swap into a correct Fragment
-//                AddEditFoodFragment foodFragment = AddEditFoodFragment.newInstance(clickedFood);
-//                // use Fragment Transaction
-//                getSupportFragmentManager().beginTransaction()
-//                        // on below line fill with the correct Fragment object
-//                        // should be showing a Fragment for view/edit an existing in-storage ingredient
-//                        .add(foodFragment, null)
-//                        .commit();
+                // use it as newInstance argument to create its associated AddEditIngredientFragment object
+                // on below necessarily required to swap into a correct Fragment
+                AddEditFoodFragment foodFragment = AddEditFoodFragment.newInstance(clickedFood);
+                // use Fragment Transaction
+                getSupportFragmentManager().beginTransaction()
+                        // on below line fill with the correct Fragment object
+                        // should be showing a Fragment for view/edit an existing in-storage ingredient
+                        .add(foodFragment, null)
+                        .commit();
             }
         });
 

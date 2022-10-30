@@ -20,8 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**/
 public class MainActivity extends AppCompatActivity {
 
-    public FirebaseFirestore prePearDB;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
