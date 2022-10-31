@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">PrePear</string>
+
+    <string-array name="ingredient_categories">
+        <item></item>
+        <item>Eggs, milk, and milk product</item>
+        <item>Fats and oils</item>
+        <item>Fruits</item>
+        <item>Grain, nuts, and baking products</item>
+        <item>Herbs and spices</item>
+        <item>Meat, sausages, and fish</item>
+        <item>Pasta, rice, and pulses</item>
+        <item>Vegetables</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="units">
+        <item></item>
+        <item>Kilograms</item>
+        <item>Grams</item>
+        <item>Ounces</item>
+        <item>Pounds</item>
+        <item>Liters</item>
+        <item>Milliliter</item>
+    </string-array>
+
 </resources>
