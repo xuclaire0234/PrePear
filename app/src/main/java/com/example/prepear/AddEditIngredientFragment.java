@@ -33,8 +33,8 @@ import java.util.HashMap;
 /**
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
  * it and make changes to its attributes
- * @author: Marafi Mergani
- * @version: 1
+ * @authors: Marafi Mergani, Shihao Liu, Jingyi Xu
+ * @version: 1.0
  */
 
 public class AddEditIngredientFragment extends DialogFragment implements
@@ -314,7 +314,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                 toast.show();
                                 return;
                             }
-                            Float amount_int = Float.parseFloat(amount);
+                            double amountValue = Double.parseDouble(amount);
                             if (amount.matches("0")) {
                                 CharSequence text = "Error, Amount Can Not Be Zero!";
                                 Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
@@ -333,11 +333,10 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             ingredientInStorage.setBriefDescription(description);
                             ingredientInStorage.setIngredientCategory(category);
                             ingredientInStorage.setBestBeforeDate(date);
-                            ingredientInStorage.setAmount(amount_int);
+                            ingredientInStorage.setAmount(amountValue);
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
-                            listener.onEditPressed(ingredientInStorage);  // call function to update
-                            // list adapter
+                            listener.onEditPressed(ingredientInStorage);  // call function to update list adapter
 
                         }
                     }).create();
@@ -392,10 +391,11 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             toast.show();
                             return;
                         }
-                        Float amount_int = Float.parseFloat(amount);
+                        double amountValue = Double.parseDouble(amount);
                         listener.onOkPressed(new IngredientInStorage(
-                                description, category, date, location, amount_int, unit));
-                        HashMap<String, String> data = new HashMap<>();
+                                description, category, date, location, amountValue, unit));
+                        // key: value pair as a element in HashMap
+                        HashMap<String, Object> data = new HashMap<>();
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
                         data.put("location", location);
@@ -410,14 +410,14 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         // These are a method which gets executed when the task is succeeded
-                                        Log.d(description, "Data has been added successfully!");
+                                        Log.d(description, "This Ingredient's Data has been added successfully into the Storage!");
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         // These are a method which gets executed if there’s any problem
-                                        Log.d(description, "Data could not be added!" + e.toString());
+                                        Log.d(description, "Data cannot be added!" + e.toString());
                                     }
                                 });
 

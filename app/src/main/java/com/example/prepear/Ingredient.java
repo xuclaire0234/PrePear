@@ -24,7 +24,7 @@ public class Ingredient implements Serializable {
     // initialize class attributes
     // <access_identifier> variableName;
     private String briefDescription;
-    private Float amount;
+    private double amount;
     private String unit;
     private String ingredientCategory;
 
@@ -36,7 +36,7 @@ public class Ingredient implements Serializable {
      * @param amount an int for the number of ingredients
      * @param unit aa int for the unit cost of the ingredient
      */
-    public Ingredient(String briefDescription, Float amount, String unit, String ingredientCategory) {
+    public Ingredient(String briefDescription, double amount, String unit, String ingredientCategory) {
         this.briefDescription = briefDescription;
         this.amount = amount;
         this.unit = unit;
@@ -48,7 +48,7 @@ public class Ingredient implements Serializable {
      * @return briefDescription a String for the description entered
      */
     public String getBriefDescription() {
-        return briefDescription;
+        return this.briefDescription;
     }
 
     /**
@@ -63,15 +63,15 @@ public class Ingredient implements Serializable {
      * This method returns the amount of the ingredient
      * @return amount an int for the amount entered
      */
-    public Float getAmount() {
-        return amount;
+    public double getAmount() {
+        return this.amount;
     }
 
     /**
      * This method sets the amount of the ingredient
      * @param  amount an int for the amount entered
      */
-    public void setAmount(Float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -80,7 +80,7 @@ public class Ingredient implements Serializable {
      * @return unit an int for the unit cost
      */
     public String getUnit() {
-        return unit;
+        return this.unit;
     }
 
     /**
@@ -96,7 +96,7 @@ public class Ingredient implements Serializable {
      * @return ingredientCategory a String for the category entered
      */
     public String getIngredientCategory() {
-        return ingredientCategory;
+        return this.ingredientCategory;
     }
 
     /**
