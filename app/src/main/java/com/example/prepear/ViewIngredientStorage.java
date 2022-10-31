@@ -1,10 +1,10 @@
 /*
-* Class Name: ViewIngredientStorage
-* Version Information: Version 1.0
-* Date: Oct 25th, 2022
-* Author: Shihao Liu
-* Copyright Notice:
-* */
+ * Class Name: ViewIngredientStorage
+ * Version Information: Version 1.0
+ * Date: Oct 25th, 2022
+ * Author: Shihao Liu
+ * Copyright Notice:
+ * */
 
 package com.example.prepear;
 
@@ -82,7 +82,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                 IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 AddEditIngredientFragment newFragment = AddEditIngredientFragment.newInstance((IngredientInStorage) clickedItem,
-                                                        inStorageIngredientsCollection);
+                        inStorageIngredientsCollection);
                 newFragment.show(transaction, "Edit Ingredient");
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
@@ -127,7 +127,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                     String unit = (String) documentSnapshot.getData().get("unit"); //
                     String amount = (String) documentSnapshot.getData().get("amount"); //
                     String category = (String) documentSnapshot.getData().get("category"); //
-                    ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, Integer.parseInt(amount), category));
+                    ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, Float.parseFloat(amount), category));
                     // Notifying the adapter to render any new data fetched from the cloud
                     ingredientStorageListAdapter.notifyDataSetChanged();
                     // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,

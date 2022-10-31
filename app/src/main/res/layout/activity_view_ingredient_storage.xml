@@ -9,7 +9,7 @@
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/sort_layout"
       android:layout_width="match_parent"
-      android:layout_height="59dp"
+      android:layout_height="wrap_content"
       android:layout_marginTop="2dp"
 
       android:background="@color/light_grey">
@@ -18,18 +18,18 @@
         android:layout_width="72dp"
         android:layout_height="27dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
         android:background="@color/light_grey"
         android:text=" Sort By:"
         android:textSize="17dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/sort_spinner"
         android:layout_width="281dp"
-        android:layout_height="54dp"
+        android:layout_height="30dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/spinner_bg"

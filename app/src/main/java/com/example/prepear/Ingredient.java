@@ -17,15 +17,14 @@ import java.io.Serializable;
 /**
  * This class creates ingredient objects and allows setting and accessing the attributes
  * @author: Marafi Mergani
- * @version: 1.0
+ * @version: 1
  */
 
-/**/
 public class Ingredient implements Serializable {
     // initialize class attributes
     // <access_identifier> variableName;
     private String briefDescription;
-    private int amount;
+    private Float amount;
     private String unit;
     private String ingredientCategory;
 
@@ -37,7 +36,7 @@ public class Ingredient implements Serializable {
      * @param amount an int for the number of ingredients
      * @param unit aa int for the unit cost of the ingredient
      */
-    public Ingredient(String briefDescription, int amount, String unit, String ingredientCategory) {
+    public Ingredient(String briefDescription, Float amount, String unit, String ingredientCategory) {
         this.briefDescription = briefDescription;
         this.amount = amount;
         this.unit = unit;
@@ -49,7 +48,7 @@ public class Ingredient implements Serializable {
      * @return briefDescription a String for the description entered
      */
     public String getBriefDescription() {
-        return this.briefDescription;
+        return briefDescription;
     }
 
     /**
@@ -64,15 +63,15 @@ public class Ingredient implements Serializable {
      * This method returns the amount of the ingredient
      * @return amount an int for the amount entered
      */
-    public int getAmount() {
-        return this.amount;
+    public Float getAmount() {
+        return amount;
     }
 
     /**
      * This method sets the amount of the ingredient
      * @param  amount an int for the amount entered
      */
-    public void setAmount(int amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -97,7 +96,7 @@ public class Ingredient implements Serializable {
      * @return ingredientCategory a String for the category entered
      */
     public String getIngredientCategory() {
-        return this.ingredientCategory;
+        return ingredientCategory;
     }
 
     /**

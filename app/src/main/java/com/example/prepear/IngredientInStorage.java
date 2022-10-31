@@ -30,7 +30,7 @@ public class IngredientInStorage extends Ingredient{
      * @param amount an int for the number of ingredients
      * @param unit aa int for the unit cost of the ingredient
      */
-    public IngredientInStorage(String description, String category, String date, String location, int amount, String unit){
+    public IngredientInStorage(String description, String category, String date, String location, Float amount, String unit){
         super(description, amount, unit, category);
         this.bestBeforeDate = date;
         this.location = location;
@@ -41,7 +41,7 @@ public class IngredientInStorage extends Ingredient{
      * @return bestBeforeDate a String for the date entered
      */
     public String getBestBeforeDate() {
-        return this.bestBeforeDate;
+        return bestBeforeDate;
     }
 
     /**
@@ -57,7 +57,7 @@ public class IngredientInStorage extends Ingredient{
      * @return  location a String for the location entered
      */
     public String getLocation() {
-        return this.location;
+        return location;
     }
 
     /**

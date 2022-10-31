@@ -1,7 +1,5 @@
 package com.example.prepear;
 
-import static com.google.android.material.color.MaterialColors.getColor;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -10,10 +8,16 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +26,6 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -34,25 +33,25 @@ import java.util.HashMap;
 /**
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
  * it and make changes to its attributes
- * @author: Marafi Mergani, Shihao Liu
- * @version: 1.0
+ * @author: Marafi Mergani
+ * @version: 1
  */
 
-public class AddEditIngredientFragment extends DialogFragment {
+public class AddEditIngredientFragment extends DialogFragment implements
+        AdapterView.OnItemSelectedListener{
     /* initialize variables for EditText, DatePickerDialog,
        and fragment interaction listener objects
        <access_identifier> variableName;
      */
-    private EditText descriptionView; //
-    private EditText categoryView; //
-    private EditText dateView; //
-    private EditText locationView; //
-    private EditText amountView; //
-    private EditText unitView; //
-    private String bbd_str; //
+    private EditText descriptionView;
+    private Spinner categoryView;
+    private EditText dateView;
+    private Spinner locationView;
+    private EditText amountView;
+    private Spinner unitView;
+    private String bbd_str;  // best before date string
     private OnFragmentInteractionListener listener;
     private DatePickerDialog dialog; // create datePicker for best before date
-
     private CollectionReference collectionReferenceForInStorageIngredients;
 
     /* Constructor */
@@ -119,22 +118,23 @@ public class AddEditIngredientFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_ingredient_fragment,
-                null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.add_ingredient_custom_title, null);
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.add_ingredient_fragment, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.add_ingredient_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading4);
 
 
-        /* assign variables to TextView objects and set on click listeners */
+        /*assign variables to TextView objects and set on click listeners*/
         dateView = view.findViewById(R.id.bestBeforeDate);
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /* create a date picker for the best before date of the ingredient */
                 Calendar currentDate = Calendar.getInstance();
-                int currentYear = currentDate.get(Calendar.YEAR);
-                int currentMonth = currentDate.get(Calendar.MONTH);
-                int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                int mYear = currentDate.get(Calendar.YEAR);
+                int mMonth = currentDate.get(Calendar.MONTH);
+                int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
                 dialog = new DatePickerDialog(getContext(), R.style.activity_date_picker,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -142,19 +142,24 @@ public class AddEditIngredientFragment extends DialogFragment {
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
                                 // if condition statement helps to regulate the format.
-                                if(monthOfYear < 9 && dayOfMonth < 10 ){
-                                    bbd_str = year + "-" +"0"+ (monthOfYear + 1) + "-" + "0"+ dayOfMonth;
-                                } else if(dayOfMonth < 10){
-                                    bbd_str = year + "-" + (monthOfYear + 1) + "-" + "0"+ dayOfMonth;
-                                }else if(monthOfYear < 9){
-                                    bbd_str = year + "-" +"0"+ (monthOfYear + 1) + "-" + dayOfMonth;
+                                if (monthOfYear < 9 && dayOfMonth < 10) {
+                                    bbd_str = year + "-" + "0" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                } else if (dayOfMonth < 10) {
+                                    bbd_str = year + "-" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                } else if (monthOfYear < 9) {
+                                    bbd_str = year + "-" + "0" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                } else {
+                                    bbd_str = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 }
-                                else{
-                                    bbd_str = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;}
                                 dateView.setText(bbd_str);
                             }
-                        }, currentYear, currentMonth, currentDay);
+                        }, mYear, mMonth, mDay);
                 dialog.show();
+                /* Temporarily remove keyboards before displaying the dialog*/
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
             }
         });
 
@@ -163,35 +168,43 @@ public class AddEditIngredientFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 descriptionView.setFocusable(true);
-                if(descriptionView.getText().toString().isEmpty()) {
+                if (descriptionView.getText().toString().isEmpty()) {
                     descriptionView.setError("Cannot leave Ingredient Name Empty");
                     descriptionView.requestFocus();
                 }
             }
         });
 
-        categoryView = view.findViewById(R.id.ingredient_category);
-        categoryView.setOnClickListener(new View.OnClickListener() {
+        categoryView = (Spinner) view.findViewById(R.id.ingredient_category);
+        ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(getContext(),
+                R.array.categories, android.R.layout.simple_spinner_item);
+        adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryView.setAdapter(adapterForCategories);
+        categoryView.setOnTouchListener(new View.OnTouchListener() {
+            /* Temporarily remove keyboards before displaying spinner */
             @Override
-            public void onClick(View v) {
-                categoryView.setFocusable(true);
-                if(categoryView.getText().toString().isEmpty()) {
-                    categoryView.setError("Cannot leave Ingredient Category Empty");
-                    categoryView.requestFocus();
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                return false;
             }
         });
 
-        locationView = view.findViewById(R.id.ingredient_location);
-        locationView.setOnClickListener(new View.OnClickListener() {
+        locationView = (Spinner) view.findViewById(R.id.ingredient_location);
+        ArrayAdapter adapterForLocation = ArrayAdapter.createFromResource(getContext(), R.array.locations,
+                android.R.layout.simple_spinner_item);
+        adapterForLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationView.setAdapter(adapterForLocation);
+        locationView.setOnTouchListener(new View.OnTouchListener() {
+            /* Temporarily remove keyboards before displaying spinner */
             @Override
-            public void onClick(View v) {
-                locationView.setFocusable(true);
-                if (locationView.getText().toString().isEmpty()) {
-                    locationView.setError(
-                            "Cannot leave Location Empty, Please choose correct location.");
-                    locationView.requestFocus();
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                return false;
             }
         });
 
@@ -200,43 +213,44 @@ public class AddEditIngredientFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 amountView.setFocusable(true);
-                if(amountView.getText().toString().isEmpty()) {
+                if (amountView.getText().toString().isEmpty()) {
                     amountView.setError("Cannot leave Ingredient amount empty");
                     amountView.requestFocus();
-                } else if(amountView.getText().toString().equals("0")) {
+                } else if (amountView.getText().toString().equals("0")) {
                     amountView.setError("Cannot enter zero for ingredient amount");
                     amountView.requestFocus();
                 }
             }
         });
 
-        unitView = view.findViewById(R.id.ingredient_unit);
-        unitView.setOnClickListener(new View.OnClickListener() {
+        unitView = (Spinner) view.findViewById(R.id.ingredient_unit);
+        ArrayAdapter adapterForUnits = ArrayAdapter.createFromResource(getContext(), R.array.units,
+                android.R.layout.simple_spinner_item);
+        adapterForUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitView.setAdapter(adapterForUnits);
+        unitView.setOnTouchListener(new View.OnTouchListener() {
+            /* Temporarily remove keyboards before displaying spinner */
             @Override
-            public void onClick(View v) {
-                unitView.setFocusable(true);
-                if(unitView.getText().toString().isEmpty()) {
-                    unitView.setError("Cannot leave unit cost of Ingredient empty");
-                    unitView.requestFocus();
-                } else if(unitView.getText().toString().equals("0")) {
-                    unitView.setError("Cannot enter zero for ingredient unit cost");
-                    unitView.requestFocus();
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                return false;
             }
         });
 
+
         Bundle args = getArguments();
-        // on below: if ingredient already exists (the case of editing an item)
-        if (args != null) {
+        if (args != null) { //if object already exists (the case of editing an item)
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
             /* set the old values of the text fields */
             descriptionView.setText(ingredientInStorage.getBriefDescription());
-            categoryView.setText(ingredientInStorage.getIngredientCategory());
+            categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
-            locationView.setText(ingredientInStorage.getLocation());
-            amountView.setText(ingredientInStorage.getAmount());
-            unitView.setText(ingredientInStorage.getUnit());
+            locationView.setSelection(adapterForLocation.getPosition(ingredientInStorage.getLocation()));
+            amountView.setText(String.valueOf(ingredientInStorage.getAmount()));
+            unitView.setSelection(adapterForUnits.getPosition(String.valueOf(ingredientInStorage.getUnit())));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("Edit Ingredient");
@@ -267,28 +281,52 @@ public class AddEditIngredientFragment extends DialogFragment {
                              * and that no text field is left empty
                              * */
                             String description = descriptionView.getText().toString();
-                            if (description.isEmpty()) {
-                                return;
-                            }
-                            String category = categoryView.getText().toString();
-                            if (category.isEmpty()) {
-                                return;
-                            }
+                            String category = categoryView.getSelectedItem().toString();
                             String date = dateView.getText().toString();
-                            if (date.isEmpty()) {
-                                return;
-                            }
-                            String location = locationView.getText().toString();
-                            if (location.isEmpty()) {
-                                return;
-                            }
+                            String location = locationView.getSelectedItem().toString();
                             String amount = amountView.getText().toString();
-                            int amount_int = Integer.parseInt(amount);
-                            if (amount.isEmpty() || amount.equals("0")) {
+                            String unit = unitView.getSelectedItem().toString();
+                            if (description.isEmpty() || category.isEmpty() || date.isEmpty()
+                                    || location.isEmpty() || amount.isEmpty() || unit.isEmpty()) {
+                                CharSequence text = "Error, Some Fields Are Empty!";
+                                Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
+                                /*View toastView = toast.getView(); // This will return the default View of the Toast.
+                                TextView toastMessage = toastView.findViewById(android.R.id.message);
+                                toastMessage.setTextSize(30);
+                                toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
+                                toastMessage.setGravity(Gravity.CENTER);
+                                toastMessage.setCompoundDrawablePadding(16);
+                                toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
+                                toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
+                                toast.show();
+                                return;
+                            } else if (amount.equals("0")) {
+                                CharSequence text = "Error, Amount Can Not Be Zero!";
+                                Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
+                                /*View toastView = toast.getView(); // This will return the default View of the Toast.
+                                TextView toastMessage = toastView.findViewById(android.R.id.message);
+                                toastMessage.setTextSize(30);
+                                toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
+                                toastMessage.setGravity(Gravity.CENTER);
+                                toastMessage.setCompoundDrawablePadding(16);
+                                toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
+                                toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
+                                toast.show();
                                 return;
                             }
-                            String unit = unitView.getText().toString();
-                            if (unit.isEmpty()) {
+                            Float amount_int = Float.parseFloat(amount);
+                            if (amount.matches("0")) {
+                                CharSequence text = "Error, Amount Can Not Be Zero!";
+                                Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
+                                /*View toastView = toast.getView(); // This will return the default View of the Toast.
+                                TextView toastMessage = toastView.findViewById(android.R.id.message);
+                                toastMessage.setTextSize(30);
+                                toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
+                                toastMessage.setGravity(Gravity.CENTER);
+                                toastMessage.setCompoundDrawablePadding(16);
+                                toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
+                                toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
+                                toast.show();
                                 return;
                             }
                             /* set the same ingredient object with the new user input */
@@ -298,23 +336,12 @@ public class AddEditIngredientFragment extends DialogFragment {
                             ingredientInStorage.setAmount(amount_int);
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
-                            listener.onEditPressed(ingredientInStorage);  // call method to update list adapter
+                            listener.onEditPressed(ingredientInStorage);  // call function to update
+                            // list adapter
 
-                            // on below: DB's Ingredient Storage Collection will update this clicked ingredient's data
-                            collectionReferenceForInStorageIngredients
-                                    .document(ingredientInStorage.getBriefDescription())
-//                                    .update("description", description,
-//                                            "category", category,
-//                                            "bestBeforeDate", date,
-//                                            "amount", amount,
-//                                            "location", location,
-//                                            "unit", unit);
-                                    .set(ingredientInStorage);
                         }
                     }).create();
         }
-
-        // on below: Adding a new ingredient in storage
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Ingredient");
         return builder
@@ -332,53 +359,60 @@ public class AddEditIngredientFragment extends DialogFragment {
                          * and that no text field is left empty
                          * */
                         String description = descriptionView.getText().toString();
-                        if (description.isEmpty()) {
-                            return;
-                        }
-                        String category = categoryView.getText().toString();
-                        if (category.isEmpty()) {
-                            return;
-                        }
+                        String category = categoryView.getSelectedItem().toString();
                         String date = dateView.getText().toString();
-                        if (date.isEmpty()) {
-                            return;
-                        }
-                        String location = locationView.getText().toString();
-                        if(location.isEmpty()){
-                            return;
-                        }
-
+                        String location = locationView.getSelectedItem().toString();
+                        String unit = unitView.getSelectedItem().toString();
                         String amount = amountView.getText().toString();
-                        int amount_int = Integer.parseInt(amount);
-                        if (amount.isEmpty() || amount_int == 0) {
+                        if (description.isEmpty() || category.isEmpty() || date.isEmpty()
+                                || location.isEmpty() || amount.isEmpty() || unit.isEmpty()) {
+                            CharSequence text = "Error, Some Fields Are Empty!";
+                            Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
+                            /*View toastView = toast.getView(); // This will return the default View of the Toast.
+                            TextView toastMessage = toastView.findViewById(android.R.id.message);
+                            toastMessage.setTextSize(30);
+                            toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
+                            toastMessage.setGravity(Gravity.CENTER);
+                            toastMessage.setCompoundDrawablePadding(16);
+                            toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
+                            toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
+                            toast.show();
+                            return;
+                        } else if (amount.equals("0")) {
+                            CharSequence text = "Error, Amount Can Not Be Zero!";
+                            Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
+                            /*View toastView = toast.getView(); // This will return the default View of the Toast.
+                            TextView toastMessage = toastView.findViewById(android.R.id.message);
+                            toastMessage.setTextSize(30);
+                            toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
+                            toastMessage.setGravity(Gravity.CENTER);
+                            toastMessage.setCompoundDrawablePadding(16);
+                            toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
+                            toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
+                            toast.show();
                             return;
                         }
-                        String unit = unitView.getText().toString();
-                        if (unit.isEmpty()) {
-                            return;
-                        }
-                        IngredientInStorage newIngredient = new IngredientInStorage(description, category,
-                                                                date, location, amount_int, unit);
-                        listener.onOkPressed(newIngredient);
-
-                        HashMap<String,String> data = new HashMap<>();
+                        Float amount_int = Float.parseFloat(amount);
+                        listener.onOkPressed(new IngredientInStorage(
+                                description, category, date, location, amount_int, unit));
+                        HashMap<String, String> data = new HashMap<>();
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
                         data.put("location", location);
                         data.put("category", category);
                         data.put("amount", amount);
-                        data.put("unit",unit);
+                        data.put("unit", unit);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(description)
                                 .set(data)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // These are a method which gets executed when the task is succeeded
-                                Log.d(description, "Data has been added successfully!");
-                            }
-                        })
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // These are a method which gets executed when the task is succeeded
+                                        Log.d(description, "Data has been added successfully!");
+                                    }
+                                })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
@@ -389,9 +423,18 @@ public class AddEditIngredientFragment extends DialogFragment {
 
                     }
                 }).create();
-
     }
 
+        @Override
+        public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
 
-}
+        }
+
+        @Override
+        public void onNothingSelected (AdapterView < ? > parent){
+
+        }
+
+
+    }
 
