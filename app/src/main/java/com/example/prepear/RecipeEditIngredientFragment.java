@@ -20,14 +20,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import javax.annotation.Nullable;
 
-/*
- */
 public class RecipeEditIngredientFragment extends DialogFragment {
     // declare variables
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
@@ -67,17 +66,13 @@ public class RecipeEditIngredientFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_edit_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
-        descriptionText = view.findViewById(R.id.description_edit_text);
-        amountText = view.findViewById(R.id.ingredient_amount_edit_text);
-        unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
-        categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
-        title.setText("Edit Ingredient");
-        Bundle bundle = getArguments();
+        descriptionText = view.findViewById(R.id.brief_description);
+        amountText = view.findViewById(R.id.ingredient_amount);
+        unitSpinner = view.findViewById(R.id.ingredient_unit);
+        categorySpinner = view.findViewById(R.id.ingredient_category);
 
         unitSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.units,
                 android.R.layout.simple_spinner_item);
@@ -109,11 +104,15 @@ public class RecipeEditIngredientFragment extends DialogFragment {
             }
         });
 
+        Bundle bundle = getArguments();
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
         amountText.setText(ingredient.getAmount().toString());
         unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));
         categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
+        title.setText("Edit Ingredient");
 
         return builder
                 .setView(view)
@@ -131,15 +130,27 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String description = descriptionText.getText().toString();
-                        int amount = Integer.parseInt(amountText.getText().toString());
-                        String unit = unitSpinner.getSelectedItem().toString();
-                        String category = categorySpinner.getSelectedItem().toString();
-                        ingredient.setBriefDescription(description);
-                        ingredient.setAmount(amount);
-                        ingredient.setUnit(unit);
-                        ingredient.setIngredientCategory(category);
-                        listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
+                        String description;
+                        Integer amount;
+                        String unit;
+                        String category;
+                        if (descriptionText.getText().toString().equals("")
+                                || amountText.getText().toString().equals("")
+                                || unitSpinner.getSelectedItem().toString().equals("")
+                                || categorySpinner.getSelectedItem().toString().equals("")) {
+                            Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            description = descriptionText.getText().toString();
+                            amount = Integer.parseInt(amountText.getText().toString());
+                            unit = unitSpinner.getSelectedItem().toString();
+                            category = categorySpinner.getSelectedItem().toString();
+                            ingredient.setBriefDescription(description);
+                            ingredient.setAmount(amount);
+                            ingredient.setUnit(unit);
+                            ingredient.setIngredientCategory(category);
+                            listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
+                        }
                     }
                 }).create();
     }

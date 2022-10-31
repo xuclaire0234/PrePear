@@ -13,6 +13,7 @@ public class Recipe implements Serializable {
     String recipeCategory;
     String comments;
     ArrayList<IngredientInRecipe> listOfIngredients;
+    String id;
 
     public Recipe(String imageURI, String title, Integer preparationTime,Integer numberOfServings, String recipeCategory, String comments) {
         this.imageURI = imageURI;
@@ -90,5 +91,13 @@ public class Recipe implements Serializable {
 
     public void deleteAllIngredients(){
         this.listOfIngredients = new ArrayList<IngredientInRecipe>();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

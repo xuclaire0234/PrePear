@@ -90,7 +90,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                collectionReference.document(viewedRecipe.getTitle())
+                collectionReference.document(viewedRecipe.getId())
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
