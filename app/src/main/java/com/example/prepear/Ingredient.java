@@ -49,7 +49,7 @@ public class Ingredient implements Serializable {
      * @return briefDescription a String for the description entered
      */
     public String getBriefDescription() {
-        return briefDescription;
+        return this.briefDescription;
     }
 
     /**
@@ -65,7 +65,7 @@ public class Ingredient implements Serializable {
      * @return amount an int for the amount entered
      */
     public int getAmount() {
-        return amount;
+        return this.amount;
     }
 
     /**
@@ -97,7 +97,7 @@ public class Ingredient implements Serializable {
      * @return ingredientCategory a String for the category entered
      */
     public String getIngredientCategory() {
-        return ingredientCategory;
+        return this.ingredientCategory;
     }
 
     /**

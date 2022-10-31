@@ -41,7 +41,7 @@ public class IngredientInStorage extends Ingredient{
      * @return bestBeforeDate a String for the date entered
      */
     public String getBestBeforeDate() {
-        return bestBeforeDate;
+        return this.bestBeforeDate;
     }
 
     /**
@@ -57,7 +57,7 @@ public class IngredientInStorage extends Ingredient{
      * @return  location a String for the location entered
      */
     public String getLocation() {
-        return location;
+        return this.location;
     }
 
     /**

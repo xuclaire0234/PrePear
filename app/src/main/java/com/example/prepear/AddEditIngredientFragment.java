@@ -226,7 +226,7 @@ public class AddEditIngredientFragment extends DialogFragment {
         });
 
         Bundle args = getArguments();
-        // on below: if object already exists (the case of editing an item)
+        // on below: if ingredient already exists (the case of editing an item)
         if (args != null) {
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
@@ -235,8 +235,8 @@ public class AddEditIngredientFragment extends DialogFragment {
             categoryView.setText(ingredientInStorage.getIngredientCategory());
             dateView.setText(ingredientInStorage.getBestBeforeDate());
             locationView.setText(ingredientInStorage.getLocation());
-            amountView.setText(String.valueOf(ingredientInStorage.getAmount()));
-            unitView.setText(String.valueOf(ingredientInStorage.getUnit()));
+            amountView.setText(ingredientInStorage.getAmount());
+            unitView.setText(ingredientInStorage.getUnit());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("Edit Ingredient");
@@ -300,7 +300,16 @@ public class AddEditIngredientFragment extends DialogFragment {
                             ingredientInStorage.setLocation(location);
                             listener.onEditPressed(ingredientInStorage);  // call method to update list adapter
 
-
+                            // on below: DB's Ingredient Storage Collection will update this clicked ingredient's data
+                            collectionReferenceForInStorageIngredients
+                                    .document(ingredientInStorage.getBriefDescription())
+//                                    .update("description", description,
+//                                            "category", category,
+//                                            "bestBeforeDate", date,
+//                                            "amount", amount,
+//                                            "location", location,
+//                                            "unit", unit);
+                                    .set(ingredientInStorage);
                         }
                     }).create();
         }
@@ -352,13 +361,13 @@ public class AddEditIngredientFragment extends DialogFragment {
                                                                 date, location, amount_int, unit);
                         listener.onOkPressed(newIngredient);
 
-                        HashMap<String, String> data = new HashMap<>();
-                        data.put("Description", description);
-                        data.put("Best Before Date", date);
-                        data.put("Location", location);
-                        data.put("Category", category);
-                        data.put("Amount", amount);
-                        data.put("Unit",unit);
+                        HashMap<String,String> data = new HashMap<>();
+                        data.put("description", description);
+                        data.put("bestBeforeDate", date);
+                        data.put("location", location);
+                        data.put("category", category);
+                        data.put("amount", amount);
+                        data.put("unit",unit);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(description)

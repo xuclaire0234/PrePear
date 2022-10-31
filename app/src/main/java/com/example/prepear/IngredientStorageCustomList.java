@@ -63,24 +63,4 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
 
         return view; // return this view
     }
-
-    /*method comment*/
-    public void SortInStorageIngredients(String userSelectedSortChoice){
-        // the in-storage ingredient in default order iff userSelectedSortChoice == " "
-        if (userSelectedSortChoice == " "){
-
-        } else if  (userSelectedSortChoice == "description(ascending)") {
-
-        } else if (userSelectedSortChoice == "description(descending)") {
-
-        } else if (userSelectedSortChoice ==  "best before (oldest to newest)") {
-
-        } else if (userSelectedSortChoice ==  "best before (newest to oldest)") {
-
-        } else if (userSelectedSortChoice == "location(ascending by default)") {
-
-        } else if (userSelectedSortChoice == "category") {
-
-        }
-    }
 }

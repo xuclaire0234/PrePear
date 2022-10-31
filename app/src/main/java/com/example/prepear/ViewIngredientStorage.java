@@ -115,18 +115,18 @@ public class ViewIngredientStorage extends AppCompatActivity
                 ingredientStorageDataList.clear(); // clear the previous data for storing new data
 
                 for (QueryDocumentSnapshot documentSnapshot: value){
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Description")));
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Best Before Date")));
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Location")));
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Category")));
-                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("Amount")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("description")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("bestBeforeDate")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("location")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("category")));
+                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("amount")));
 
                     String description = documentSnapshot.getId(); //
-                    String bestBeforeDate = (String) documentSnapshot.getData().get("Best Before Date"); //
-                    String location = (String) documentSnapshot.getData().get("Location"); //
-                    String unit = (String) documentSnapshot.getData().get("Unit"); //
-                    String amount = (String) documentSnapshot.getData().get("Amount");//
-                    String category = (String) documentSnapshot.getData().get("Category"); //
+                    String bestBeforeDate = (String) documentSnapshot.getData().get("bestBeforeDate"); //
+                    String location = (String) documentSnapshot.getData().get("location"); //
+                    String unit = (String) documentSnapshot.getData().get("unit"); //
+                    String amount = (String) documentSnapshot.getData().get("amount"); //
+                    String category = (String) documentSnapshot.getData().get("category"); //
                     ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, Integer.parseInt(amount), category));
                     // Notifying the adapter to render any new data fetched from the cloud
                     ingredientStorageListAdapter.notifyDataSetChanged();
