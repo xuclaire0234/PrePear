@@ -45,7 +45,7 @@ public class ViewIngredientStorage extends AppCompatActivity
     private ListView ingredientStorageList;
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
-    private String[] userSortChoices = {" ","description(ascending)","description(descending)",
+    private final String[] userSortChoices = {" ","description(ascending)","description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
             "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
@@ -112,11 +112,11 @@ public class ViewIngredientStorage extends AppCompatActivity
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
 
-        inStorageIngredientsCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value,
-                                @Nullable FirebaseFirestoreException error) {
-                ingredientStorageDataList.clear(); // clear the previous data for storing new data
+//        inStorageIngredientsCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value,
+//                                @Nullable FirebaseFirestoreException error) {
+//                ingredientStorageDataList.clear(); // clear the previous data for storing new data
 
 //                for (QueryDocumentSnapshot documentSnapshot: value){
 //                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(documentSnapshot.getData().get("description")));
@@ -129,6 +129,7 @@ public class ViewIngredientStorage extends AppCompatActivity
 //                    String bestBeforeDate = (String) documentSnapshot.getData().get("bestBeforeDate"); //
 //                    String location = (String) documentSnapshot.getData().get("location"); //
 //                    String unit = (String) documentSnapshot.getData().get("unit"); //
+                        /* amount might be null! */
 //                    double amount = Double.parseDouble((String) documentSnapshot.getData().get("amount")); //
 //                    String category = (String) documentSnapshot.getData().get("category"); //
 
@@ -138,28 +139,31 @@ public class ViewIngredientStorage extends AppCompatActivity
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
+
                                     String description = document.getId(); //
                                     String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
                                     String location = (String) document.getData().get("location"); //
                                     String unit = (String) document.getData().get("unit"); //
-                                    double amount = Double.parseDouble((String) Objects.requireNonNull(document.getData().get("amount"))); //
+//                                    double amount = Double.parseDouble((String) Objects.requireNonNull(document.getData().get("amount"))); //
+                                    String amount = String.valueOf(document.getData().get("amount"));
                                     String category = (String) document.getData().get("category"); //
 
                                     ingredientStorageDataList.add(new IngredientInStorage(description, bestBeforeDate, location, unit, amount, category));
                                     // Notifying the adapter to render any new data fetched from the cloud
                                     ingredientStorageListAdapter.notifyDataSetChanged();
+                                }
                             }
-                        }
-                });
+                        });
                 // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
                 // sort all retrieved ingredients based on user's picked sort-by choice
                 SortInStorageIngredients(userSelectedSortChoice);
                 ingredientStorageListAdapter.notifyDataSetChanged(); // for purpose of updating data in the ArrayAdapter
-            }
-        });
     }
-
-
 
     /**
      * <p>Callback method to be invoked when an item in this view has been
@@ -196,44 +200,44 @@ public class ViewIngredientStorage extends AppCompatActivity
 
     /* Sort-by functionality */
     public void SortInStorageIngredients(String userSelectedSortChoice){
-        if (userSelectedSortChoice == " "){
+        if (Objects.equals(userSelectedSortChoice, " ")){
             // the in-storage ingredient in default order iff userSelectedSortChoice == " "
-        } else if  (userSelectedSortChoice == "description(ascending)") {
+        } else if  (Objects.equals(userSelectedSortChoice, "description(ascending)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
                     return ingredient1.getBriefDescription().compareTo(ingredient2.getBriefDescription());
                 }
             });
-        } else if (userSelectedSortChoice == "description(descending)") {
+        } else if (Objects.equals(userSelectedSortChoice, "description(descending)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
                     return ingredient2.getBriefDescription().compareTo(ingredient1.getBriefDescription());
                 }
             });
-        } else if (userSelectedSortChoice ==  "best before (oldest to newest)") {
+        } else if (Objects.equals(userSelectedSortChoice, "best before (oldest to newest)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
                     return ingredient1.getBestBeforeDate().compareTo(ingredient2.getBestBeforeDate());
                 }
             });
-        } else if (userSelectedSortChoice ==  "best before (newest to oldest)") {
+        } else if (Objects.equals(userSelectedSortChoice, "best before (newest to oldest)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
                     return ingredient2.getBestBeforeDate().compareTo(ingredient1.getBestBeforeDate());
                 }
             });
-        } else if (userSelectedSortChoice == "location(ascending by default)") {
+        } else if (Objects.equals(userSelectedSortChoice, "location(ascending by default)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
                     return ingredient2.getLocation().compareTo(ingredient1.getLocation());
                 }
             });
-        } else if (userSelectedSortChoice == "category") {
+        } else if (Objects.equals(userSelectedSortChoice, "category")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
@@ -260,7 +264,7 @@ public class ViewIngredientStorage extends AppCompatActivity
     /**/
     @Override
     public void onEditPressed (IngredientInStorage ingredientInStorage) {
-        ingredientStorageListAdapter.notifyDataSetChanged();
+        ingredientStorageListAdapter.notifyDataSetChanged(); // notify for updating data in the ingredient list
     }
 }
 

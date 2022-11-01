@@ -24,7 +24,8 @@ public class Ingredient implements Serializable {
     // initialize class attributes
     // <access_identifier> variableName;
     private String briefDescription;
-    private double amount;
+    private String amount;
+    private double amountValue; // actual value of amount
     private String unit;
     private String ingredientCategory;
 
@@ -36,9 +37,10 @@ public class Ingredient implements Serializable {
      * @param amount an int for the number of ingredients
      * @param unit aa int for the unit cost of the ingredient
      */
-    public Ingredient(String briefDescription, double amount, String unit, String ingredientCategory) {
+    public Ingredient(String briefDescription, String amount, String unit, String ingredientCategory) {
         this.briefDescription = briefDescription;
         this.amount = amount;
+        this.amountValue = Double.parseDouble(amount);
         this.unit = unit;
         this.ingredientCategory = ingredientCategory;
     }
@@ -64,7 +66,7 @@ public class Ingredient implements Serializable {
      * @return amount an int for the amount entered
      */
     public double getAmount() {
-        return this.amount;
+        return this.amountValue;
     }
 
     /**
@@ -72,7 +74,7 @@ public class Ingredient implements Serializable {
      * @param  amount an int for the amount entered
      */
     public void setAmount(double amount) {
-        this.amount = amount;
+        this.amountValue = amount;
     }
 
     /**

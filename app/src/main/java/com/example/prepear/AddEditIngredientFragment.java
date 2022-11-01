@@ -239,12 +239,11 @@ public class AddEditIngredientFragment extends DialogFragment implements
             }
         });
 
-
         Bundle args = getArguments();
         if (args != null) { //if object already exists (the case of editing an item)
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
-            /* set the old values of the text fields */
+            /* set the previous values of the text fields */
             descriptionView.setText(ingredientInStorage.getBriefDescription());
             categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
@@ -253,7 +252,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             unitView.setSelection(adapterForUnits.getPosition(String.valueOf(ingredientInStorage.getUnit())));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
-            title.setText("Edit Ingredient");
+            title.setText("View/Edit Ingredient");
             return builder
                     .setView(view)
                     .setNegativeButton("Cancel", null)
@@ -263,11 +262,11 @@ public class AddEditIngredientFragment extends DialogFragment implements
                          */
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            listener.onDeletePressed(ingredientInStorage);
                             // delete this clicked ingredient from "Ingredient Storage" Collection
                             collectionReferenceForInStorageIngredients
                                     .document(ingredientInStorage.getBriefDescription())
                                     .delete();
+                            listener.onDeletePressed(ingredientInStorage);
                         }
                     })
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -336,8 +335,11 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             ingredientInStorage.setAmount(amountValue);
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
-                            listener.onEditPressed(ingredientInStorage);  // call function to update list adapter
-
+                            // on below:
+                            collectionReferenceForInStorageIngredients
+                                    .document(description)
+                                    .set(ingredientInStorage);
+                            listener.onEditPressed(ingredientInStorage);
                         }
                     }).create();
         }
@@ -393,7 +395,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         }
                         double amountValue = Double.parseDouble(amount);
                         listener.onOkPressed(new IngredientInStorage(
-                                description, category, date, location, amountValue, unit));
+                                description, category, date, location, amount, unit));
                         // key: value pair as a element in HashMap
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("description", description);
