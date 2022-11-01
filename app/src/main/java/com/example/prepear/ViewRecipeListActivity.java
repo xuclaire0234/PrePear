@@ -185,4 +185,11 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
         }
     }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 }
