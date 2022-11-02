@@ -1,10 +1,3 @@
-/*
- * Class Name: IngredientStorageCustomList
- * Version Information: Version 1.0
- * Date: Oct 25th, 2022
- * Author: Shihao Liu
- * Copyright Notice:
- * */
 package com.example.prepear;
 
 import android.content.Context;
@@ -55,11 +48,13 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         // best before date and unit count to the corresponding Textview object for displaying on the activity
         TextView ingredientDescription = view.findViewById(R.id.descriptionText);
         TextView ingredientBestBeforeDate = view.findViewById(R.id.bestBeforeDateText);
-        TextView ingredientUnitCount = view.findViewById(R.id.unitCountedNumberText);
+        TextView ingredientUnit = view.findViewById(R.id.unitNumberText);
+        TextView ingredientAmount = view.findViewById(R.id.amountText);
 
         ingredientDescription.setText(ingredientEntry.getBriefDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
-        ingredientUnitCount.setText(ingredientEntry.getUnit());
+        ingredientUnit.setText(ingredientEntry.getUnit());
+        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmount()));
 
         return view; // return this view
     }

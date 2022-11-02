@@ -46,7 +46,8 @@ public class ViewIngredientStorage extends AppCompatActivity
     private ListView ingredientStorageList;
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
-    private final String[] userSortChoices = {" ","description(ascending)","description(descending)",
+    private final String[] userSortChoices = {"                 ---- Select  ---- ",
+            "description(ascending)","description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
             "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
