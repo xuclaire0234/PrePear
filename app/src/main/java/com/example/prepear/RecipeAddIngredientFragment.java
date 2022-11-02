@@ -44,9 +44,9 @@ public class RecipeAddIngredientFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
     /**
-     * This method defines an interface of methods that the MainActivity needs to implement
+     * This method defines an interface of methods that the AddEditRecipeActivity needs to implement
      * in order to respond to the user clicking Confirm buttons.
-     * @see MainActivity
+     * @see AddEditRecipeActivity
      */
     public interface OnFragmentInteractionListener {
         void onConfirmPressed(IngredientInRecipe ingredient);
