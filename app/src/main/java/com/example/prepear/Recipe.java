@@ -1,7 +1,7 @@
 /**
  * Recipe
  *
- * Version
+ * Version 1.0
  *
  * Date
  *
@@ -220,7 +220,7 @@ public class Recipe implements Serializable {
      * @return The return is of type {@link String}
      */
     public String getId() {
-        return id;
+        return this.id;
     }
 
     /**
