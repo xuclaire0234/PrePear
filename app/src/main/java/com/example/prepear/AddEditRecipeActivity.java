@@ -33,7 +33,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEditIngredientFragment.OnFragmentInteractionListener, RecipeAddIngredientFragment.OnFragmentInteractionListener{
@@ -58,6 +60,9 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     FirebaseFirestore db;
     private boolean pictureSelected;
     private Integer positionToEditInViewIngredient = -1;
+    ArrayList<String> editDeleteListSaved;
+    String idOfRecipe;
+    Boolean isEditedRecipe;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +86,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("imageFolder");
 
+        editDeleteListSaved = new ArrayList<String>();
 
         if (getIntent().getStringExtra("calling activity").equals("2")) {
             viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
@@ -93,8 +99,12 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             recipeCategoryEditText.setText(viewedRecipe.getRecipeCategory());
             commentsEditText.setText(viewedRecipe.getComments());
             ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
+            idOfRecipe = viewedRecipe.getId();
+            isEditedRecipe = Boolean.TRUE;
         } else {
             ingredientInRecipeDataList = new ArrayList<>();
+            idOfRecipe = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            isEditedRecipe = Boolean.FALSE;
         }
 
 
@@ -138,6 +148,8 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     }
 
     public void onConfirmPressed(IngredientInRecipe ingredientToAdd) {
+        String ingredientId = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        ingredientToAdd.setId(ingredientId);
         ingredientInRecipeDataList.add(ingredientToAdd);
         ingredientInRecipeArrayAdapter.notifyDataSetChanged();
         positionToEditInViewIngredient = -1;
@@ -146,15 +158,18 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     @Override
     public void onOkPressed(IngredientInRecipe ingredient) {
         if (positionToEditInViewIngredient != -1) {
-            ingredientInRecipeDataList.remove(positionToEditInViewIngredient);
-            ingredientInRecipeDataList.add(ingredient);
-            ingredientInRecipeArrayAdapter.notifyDataSetChanged();
+            editDeleteListSaved.add(ingredientInRecipeDataList.get(positionToEditInViewIngredient).getId());
+            String ingredientId = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            ingredientInRecipeArrayAdapter.remove(ingredientInRecipeDataList.get(positionToEditInViewIngredient));
+            ingredient.setId(ingredientId);
+            ingredientInRecipeArrayAdapter.add(ingredient);
             positionToEditInViewIngredient = -1;
         }
     };
 
     public void onDeletePressed(IngredientInRecipe ingredientToDelete) {
-        ingredientInRecipeDataList.remove(positionToEditInViewIngredient);
+        editDeleteListSaved.add(ingredientInRecipeDataList.get(positionToEditInViewIngredient).getId());
+        ingredientInRecipeArrayAdapter.remove(ingredientInRecipeDataList.get(positionToEditInViewIngredient));
         ingredientInRecipeArrayAdapter.notifyDataSetChanged();
         positionToEditInViewIngredient = -1;
     }
@@ -212,6 +227,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                     || recipeCategory.equals("") || comments.equals("")) {
                 Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
             } else {
+                data.put("Title", title);
                 data.put("Image URI", imageURI);
                 data.put("Preparation Time", preparationTime);
                 data.put("Number of Servings", numberOfServings);
@@ -220,7 +236,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
 
                 db
                         .collection("Recipes")
-                        .document(title)
+                        .document(idOfRecipe)
                         .set(data)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -274,15 +290,17 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                                         || recipeCategory.equals("") || comments.equals("")) {
                                     Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
                                 } else {
+                                    data.put("Title", title);
                                     data.put("Image URI", imageURI);
                                     data.put("Preparation Time", preparationTime);
                                     data.put("Number of Servings", numberOfServings);
                                     data.put("Recipe Category", recipeCategory);
                                     data.put("Comments", comments);
+                                    data.put("Id", idOfRecipe);
 
                                     db
                                             .collection("Recipes")
-                                            .document(title)
+                                            .document(idOfRecipe)
                                             .set(data)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -320,25 +338,32 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
 
         HashMap<String, Object> data = new HashMap<>();
         String title = titleEditText.getText().toString();
+        for (String id : editDeleteListSaved){
+            db.collection("Recipes").document(idOfRecipe).collection("Ingredient").document(id).delete();
+        }
+
         for (IngredientInRecipe ingredient: ingredientInRecipeDataList) {
             data = new HashMap<>();
             String briefDescription = ingredient.getBriefDescription();
             Number amount = ingredient.getAmount();
             String unit = ingredient.getUnit();
             String ingredientCategory = ingredient.getIngredientCategory();
+            String ingredientId = ingredient.getId();
 
             if (briefDescription.equals("") || amount.equals("") || unit.equals("")
                     || ingredientCategory.equals("")) {
                 Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
             } else {
+                data.put("Brief Description", briefDescription);
                 data.put("Amount", amount);
                 data.put("Unit", unit);
                 data.put("Ingredient Category", ingredientCategory);
+                data.put("Id", ingredientId);
                 db
                         .collection("Recipes")
-                        .document(title)
+                        .document(idOfRecipe)
                         .collection("Ingredient")
-                        .document(briefDescription)
+                        .document(ingredientId)
                         .set(data)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
