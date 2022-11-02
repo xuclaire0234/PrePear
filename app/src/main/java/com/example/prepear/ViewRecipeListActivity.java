@@ -51,6 +51,9 @@ import java.util.HashMap;
  */
 public class ViewRecipeListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    /*
+     * Variables are defined here below
+     */
     ListView recipeList;
     CustomRecipeList recipeAdapter;
     ArrayList<Recipe> recipeDataList;
@@ -61,11 +64,19 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     final String[] sortItemSpinnerContent = {"  ","Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
 
+    /**
+     * This function reacted when the activity is started
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_recipe_list);
+        setContentView(R.layout.activity_view_recipe_list); /* link current activity to its layout
+                                                             * file */
 
+        /*
+         * All variables to link to the layout elements are defined here below
+         */
         final Spinner sortItemSpinner;
         final ImageButton mainPage;
         final ImageButton viewIngredients;
@@ -73,12 +84,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         final ImageButton viewShoppingList;
         final FloatingActionButton addRecipe;
 
-
-        final String TAG = "Recipes";
-        FirebaseFirestore db;
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Recipes");
-
+        /*
+         * All variables to link to the layout elements are linked to layout by id here below
+         */
         sortItemSpinner = findViewById(R.id.sort_spinner);
         viewIngredients = findViewById(R.id.ingredient_storage_button);
         mainPage = findViewById(R.id.home_button);
@@ -87,10 +95,27 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         addRecipe = findViewById(R.id.add_recipe_button);
         recipeList = findViewById(R.id.recipe_listview);
 
+        /*
+         * Database are defined and connected to collection with id "Recipes" here below
+         */
+        final String TAG = "Recipes";
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Recipes");
+
+
+        /*
+         * The arraylist and adapter for the recipes are assigned and linked to each other here
+         * below
+         */
         recipeDataList = new ArrayList<>();
         recipeAdapter = new CustomRecipeList(this, recipeDataList);
-        recipeList.setAdapter(recipeAdapter);
+        recipeList.setAdapter(recipeAdapter); /* Link the arraylist and adapter(controller) */
 
+        /*
+         * When the addRecipe button is clicked, a new activity will start, which is activity to add
+         * recipe.
+         */
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +126,10 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
         });
 
+        /*
+         * When item on the listview was clicked, a new activity will start, which is activity to
+         * view the details of that Recipe
+         */
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -112,69 +141,137 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
         });
 
+        /*
+         * The spinner in the activity is set and linked to the string array which contains all the
+         * possible sort values
+         */
         sortItemSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         sortItemSpinner.setAdapter(ad);
 
+        /*
+         * When any changes were made to the database, the activity should be refreshed with all the
+         * newest changes were applied
+         */
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
-                // Clear the old list
-                recipeDataList.clear();
+                recipeDataList.clear(); /* Clear the old list */
 
+                /*
+                 * Loop through all the documents in the collection named "Recipes"
+                 */
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time")));
+                    Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time"))); /* Set an
+                    error message */
+
+                    /*
+                     * get the id of the document
+                     */
                     String id = doc.getId();
+
+                    /*
+                     * Get all the attributes in each document
+                     */
                     String title = (String) doc.getData().get("Title");
                     Number preparationTime = (Number) doc.getData().get("Preparation Time");
                     Number numberOfServings = (Number) doc.getData().get("Number of Servings");
                     String recipeCategory = (String) doc.getData().get("Recipe Category");
                     String comments = (String) doc.getData().get("Comments");
                     String imageURI = (String) doc.getData().get("Image URI");
-                    newRecipe = new Recipe(imageURI, title, preparationTime.intValue(), numberOfServings.intValue(), recipeCategory, comments);
-                    newRecipe.setId(id);
+
+                    /*
+                     * Create a new object of type {Recipe} with all the attributes added
+                     */
+                    newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
+                            numberOfServings.intValue(), recipeCategory, comments); /* initialize
+                                                                                 a recipe object */
+                    newRecipe.setId(id); /* set id of the recipe in database */
+
+                    /*
+                     * add the newly generated recipe item to the recipeDataList
+                     */
                     recipeDataList.add(newRecipe);
                 }
 
+                /*
+                 * Loop through all the documents and get collections named "Ingredient" which
+                 * and get information of all the ingredients needed by one Recipe.
+                 */
                 for (int i = 0; i < recipeDataList.size(); i++) {
-                    int index = i;
-                    db.collection("Recipes").document(recipeDataList.get(index).getId()).collection("Ingredient")
+                    int indexOfRecipe = i;
+
+                    /*
+                     * Get information of all the ingredients needed by the recipe at certain index
+                     */
+                    db.collection("Recipes").document(recipeDataList.get(indexOfRecipe).getId()).collection("Ingredient")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                    recipeDataList.get(index).deleteAllIngredients();
+                                    recipeDataList.get(indexOfRecipe).deleteAllIngredients();
+
+                                    /*
+                                     * Loop through all the documents in Ingredient collection
+                                     */
                                     for (QueryDocumentSnapshot doc : value) {
+                                        /*
+                                         * get the id of the document
+                                         */
                                         String id = doc.getId();
+
+                                        /*
+                                         * Get all the attributes in each document
+                                         */
                                         String briefDescription = (String) doc.getData().get("Brief Description");
                                         Number amount = (Number) doc.getData().get("Amount");
                                         String unit = (String) doc.getData().get("Unit");
                                         String ingredientCategory = (String) doc.getData().get("Ingredient Category");
-                                        IngredientInRecipe NewIngredient = new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory);
-                                        NewIngredient.setId(id);
-                                        recipeDataList.get(index).addIngredientToRecipe(NewIngredient);
+
+                                        /*
+                                         * Create a new object of type {Ingredient} with all the attributes added
+                                         */
+                                        IngredientInRecipe NewIngredient = new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory); /* initialize
+                                                                                 a ingredient object */
+                                        NewIngredient.setId(id); /* set id of the ingredient in database */
+
+                                        /*
+                                         * add the newly generated ingredient item to the recipe in the recipeDataList
+                                         */
+                                        recipeDataList.get(indexOfRecipe).addIngredientToRecipe(NewIngredient);
                                     }
                                 }
                             });
                 }
 
-                recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+                recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
             }
         });
     }
 
+    /**
+     * This function reacted when one item in the spinner were selected
+     * @param adapterView
+     * @param view
+     * @param i this is the position of item selected in the spinner
+     * @param l
+     */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (i != 0){
-            sortItemRecipe = i - 1;
-            recipeAdapter.sortRecipe(sortItemRecipe);
-            recipeAdapter.notifyDataSetChanged();
-            Toast.makeText(ViewRecipeListActivity.this, sortItemSpinnerContent[i],Toast.LENGTH_SHORT).show();
+            /* If it is not the first item in the spinner, which is a blank, is selected, the recipe
+            * will be sorted by the item selected */
+            sortItemRecipe = i - 1; /* get the index of the item the recipes should be sorted by */
+            recipeAdapter.sortRecipe(sortItemRecipe); /* sort the recipes */
+            recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
         }
     }
 
+    /**
+     * This function reacted when no item in the spinner were selected
+     * @param adapterView
+     */
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
