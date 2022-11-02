@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**/
@@ -108,25 +109,34 @@ public class ViewIngredientStorage extends AppCompatActivity
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
+                        ingredientStorageDataList.clear();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    /**/
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
 
-                            String documentID = document.getId();
-                            String description =  (String) document.getData().get("description"); //
-                            String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
-                            String location = (String) document.getData().get("location"); //
-                            String unit = (String) document.getData().get("unit"); //
-                            String amount = String.valueOf(document.getData().get("amount"));
-                            String category = (String) document.getData().get("category"); //
+                                    String documentID = document.getId(); //
+                                    String description =  (String) (document.getData().get("description")); //
+                                    String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
+                                    String location = (String) document.getData().get("location"); //
+                                    String unit = (String) document.getData().get("unit"); //
+                                    String amount = String.valueOf(document.getData().get("amount")); //
+                                    String category = (String) document.getData().get("category"); //
 
-                            ingredientStorageDataList.add(new IngredientInStorage(description, category,
-                                    bestBeforeDate, location, amount, unit, documentID));
-                            // Notifying the adapter to render any new data fetched from the cloud
-                            ingredientStorageListAdapter.notifyDataSetChanged();
+                                    ingredientStorageDataList.add(new IngredientInStorage(description, category,
+                                            bestBeforeDate, location, amount, unit, documentID));
+                                    // Notifying the adapter to render any new data fetched from the cloud
+                                    ingredientStorageListAdapter.notifyDataSetChanged();
+                                } else {
+                                    Log.d("This document", "onComplete: DNE! ");
+                                }
+
+                            }
                         }
                     }
                 });
@@ -223,14 +233,14 @@ public class ViewIngredientStorage extends AppCompatActivity
     @Override
     public void onOkPressed (IngredientInStorage newIngredientInStorage) {
         ingredientStorageListAdapter.add(newIngredientInStorage);
-        ingredientStorageListAdapter.notifyDataSetChanged();
+        onEditPressed(newIngredientInStorage);
     }
 
     /**/
     @Override
     public void onDeletePressed (IngredientInStorage ingredientInStorage) {
         ingredientStorageListAdapter.remove(ingredientInStorage);
-        ingredientStorageListAdapter.notifyDataSetChanged();
+        onEditPressed(ingredientInStorage);
     }
 
     /**/

@@ -14,17 +14,20 @@
     </string-array>
     <string-array name="locations">
         <item></item>
+        <item>Bin</item>
+        <item>Box</item>
         <item>Freezer</item>
         <item>Fridge</item>
         <item>Pantry</item>
+        <item>Shelf</item>
     </string-array>
     <string-array name="units">
         <item></item>
-        <item>Kilograms</item>
-        <item>Grams</item>
-        <item>Ounces</item>
-        <item>Pounds</item>
-        <item>Liters</item>
-        <item>Milliliters</item>
+        <item>g</item>
+        <item>kg</item>
+        <item>oz</item>
+        <item>lb</item>
+        <item>ml</item>
+        <item>L</item>
     </string-array>
 </resources>

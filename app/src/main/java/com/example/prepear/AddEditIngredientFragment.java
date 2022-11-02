@@ -35,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
@@ -129,7 +130,6 @@ public class AddEditIngredientFragment extends DialogFragment implements
         View titleView = LayoutInflater.from(getActivity()).inflate(
                 R.layout.add_ingredient_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading4);
-
 
         /*assign variables to TextView objects and set on click listeners*/
         dateView = view.findViewById(R.id.bestBeforeDate);
@@ -362,13 +362,14 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         // key: value pair as a element in HashMap
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
-                        HashMap<String, Object> data = new HashMap<>();
+                        Map<String, Object> data = new HashMap<>();
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
                         data.put("location", location);
                         data.put("category", category);
                         data.put("amount", amount);
                         data.put("unit", unit);
+                        data.put("ingredient added date and time", documentId);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(documentId)
