@@ -90,6 +90,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<IngredientInRecipe> IngredientListToBeDeleted = viewedRecipe.getListOfIngredients();
+                for (IngredientInRecipe ingredient: IngredientListToBeDeleted) {
+                    collectionReference.document(viewedRecipe.getId()).collection("Ingredient").document(ingredient.getId()).delete();
+                }
+
                 collectionReference.document(viewedRecipe.getId())
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
