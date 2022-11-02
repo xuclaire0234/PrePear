@@ -1,3 +1,12 @@
+/**
+ * ViewRecipeListActivity
+ *
+ * Version 1.0
+ *
+ * Date
+ *
+ * Copyright
+ */
 package com.example.prepear;
 
 import androidx.annotation.NonNull;
@@ -33,6 +42,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This Class creates an activity called viewRecipeListActivity. This activity showed the list of
+ * the Recipes with details like its image, title, number of servings, preparation time and recipe
+ * category.
+ * This activity could be directed by the main activity and could direct to the ViewRecipeActivity
+ * which views all details of the recipe.
+ */
 public class ViewRecipeListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     ListView recipeList;

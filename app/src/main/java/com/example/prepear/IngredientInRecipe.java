@@ -1,5 +1,5 @@
 /**
- * Recipe
+ * IngredientInRecipe
  *
  * Version 1.0
  *
