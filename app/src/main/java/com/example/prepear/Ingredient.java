@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 /**
  * This class creates ingredient objects and allows setting and accessing the attributes
- * @author: Marafi Mergani
+ * @author: Marafi Mergani, Shihao Liu
  * @version: 1
  */
 
