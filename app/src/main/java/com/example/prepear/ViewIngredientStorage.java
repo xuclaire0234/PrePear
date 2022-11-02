@@ -121,7 +121,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                                     Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
 
                                     String documentID = document.getId(); //
-                                    String description =  (String) (document.getData().get("description")); //
+                                    String description =  (String) document.getData().get("description"); //
                                     String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
                                     String location = (String) document.getData().get("location"); //
                                     String unit = (String) document.getData().get("unit"); //

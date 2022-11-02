@@ -321,7 +321,9 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             // on below:
                             collectionReferenceForInStorageIngredients
                                     .document(ingredientInStorage.getDocumentId())
-                                    .set(ingredientInStorage);
+//                                    .set(ingredientInStorage);
+        .update("description",description,"category",category,"bestBeforeDate", date,
+                "amount", amount, "unit", unit, "location", location);
                             listener.onEditPressed(ingredientInStorage);
                         }
                     }).create();
@@ -369,7 +371,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         data.put("category", category);
                         data.put("amount", amount);
                         data.put("unit", unit);
-                        data.put("ingredient added date and time", documentId);
+                        data.put("document id", documentId);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(documentId)

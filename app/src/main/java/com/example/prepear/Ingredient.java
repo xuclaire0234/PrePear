@@ -23,11 +23,11 @@ import java.io.Serializable;
 public class Ingredient implements Serializable {
     // initialize class attributes
     // <access_identifier> variableName;
-    private String briefDescription;
+    private String description;
     private String amount;
     private double amountValue; // actual value of amount
     private String unit;
-    private String ingredientCategory;
+    private String category;
 
     /**
      * This constructor creates an {@link Ingredient} object with the given attributes
@@ -38,11 +38,11 @@ public class Ingredient implements Serializable {
      * @param unit aa int for the unit cost of the ingredient
      */
     public Ingredient(String briefDescription, String amount, String unit, String ingredientCategory) {
-        this.briefDescription = briefDescription;
+        this.description = briefDescription;
         this.amount = amount;
         this.amountValue = Double.parseDouble(amount);
         this.unit = unit;
-        this.ingredientCategory = ingredientCategory;
+        this.category = ingredientCategory;
     }
 
     /**
@@ -50,15 +50,15 @@ public class Ingredient implements Serializable {
      * @return briefDescription a String for the description entered
      */
     public String getBriefDescription() {
-        return this.briefDescription;
+        return this.description;
     }
 
     /**
      * This method sets the description of the ingredient
-     * @param  breifDescription a String for the description entered
+     * @param  description a String for the description entered
      */
-    public void setBriefDescription(String breifDescription) {
-        this.briefDescription = breifDescription;
+    public void setBriefDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -98,14 +98,14 @@ public class Ingredient implements Serializable {
      * @return ingredientCategory a String for the category entered
      */
     public String getIngredientCategory() {
-        return this.ingredientCategory;
+        return this.category;
     }
 
     /**
      * This method sets the category of the ingredient
-     * @param  ingredientCategory a String for the category entered
+     * @param  category a String for the category entered
      */
-    public void setIngredientCategory(String ingredientCategory) {
-        this.ingredientCategory = ingredientCategory;
+    public void setIngredientCategory(String category) {
+        this.category = category;
     }
 }
