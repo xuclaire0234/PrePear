@@ -1,3 +1,13 @@
+/*
+* Classname: CustomIngredientInRecipeList
+*
+* Version information: 1.0.0
+*
+* Date: 11/2/2022
+*
+* Copyright notice: Jiayin He
+ */
+
 package com.example.prepear;
 
 import android.content.Context;
@@ -12,17 +22,32 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * This class defines the custom ingredient in recipe list that shows the listview of all ingredients
+ * that a recipe needs.
+ */
 public class CustomIngredientInRecipeList extends ArrayAdapter<IngredientInRecipe> {
-
     private ArrayList<IngredientInRecipe> ingredientsInRecipe;
     private Context context;
 
+    /**
+     * This initializes the new custom ingredient in recipe list.
+     * @param context
+     * @param ingredientsInRecipe
+     */
     public CustomIngredientInRecipeList(Context context, ArrayList<IngredientInRecipe> ingredientsInRecipe) {
         super(context, 0, ingredientsInRecipe);
         this.ingredientsInRecipe = ingredientsInRecipe;
         this.context = context;
     }
 
+    /**
+     * This gets the listview of the ingredient in recipe list.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
