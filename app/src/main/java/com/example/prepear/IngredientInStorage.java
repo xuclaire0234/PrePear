@@ -19,6 +19,7 @@ public class IngredientInStorage extends Ingredient{
     // <access_identifier> variableName;
     private String bestBeforeDate;
     private String location;
+    private String documentId;
 
     /**
      * This constructor creates an {@link IngredientInStorage} object with the given attributes
@@ -54,7 +55,7 @@ public class IngredientInStorage extends Ingredient{
 
     /**
      * This method returns the location of the ingredient
-     * @return  location a String for the location entered
+     * @return  location: a String for the location entered
      */
     public String getLocation() {
         return location;
@@ -66,5 +67,22 @@ public class IngredientInStorage extends Ingredient{
      */
     public void setLocation(String location) {
         this.location = location;
+    }
+
+
+    /**
+     * This method sets the location of the ingredient
+     * @return documentId a String for the ingredient's document id inside the storage Collection
+     */
+    public String getDocumentId() {
+        return this.documentId;
+    }
+
+    /**
+     * This method sets the location of the ingredient
+     * @param  documentId a String for the the ingredient's document id inside the storage Collection auto-generated
+     */
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }

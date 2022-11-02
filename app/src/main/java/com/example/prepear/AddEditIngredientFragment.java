@@ -5,8 +5,10 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,7 +51,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
     private Spinner locationView;
     private EditText amountView;
     private Spinner unitView;
-    private String bbd_str;  // best before date string
+    private String bestBeforeDateString;  // best before date string
     private OnFragmentInteractionListener listener;
     private DatePickerDialog dialog; // create datePicker for best before date
     private CollectionReference collectionReferenceForInStorageIngredients;
@@ -143,15 +145,15 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                 // set day of month , month and year value in the edit text
                                 // if condition statement helps to regulate the format.
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
-                                    bbd_str = year + "-" + "0" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
                                 } else if (dayOfMonth < 10) {
-                                    bbd_str = year + "-" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
                                 } else if (monthOfYear < 9) {
-                                    bbd_str = year + "-" + "0" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 } else {
-                                    bbd_str = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 }
-                                dateView.setText(bbd_str);
+                                dateView.setText(bestBeforeDateString);
                             }
                         }, mYear, mMonth, mDay);
                 dialog.show();
@@ -181,11 +183,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryView.setAdapter(adapterForCategories);
         categoryView.setOnTouchListener(new View.OnTouchListener() {
-            /* Temporarily remove keyboards before displaying spinner */
+            /*Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        (InputMethodManager) getContext()
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
                 inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
                 return false;
@@ -198,10 +201,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
         adapterForLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationView.setAdapter(adapterForLocation);
         locationView.setOnTouchListener(new View.OnTouchListener() {
-            /* Temporarily remove keyboards before displaying spinner */
+            /*Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) getContext()
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
                 inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
                 return false;
@@ -229,7 +234,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
         adapterForUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unitView.setAdapter(adapterForUnits);
         unitView.setOnTouchListener(new View.OnTouchListener() {
-            /* Temporarily remove keyboards before displaying spinner */
+            /*Temporarily remove keyboards before displaying spinner*/
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -245,11 +250,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
                     "IngredientInStorage");
             /* set the previous values of the text fields */
             descriptionView.setText(ingredientInStorage.getBriefDescription());
+            Log.d("IngredientCategory", "onCreateDialog: " + ingredientInStorage.getIngredientCategory());
             categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
             locationView.setSelection(adapterForLocation.getPosition(ingredientInStorage.getLocation()));
             amountView.setText(String.valueOf(ingredientInStorage.getAmount()));
-            unitView.setSelection(adapterForUnits.getPosition(String.valueOf(ingredientInStorage.getUnit())));
+            unitView.setSelection(adapterForUnits.getPosition(ingredientInStorage.getUnit()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("View/Edit Ingredient");
@@ -288,44 +294,17 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             if (description.isEmpty() || category.isEmpty() || date.isEmpty()
                                     || location.isEmpty() || amount.isEmpty() || unit.isEmpty()) {
                                 CharSequence text = "Error, Some Fields Are Empty!";
-                                Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
-                                /*View toastView = toast.getView(); // This will return the default View of the Toast.
-                                TextView toastMessage = toastView.findViewById(android.R.id.message);
-                                toastMessage.setTextSize(30);
-                                toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
-                                toastMessage.setGravity(Gravity.CENTER);
-                                toastMessage.setCompoundDrawablePadding(16);
-                                toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
-                                toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
-                                toast.show();
+                                Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                                 return;
                             } else if (amount.equals("0")) {
                                 CharSequence text = "Error, Amount Can Not Be Zero!";
-                                Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
-                                /*View toastView = toast.getView(); // This will return the default View of the Toast.
-                                TextView toastMessage = toastView.findViewById(android.R.id.message);
-                                toastMessage.setTextSize(30);
-                                toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
-                                toastMessage.setGravity(Gravity.CENTER);
-                                toastMessage.setCompoundDrawablePadding(16);
-                                toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
-                                toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
-                                toast.show();
+                                Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                                 return;
                             }
                             double amountValue = Double.parseDouble(amount);
                             if (amount.matches("0")) {
                                 CharSequence text = "Error, Amount Can Not Be Zero!";
-                                Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
-                                /*View toastView = toast.getView(); // This will return the default View of the Toast.
-                                TextView toastMessage = toastView.findViewById(android.R.id.message);
-                                toastMessage.setTextSize(30);
-                                toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
-                                toastMessage.setGravity(Gravity.CENTER);
-                                toastMessage.setCompoundDrawablePadding(16);
-                                toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
-                                toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
-                                toast.show();
+                                Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                                 return;
                             }
                             /* set the same ingredient object with the new user input */
@@ -368,34 +347,14 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         if (description.isEmpty() || category.isEmpty() || date.isEmpty()
                                 || location.isEmpty() || amount.isEmpty() || unit.isEmpty()) {
                             CharSequence text = "Error, Some Fields Are Empty!";
-                            Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
-                            /*View toastView = toast.getView(); // This will return the default View of the Toast.
-                            TextView toastMessage = toastView.findViewById(android.R.id.message);
-                            toastMessage.setTextSize(30);
-                            toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
-                            toastMessage.setGravity(Gravity.CENTER);
-                            toastMessage.setCompoundDrawablePadding(16);
-                            toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
-                            toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
-                            toast.show();
+                            Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         } else if (amount.equals("0")) {
                             CharSequence text = "Error, Amount Can Not Be Zero!";
-                            Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_LONG);
-                            /*View toastView = toast.getView(); // This will return the default View of the Toast.
-                            TextView toastMessage = toastView.findViewById(android.R.id.message);
-                            toastMessage.setTextSize(30);
-                            toastMessage.setTextColor(Color.parseColor("#FFFFFF"));
-                            toastMessage.setGravity(Gravity.CENTER);
-                            toastMessage.setCompoundDrawablePadding(16);
-                            toastMessage.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_error_icon_foreground, 0, 0, 0);
-                            toastView.setBackgroundColor(Color.parseColor("#BA5951"));*/
-                            toast.show();
+                            Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
                         double amountValue = Double.parseDouble(amount);
-                        listener.onOkPressed(new IngredientInStorage(
-                                description, category, date, location, amount, unit));
                         // key: value pair as a element in HashMap
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("description", description);
@@ -422,21 +381,22 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                         Log.d(description, "Data cannot be added!" + e.toString());
                                     }
                                 });
-
+                        listener.onOkPressed(new IngredientInStorage(
+                                description, category, date, location, amount, unit));
                     }
                 }).create();
     }
 
-        @Override
-        public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
-
-        }
-
-        @Override
-        public void onNothingSelected (AdapterView < ? > parent){
-
-        }
-
+    @Override
+    public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
 
     }
+
+    @Override
+    public void onNothingSelected (AdapterView < ? > parent){
+
+    }
+
+
+}
 
