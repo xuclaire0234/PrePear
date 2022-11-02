@@ -8,20 +8,18 @@
 
 package com.example.prepear;
 
-import java.io.Serializable;
-
 /**
  * This class defines {@link IngredientInStorage} objects which extends Ingredient class
  * and allows setting and accessing the attributes
  * @author: Marafi Mergani
  * @version: 1
  */
-public class IngredientInStorage extends Ingredient implements Serializable {
+public class IngredientInStorage extends Ingredient{
     // initialize additional class attributes
     // <access_identifier> variableName;
     private String bestBeforeDate;
     private String location;
-    private String id;
+    private String documentId;
 
     /**
      * This constructor creates an {@link IngredientInStorage} object with the given attributes
@@ -33,10 +31,11 @@ public class IngredientInStorage extends Ingredient implements Serializable {
      * @param amount an int for the number of ingredients
      * @param unit aa int for the unit cost of the ingredient
      */
-    public IngredientInStorage(String description, String category, String date, String location, String amount, String unit){
+    public IngredientInStorage(String description, String category, String date, String location, String amount, String unit, String documentId){
         super(description, amount, unit, category);
         this.bestBeforeDate = date;
         this.location = location;
+        this.documentId = documentId;
     }
 
     /**
@@ -44,7 +43,7 @@ public class IngredientInStorage extends Ingredient implements Serializable {
      * @return bestBeforeDate a String for the date entered
      */
     public String getBestBeforeDate() {
-        return this.bestBeforeDate;
+        return bestBeforeDate;
     }
 
     /**
@@ -57,10 +56,10 @@ public class IngredientInStorage extends Ingredient implements Serializable {
 
     /**
      * This method returns the location of the ingredient
-     * @return  location a String for the location entered
+     * @return  location: a String for the location entered
      */
     public String getLocation() {
-        return this.location;
+        return location;
     }
 
     /**
@@ -71,11 +70,20 @@ public class IngredientInStorage extends Ingredient implements Serializable {
         this.location = location;
     }
 
-    public String getId() {
-        return id;
+
+    /**
+     * This method sets the location of the ingredient
+     * @return documentId a String for the ingredient's document id inside the storage Collection
+     */
+    public String getDocumentId() {
+        return this.documentId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    /**
+     * This method sets the location of the ingredient
+     * @param  documentId a String for the the ingredient's document id inside the storage Collection auto-generated
+     */
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }

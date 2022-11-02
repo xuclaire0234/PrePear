@@ -1,10 +1,3 @@
-/*
- * Class Name: IngredientStorageCustomList
- * Version Information: Version 1.0
- * Date: Oct 25th, 2022
- * Author: Shihao Liu
- * Copyright Notice:
- * */
 package com.example.prepear;
 
 import android.content.Context;
@@ -20,8 +13,6 @@ import androidx.annotation.Nullable;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /* CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
  * Substitution of IngredientStorageController Class
@@ -30,7 +21,6 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
 
     private ArrayList<IngredientInStorage> ingredientsInStorage; // holds for ingredients in storage entries
     private Context context; // holds for ViewIngredientStorage activity's context
-    private int sortItemIngredient = 0;
 
     /* constructor comment */
     public IngredientStorageCustomList(Context contextParameter,
@@ -39,63 +29,6 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         this.context = contextParameter;
         this.ingredientsInStorage = ingredientsInStorageParameter;
     }
-
-    public int getSortItemIngredient() {
-        return this.sortItemIngredient;
-    }
-
-    public void setSortItemIngredient(int index) {
-        this.sortItemIngredient = index;
-    }
-
-    public void sortIngredient(int index) {
-        this.sortItemIngredient = index;
-        if (index == 0) {
-            Collections.sort(this.ingredientsInStorage, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getBriefDescription().compareTo(ingredient2.getBriefDescription());
-                }
-            });
-        }else if (index == 1) {
-            Collections.sort(ingredientsInStorage, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getBriefDescription().compareTo(ingredient1.getBriefDescription());
-                }
-            });
-        }else if (index == 2) {
-            Collections.sort(ingredientsInStorage, new Comparator<IngredientInStorage>(){
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getBestBeforeDate().compareTo(ingredient2.getBestBeforeDate());
-                }
-            });
-        }else if (index == 3) {
-            Collections.sort(ingredientsInStorage, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getBestBeforeDate().compareTo(ingredient1.getBestBeforeDate());
-                }
-            });
-        }else if (index == 4){
-            Collections.sort(ingredientsInStorage, new Comparator<IngredientInStorage>(){
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getLocation().compareTo(ingredient1.getLocation());
-                }
-            });
-        }else if (index == 5){
-            Collections.sort(ingredientsInStorage, new Comparator<IngredientInStorage>(){
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getIngredientCategory().compareTo(ingredient1.getIngredientCategory());
-                }
-            });
-        }
-    }
-
-
 
     @NonNull
     @Override
@@ -115,15 +48,13 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         // best before date and unit count to the corresponding Textview object for displaying on the activity
         TextView ingredientDescription = view.findViewById(R.id.descriptionText);
         TextView ingredientBestBeforeDate = view.findViewById(R.id.bestBeforeDateText);
-        TextView ingredientUnit = view.findViewById(R.id.unitText);
-//        TextView ingredientCategory = view.findViewById(R.id.categoryText);
-//        TextView ingredientLocation = view.findViewById(R.id.locationText);
+        TextView ingredientUnit = view.findViewById(R.id.unitNumberText);
+        TextView ingredientAmount = view.findViewById(R.id.amountText);
 
-        ingredientDescription.setText(ingredientEntry.getBriefDescription());
+        ingredientDescription.setText(ingredientEntry.getDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
         ingredientUnit.setText(ingredientEntry.getUnit());
-//        ingredientLocation.setText(ingredientEntry.getLocation());
-//        ingredientCategory.setText(ingredientEntry.getIngredientCategory());
+        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmount()));
 
         return view; // return this view
     }
