@@ -31,10 +31,11 @@ public class IngredientInStorage extends Ingredient{
      * @param amount an int for the number of ingredients
      * @param unit aa int for the unit cost of the ingredient
      */
-    public IngredientInStorage(String description, String category, String date, String location, String amount, String unit){
+    public IngredientInStorage(String description, String category, String date, String location, String amount, String unit, String documentId){
         super(description, amount, unit, category);
         this.bestBeforeDate = date;
         this.location = location;
+        this.documentId = documentId;
     }
 
     /**

@@ -115,24 +115,26 @@ public class ViewIngredientStorage extends AppCompatActivity
                             Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
                             Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
 
-                            String description = document.getId(); //
+                            String documentID = document.getId();
+                            String description =  (String) document.getData().get("description"); //
                             String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
                             String location = (String) document.getData().get("location"); //
                             String unit = (String) document.getData().get("unit"); //
-//                                  //double amount = Double.parseDouble((String) Objects.requireNonNull(document.getData().get("amount")));
                             String amount = String.valueOf(document.getData().get("amount"));
                             String category = (String) document.getData().get("category"); //
 
-                            ingredientStorageDataList.add(new IngredientInStorage(description, category, bestBeforeDate, location, amount, unit));
+                            ingredientStorageDataList.add(new IngredientInStorage(description, category,
+                                    bestBeforeDate, location, amount, unit, documentID));
                             // Notifying the adapter to render any new data fetched from the cloud
                             ingredientStorageListAdapter.notifyDataSetChanged();
                         }
                     }
                 });
+
         // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
         // sort all retrieved ingredients based on user's picked sort-by choice
         SortInStorageIngredients(userSelectedSortChoice);
-        ingredientStorageListAdapter.notifyDataSetChanged(); // for purpose of updating data in the ArrayAdapter
+        ingredientStorageListAdapter.notifyDataSetChanged(); // for updating data in the ArrayAdapter
     }
 
     /**

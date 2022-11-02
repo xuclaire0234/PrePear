@@ -29,7 +29,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -55,7 +59,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
     private OnFragmentInteractionListener listener;
     private DatePickerDialog dialog; // create datePicker for best before date
     private CollectionReference collectionReferenceForInStorageIngredients;
-
+    private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /* Constructor */
     public AddEditIngredientFragment(CollectionReference collectionReference) {
         this.collectionReferenceForInStorageIngredients = collectionReference;
@@ -270,7 +274,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // delete this clicked ingredient from "Ingredient Storage" Collection
                             collectionReferenceForInStorageIngredients
-                                    .document(ingredientInStorage.getBriefDescription())
+                                    .document(ingredientInStorage.getDocumentId())
                                     .delete();
                             listener.onDeletePressed(ingredientInStorage);
                         }
@@ -316,7 +320,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             ingredientInStorage.setLocation(location);
                             // on below:
                             collectionReferenceForInStorageIngredients
-                                    .document(description)
+                                    .document(ingredientInStorage.getDocumentId())
                                     .set(ingredientInStorage);
                             listener.onEditPressed(ingredientInStorage);
                         }
@@ -344,6 +348,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         String location = locationView.getSelectedItem().toString();
                         String unit = unitView.getSelectedItem().toString();
                         String amount = amountView.getText().toString();
+
                         if (description.isEmpty() || category.isEmpty() || date.isEmpty()
                                 || location.isEmpty() || amount.isEmpty() || unit.isEmpty()) {
                             CharSequence text = "Error, Some Fields Are Empty!";
@@ -354,8 +359,9 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        double amountValue = Double.parseDouble(amount);
                         // key: value pair as a element in HashMap
+                        Date dateTimeNow = new Date();
+                        String documentId = DATEFORMAT.format(dateTimeNow);
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
@@ -365,7 +371,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         data.put("unit", unit);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
-                                .document(description)
+                                .document(documentId)
                                 .set(data)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -382,7 +388,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                     }
                                 });
                         listener.onOkPressed(new IngredientInStorage(
-                                description, category, date, location, amount, unit));
+                                description, category, date, location, amount, unit, documentId));
                     }
                 }).create();
     }
