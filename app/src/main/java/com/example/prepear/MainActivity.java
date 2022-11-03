@@ -1,46 +1,61 @@
-package com.example.prepear;
+/*
+ * Class Name: MainActivity
+ * Version Information: Version 1.0
+ * Date: Oct 25th, 2022
+ * Author: Shihao Liu
+ * Copyright Notice:
+ * */
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.prepear;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
+/**/
 public class MainActivity extends AppCompatActivity {
-
-    private Button viewRecipeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewRecipeButton = findViewById(R.id.view_recipe_button);
-        viewRecipeButton.setOnClickListener(new View.OnClickListener() {
+        final Button ingredientStorageButton = findViewById(R.id.ingredient_storage_button);
+        directToViewIngredientStorage(ingredientStorageButton);
+
+        final Button recipeListButton = findViewById(R.id.recipe_folder_button);
+        directToViewRecipeFolder(recipeListButton);
+    }
+
+    /**
+     * @para clickedButton an button for the user to click and be directed to the corresponding activity
+     */
+    public void directToViewIngredientStorage(Button clickedButton) {
+        clickedButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,ViewRecipeListActivity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                Intent intentForViewIngredientStorageActivity = new Intent(MainActivity.this, ViewIngredientStorage.class);
+                startActivity(intentForViewIngredientStorageActivity);
             }
         });
     }
+
+    /**
+     * @param clickedButton clickedButton an button for the user to click and be directed to the corresponding activity
+     */
+    public void directToViewRecipeFolder(Button clickedButton){
+        clickedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentForViewRecipeListActivity = new Intent(MainActivity.this, ViewRecipeListActivity.class);
+                startActivity(intentForViewRecipeListActivity);
+            }
+        });
+    }
+
 }
