@@ -143,7 +143,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description;
-                        Integer amount;
+                        String amount;
                         String unit;
                         String category;
 
@@ -155,7 +155,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                                     Toast.LENGTH_LONG).show();
                         } else {
                             description = descriptionText.getText().toString();
-                            amount = Integer.parseInt(amountText.getText().toString());
+                            amount = amountText.getText().toString();
                             unit = unitSpinner.getSelectedItem().toString();
                             category = categorySpinner.getSelectedItem().toString();
                             listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));

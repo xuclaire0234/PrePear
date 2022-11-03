@@ -408,10 +408,10 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
 
         for (IngredientInRecipe ingredient: ingredientInRecipeDataList) {
             data = new HashMap<>();
-            String briefDescription = ingredient.getBriefDescription();
+            String briefDescription = ingredient.getDescription();
             Number amount = ingredient.getAmount();
             String unit = ingredient.getUnit();
-            String ingredientCategory = ingredient.getIngredientCategory();
+            String ingredientCategory = ingredient.getCategory();
             String ingredientId = ingredient.getId();
 
             if (briefDescription.equals("") || amount.equals("") || unit.equals("")

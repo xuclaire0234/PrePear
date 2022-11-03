@@ -134,10 +134,10 @@ public class RecipeEditIngredientFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
-        descriptionText.setText(ingredient.getBriefDescription());
-        amountText.setText(ingredient.getAmount().toString());
+        descriptionText.setText(ingredient.getDescription());
+        amountText.setText(String.valueOf(ingredient.getAmount()));
         unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));
-        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
+        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getCategory()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Edit Ingredient");
@@ -149,7 +149,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
-                        int amount = Integer.parseInt(amountText.getText().toString());
+                        String amount = amountText.getText().toString();
                         String unit = unitSpinner.getSelectedItem().toString();
                         String category = categorySpinner.getSelectedItem().toString();
                         listener.onDeletePressed(new IngredientInRecipe(description, amount, unit, category));
@@ -159,7 +159,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description;
-                        Integer amount;
+                        String amount;
                         String unit;
                         String category;
                         if (descriptionText.getText().toString().equals("")
@@ -170,13 +170,13 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                                     Toast.LENGTH_LONG).show();
                         } else {
                             description = descriptionText.getText().toString();
-                            amount = Integer.parseInt(amountText.getText().toString());
+                            amount = amountText.getText().toString();
                             unit = unitSpinner.getSelectedItem().toString();
                             category = categorySpinner.getSelectedItem().toString();
-                            ingredient.setBriefDescription(description);
-                            ingredient.setAmount(amount);
+                            ingredient.setDescription(description);
+                            ingredient.setAmount(Double.parseDouble(amount));
                             ingredient.setUnit(unit);
-                            ingredient.setIngredientCategory(category);
+                            ingredient.setCategory(category);
                             listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
                         }
                     }

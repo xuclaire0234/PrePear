@@ -65,10 +65,10 @@ public class CustomIngredientInRecipeList extends ArrayAdapter<IngredientInRecip
         TextView unitTextView = view.findViewById(R.id.unit_TextView);
         TextView ingredientCategoryTextView = view.findViewById(R.id.ingredient_category_TextView);
 
-        briefDescriptionTextView.setText(ingredientInRecipe.getBriefDescription());
-        amountTextView.setText(ingredientInRecipe.getAmount().toString());
+        briefDescriptionTextView.setText(ingredientInRecipe.getDescription());
+        amountTextView.setText(String.valueOf(ingredientInRecipe.getAmount()));
         unitTextView.setText(ingredientInRecipe.getUnit());
-        ingredientCategoryTextView.setText(ingredientInRecipe.getIngredientCategory());
+        ingredientCategoryTextView.setText(ingredientInRecipe.getCategory());
 
         return view;
     }

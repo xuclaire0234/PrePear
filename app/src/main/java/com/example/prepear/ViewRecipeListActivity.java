@@ -232,7 +232,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                                         /*
                                          * Create a new object of type {Ingredient} with all the attributes added
                                          */
-                                        IngredientInRecipe NewIngredient = new IngredientInRecipe(briefDescription,amount.intValue(),unit,ingredientCategory); /* initialize
+                                        IngredientInRecipe NewIngredient = new IngredientInRecipe(briefDescription,amount.toString(),unit,ingredientCategory); /* initialize
                                                                                  a ingredient object */
                                         NewIngredient.setId(id); /* set id of the ingredient in database */
 
