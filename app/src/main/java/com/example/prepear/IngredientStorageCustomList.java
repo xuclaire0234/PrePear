@@ -51,10 +51,10 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         TextView ingredientUnit = view.findViewById(R.id.unitNumberText);
         TextView ingredientAmount = view.findViewById(R.id.amountText);
 
-        ingredientDescription.setText(ingredientEntry.getDescription());
+        ingredientDescription.setText(ingredientEntry.getBriefDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
         ingredientUnit.setText(ingredientEntry.getUnit());
-        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmount()));
+        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmountValue()));
 
         return view; // return this view
     }

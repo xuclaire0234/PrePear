@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**/
@@ -43,16 +44,17 @@ public class ViewIngredientStorage extends AppCompatActivity
         AddEditIngredientFragment.OnFragmentInteractionListener {
 
     private ListView ingredientStorageList;
-    private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
+    public ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
-    private final String[] userSortChoices = {" ","description(ascending)","description(descending)",
+    private String[] userSortChoices = {"                 ---- Select  ---- ",
+            "description(ascending)","description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
             "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
-    private IngredientInStorage newIngredient;
-    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
-    private final FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
-    final CollectionReference inStorageIngredientsCollection = dbForInStorageIngredients.collection("Ingredient Storage");
+
+    private final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
+    private FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
+    private CollectionReference inStorageIngredientCollection = dbForInStorageIngredients.collection("Ingredient Storage");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class ViewIngredientStorage extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // on below the addition Fragment for new in-storage ingredient
-                new AddEditIngredientFragment(inStorageIngredientsCollection).show(getSupportFragmentManager(), "Add Ingredient");
+                new AddEditIngredientFragment(inStorageIngredientCollection).show(getSupportFragmentManager(), "Add Ingredient");
             }
         });
 
@@ -88,7 +90,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
                 AddEditIngredientFragment ingredientFragment = AddEditIngredientFragment.newInstance(clickedFood,
-                        inStorageIngredientsCollection);
+                        inStorageIngredientCollection);
                 ingredientFragment.show(transaction, "Edit Ingredient");
             }
         });
@@ -103,44 +105,48 @@ public class ViewIngredientStorage extends AppCompatActivity
         adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
-
-        inStorageIngredientsCollection
+        inStorageIngredientCollection
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         ingredientStorageDataList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
-                            Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    /**/
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
 
-                            String documentID = document.getId();
-                            String description =  (String) document.getData().get("description"); //
-                            String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
-                            String location = (String) document.getData().get("location"); //
-                            String unit = (String) document.getData().get("unit"); //
-                            String amount = String.valueOf(document.getData().get("amount"));
-                            String category = (String) document.getData().get("category"); //
+                                    String documentID = document.getId(); //
+                                    String description =  (String) document.getData().get("description"); //
+                                    String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
+                                    String location = (String) document.getData().get("location"); //
+                                    String unit = (String) document.getData().get("unit"); //
+                                    String amount = String.valueOf(document.getData().get("amount")); //
+                                    String category = (String) document.getData().get("category"); //
 
-                            newIngredient = new IngredientInStorage(description, category,
-                                    bestBeforeDate, location, amount, unit, documentID);
-                            newIngredient.setDocumentId(documentID);
-                            ingredientStorageDataList.add(newIngredient);
-                            // Notifying the adapter to render any new data fetched from the cloud
-                            ingredientStorageListAdapter.notifyDataSetChanged();
+                                    ingredientStorageDataList.add(new IngredientInStorage(description, category,
+                                            bestBeforeDate, location, amount, unit, documentID));
+                                    // Notifying the adapter to render any new data fetched from the cloud
+                                    ingredientStorageListAdapter.notifyDataSetChanged();
+                                } else {
+                                    Log.d("This document", "onComplete: DNE! ");
+                                }
+
+                            }
                         }
-
                     }
                 });
+
         // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
         // sort all retrieved ingredients based on user's picked sort-by choice
         SortInStorageIngredients(userSelectedSortChoice);
-        ingredientStorageListAdapter.notifyDataSetChanged(); // for purpose of updating data in the ArrayAdapter
+        ingredientStorageListAdapter.notifyDataSetChanged(); // for updating data in the ArrayAdapter
     }
-
 
     /**
      * <p>Callback method to be invoked when an item in this view has been
@@ -183,14 +189,14 @@ public class ViewIngredientStorage extends AppCompatActivity
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getDescription().compareTo(ingredient2.getDescription());
+                    return ingredient1.getBriefDescription().compareTo(ingredient2.getBriefDescription());
                 }
             });
         } else if (Objects.equals(userSelectedSortChoice, "description(descending)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getDescription().compareTo(ingredient1.getDescription());
+                    return ingredient2.getBriefDescription().compareTo(ingredient1.getBriefDescription());
                 }
             });
         } else if (Objects.equals(userSelectedSortChoice, "best before (oldest to newest)")) {
@@ -218,32 +224,36 @@ public class ViewIngredientStorage extends AppCompatActivity
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getCategory().compareTo(ingredient1.getCategory());
+                    return ingredient2.getIngredientCategory().compareTo(ingredient1.getIngredientCategory());
                 }
             });
         }
     }
 
-    /**/
+    /**
+     * @param newIngredientInStorage
+     */
     @Override
     public void onOkPressed (IngredientInStorage newIngredientInStorage) {
         ingredientStorageListAdapter.add(newIngredientInStorage);
-        ingredientStorageListAdapter.notifyDataSetChanged();
+        onEditPressed(newIngredientInStorage);
     }
 
-    /**/
+
+    /**
+     * @param ingredientInStorage
+     */
     @Override
     public void onDeletePressed (IngredientInStorage ingredientInStorage) {
         ingredientStorageListAdapter.remove(ingredientInStorage);
-        ingredientStorageListAdapter.notifyDataSetChanged();
+        onEditPressed(ingredientInStorage);
     }
 
-    /**/
+    /**
+     * @param ingredientInStorage
+     */
     @Override
     public void onEditPressed (IngredientInStorage ingredientInStorage) {
         ingredientStorageListAdapter.notifyDataSetChanged(); // notify for updating data in the ingredient list
     }
 }
-
-
-

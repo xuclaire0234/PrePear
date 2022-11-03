@@ -15,7 +15,8 @@
             android:textSize="15sp"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="Description" />
+            android:text="Description"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/bestBeforeDateText"
@@ -33,7 +34,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="15sp"
-            android:text="Amount" />
+            android:text="Amount"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/unitNumberText"

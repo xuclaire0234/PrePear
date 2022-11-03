@@ -35,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
@@ -130,7 +131,6 @@ public class AddEditIngredientFragment extends DialogFragment implements
                 R.layout.add_ingredient_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading4);
 
-
         /*assign variables to TextView objects and set on click listeners*/
         dateView = view.findViewById(R.id.bestBeforeDate);
         dateView.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +183,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
 
         categoryView = (Spinner) view.findViewById(R.id.ingredient_category);
         ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(getContext(),
-                R.array.categories, android.R.layout.simple_spinner_item);
+                R.array.ingredient_categories, android.R.layout.simple_spinner_item);
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryView.setAdapter(adapterForCategories);
         categoryView.setOnTouchListener(new View.OnTouchListener() {
@@ -253,13 +253,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
             /* set the previous values of the text fields */
-            descriptionView.setText(ingredientInStorage.getDescription());
-            Log.d("description_fetch", "onCreateDialog: "+ingredientInStorage.getDescription());
-            Log.d("IngredientCategory", "onCreateDialog: " + ingredientInStorage.getCategory());
-            categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getCategory()));
+            descriptionView.setText(ingredientInStorage.getBriefDescription());
+            Log.d("IngredientCategory", "onCreateDialog: " + ingredientInStorage.getIngredientCategory());
+            categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
             locationView.setSelection(adapterForLocation.getPosition(ingredientInStorage.getLocation()));
-            amountView.setText(String.valueOf(ingredientInStorage.getAmount()));
+            amountView.setText(String.valueOf(ingredientInStorage.getAmountValue()));
             unitView.setSelection(adapterForUnits.getPosition(ingredientInStorage.getUnit()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
@@ -296,7 +295,6 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             String location = locationView.getSelectedItem().toString();
                             String amount = amountView.getText().toString();
                             String unit = unitView.getSelectedItem().toString();
-
                             if (description.isEmpty() || category.isEmpty() || date.isEmpty()
                                     || location.isEmpty() || amount.isEmpty() || unit.isEmpty()) {
                                 CharSequence text = "Error, Some Fields Are Empty!";
@@ -313,19 +311,19 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                 Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                                 return;
                             }
-
                             /* set the same ingredient object with the new user input */
-                            ingredientInStorage.setDescription(description);
-                            ingredientInStorage.setCategory(category);
+                            ingredientInStorage.setBriefDescription(description);
+                            ingredientInStorage.setIngredientCategory(category);
                             ingredientInStorage.setBestBeforeDate(date);
-                            ingredientInStorage.setAmount(amountValue);
+                            ingredientInStorage.setAmountValue(amountValue);
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
                             // on below:
                             collectionReferenceForInStorageIngredients
                                     .document(ingredientInStorage.getDocumentId())
+//                                    .set(ingredientInStorage);
                                     .update("description",description,"category",category,"bestBeforeDate", date,
-                                        "amount", amount, "unit", unit, "location", location);
+                                            "amount", amount, "unit", unit, "location", location);
                             listener.onEditPressed(ingredientInStorage);
                         }
                     }).create();
@@ -366,13 +364,14 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         // key: value pair as a element in HashMap
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
-                        HashMap<String, Object> data = new HashMap<>();
+                        Map<String, Object> data = new HashMap<>();
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
                         data.put("location", location);
                         data.put("category", category);
                         data.put("amount", amount);
                         data.put("unit", unit);
+                        data.put("document id", documentId);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(documentId)
@@ -391,7 +390,8 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                         Log.d(description, "Data cannot be added!" + e.toString());
                                     }
                                 });
-                        listener.onOkPressed(new IngredientInStorage(description, category, date, location, amount, unit, documentId));
+                        listener.onOkPressed(new IngredientInStorage(
+                                description, category, date, location, amount, unit, documentId));
                     }
                 }).create();
     }
@@ -408,6 +408,3 @@ public class AddEditIngredientFragment extends DialogFragment implements
 
 
 }
-
-
-

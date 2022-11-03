@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PrePear</string>
-    <string-array name="categories">
+    <string-array name="ingredient_categories">
         <item></item>
         <item>Eggs, milk, and milk product</item>
         <item>Fats and oils</item>
@@ -14,17 +14,36 @@
     </string-array>
     <string-array name="locations">
         <item></item>
+        <item>Bin</item>
+        <item>Box</item>
         <item>Freezer</item>
         <item>Fridge</item>
         <item>Pantry</item>
+        <item>Shelf</item>
     </string-array>
     <string-array name="units">
         <item></item>
-        <item>Kilograms</item>
-        <item>Grams</item>
-        <item>Ounces</item>
-        <item>Pounds</item>
-        <item>Liters</item>
-        <item>Milliliters</item>
+        <item>g</item>
+        <item>kg</item>
+        <item>oz</item>
+        <item>lb</item>
+        <item>ml</item>
+        <item>L</item>
+    </string-array>
+    <string-array name="recipe_category">
+        <item></item>
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Appetizer</item>
+        <item>Salad</item>
+        <item>Main-course</item>
+        <item>Side-dish</item>
+        <item>Baked-good</item>
+        <item>Dessert</item>
+        <item>Snack</item>
+        <item>Soap</item>
+        <item>Holiday</item>
+        <item>Vegetarian</item>
     </string-array>
 </resources>

@@ -4,5 +4,4 @@
         <item name="colorAccent">#DFC645</item>
         <item name="colorOnPrimary">@color/black</item>
     </style>
-
 </resources>

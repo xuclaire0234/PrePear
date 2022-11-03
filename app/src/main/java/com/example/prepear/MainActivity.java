@@ -20,8 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**/
 public class MainActivity extends AppCompatActivity {
 
-    public FirebaseFirestore prePearDB;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
 
         final Button ingredientStorageButton = findViewById(R.id.ingredient_storage_button);
         directToViewIngredientStorage(ingredientStorageButton);
+
+        final Button recipeListButton = findViewById(R.id.recipe_folder_button);
+        directToViewRecipeFolder(recipeListButton);
     }
 
     /**
-     * @para clickedButton an button the user clicks and direct to the corresponding activity
+     * @para clickedButton an button for the user to click and be directed to the corresponding activity
      */
     public void directToViewIngredientStorage(Button clickedButton) {
         clickedButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * @param clickedButton clickedButton an button for the user to click and be directed to the corresponding activity
+     */
+    public void directToViewRecipeFolder(Button clickedButton){
+        clickedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentForViewRecipeListActivity = new Intent(MainActivity.this, ViewRecipeListActivity.class);
+                startActivity(intentForViewRecipeListActivity);
+            }
+        });
+    }
 
 }
