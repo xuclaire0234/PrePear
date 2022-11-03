@@ -40,16 +40,13 @@ import java.util.Map;
 /**
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
  * it and make changes to its attributes
- * @authors: Marafi Mergani, Shihao Liu, Jingyi Xu
+ * @authors: Shihao Liu, Marafi Mergani
  * @version: 1.0
  */
 
 public class AddEditIngredientFragment extends DialogFragment implements
         AdapterView.OnItemSelectedListener{
-    /* initialize variables for EditText, DatePickerDialog,
-       and fragment interaction listener objects
-       <access_identifier> variableName;
-     */
+    // initialize variables for EditText, DatePickerDialog, and fragment interaction listener objects
     private EditText descriptionView;
     private Spinner categoryView;
     private EditText dateView;

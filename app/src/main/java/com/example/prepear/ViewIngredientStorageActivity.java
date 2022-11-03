@@ -9,7 +9,6 @@
 package com.example.prepear;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,21 +24,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**/
-public class ViewIngredientStorage extends AppCompatActivity
+public class ViewIngredientStorageActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener,
         AddEditIngredientFragment.OnFragmentInteractionListener {
 
@@ -181,11 +176,9 @@ public class ViewIngredientStorage extends AppCompatActivity
         // Auto
     }
 
-    /* Sort-by functionality */
+    /* on below: Sort-by functionality */
     public void SortInStorageIngredients(String userSelectedSortChoice){
-        if (Objects.equals(userSelectedSortChoice, " ")){
-            // the in-storage ingredient in default order iff userSelectedSortChoice == " "
-        } else if  (Objects.equals(userSelectedSortChoice, "description(ascending)")) {
+        if (Objects.equals(userSelectedSortChoice, "description(ascending)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
