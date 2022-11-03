@@ -61,10 +61,6 @@ public class AddEditIngredientFragment extends DialogFragment implements
     private DatePickerDialog dialog; // create datePicker for best before date
     private CollectionReference collectionReferenceForInStorageIngredients;
     private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    /* Constructor */
-    public AddEditIngredientFragment(CollectionReference collectionReference) {
-        this.collectionReferenceForInStorageIngredients = collectionReference;
-    }
 
     /**
      * This method defines an interface of methods that the MainActivity needs to implement
@@ -86,14 +82,13 @@ public class AddEditIngredientFragment extends DialogFragment implements
      *                            that the user clicked on
      * @return fragment the newly created fragment
      */
-    public static AddEditIngredientFragment newInstance(IngredientInStorage ingredientInStorage,
-                                                        CollectionReference collectionReference) {
+    public static AddEditIngredientFragment newInstance(IngredientInStorage ingredientInStorage) {
         /* create a fragment, and a bundle, add the ingredient to the bundle, and pass it to the
          fragment
          */
         Bundle args = new Bundle(); // create a bundle to store the ingredient passed in
         args.putSerializable("IngredientInStorage", ingredientInStorage); // add ingredient to bundle
-        AddEditIngredientFragment fragment = new AddEditIngredientFragment(collectionReference);
+        AddEditIngredientFragment fragment = new AddEditIngredientFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -273,9 +268,8 @@ public class AddEditIngredientFragment extends DialogFragment implements
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // delete this clicked ingredient from "Ingredient Storage" Collection
-                            collectionReferenceForInStorageIngredients
-                                    .document(ingredientInStorage.getDocumentId())
-                                    .delete();
+                            DatabaseController databaseController = new DatabaseController();
+                            databaseController.deleteIngredientFromIngredientStorage(getActivity(), ingredientInStorage);
                             listener.onDeletePressed(ingredientInStorage);
                         }
                     })
@@ -319,11 +313,8 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
                             // on below:
-                            collectionReferenceForInStorageIngredients
-                                    .document(ingredientInStorage.getDocumentId())
-//                                    .set(ingredientInStorage);
-                                    .update("description",description,"category",category,"bestBeforeDate", date,
-                                            "amount", amount, "unit", unit, "location", location);
+                            DatabaseController database = new DatabaseController();
+                            database.editIngredientInIngredientStorage(getActivity(), ingredientInStorage);
                             listener.onEditPressed(ingredientInStorage);
                         }
                     }).create();
@@ -361,37 +352,14 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        // key: value pair as a element in HashMap
+
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("description", description);
-                        data.put("bestBeforeDate", date);
-                        data.put("location", location);
-                        data.put("category", category);
-                        data.put("amount", amount);
-                        data.put("unit", unit);
-                        data.put("document id", documentId);
-                        // two ingredients with the same descriptions (as id) should be allowed
-                        collectionReferenceForInStorageIngredients
-                                .document(documentId)
-                                .set(data)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // These are a method which gets executed when the task is succeeded
-                                        Log.d(description, "This Ingredient's Data has been added successfully into the Storage!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // These are a method which gets executed if there’s any problem
-                                        Log.d(description, "Data cannot be added!" + e.toString());
-                                    }
-                                });
-                        listener.onOkPressed(new IngredientInStorage(
-                                description, category, date, location, amount, unit, documentId));
+                        IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
+                                category, date, location, amount, unit, documentId);
+                        DatabaseController database = new DatabaseController();
+                        database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
+                        listener.onOkPressed(ingredientToAdd);
                     }
                 }).create();
     }

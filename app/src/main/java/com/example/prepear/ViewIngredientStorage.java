@@ -75,7 +75,7 @@ public class ViewIngredientStorage extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // on below the addition Fragment for new in-storage ingredient
-                new AddEditIngredientFragment(inStorageIngredientCollection).show(getSupportFragmentManager(), "Add Ingredient");
+                new AddEditIngredientFragment().show(getSupportFragmentManager(), "Add Ingredient");
             }
         });
 
@@ -89,8 +89,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
-                AddEditIngredientFragment ingredientFragment = AddEditIngredientFragment.newInstance(clickedFood,
-                        inStorageIngredientCollection);
+                AddEditIngredientFragment ingredientFragment = AddEditIngredientFragment.newInstance(clickedFood);
                 ingredientFragment.show(transaction, "Edit Ingredient");
             }
         });
@@ -105,48 +104,17 @@ public class ViewIngredientStorage extends AppCompatActivity
         adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
-        inStorageIngredientCollection
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ingredientStorageDataList.clear();
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.exists()) {
-                                    /**/
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
 
-                                    String documentID = document.getId(); //
-                                    String description =  (String) document.getData().get("description"); //
-                                    String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
-                                    String location = (String) document.getData().get("location"); //
-                                    String unit = (String) document.getData().get("unit"); //
-                                    String amount = String.valueOf(document.getData().get("amount")); //
-                                    String category = (String) document.getData().get("category"); //
-
-                                    ingredientStorageDataList.add(new IngredientInStorage(description, category,
-                                            bestBeforeDate, location, amount, unit, documentID));
-                                    // Notifying the adapter to render any new data fetched from the cloud
-                                    ingredientStorageListAdapter.notifyDataSetChanged();
-                                } else {
-                                    Log.d("This document", "onComplete: DNE! ");
-                                }
-
-                            }
-                        }
-                    }
-                });
+        // updated version of view ingredients in ingredient storage
+        DatabaseController databaseController = new DatabaseController();
+        databaseController.viewIngredientsInIngredientStorage(ViewIngredientStorage.this, ingredientStorageDataList);
 
         // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
         // sort all retrieved ingredients based on user's picked sort-by choice
         SortInStorageIngredients(userSelectedSortChoice);
         ingredientStorageListAdapter.notifyDataSetChanged(); // for updating data in the ArrayAdapter
     }
+
 
     /**
      * <p>Callback method to be invoked when an item in this view has been

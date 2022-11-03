@@ -60,11 +60,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
-        // connects to the database
-        final String TAG = "Recipes";
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Recipes");
-
         // connects the layout with the views and buttons
         imageImageView = findViewById(R.id.imageView);
         titleTextView = findViewById(R.id.title_TextView);
@@ -113,25 +108,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<IngredientInRecipe> IngredientListToBeDeleted = viewedRecipe.getListOfIngredients();
-                for (IngredientInRecipe ingredient: IngredientListToBeDeleted) {
-                    collectionReference.document(viewedRecipe.getId()).collection("Ingredient").document(ingredient.getId()).delete();
-                }
-
-                collectionReference.document(viewedRecipe.getId())
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                            }
-                        });
+                // delete recipe from database
+                DatabaseController databaseController = new DatabaseController();
+                databaseController.deleteRecipeFromRecipeList(ViewRecipeActivity.this, viewedRecipe);
 
                 // return to the calling ViewRecipeListActivity
                 Intent returnIntent = new Intent();
