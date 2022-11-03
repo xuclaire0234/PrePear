@@ -230,21 +230,28 @@ public class ViewIngredientStorage extends AppCompatActivity
         }
     }
 
-    /**/
+    /**
+     * @param newIngredientInStorage
+     */
     @Override
     public void onOkPressed (IngredientInStorage newIngredientInStorage) {
         ingredientStorageListAdapter.add(newIngredientInStorage);
         onEditPressed(newIngredientInStorage);
     }
 
-    /**/
+
+    /**
+     * @param ingredientInStorage
+     */
     @Override
     public void onDeletePressed (IngredientInStorage ingredientInStorage) {
         ingredientStorageListAdapter.remove(ingredientInStorage);
         onEditPressed(ingredientInStorage);
     }
 
-    /**/
+    /**
+     * @param ingredientInStorage
+     */
     @Override
     public void onEditPressed (IngredientInStorage ingredientInStorage) {
         ingredientStorageListAdapter.notifyDataSetChanged(); // notify for updating data in the ingredient list

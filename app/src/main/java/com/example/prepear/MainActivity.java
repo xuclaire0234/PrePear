@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @para clickedButton an button the user clicks and direct to the corresponding activity
+     * @para clickedButton an button for the user to click and be directed to the corresponding activity
      */
     public void directToViewIngredientStorage(Button clickedButton) {
         clickedButton.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param clickedButton clickedButton an button for the user to click and be directed to the corresponding activity
+     */
     public void directToViewRecipeFolder(Button clickedButton){
 
     }
