@@ -408,13 +408,13 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
 
         for (IngredientInRecipe ingredient: ingredientInRecipeDataList) {
             data = new HashMap<>();
-            String briefDescription = ingredient.getDescription();
-            Number amount = ingredient.getAmount();
+            String briefDescription = ingredient.getBriefDescription();
+            Number amount = ingredient.getAmountValue();
             String unit = ingredient.getUnit();
-            String ingredientCategory = ingredient.getCategory();
+            String ingredientCategory = ingredient.getIngredientCategory();
             String ingredientId = ingredient.getId();
 
-            if (briefDescription.equals("") || amount.equals("") || unit.equals("")
+            if (briefDescription.equals("") || amount.toString().equals("") || unit.equals("")
                     || ingredientCategory.equals("")) {
                 Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
             } else {

@@ -134,10 +134,10 @@ public class RecipeEditIngredientFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
-        descriptionText.setText(ingredient.getDescription());
-        amountText.setText(String.valueOf(ingredient.getAmount()));
+        descriptionText.setText(ingredient.getBriefDescription());
+        amountText.setText(String.valueOf(ingredient.getAmountString()));
         unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));
-        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getCategory()));
+        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Edit Ingredient");
@@ -173,10 +173,10 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                             amount = amountText.getText().toString();
                             unit = unitSpinner.getSelectedItem().toString();
                             category = categorySpinner.getSelectedItem().toString();
-                            ingredient.setDescription(description);
-                            ingredient.setAmount(Double.parseDouble(amount));
+                            ingredient.setBriefDescription(description);
+                            ingredient.setAmountValue(Double.parseDouble(amount));
                             ingredient.setUnit(unit);
-                            ingredient.setCategory(category);
+                            ingredient.setIngredientCategory(category);
                             listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
                         }
                     }
