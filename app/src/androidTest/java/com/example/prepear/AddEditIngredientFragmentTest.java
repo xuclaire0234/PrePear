@@ -85,28 +85,14 @@ public class AddEditIngredientFragmentTest {
     public void testViewIngredientDetail(){
         solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorage.class);
-        solo.clickOnImageButton(0);
-        solo.enterText((EditText) solo.getView(R.id.brief_description), "Carrots");
-        solo.clickOnView(solo.getView(R.id.ingredient_location));
-        solo.clickOnMenuItem("Freezer");
-        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-        solo.clickOnMenuItem("kg");
-        solo.clickOnView(solo.getView(R.id.ingredient_category));
-        solo.clickOnMenuItem("Fats and oils");
-        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-        solo.sleep(2000);
-        solo.clickOnText("OK");
-        // Get ViewIngredientStorage Activity to access its variables and methods.
         ViewIngredientStorage viewIngredientStorage = (ViewIngredientStorage) solo.getCurrentActivity();
         Adapter adapter = viewIngredientStorage.ingredientStorageListAdapter;
-        IngredientInStorage ingredientInStorage = (IngredientInStorage) adapter.getItem(0);
         solo.sleep(3000);
-        solo.clickOnText(ingredientInStorage.getBriefDescription());
+        solo.clickOnMenuItem("test");
         solo.sleep(3000);
-        assertEquals("nn",ingredientInStorage.getBriefDescription());
-        solo.searchText("Carrots");
-        solo.sleep(5000);
+        solo.clickOnText("OK");
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorage.class);
+        solo.sleep(3000);
     }
 
     @Test
@@ -119,7 +105,7 @@ public class AddEditIngredientFragmentTest {
         ViewIngredientStorage viewIngredientStorage = (ViewIngredientStorage) solo.getCurrentActivity();
         Adapter adapter = viewIngredientStorage.ingredientStorageListAdapter;
         solo.sleep(3000);
-        solo.clickOnMenuItem("nn");
+        solo.clickOnMenuItem("test");
         solo.clearEditText((EditText) solo.getView(R.id.brief_description));
         solo.enterText((EditText) solo.getView(R.id.brief_description), "Carrots");
         solo.sleep(3000);
@@ -141,7 +127,7 @@ public class AddEditIngredientFragmentTest {
         ViewIngredientStorage viewIngredientStorage = (ViewIngredientStorage) solo.getCurrentActivity();
         Adapter adapter = viewIngredientStorage.ingredientStorageListAdapter;
         // Change the text to search
-        solo.clickOnMenuItem("tetst");
+        solo.clickOnMenuItem("testForDelete");
         solo.sleep(3000);
         solo.clickOnText("Delete");
         solo.sleep(3000);
