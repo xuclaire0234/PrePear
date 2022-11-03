@@ -1,3 +1,4 @@
+
 package com.example.prepear;
 
 import android.app.AlertDialog;
@@ -146,23 +147,24 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                 // set day of month , month and year value in the edit text
                                 // if condition statement helps to regulate the format.
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
-                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
+                                            "-" + "0" + dayOfMonth;
                                 } else if (dayOfMonth < 10) {
-                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) +
+                                            "-" + "0" + dayOfMonth;
                                 } else if (monthOfYear < 9) {
-                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
+                                            "-" + dayOfMonth;
                                 } else {
-                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) +
+                                            "-" + dayOfMonth;
                                 }
                                 dateView.setText(bestBeforeDateString);
                             }
                         }, mYear, mMonth, mDay);
                 dialog.show();
                 /* Temporarily remove keyboards before displaying the dialog*/
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
+                removeKeyboard();
             }
         });
 
@@ -179,6 +181,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
         });
 
         categoryView = (Spinner) view.findViewById(R.id.ingredient_category);
+        // create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(getContext(),
                 R.array.ingredient_categories, android.R.layout.simple_spinner_item);
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -187,16 +190,13 @@ public class AddEditIngredientFragment extends DialogFragment implements
             /*Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext()
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
 
         locationView = (Spinner) view.findViewById(R.id.ingredient_location);
+        // create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForLocation = ArrayAdapter.createFromResource(getContext(), R.array.locations,
                 android.R.layout.simple_spinner_item);
         adapterForLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -205,11 +205,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             /*Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext()
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
@@ -230,6 +226,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
         });
 
         unitView = (Spinner) view.findViewById(R.id.ingredient_unit);
+        // create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForUnits = ArrayAdapter.createFromResource(getContext(), R.array.units,
                 android.R.layout.simple_spinner_item);
         adapterForUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -238,9 +235,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             /*Temporarily remove keyboards before displaying spinner*/
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
@@ -249,14 +244,16 @@ public class AddEditIngredientFragment extends DialogFragment implements
         if (args != null) { //if object already exists (the case of editing an item)
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
-            /* set the previous values of the text fields */
+            /* set the previous values of the text fields and spinners*/
             descriptionView.setText(ingredientInStorage.getBriefDescription());
-            Log.d("IngredientCategory", "onCreateDialog: " + ingredientInStorage.getIngredientCategory());
-            categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
+            categoryView.setSelection(adapterForCategories
+                    .getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
-            locationView.setSelection(adapterForLocation.getPosition(ingredientInStorage.getLocation()));
+            locationView.setSelection(adapterForLocation
+                    .getPosition(ingredientInStorage.getLocation()));
             amountView.setText(String.valueOf(ingredientInStorage.getAmountValue()));
-            unitView.setSelection(adapterForUnits.getPosition(ingredientInStorage.getUnit()));
+            unitView.setSelection(adapterForUnits
+                    .getPosition(ingredientInStorage.getUnit()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("View/Edit Ingredient");
@@ -391,6 +388,17 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                 description, category, date, location, amount, unit, documentId));
                     }
                 }).create();
+    }
+
+    /**
+     * This method removes all present soft keyboards and is used when user clicks on one of the
+     * spinners
+     */
+    private void removeKeyboard() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
     }
 
     @Override

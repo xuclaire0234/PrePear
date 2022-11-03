@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         directToViewRecipeFolder(recipeListButton);
     }
 
-
     /**
      * Direct to ViewIngredientStorage Activity after clicking the "INGREDIENT STORAGE" button
      * @param clickedButton clickedButton an button for the user to click,
