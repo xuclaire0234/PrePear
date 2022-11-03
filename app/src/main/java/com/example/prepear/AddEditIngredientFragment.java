@@ -1,4 +1,10 @@
-
+/**
+ * Class Name: ViewIngredientStorage
+ * Version Information: Version 1.0
+ * Create Date: Oct 25th, 2022
+ * Authors: Shihao Liu, Marafi Mergani
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import android.app.AlertDialog;
@@ -6,10 +12,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,16 +36,14 @@ import com.google.firebase.firestore.CollectionReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
- * it and make changes to its attributes
- * @authors: Shihao Liu, Marafi Mergani
+ * This class creates the add/edit ingredient fragment allowing the user to add an ingredient,
+ * view it and make changes to its attributes
  * @version: 1.0
  */
 
@@ -53,12 +55,13 @@ public class AddEditIngredientFragment extends DialogFragment implements
     private EditText dateView;
     private Spinner locationView;
     private EditText amountView;
-    private Spinner unitView;
+    private Spinner unitView; // Spinner for picking ingredient unit
     private String bestBeforeDateString;  // best before date string
     private OnFragmentInteractionListener listener;
     private DatePickerDialog dialog; // create datePicker for best before date
     private CollectionReference collectionReferenceForInStorageIngredients;
     private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /* Constructor */
     public AddEditIngredientFragment(CollectionReference collectionReference) {
         this.collectionReferenceForInStorageIngredients = collectionReference;
@@ -145,7 +148,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                // if condition statement helps to regulate the format.
+                                // if-conditional statement helps to regulate the format.
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
                                     bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
                                             "-" + "0" + dayOfMonth;
@@ -163,7 +166,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             }
                         }, mYear, mMonth, mDay);
                 dialog.show();
-                /* Temporarily remove keyboards before displaying the dialog*/
+                /* Temporarily remove keyboards before displaying the dialog */
                 removeKeyboard();
             }
         });
@@ -174,6 +177,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             public void onClick(View v) {
                 descriptionView.setFocusable(true);
                 if (descriptionView.getText().toString().isEmpty()) {
+                    /* check if description edit */
                     descriptionView.setError("Cannot leave Ingredient Name Empty");
                     descriptionView.requestFocus();
                 }
@@ -231,7 +235,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                 android.R.layout.simple_spinner_item);
         adapterForUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unitView.setAdapter(adapterForUnits);
-        unitView.setOnTouchListener(new View.OnTouchListener() {
+        unitView.setOnTouchListener( new View.OnTouchListener() {
             /*Temporarily remove keyboards before displaying spinner*/
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -355,17 +359,17 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        // key: value pair as a element in HashMap
+                        // key: value pair as a element in HashMap/Map
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
                         Map<String, Object> data = new HashMap<>();
+                        data.put("document id", documentId);
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
                         data.put("location", location);
                         data.put("category", category);
                         data.put("amount", amount);
                         data.put("unit", unit);
-                        data.put("document id", documentId);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(documentId)
@@ -381,7 +385,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         // These are a method which gets executed if there’s any problem
-                                        Log.d(description, "Data cannot be added!" + e.toString());
+                                        Log.d(description, "Data cannot be added!" + e);
                                     }
                                 });
                         listener.onOkPressed(new IngredientInStorage(

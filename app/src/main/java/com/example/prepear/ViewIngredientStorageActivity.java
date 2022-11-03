@@ -33,18 +33,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
-/**/
+/**
+ *
+ *
+ * */
 public class ViewIngredientStorageActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener,
         AddEditIngredientFragment.OnFragmentInteractionListener {
 
     private ListView ingredientStorageList;
-    private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
+    public ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
     private String[] userSortChoices = {"                 ---- Select  ---- ",
             "description(ascending)","description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
-            "location(ascending by default)", "category"}; // used for Spinner
+            "location", "category"}; // used for Spinner
     private String userSelectedSortChoice;
 
     private final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
