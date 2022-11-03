@@ -183,7 +183,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
 
         categoryView = (Spinner) view.findViewById(R.id.ingredient_category);
         ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(getContext(),
-                R.array.categories, android.R.layout.simple_spinner_item);
+                R.array.ingredient_categories, android.R.layout.simple_spinner_item);
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryView.setAdapter(adapterForCategories);
         categoryView.setOnTouchListener(new View.OnTouchListener() {
@@ -322,8 +322,8 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             collectionReferenceForInStorageIngredients
                                     .document(ingredientInStorage.getDocumentId())
 //                                    .set(ingredientInStorage);
-        .update("description",description,"category",category,"bestBeforeDate", date,
-                "amount", amount, "unit", unit, "location", location);
+                                    .update("description",description,"category",category,"bestBeforeDate", date,
+                                            "amount", amount, "unit", unit, "location", location);
                             listener.onEditPressed(ingredientInStorage);
                         }
                     }).create();
@@ -408,4 +408,3 @@ public class AddEditIngredientFragment extends DialogFragment implements
 
 
 }
-

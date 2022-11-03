@@ -6,10 +6,15 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    // changed from RepositoriesMode.FAIL_ON_PROJECT_REPOS to RepositoriesMode.PREFER_SETTINGS for imagepicker
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+
+    // added jcenter() and maven { url 'https://jitpack.io' } for imagepicker
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "PrePear"
