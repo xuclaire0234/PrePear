@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,12 +55,13 @@ import java.util.HashMap;
  */
 public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEditIngredientFragment.OnFragmentInteractionListener,
         RecipeAddIngredientFragment.OnFragmentInteractionListener{
+    private ArrayAdapter<CharSequence> recipeCategorySpinnerAdapter;
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
     private EditText titleEditText;
     private EditText preparationTimeEditText;
     private EditText numberOfServingsEditText;
-    private EditText recipeCategoryEditText;
+    private Spinner recipeCategorySpinner;
     private EditText commentsEditText;
     private Button addIngredientInRecipeButton;
     private ListView ingredientInRecipeListView;
@@ -94,12 +96,28 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         titleEditText = findViewById(R.id.title_EditText);
         preparationTimeEditText = findViewById(R.id.preparation_time_EditText);
         numberOfServingsEditText = findViewById(R.id.number_of_servings_EditText);
-        recipeCategoryEditText = findViewById(R.id.recipe_category_EditText);
+        recipeCategorySpinner = findViewById(R.id.recipe_category_Spinner);
         commentsEditText = findViewById(R.id.comments_EditText);
         addIngredientInRecipeButton = findViewById(R.id.add_ingredient_in_recipe_button);
         ingredientInRecipeListView = findViewById(R.id.ingredient_in_recipe_ListView);
         commitButton = findViewById(R.id.commit_button);
         cancelButton = findViewById(R.id.cancel_button);
+
+        // sets up recipe category spinner
+        recipeCategorySpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.recipe_category,
+                android.R.layout.simple_spinner_item);
+        recipeCategorySpinner.setAdapter(recipeCategorySpinnerAdapter);
+        recipeCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // connects to the database
         final String TAG = "Recipes";
@@ -120,7 +138,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             titleEditText.setText(viewedRecipe.getTitle());
             preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString());
             numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
-            recipeCategoryEditText.setText(viewedRecipe.getRecipeCategory());
+            recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition(viewedRecipe.getRecipeCategory()));
             commentsEditText.setText(viewedRecipe.getComments());
             ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
@@ -276,14 +294,14 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             final String title = titleEditText.getText().toString();
             final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
             final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
-            final String recipeCategory = recipeCategoryEditText.getText().toString();
+            final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
             final String comments = commentsEditText.getText().toString();
             final ArrayList<IngredientInRecipe> listOfIngredients = ingredientInRecipeDataList;
             final String imageURI = linkOfImage;
 
             // checks if there is any necessary information missing
             if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
-                    || recipeCategory.equals("") || comments.equals("")) {
+                    || recipeCategory.equals("")) {
                 Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
             } else {
                 // put details to the new recipe
@@ -345,13 +363,13 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                                 final String title = titleEditText.getText().toString();
                                 final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
                                 final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
-                                final String recipeCategory = recipeCategoryEditText.getText().toString();
+                                final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
                                 final String comments = commentsEditText.getText().toString();
                                 final ArrayList<IngredientInRecipe> listOfIngredients = ingredientInRecipeDataList;
                                 final String imageURI = task.getResult().toString();
 
                                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
-                                        || recipeCategory.equals("") || comments.equals("")) {
+                                        || recipeCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
                                 } else {
                                     data.put("Title", title);

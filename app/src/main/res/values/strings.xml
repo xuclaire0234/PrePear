@@ -30,4 +30,20 @@
         <item>ml</item>
         <item>L</item>
     </string-array>
+    <string-array name="recipe_category">
+        <item></item>
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Appetizer</item>
+        <item>Salad</item>
+        <item>Main-course</item>
+        <item>Side-dish</item>
+        <item>Baked-good</item>
+        <item>Dessert</item>
+        <item>Snack</item>
+        <item>Soap</item>
+        <item>Holiday</item>
+        <item>Vegetarian</item>
+    </string-array>
 </resources>
