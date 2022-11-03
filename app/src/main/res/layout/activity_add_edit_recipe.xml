@@ -126,8 +126,8 @@
                     android:text="Recipe Category:"
                     android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/recipe_category_EditText"
+                <Spinner
+                    android:id="@+id/recipe_category_Spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -185,7 +185,7 @@
             <ListView
                 android:id="@+id/ingredient_in_recipe_ListView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"

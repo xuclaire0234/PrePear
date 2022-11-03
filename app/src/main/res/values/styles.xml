@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="activity_date_picker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#DFC645</item>
+        <item name="colorOnPrimary">@color/black</item>
+    </style>
+</resources>

@@ -19,4 +19,7 @@
     <item name="preparation_time_texts_view_recipe_list" type="id" />
     <item name="recipe_category_texts_view_recipe_list" type="id" />
     <item name="imageView_in_recipe_list" type="id" />
+    <item name="bestBeforeDate" type="id" />
+    <item name="ingredients_in_storage_listview" type="id" />
+    <item name="add_ingredient_button" type="id" />
 </resources>
