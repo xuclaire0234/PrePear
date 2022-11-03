@@ -258,7 +258,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
             locationView.setSelection(adapterForLocation.getPosition(ingredientInStorage.getLocation()));
-            amountView.setText(String.valueOf(ingredientInStorage.getAmount()));
+            amountView.setText(String.valueOf(ingredientInStorage.getAmountValue()));
             unitView.setSelection(adapterForUnits.getPosition(ingredientInStorage.getUnit()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
@@ -315,7 +315,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             ingredientInStorage.setBriefDescription(description);
                             ingredientInStorage.setIngredientCategory(category);
                             ingredientInStorage.setBestBeforeDate(date);
-                            ingredientInStorage.setAmount(amountValue);
+                            ingredientInStorage.setAmountValue(amountValue);
                             ingredientInStorage.setUnit(unit);
                             ingredientInStorage.setLocation(location);
                             // on below:

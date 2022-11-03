@@ -65,7 +65,7 @@ public class Ingredient implements Serializable {
      * This method returns the amount of the ingredient
      * @return amount an int for the amount entered
      */
-    public double getAmount() {
+    public double getAmountValue() {
         return this.amountValue;
     }
 
@@ -73,7 +73,7 @@ public class Ingredient implements Serializable {
      * This method sets the amount of the ingredient
      * @param  amount an int for the amount entered
      */
-    public void setAmount(double amount) {
+    public void setAmountValue(double amount) {
         this.amountValue = amount;
     }
 
@@ -107,5 +107,13 @@ public class Ingredient implements Serializable {
      */
     public void setIngredientCategory(String category) {
         this.category = category;
+    }
+
+    public void setAmountString(String amount) {
+        this.amount = amount;
+    }
+
+    public String getAmountString(){
+        return this.amount;
     }
 }

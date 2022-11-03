@@ -46,15 +46,15 @@ public class ViewIngredientStorage extends AppCompatActivity
     private ListView ingredientStorageList;
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
-    private final String[] userSortChoices = {"                 ---- Select  ---- ",
+    private String[] userSortChoices = {"                 ---- Select  ---- ",
             "description(ascending)","description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
             "location(ascending by default)", "category"}; // used for Spinner
     private String userSelectedSortChoice;
 
-    final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
-    private final FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
-    final CollectionReference inStorageIngredientsCollection = dbForInStorageIngredients.collection("Ingredient Storage");
+    private final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
+    private FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
+    private CollectionReference inStorageIngredientCollection = dbForInStorageIngredients.collection("Ingredient Storage");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class ViewIngredientStorage extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // on below the addition Fragment for new in-storage ingredient
-                new AddEditIngredientFragment(inStorageIngredientsCollection).show(getSupportFragmentManager(), "Add Ingredient");
+                new AddEditIngredientFragment(inStorageIngredientCollection).show(getSupportFragmentManager(), "Add Ingredient");
             }
         });
 
@@ -90,7 +90,7 @@ public class ViewIngredientStorage extends AppCompatActivity
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
                 AddEditIngredientFragment ingredientFragment = AddEditIngredientFragment.newInstance(clickedFood,
-                        inStorageIngredientsCollection);
+                        inStorageIngredientCollection);
                 ingredientFragment.show(transaction, "Edit Ingredient");
             }
         });
@@ -105,7 +105,7 @@ public class ViewIngredientStorage extends AppCompatActivity
         adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
-        inStorageIngredientsCollection
+        inStorageIngredientCollection
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

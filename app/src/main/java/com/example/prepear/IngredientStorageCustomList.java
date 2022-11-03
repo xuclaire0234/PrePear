@@ -54,7 +54,7 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         ingredientDescription.setText(ingredientEntry.getBriefDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
         ingredientUnit.setText(ingredientEntry.getUnit());
-        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmount()));
+        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmountValue()));
 
         return view; // return this view
     }
