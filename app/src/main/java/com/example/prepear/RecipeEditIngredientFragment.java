@@ -1,8 +1,9 @@
-/*
- * Class Name: RecipeAddIngredientFragment
- * Version Information: Version 1.0
- * Date: Oct 26th, 2022
+/**
+ * Classname: RecipeEditIngredientFragment
+ * Version Information: 1.0.0
+ * Date: 11/1/2022
  * Author: Jamie Lee
+ * Copyright Notice:
  */
 package com.example.prepear;
 
@@ -146,6 +147,9 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    /* set listener for the Delete button, delete the clicked Ingredient
+                    and call onDeletePressed method to delete ingredient item
+                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
@@ -156,6 +160,9 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     }
                 })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    /* set listener for the OK button, get user input,
+                    and call onOkPressed method to edit ingredient item
+                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description;

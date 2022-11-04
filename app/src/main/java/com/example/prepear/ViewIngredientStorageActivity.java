@@ -1,5 +1,5 @@
 /**
- * Class Name: ViewIngredientStorage
+* Class Name: ViewIngredientStorage
  * Version Information: Version 1.0
  * Date: Oct 25th, 2022
  * Author: Shihao Liu
@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.example.prepear.IngredientInStorage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,10 +34,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
-/**
- *
- *
- * */
 public class ViewIngredientStorageActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener,
         AddEditIngredientFragment.OnFragmentInteractionListener {

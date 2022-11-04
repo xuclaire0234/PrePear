@@ -1,11 +1,9 @@
 /**
- * CustomRecipeList
- *
- * Version 1.0
- *
- * Date
- *
- * Copyright
+ * Classname: CustomRecipeList
+ * Version Information: 1.0.0
+ * Date: 11/2/2022
+ * Author: Jiayin He
+ * Copyright notice:
  */
 package com.example.prepear;
 
@@ -85,16 +83,16 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
                 (R.id.recipe_text); /* This variable linked to the textview to show the title */
         TextView recipeNumberOfServings = view.findViewById
                 (R.id.number_of_servings_texts_view_recipe_list); /* This variable linked to the
-                 * TextView to show the number of servings */
+         * TextView to show the number of servings */
         TextView recipePreparationTime = view.findViewById
                 (R.id.preparation_time_texts_view_recipe_list); /* This variable linked to the
-                 * TextView to show the preparation time */
+         * TextView to show the preparation time */
         TextView recipeCategory = view.findViewById
                 (R.id.recipe_category_texts_view_recipe_list); /* This variable linked to the
-                 * TextView to show the recipe category */
+         * TextView to show the recipe category */
         ImageView recipeImageView = view.findViewById
                 (R.id.imageView_in_recipe_list); /* This variable linked to the ImageView to show
-                * the image of the recipe */
+         * the image of the recipe */
 
         /*
          * Set colors grey to all the textview except for the textview to show the title
