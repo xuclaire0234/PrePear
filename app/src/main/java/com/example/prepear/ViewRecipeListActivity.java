@@ -72,7 +72,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe_list); /* link current activity to its layout
-                                                             * file */
+         * file */
 
         /*
          * All variables to link to the layout elements are defined here below
@@ -261,7 +261,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (i != 0){
             /* If it is not the first item in the spinner, which is a blank, is selected, the recipe
-            * will be sorted by the item selected */
+             * will be sorted by the item selected */
             sortItemRecipe = i - 1; /* get the index of the item the recipes should be sorted by */
             recipeAdapter.sortRecipe(sortItemRecipe); /* sort the recipes */
             recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
@@ -277,6 +277,12 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
 
     }
 
+    /**
+     * This function gets the added recipe or deleted recipe.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -299,6 +305,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         }
     }
 
+    /**
+     * This function restarts the activity to renew the displayed information.
+     */
     @Override
     public void onRestart() {
         super.onRestart();

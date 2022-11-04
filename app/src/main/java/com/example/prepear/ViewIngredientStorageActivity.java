@@ -73,7 +73,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // on below the addition Fragment for new in-storage ingredient
-                new AddEditIngredientFragment(inStorageIngredientCollection).show(getSupportFragmentManager(), "Add Ingredient");
+                new AddEditIngredientFragment().show(getSupportFragmentManager(), "Add Ingredient");
             }
         });
 
@@ -87,8 +87,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 // use it as newInstance argument to create its associated AddEditIngredientFragment object
                 // on below necessarily required to swap into a correct Fragment
-                AddEditIngredientFragment ingredientFragment = AddEditIngredientFragment.newInstance(clickedFood,
-                        inStorageIngredientCollection);
+                AddEditIngredientFragment ingredientFragment = AddEditIngredientFragment.newInstance(clickedFood);
                 ingredientFragment.show(transaction, "Edit Ingredient");
             }
         });

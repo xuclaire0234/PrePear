@@ -35,11 +35,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,7 +44,6 @@ import com.google.firebase.storage.UploadTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 /**
  * This class defines the add/edit recipe activity that allows user to either add a new recipe or
@@ -74,7 +70,6 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     private StorageReference storageReference;
     private final int IMAGE_REQUEST = 1;
     private Uri imageLocationPath;
-    private FirebaseFirestore db;
     private boolean pictureSelected;
     private Integer positionToEditInViewIngredient = -1;
     private ArrayList<String> editDeleteListSaved;
@@ -119,9 +114,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             }
         });
 
-        // connects to the database
-        final String TAG = "Recipes";
-        db = FirebaseFirestore.getInstance();
+        // connects to firebase storage
         storageReference = FirebaseStorage.getInstance().getReference("imageFolder");
 
         // ???
@@ -296,7 +289,6 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
             final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
             final String comments = commentsEditText.getText().toString();
-            final ArrayList<IngredientInRecipe> listOfIngredients = ingredientInRecipeDataList;
             final String imageURI = linkOfImage;
 
             // checks if there is any necessary information missing
@@ -304,37 +296,15 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                     || recipeCategory.equals("")) {
                 Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
             } else {
-                // put details to the new recipe
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("Title", title);
-                data.put("Image URI", imageURI);
-                data.put("Preparation Time", preparationTime);
-                data.put("Number of Servings", numberOfServings);
-                data.put("Recipe Category", recipeCategory);
-                data.put("Comments", comments);
-
-                // add new recipe to the database
-                db
-                        .collection("Recipes")
-                        .document(idOfRecipe)
-                        .set(data)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(AddEditRecipeActivity.this, "Recipe is uploaded", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(AddEditRecipeActivity.this, "Fails to upload recipe", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                // add to database
+                Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
+                        numberOfServings.intValue(), recipeCategory, comments);
+                DatabaseController databaseController = new DatabaseController();
+                databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
                 // sends new recipe being added back to the ViewRecipeListActivity and return
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("new recipe", new Recipe(imageURI, title, preparationTime.intValue(),
-                        numberOfServings.intValue(), recipeCategory, comments));
+                returnIntent.putExtra("new recipe", newRecipe);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
@@ -358,48 +328,26 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                HashMap<String, Object> data = new HashMap<>();
-
                                 final String title = titleEditText.getText().toString();
                                 final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
                                 final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
                                 final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
                                 final String comments = commentsEditText.getText().toString();
-                                final ArrayList<IngredientInRecipe> listOfIngredients = ingredientInRecipeDataList;
                                 final String imageURI = task.getResult().toString();
 
                                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                                         || recipeCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    data.put("Title", title);
-                                    data.put("Image URI", imageURI);
-                                    data.put("Preparation Time", preparationTime);
-                                    data.put("Number of Servings", numberOfServings);
-                                    data.put("Recipe Category", recipeCategory);
-                                    data.put("Comments", comments);
-                                    data.put("Id", idOfRecipe);
+                                    // add to database
+                                    Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
+                                            numberOfServings.intValue(), recipeCategory, comments);
+                                    DatabaseController databaseController = new DatabaseController();
+                                    databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
-                                    db
-                                            .collection("Recipes")
-                                            .document(idOfRecipe)
-                                            .set(data)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Toast.makeText(AddEditRecipeActivity.this, "Recipe is uploaded", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(AddEditRecipeActivity.this, "Fails to upload recipe", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-
+                                    // sends new recipe being added back to the ViewRecipeListActivity and return
                                     Intent returnIntent = new Intent();
-                                    returnIntent.putExtra("new recipe", new Recipe(imageURI, title, preparationTime.intValue(),
-                                            numberOfServings.intValue(), recipeCategory, comments));
+                                    returnIntent.putExtra("new recipe", newRecipe);
                                     setResult(Activity.RESULT_OK, returnIntent);
                                     finish();
                                 }
@@ -415,50 +363,6 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                 }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        HashMap<String, Object> data = new HashMap<>();
-        String title = titleEditText.getText().toString();
-        for (String id : editDeleteListSaved){
-            db.collection("Recipes").document(idOfRecipe).collection("Ingredient").document(id).delete();
-        }
-
-        for (IngredientInRecipe ingredient: ingredientInRecipeDataList) {
-            data = new HashMap<>();
-            String briefDescription = ingredient.getBriefDescription();
-            Number amount = ingredient.getAmountValue();
-            String unit = ingredient.getUnit();
-            String ingredientCategory = ingredient.getIngredientCategory();
-            String ingredientId = ingredient.getId();
-
-            if (briefDescription.equals("") || amount.toString().equals("") || unit.equals("")
-                    || ingredientCategory.equals("")) {
-                Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
-            } else {
-                data.put("Brief Description", briefDescription);
-                data.put("Amount", amount);
-                data.put("Unit", unit);
-                data.put("Ingredient Category", ingredientCategory);
-                data.put("Id", ingredientId);
-                db
-                        .collection("Recipes")
-                        .document(idOfRecipe)
-                        .collection("Ingredient")
-                        .document(ingredientId)
-                        .set(data)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(AddEditRecipeActivity.this, "Ingredients are uploaded", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(AddEditRecipeActivity.this, "Fails to upload ingredients", Toast.LENGTH_SHORT).show();
-                            }
-                        });
             }
         }
     }
