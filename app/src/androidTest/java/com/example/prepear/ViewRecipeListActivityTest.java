@@ -1,6 +1,7 @@
 package com.example.prepear;
 
 import android.widget.Adapter;
+import android.widget.ListView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -21,11 +22,21 @@ public class ViewRecipeListActivityTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<ViewRecipeListActivity> rule = new ActivityTestRule<>(ViewRecipeListActivity.class, true, true);
 
     @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+    }
+
+    @Test
+    public void testViewRecipeList() {
+        solo.assertCurrentActivity("Wrong Activity",ViewRecipeListActivity.class);
+        ListView ListView=(ListView)solo.getView(R.id.recipe_listview);
+        Integer length = ListView.getCount();
+        if (length != 0) {
+            solo.clickInList(0);
+        }
     }
 
     @Test

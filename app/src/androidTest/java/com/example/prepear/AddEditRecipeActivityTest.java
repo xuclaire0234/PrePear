@@ -2,6 +2,7 @@ package com.example.prepear;
 
 import android.widget.Adapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -23,7 +24,7 @@ public class AddEditRecipeActivityTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<AddEditRecipeActivity> rule = new ActivityTestRule<>(AddEditRecipeActivity.class, true, true);
 
     @Before
     public void setUp() {

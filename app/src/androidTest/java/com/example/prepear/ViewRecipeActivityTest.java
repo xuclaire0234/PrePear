@@ -21,5 +21,4 @@ import java.util.ArrayList;
 public class ViewRecipeActivityTest {
     private Solo solo;
 
-
 }
