@@ -28,6 +28,9 @@ public class ViewIngredientStorageActivityTest {
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
+    /**
+     * Run before each test to set up activities.
+     */
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
     }

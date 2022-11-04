@@ -27,6 +27,9 @@ public class AddEditIngredientFragmentTest {
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
+    /**
+     * Run before each test to set up activities.
+     */
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
     }
@@ -220,7 +223,7 @@ public class AddEditIngredientFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class); //test if activity successfully transfers.
     }
 
-    /* This method tests if the toast message will be
+    /** This method tests if the toast message will be
      * displayed when user enters 0 for the amount
      */
     @Test
@@ -242,7 +245,7 @@ public class AddEditIngredientFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
 
     }
-    /* This method tests if toast message will be displayed when user
+    /** This method tests if toast message will be displayed when user
      * leaves everything in the fragment empty
      */
     @Test
@@ -254,7 +257,7 @@ public class AddEditIngredientFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
     }
 
-    /* This method tests if toast message will be displayed when user
+    /** This method tests if toast message will be displayed when user
      * one or both edit text fields empty
      */
     @Test
