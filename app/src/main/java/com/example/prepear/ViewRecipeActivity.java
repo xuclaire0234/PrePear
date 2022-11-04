@@ -1,11 +1,9 @@
-/*
+/**
  * Classname: ViewRecipeActivity
- *
- * Version information: 1.0.0
- *
- * Date: 11/2/2022
- *
- * Copyright notice: Jiayin He
+ * Version Information: 1.0.0
+ * Date: 11/3/2022
+ * Author: Jiayin He
+ * Copyright Notice:
  */
 
 package com.example.prepear;
@@ -72,8 +70,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.delete_button);
         returnButton = findViewById(R.id.return_button);
 
-        // gets the information of the specific recipe being clicked inside ViewRecipeListActivity
-        // and display them on the screen
+        /* gets the information of the specific recipe being clicked inside ViewRecipeListActivity
+        and display them on the screen */
         viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
         Glide.with(ViewRecipeActivity.this)
                 .load(viewedRecipe.getImageURI()).into(imageImageView);
@@ -86,33 +84,33 @@ public class ViewRecipeActivity extends AppCompatActivity {
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
 
-        // sets edit button to jump to AddEditRecipeActivity after clicking it, while at the same time
-        // pass the recipe object being viewed to the AddEditRecipeActivity to let it display its information
+        /* sets edit button to jump to AddEditRecipeActivity after clicking it, while at the same time
+        pass the recipe object being viewed to the AddEditRecipeActivity to let it display its information */
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent switchActivityIntent = new Intent(ViewRecipeActivity.this, AddEditRecipeActivity.class);
                 switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
-                switchActivityIntent.putExtra("calling activity", "2");     // pass the number 2 to AddEditRecipeActivity to indicate that it should be used to edit recipe
+                switchActivityIntent.putExtra("calling activity", "2"); // pass the number 2 to AddEditRecipeActivity to indicate that it should be used to edit recipe
                 startActivity(switchActivityIntent);
 
-                // return to the calling ViewRecipeListActivity automatically after editing the recipe
+                /* return to the calling ViewRecipeListActivity automatically after editing the recipe */
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }
         });
 
-        // sets delete button to delete the viewing recipe after clicking it, and then return
-        // to the ViewRecipeListActivity
+        /* sets delete button to delete the viewing recipe after clicking it, and then return
+        to the ViewRecipeListActivity */
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // delete recipe from database
+                /* delete recipe from database */
                 DatabaseController databaseController = new DatabaseController();
                 databaseController.deleteRecipeFromRecipeList(ViewRecipeActivity.this, viewedRecipe);
 
-                // return to the calling ViewRecipeListActivity
+                /* return to the calling ViewRecipeListActivity */
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("delete recipe", viewedRecipe);
                 setResult(Activity.RESULT_OK, returnIntent);
@@ -120,11 +118,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
             }
         });
 
-        // sets return button to directly return to the ViewRecipeListActivity after clicking it
+        /* sets return button to directly return to the ViewRecipeListActivity after clicking it */
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // return to the calling ViewRecipeListActivity
+                /* return to the calling ViewRecipeListActivity */
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
