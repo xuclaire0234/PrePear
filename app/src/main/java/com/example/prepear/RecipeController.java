@@ -47,7 +47,11 @@ public class RecipeController {
     }
 
     public Recipe getRecipeAt(Integer index) {
-        return this.recipes.get(index);
+        if (index < this.recipes.size()) {
+            return this.recipes.get(index);
+        } else {
+            return null;
+        }
     }
 
     public Integer getRecipeIndex(Recipe recipe) {
