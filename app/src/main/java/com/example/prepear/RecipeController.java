@@ -1,3 +1,10 @@
+/**
+ * Classname: DatabaseController
+ * Version Information: 1.0.0
+ * Date: 11/3/2022
+ * Author: Yingyue Cao
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import java.util.ArrayList;
