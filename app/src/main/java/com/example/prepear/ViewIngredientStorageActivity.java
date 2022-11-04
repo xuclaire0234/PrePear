@@ -41,7 +41,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
         AddEditIngredientFragment.OnFragmentInteractionListener {
 
     private ListView ingredientStorageList; // for displaying all added in-storage ingredients
-    public ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
+    private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>(); // store in-storage ingredient entries
     // On below: a String array containing all sort by choices used on sort-by Spinner for user selection
     private String[] userSortChoices = {"                 ---- Select  ---- ",

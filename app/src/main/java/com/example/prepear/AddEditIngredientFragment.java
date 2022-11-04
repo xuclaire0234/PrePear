@@ -172,25 +172,26 @@ public class AddEditIngredientFragment extends DialogFragment implements
             }
         });
 
-        descriptionView = view.findViewById(R.id.brief_description);
+        descriptionView = view.findViewById(R.id.brief_description);  // link variable with layout object
         descriptionView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                descriptionView.setFocusable(true);
+                descriptionView.setFocusable(true); // make the field focusable to receive keyboard, etc
                 if (descriptionView.getText().toString().isEmpty()) {
-                    // check if description edit
+                    // On above: check if description edit description field is empty and set an error message if empty
                     descriptionView.setError("Cannot leave Ingredient Name Empty");
-                    descriptionView.requestFocus();
+                    descriptionView.requestFocus();  // focus on field when left empty
                 }
             }
         });
 
         categoryView = (Spinner) view.findViewById(R.id.ingredient_category);
-        // create array adapter for the spinner from array in strings.xml file
+        // On below: create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(getContext(),
                 R.array.ingredient_categories, android.R.layout.simple_spinner_item);
+        // On below:  specify the layout the adapter should use to display the spinner list
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoryView.setAdapter(adapterForCategories);
+        categoryView.setAdapter(adapterForCategories); // set spinner adapter to be the array list
         categoryView.setOnTouchListener(new View.OnTouchListener() {
             /*Temporarily remove keyboards before displaying spinner */
             @Override
@@ -201,13 +202,14 @@ public class AddEditIngredientFragment extends DialogFragment implements
         });
 
         locationView = (Spinner) view.findViewById(R.id.ingredient_location);
-        // create array adapter for the spinner from array in strings.xml file
+        // On below: create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForLocation = ArrayAdapter.createFromResource(getContext(), R.array.locations,
                 android.R.layout.simple_spinner_item);
+        // On below: specify the layout the adapter should use to display the spinner list
         adapterForLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationView.setAdapter(adapterForLocation);
+        locationView.setAdapter(adapterForLocation);  // set spinner adapter to be the array list
         locationView.setOnTouchListener(new View.OnTouchListener() {
-            /*Temporarily remove keyboards before displaying spinner */
+            /* Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 removeKeyboard();  // remove all keyboards when spinner is on display
@@ -215,7 +217,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             }
         });
 
-        amountView = view.findViewById(R.id.ingredient_amount);
+        amountView = view.findViewById(R.id.ingredient_amount); // grab the amount EditText object
         amountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,21 +247,22 @@ public class AddEditIngredientFragment extends DialogFragment implements
             }
         });
 
-        Bundle args = getArguments();
-        if (args != null) { //if object already exists (the case of editing an item)
+        Bundle args = getArguments();  // get fragment arguments to access ingredient passed in
+        if (args != null) { // if object already exists (the case of editing an item)
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
-                    "IngredientInStorage");
-            /* set the previous values of the text fields and spinners*/
-            descriptionView.setText(ingredientInStorage.getBriefDescription());
+                    "IngredientInStorage"); // get ingredient from bundle
+            /* set the previous values of the text fields and spinners */
+            descriptionView.setText(ingredientInStorage.getBriefDescription()); //  set ingredient description
             categoryView.setSelection(adapterForCategories
-                    .getPosition(ingredientInStorage.getIngredientCategory()));
-            dateView.setText(ingredientInStorage.getBestBeforeDate());
+                    .getPosition(ingredientInStorage.getIngredientCategory())); // set the category spinner to the right item
+            dateView.setText(ingredientInStorage.getBestBeforeDate()); // set the best before date
             locationView.setSelection(adapterForLocation
-                    .getPosition(ingredientInStorage.getLocation()));
-            amountView.setText(String.valueOf(ingredientInStorage.getAmountValue()));
+                    .getPosition(ingredientInStorage.getLocation())); // set the location spinner to the right item
+            amountView.setText(String.valueOf(ingredientInStorage.getAmountValue())); // set the amount of the ingredient
             unitView.setSelection(adapterForUnits
-                    .getPosition(ingredientInStorage.getUnit()));
+                    .getPosition(ingredientInStorage.getUnit())); // set the unit spinner to the right item
 
+            // On below part: View/Edit Fragment for updating in-storage ingredient's detailed information after clicking it on ListView and
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("View/Edit Ingredient");
             return builder
@@ -400,8 +403,11 @@ public class AddEditIngredientFragment extends DialogFragment implements
      * This method removes all present soft keyboards and is used when user clicks on one of the spinners
      */
     private void removeKeyboard() {
+        /* get the input method manager which manages interaction within the system.
+           get System service is used to access Android system-level services like the keyboard */
         InputMethodManager inputMethodManager =
                 (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        // Hide the soft keyboards associated with description and amount edit text fields
         inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
         inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
     }
