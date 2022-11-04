@@ -1,4 +1,3 @@
-
 package com.example.prepear;
 import android.widget.Adapter;
 
@@ -38,7 +37,7 @@ public class ViewIngredientStorageTest {
      */
     public void testSort1(){
         solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorage.class);
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("description");
         /*
@@ -53,7 +52,7 @@ public class ViewIngredientStorageTest {
      */
     public void testSort2(){
         solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorage.class);
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("best before");
         solo.sleep(5000);
@@ -65,7 +64,7 @@ public class ViewIngredientStorageTest {
      */
     public void testSort3(){
         solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorage.class);
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("location");
         solo.sleep(5000);
@@ -74,7 +73,7 @@ public class ViewIngredientStorageTest {
     @Test
     public void testSort4(){
         solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorage.class);
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("category");
         solo.sleep(5000);

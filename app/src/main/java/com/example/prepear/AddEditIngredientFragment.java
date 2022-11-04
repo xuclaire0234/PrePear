@@ -1,3 +1,10 @@
+/**
+ * Class Name: ViewIngredientStorage
+ * Version Information: Version 1.0
+ * Create Date: Oct 25th, 2022
+ * Authors: Shihao Liu, Marafi Mergani, Jingyi Xu
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import android.app.AlertDialog;
@@ -5,10 +12,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,36 +36,32 @@ import com.google.firebase.firestore.CollectionReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class creates the add/edit ingredient fragment allowing the user to add an ingredient, view
- * it and make changes to its attributes
- * @authors: Marafi Mergani, Shihao Liu, Jingyi Xu
+ * This class creates the add/edit ingredient fragment allowing the user to add an ingredient,
+ * view it and make changes to its attributes
  * @version: 1.0
  */
 
 public class AddEditIngredientFragment extends DialogFragment implements
         AdapterView.OnItemSelectedListener{
-    /* initialize variables for EditText, DatePickerDialog,
-       and fragment interaction listener objects
-       <access_identifier> variableName;
-     */
+    // initialize variables for EditText, DatePickerDialog, and fragment interaction listener objects
     private EditText descriptionView;
     private Spinner categoryView;
     private EditText dateView;
     private Spinner locationView;
     private EditText amountView;
-    private Spinner unitView;
+    private Spinner unitView; // Spinner for picking ingredient unit
     private String bestBeforeDateString;  // best before date string
     private OnFragmentInteractionListener listener;
     private DatePickerDialog dialog; // create datePicker for best before date
     private CollectionReference collectionReferenceForInStorageIngredients;
     private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /* Constructor */
     public AddEditIngredientFragment(CollectionReference collectionReference) {
         this.collectionReferenceForInStorageIngredients = collectionReference;
@@ -147,25 +148,26 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                // if condition statement helps to regulate the format.
+                                // if-conditional statement helps to regulate the format.
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
-                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
+                                            "-" + "0" + dayOfMonth;
                                 } else if (dayOfMonth < 10) {
-                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) + "-" + "0" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) +
+                                            "-" + "0" + dayOfMonth;
                                 } else if (monthOfYear < 9) {
-                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
+                                            "-" + dayOfMonth;
                                 } else {
-                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                    bestBeforeDateString = year + "-" + (monthOfYear + 1) +
+                                            "-" + dayOfMonth;
                                 }
                                 dateView.setText(bestBeforeDateString);
                             }
                         }, mYear, mMonth, mDay);
                 dialog.show();
-                /* Temporarily remove keyboards before displaying the dialog*/
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
+                /* Temporarily remove keyboards before displaying the dialog */
+                removeKeyboard();
             }
         });
 
@@ -175,6 +177,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             public void onClick(View v) {
                 descriptionView.setFocusable(true);
                 if (descriptionView.getText().toString().isEmpty()) {
+                    /* check if description edit */
                     descriptionView.setError("Cannot leave Ingredient Name Empty");
                     descriptionView.requestFocus();
                 }
@@ -182,6 +185,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
         });
 
         categoryView = (Spinner) view.findViewById(R.id.ingredient_category);
+        // create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(getContext(),
                 R.array.ingredient_categories, android.R.layout.simple_spinner_item);
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -190,16 +194,13 @@ public class AddEditIngredientFragment extends DialogFragment implements
             /*Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext()
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
 
         locationView = (Spinner) view.findViewById(R.id.ingredient_location);
+        // create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForLocation = ArrayAdapter.createFromResource(getContext(), R.array.locations,
                 android.R.layout.simple_spinner_item);
         adapterForLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -208,11 +209,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
             /*Temporarily remove keyboards before displaying spinner */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getContext()
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
@@ -233,17 +230,16 @@ public class AddEditIngredientFragment extends DialogFragment implements
         });
 
         unitView = (Spinner) view.findViewById(R.id.ingredient_unit);
+        // create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForUnits = ArrayAdapter.createFromResource(getContext(), R.array.units,
                 android.R.layout.simple_spinner_item);
         adapterForUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unitView.setAdapter(adapterForUnits);
-        unitView.setOnTouchListener(new View.OnTouchListener() {
+        unitView.setOnTouchListener( new View.OnTouchListener() {
             /*Temporarily remove keyboards before displaying spinner*/
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
-                inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+                removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
@@ -252,14 +248,16 @@ public class AddEditIngredientFragment extends DialogFragment implements
         if (args != null) { //if object already exists (the case of editing an item)
             IngredientInStorage ingredientInStorage = (IngredientInStorage) args.getSerializable(
                     "IngredientInStorage");
-            /* set the previous values of the text fields */
+            /* set the previous values of the text fields and spinners*/
             descriptionView.setText(ingredientInStorage.getBriefDescription());
-            Log.d("IngredientCategory", "onCreateDialog: " + ingredientInStorage.getIngredientCategory());
-            categoryView.setSelection(adapterForCategories.getPosition(ingredientInStorage.getIngredientCategory()));
+            categoryView.setSelection(adapterForCategories
+                    .getPosition(ingredientInStorage.getIngredientCategory()));
             dateView.setText(ingredientInStorage.getBestBeforeDate());
-            locationView.setSelection(adapterForLocation.getPosition(ingredientInStorage.getLocation()));
+            locationView.setSelection(adapterForLocation
+                    .getPosition(ingredientInStorage.getLocation()));
             amountView.setText(String.valueOf(ingredientInStorage.getAmountValue()));
-            unitView.setSelection(adapterForUnits.getPosition(ingredientInStorage.getUnit()));
+            unitView.setSelection(adapterForUnits
+                    .getPosition(ingredientInStorage.getUnit()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("View/Edit Ingredient");
@@ -361,17 +359,17 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        // key: value pair as a element in HashMap
+                        // key: value pair as a element in HashMap/Map
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
                         Map<String, Object> data = new HashMap<>();
+                        data.put("document id", documentId);
                         data.put("description", description);
                         data.put("bestBeforeDate", date);
                         data.put("location", location);
                         data.put("category", category);
                         data.put("amount", amount);
                         data.put("unit", unit);
-                        data.put("document id", documentId);
                         // two ingredients with the same descriptions (as id) should be allowed
                         collectionReferenceForInStorageIngredients
                                 .document(documentId)
@@ -387,13 +385,24 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         // These are a method which gets executed if there’s any problem
-                                        Log.d(description, "Data cannot be added!" + e.toString());
+                                        Log.d(description, "Data cannot be added!" + e);
                                     }
                                 });
                         listener.onOkPressed(new IngredientInStorage(
                                 description, category, date, location, amount, unit, documentId));
                     }
                 }).create();
+    }
+
+    /**
+     * This method removes all present soft keyboards and is used when user clicks on one of the
+     * spinners
+     */
+    private void removeKeyboard() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
     }
 
     @Override
