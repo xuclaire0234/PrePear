@@ -1,11 +1,9 @@
-/*
+/**
 * Classname: CustomIngredientInRecipeList
-*
-* Version information: 1.0.0
-*
+* Version Information: 1.0.0
 * Date: 11/2/2022
-*
-* Copyright notice: Jiayin He
+* Author: Jiayin He
+* Copyright notice:
  */
 
 package com.example.prepear;
@@ -54,17 +52,20 @@ public class CustomIngredientInRecipeList extends ArrayAdapter<IngredientInRecip
         // return super.getView(position, convertView, parent);
         View view = convertView;
 
+        /* check error */
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.content_ingredient_in_recipe, parent, false);
         }
 
         IngredientInRecipe ingredientInRecipe = ingredientsInRecipe.get(position);
 
+        /* connects the the layout with the views */
         TextView briefDescriptionTextView = view.findViewById(R.id.brief_description_TextView);
         TextView amountTextView = view.findViewById(R.id.amount_TextView);
         TextView unitTextView = view.findViewById(R.id.unit_TextView);
         TextView ingredientCategoryTextView = view.findViewById(R.id.ingredient_category_TextView);
 
+        /* sets the detailed information to the view */
         briefDescriptionTextView.setText(ingredientInRecipe.getBriefDescription());
         amountTextView.setText(String.valueOf(ingredientInRecipe.getAmountString()));
         unitTextView.setText(ingredientInRecipe.getUnit());
