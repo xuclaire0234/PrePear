@@ -36,6 +36,12 @@ android {
         viewBinding true
     }
 
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
 }
 
 dependencies {
@@ -69,4 +75,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
 }
