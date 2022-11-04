@@ -1,46 +1,39 @@
-/*
-* Class Name: Ingredient
-* Version: 1.0
-* Date: Oct 25th, 2022
-* Author: Shihao Liu
-* Copyright Notice:
-* */
+/**
+ * Class Name: Ingredient
+ * Version: 1.0
+ * Create Date: Oct 25th, 2022
+ * Last Edit Date: Nov 3rd, 2022
+ * Author: Shihao Liu, Marafi Mergani
+ * Copyright Notice:
+ */
 
 package com.example.prepear;
-
-
-/**/
-
 
 import java.io.Serializable;
 
 /**
  * This class creates ingredient objects and allows setting and accessing the attributes
- * @author: Marafi Mergani, Shihao Liu
- * @version: 1
  */
 
 public class Ingredient implements Serializable {
     // initialize class attributes
-    // <access_identifier> variableName;
     private String description;
     private String amount;
-    private double amountValue; // actual value of amount
+    private double amountValue; // actual numerical value of amount
     private String unit;
     private String category;
 
     /**
      * This constructor creates an {@link Ingredient} object with the given attributes
-     * using the Ingredient class constructor
      * @param briefDescription a String for the description entered
      * @param ingredientCategory a String for the category entered
-     * @param amount an int for the number of ingredients
-     * @param unit aa int for the unit cost of the ingredient
+     * @param amount an numerical value for the amount of this ingredient
+     * @param unit the unit to used to measure and scale this ingredient
      */
     public Ingredient(String briefDescription, String amount, String unit, String ingredientCategory) {
         this.description = briefDescription;
         this.amount = amount;
-        this.amountValue = Double.parseDouble(amount);
+        this.amountValue = Double.parseDouble(amount); // initialize actual amount's numerical value
         this.unit = unit;
         this.category = ingredientCategory;
     }
@@ -71,23 +64,23 @@ public class Ingredient implements Serializable {
 
     /**
      * This method sets the amount of the ingredient
-     * @param  amount an int for the amount entered
+     * @param  amount an double (numerical) value for the amount entered
      */
     public void setAmountValue(double amount) {
         this.amountValue = amount;
     }
 
     /**
-     * This method returns the unit cost of the ingredient
-     * @return unit an int for the unit cost
+     * This method returns a String object as the unit to used to measure and scale this ingredient
+     * @return unit the unit to used to measure and scale this ingredient
      */
     public String getUnit() {
         return this.unit;
     }
 
     /**
-     * This method sets the unit cost of the ingredient
-     * @param  unit an int for the unit cost entered
+     * This method sets a String object as the unit to used to measure and scale this ingredient
+     * @param  unit the unit to used to measure and scale this ingredient
      */
     public void setUnit(String unit) {
         this.unit = unit;
