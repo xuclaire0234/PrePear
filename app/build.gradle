@@ -36,6 +36,12 @@ android {
         viewBinding true
     }
 
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
 }
 
 dependencies {
@@ -72,4 +78,5 @@ dependencies {
 
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
 }
