@@ -71,12 +71,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_recipe_list); /* link current activity to its layout
-                                                             * file */
+        setContentView(R.layout.activity_view_recipe_list); // link current activity to its layout file
 
-        /*
-         * All variables to link to the layout elements are defined here below
-         */
+        /* All variables to link to the layout elements are defined here below */
         final Spinner sortItemSpinner;
         final ImageButton mainPage;
         final ImageButton viewIngredients;
@@ -278,7 +275,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     }
 
     /**
-     * This function control
+     * This function control the data 
      * @param requestCode
      * @param resultCode
      * @param data
