@@ -1,8 +1,9 @@
-/*
- * Class Name: RecipeAddIngredientFragment
- * Version Information: Version 1.0
- * Date: Oct 26th, 2022
+/**
+ * Classname: RecipeAddIngredientFragment
+ * Version Information: 1.0.0
+ * Date: 11/1/2022
  * Author: Jamie Lee
+ * Copyright notice:
  */
 package com.example.prepear;
 
@@ -140,8 +141,14 @@ public class RecipeAddIngredientFragment extends DialogFragment {
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    /* set listener for the Confirm button, get user input,
+                    and call oncConfirmPressed method to add ingredient item
+                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        /* get user input
+                         * and make sure that no text field is left empty
+                         * */
                         String description;
                         String amount;
                         String unit;

@@ -1,11 +1,9 @@
 /**
- * CustomRecipeList
- *
- * Version 1.0
- *
- * Date
- *
- * Copyright
+ * Classname: CustomRecipeList
+ * Version Information: 1.0.0
+ * Date: 11/2/2022
+ * Author: Jiayin He
+ * Copyright notice:
  */
 package com.example.prepear;
 
