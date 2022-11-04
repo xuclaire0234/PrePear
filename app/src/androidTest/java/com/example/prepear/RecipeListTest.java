@@ -195,7 +195,7 @@ public class RecipeListTest {
         solo.clickOnText("Orange Juice");
         View deleteButton = solo.getView(R.id.delete_button);
         solo.clickOnView(deleteButton);
-        solo.sleep(3000);
+        solo.sleep(5000);
         assertFalse(solo.searchText("Orange Juice"));
     }
 

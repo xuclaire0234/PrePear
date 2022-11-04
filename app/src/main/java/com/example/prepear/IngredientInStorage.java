@@ -19,6 +19,7 @@ public class IngredientInStorage extends Ingredient{
     // initialize class attributes
     private String bestBeforeDate;
     private String location;
+    // On below: unique id for storing as a document with its detailed information combined into a Map object inside Ingredient Storage collection
     private String documentId;
 
     /**
