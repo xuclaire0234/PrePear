@@ -2,7 +2,7 @@
  * Class Name: ViewIngredientStorage
  * Version Information: Version 1.0
  * Create Date: Oct 25th, 2022
- * Authors: Shihao Liu, Marafi Mergani
+ * Authors: Shihao Liu, Marafi Mergani, Jingyi Xu
  * Copyright Notice:
  */
 package com.example.prepear;
