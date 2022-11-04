@@ -15,8 +15,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 /**/
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         clickedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentForViewIngredientStorageActivity = new Intent(MainActivity.this, ViewIngredientStorage.class);
+                Intent intentForViewIngredientStorageActivity = new Intent(MainActivity.this, ViewIngredientStorageActivity.class);
                 startActivity(intentForViewIngredientStorageActivity);
             }
         });

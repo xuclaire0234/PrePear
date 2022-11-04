@@ -1,15 +1,14 @@
-/*
+/**
  * Class Name: ViewIngredientStorage
  * Version Information: Version 1.0
  * Date: Oct 25th, 2022
  * Author: Shihao Liu
  * Copyright Notice:
- * */
+ */
 
 package com.example.prepear;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,31 +24,30 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-/**/
-public class ViewIngredientStorage extends AppCompatActivity
+/**
+ *
+ *
+ * */
+public class ViewIngredientStorageActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener,
         AddEditIngredientFragment.OnFragmentInteractionListener {
 
     private ListView ingredientStorageList;
-    private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
+    public ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>();
     private String[] userSortChoices = {"                 ---- Select  ---- ",
             "description(ascending)","description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
-            "location(ascending by default)", "category"}; // used for Spinner
+            "location", "category"}; // used for Spinner
     private String userSelectedSortChoice;
 
     private final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
@@ -104,17 +102,48 @@ public class ViewIngredientStorage extends AppCompatActivity
         adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         sortBySpinner.setAdapter(adapterForSpinner);
+        inStorageIngredientCollection
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        ingredientStorageDataList.clear();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    /**/
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
 
-        // updated version of view ingredients in ingredient storage
-        DatabaseController databaseController = new DatabaseController();
-        databaseController.viewIngredientsInIngredientStorage(ViewIngredientStorage.this, ingredientStorageDataList);
+                                    String documentID = document.getId(); //
+                                    String description =  (String) document.getData().get("description"); //
+                                    String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
+                                    String location = (String) document.getData().get("location"); //
+                                    String unit = (String) document.getData().get("unit"); //
+                                    String amount = String.valueOf(document.getData().get("amount")); //
+                                    String category = (String) document.getData().get("category"); //
+
+                                    ingredientStorageDataList.add(new IngredientInStorage(description, category,
+                                            bestBeforeDate, location, amount, unit, documentID));
+                                    // Notifying the adapter to render any new data fetched from the cloud
+                                    ingredientStorageListAdapter.notifyDataSetChanged();
+                                } else {
+                                    Log.d("This document", "onComplete: DNE! ");
+                                }
+
+                            }
+                        }
+                    }
+                });
 
         // on below: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
         // sort all retrieved ingredients based on user's picked sort-by choice
         SortInStorageIngredients(userSelectedSortChoice);
         ingredientStorageListAdapter.notifyDataSetChanged(); // for updating data in the ArrayAdapter
     }
-
 
     /**
      * <p>Callback method to be invoked when an item in this view has been
@@ -149,11 +178,9 @@ public class ViewIngredientStorage extends AppCompatActivity
         // Auto
     }
 
-    /* Sort-by functionality */
+    /* on below: Sort-by functionality */
     public void SortInStorageIngredients(String userSelectedSortChoice){
-        if (Objects.equals(userSelectedSortChoice, " ")){
-            // the in-storage ingredient in default order iff userSelectedSortChoice == " "
-        } else if  (Objects.equals(userSelectedSortChoice, "description(ascending)")) {
+        if (Objects.equals(userSelectedSortChoice, "description(ascending)")) {
             Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
                 @Override
                 public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {

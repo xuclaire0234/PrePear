@@ -40,70 +40,6 @@ public class DatabaseController {
 
     private IngredientInStorage newIngredientInStorage;
 
-    public void viewIngredientsInIngredientStorage(Context context, ArrayList<IngredientInStorage> ingredientStorageDataList) {
-        /*
-        db
-                .collection("Ingredient Storage")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                        ingredientStorageDataList.clear();
-
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            String documentID = doc.getId();
-                            String description =  (String) doc.getData().get("description");
-                            String bestBeforeDate = (String) doc.getData().get("bestBeforeDate");
-                            String location = (String) doc.getData().get("location");
-                            String unit = (String) doc.getData().get("unit");
-                            String amount = String.valueOf(doc.getData().get("amount"));
-                            String category = (String) doc.getData().get("category");
-
-                            ingredientStorageDataList.add(new IngredientInStorage(description, category,
-                                    bestBeforeDate, location, amount, unit, documentID));
-                        }
-                    }
-                });
-
-         */
-        /*
-        db
-                .collection("Ingredient Storage")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ingredientStorageDataList.clear();
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.exists()) {
-                                    /**/
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
-                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
-
-                                    String documentID = document.getId(); //
-                                    String description =  (String) document.getData().get("description"); //
-                                    String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
-                                    String location = (String) document.getData().get("location"); //
-                                    String unit = (String) document.getData().get("unit"); //
-                                    String amount = String.valueOf(document.getData().get("amount")); //
-                                    String category = (String) document.getData().get("category"); //
-
-                                    ingredientStorageDataList.add(new IngredientInStorage(description, category,
-                                            bestBeforeDate, location, amount, unit, documentID));
-                                    // Notifying the adapter to render any new data fetched from the cloud
-                                    ingredientStorageListAdapter.notifyDataSetChanged();
-                                } else {
-                                    Log.d("This document", "onComplete: DNE! ");
-                                }
-
-                            }
-                    }
-                })
-    }
-
     public void addIngredientToIngredientStorage(Context context, IngredientInStorage ingredientToAdd) {
         HashMap<String, Object> data = new HashMap<>();
         String documentId = ingredientToAdd.getDocumentId();
@@ -181,62 +117,6 @@ public class DatabaseController {
                         Toast.makeText(context, "Error deleting ingredient", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    public ArrayList<Recipe> viewRecipesInRecipeList (Context context, ArrayList<Recipe> recipeDataList) {
-        ArrayList<Recipe> newRecipeDataList = recipeDataList;
-        db
-                .collection("Recipes")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                        newRecipeDataList.clear();
-
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            String documentID = doc.getId();
-                            String title = (String) doc.getData().get("Title");
-                            Number preparationTime = (Number) doc.getData().get("Preparation Time");
-                            Number numberOfServings = (Number) doc.getData().get("Number of Servings");
-                            String recipeCategory = (String) doc.getData().get("Recipe Category");
-                            String comments = (String) doc.getData().get("Comments");
-                            String imageURI = (String) doc.getData().get("Image URI");
-
-                            Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
-                                    numberOfServings.intValue(), recipeCategory, comments);
-                            newRecipe.setId(documentID);
-                            newRecipeDataList.add(newRecipe);
-                        }
-
-                        for (int i = 0; i < newRecipeDataList.size(); i++) {
-                            int indexOfRecipe = i;
-
-                            db.collection("Recipes")
-                                    .document(newRecipeDataList.get(indexOfRecipe).getId())
-                                    .collection("Ingredient")
-                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                            newRecipeDataList.get(indexOfRecipe).deleteAllIngredients();
-
-                                            // loop through all the documents in Ingredient collection
-                                            for (QueryDocumentSnapshot doc : value) {
-                                                String id = doc.getId();
-
-                                                String briefDescription = (String) doc.getData().get("Brief Description");
-                                                Number amount = (Number) doc.getData().get("Amount");
-                                                String unit = (String) doc.getData().get("Unit");
-                                                String ingredientCategory = (String) doc.getData().get("Ingredient Category");
-
-                                                IngredientInRecipe newIngredient = new IngredientInRecipe(briefDescription, amount.toString(), unit, ingredientCategory);
-                                                newIngredient.setId(id);
-                                                newRecipeDataList.get(indexOfRecipe).addIngredientToRecipe(newIngredient);
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
-        return newRecipeDataList;
     }
 
     public void addEditRecipeToRecipeList(Context context, Recipe recipeToAdd, ArrayList<IngredientInRecipe> ingredientInRecipeDataList, ArrayList<String> editDeleteListSaved, String idOfRecipe) {
