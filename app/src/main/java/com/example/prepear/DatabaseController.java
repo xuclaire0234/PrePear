@@ -16,8 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,6 +41,7 @@ public class DatabaseController {
     private IngredientInStorage newIngredientInStorage;
 
     public void viewIngredientsInIngredientStorage(Context context, ArrayList<IngredientInStorage> ingredientStorageDataList) {
+        /*
         db
                 .collection("Ingredient Storage")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -60,6 +63,45 @@ public class DatabaseController {
                         }
                     }
                 });
+
+         */
+        /*
+        db
+                .collection("Ingredient Storage")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        ingredientStorageDataList.clear();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    /**/
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("description")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("bestBeforeDate")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
+
+                                    String documentID = document.getId(); //
+                                    String description =  (String) document.getData().get("description"); //
+                                    String bestBeforeDate = (String) document.getData().get("bestBeforeDate"); //
+                                    String location = (String) document.getData().get("location"); //
+                                    String unit = (String) document.getData().get("unit"); //
+                                    String amount = String.valueOf(document.getData().get("amount")); //
+                                    String category = (String) document.getData().get("category"); //
+
+                                    ingredientStorageDataList.add(new IngredientInStorage(description, category,
+                                            bestBeforeDate, location, amount, unit, documentID));
+                                    // Notifying the adapter to render any new data fetched from the cloud
+                                    ingredientStorageListAdapter.notifyDataSetChanged();
+                                } else {
+                                    Log.d("This document", "onComplete: DNE! ");
+                                }
+
+                            }
+                    }
+                })
     }
 
     public void addIngredientToIngredientStorage(Context context, IngredientInStorage ingredientToAdd) {
