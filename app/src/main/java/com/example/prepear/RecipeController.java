@@ -12,23 +12,39 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RecipeController {
+
+    /**
+     * Create list for Recipe class
+     */
     private ArrayList<Recipe> recipes;
     private Integer sortItemRecipe;
 
+    /**
+     * This function initializes the recipe controller.
+     */
     public RecipeController() {
         this.recipes = new ArrayList<Recipe>();
     }
 
+    /**
+     * This function add a new recipe to recipes list
+     */
     public void addRecipe(Recipe recipe) {
         this.recipes.add(recipe);
     }
 
+    /**
+     * This function delete existed recipe in recipes list
+     */
     public void deleteRecipe(Recipe recipe) {
         if (recipes.contains(recipe)) {
             this.recipes.remove(recipe);
         }
     }
 
+    /**
+     * This function edit existed recipe in recipes list
+     */
     public void editRecipe(Recipe recipeToEdit, Recipe newestVersionOfRecipe) {
         if (this.recipes.contains(recipeToEdit)){
             Integer indexOfRecipeToEdit;
@@ -41,18 +57,33 @@ public class RecipeController {
         this.recipes.set(index,newestVersionOfRecipe);
     }
 
+    /**
+     * This function returns the number of recipe in recipes list
+     * @return The return is of type {@link int}
+     */
     public int countRecipes() {
         return this.recipes.size();
     }
 
+    /**
+     * This function returns the list of recipes
+     * @return The return is of type {@link ArrayList}
+     */
     public ArrayList<Recipe> getRecipes() {
         return this.recipes;
     }
 
+    /**
+     * This function set the list of recipes
+     */
     public void setRecipes(ArrayList<Recipe> recipes) {
         this.recipes = recipes;
     }
 
+    /**
+     * This function returns the recipe at given index
+     * @return The return is of type {@link Recipe}
+     */
     public Recipe getRecipeAt(Integer index) {
         if (index < this.recipes.size()) {
             return this.recipes.get(index);
@@ -61,6 +92,10 @@ public class RecipeController {
         }
     }
 
+    /**
+     * This function returns index of given recipe
+     * @return The return is of type {@link Integer}
+     */
     public Integer getRecipeIndex(Recipe recipe) {
         if (this.recipes.contains(recipe)) {
             return recipes.indexOf(recipe);
@@ -69,6 +104,9 @@ public class RecipeController {
         }
     }
 
+    /**
+     * This function clear the recipes in the list
+     */
     public void clearAllRecipes() {
         this.recipes.clear();
     }

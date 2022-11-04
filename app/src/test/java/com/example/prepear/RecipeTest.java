@@ -8,72 +8,70 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+/**
+ * Test class for Recipe class.
+ */
 public class RecipeTest {
-    private CustomRecipeList recipeList;
-    @BeforeEach
-    private void mockCustomRecipeList() {
-        // recipeList = new CustomRecipeList(".", mockRecipe());
-        recipeList.add(mockRecipe());
-    }
-    @BeforeEach
-    private Recipe mockRecipe() {
-        Recipe recipe = new Recipe("image", "Tomato Soup", 30, 3, "food", "none");
-        return recipe;
-    }
+    Recipe recipe = new Recipe("image", "Tomato Soup", 30, 3, "food", "none");
+
+    /**
+     * Testing getter and setter for Recipe class
+     */
     @Test
     @DisplayName("This function is for testing getImageURI")
     void testGetImageURI() {
-        assertEquals("image", mockRecipe().getImageURI());
+        assertEquals("image", recipe.getImageURI());
     }
+
     @Test
     @DisplayName("This function is for testing setImageURI")
     void testSetImageURI() {
-        mockRecipe().setImageURI("image1");
-        assertEquals("image1", mockRecipe().getImageURI());
+        recipe.setImageURI("image1");
+        assertEquals("image1", recipe.getImageURI());
     }
     @Test
     @DisplayName("This function is for testing getTitle")
     void testGetTitle() {
-        assertEquals("Tomato Soup", mockRecipe().getTitle());
+        assertEquals("Tomato Soup", recipe.getTitle());
     }
     @Test
     @DisplayName("This function is for testing setTitle")
     void testSetTitle() {
-        mockRecipe().setTitle("Tomato Stew");
-        assertEquals("Tomato Stew", mockRecipe().getTitle());
+        recipe.setTitle("Tomato Stew");
+        assertEquals("Tomato Stew", recipe.getTitle());
     }
     @Test
     @DisplayName("This function is for testing getPreparationTime")
     void testGetPreparationTime() {
-        assertEquals(30, Optional.ofNullable(mockRecipe().getPreparationTime()));
+        assertEquals(30, recipe.getPreparationTime());
     }
     @Test
     @DisplayName("This function is for testing setPreparationTime")
     void testSetPreparationTime() {
-        mockRecipe().setPreparationTime(20);
-        assertEquals(20, Optional.ofNullable(mockRecipe().getPreparationTime()));
+        recipe.setPreparationTime(20);
+        assertEquals(20, recipe.getPreparationTime());
     }
     @Test
     @DisplayName("This function is for testing getNumberOfServings")
     void testGetNumberOfServings() {
-        assertEquals(3, Optional.ofNullable(mockRecipe().getNumberOfServings()));
+        assertEquals(3, recipe.getNumberOfServings());
     }
     @Test
     @DisplayName("This function is for testing setNumberOfServings")
     void testSetNumberOfServings() {
-        mockRecipe().setNumberOfServings(5);
-        assertEquals(5, Optional.ofNullable(mockRecipe().getNumberOfServings()));
+        recipe.setNumberOfServings(5);
+        assertEquals(5, recipe.getNumberOfServings());
     }
     @Test
     @DisplayName("This function is for testing getRecipeCategory")
     void testGetRecipeCategory() {
-        assertEquals("food", mockRecipe().getRecipeCategory());
+        assertEquals("food", recipe.getRecipeCategory());
     }
     @Test
     @DisplayName("This function is for testing setRecipeCategory")
     void testSetRecipeCategory() {
-        mockRecipe().setRecipeCategory("Meat");
-        assertEquals("Meat", mockRecipe().getRecipeCategory());
+        recipe.setRecipeCategory("Meat");
+        assertEquals("Meat", recipe.getRecipeCategory());
     }
 
 }

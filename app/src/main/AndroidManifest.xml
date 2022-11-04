@@ -41,6 +41,27 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ViewRecipeListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value=""></meta-data>
+        </activity>
+        <activity
+            android:name=".AddEditRecipeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ViewRecipeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
