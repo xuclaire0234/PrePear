@@ -139,16 +139,17 @@ public class AddEditIngredientFragment extends DialogFragment implements
             public void onClick(View view) {
                 /* create a date picker for the best before date of the ingredient */
                 Calendar currentDate = Calendar.getInstance();
-                int mYear = currentDate.get(Calendar.YEAR);
-                int mMonth = currentDate.get(Calendar.MONTH);
-                int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                int currentYear = currentDate.get(Calendar.YEAR);
+                int currentMonth = currentDate.get(Calendar.MONTH);
+                int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
                 dialog = new DatePickerDialog(getContext(), R.style.activity_date_picker,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                // set day of month , month and year value in the edit text
-                                // if-conditional statement helps to regulate the format.
+                                // On below parts:
+                                // set the day of month , the month of year and the year value in the edit text
+                                // if-conditional statement helps to regulate the format of yyyy-mm-dd.
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
                                     bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
                                             "-" + "0" + dayOfMonth;
@@ -164,7 +165,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                                 }
                                 dateView.setText(bestBeforeDateString);
                             }
-                        }, mYear, mMonth, mDay);
+                        }, currentYear, currentMonth, currentDay);
                 dialog.show();
                 /* Temporarily remove keyboards before displaying the dialog */
                 removeKeyboard();
@@ -172,12 +173,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
         });
 
         descriptionView = view.findViewById(R.id.brief_description);
-        descriptionView.setOnClickListener(new View.OnClickListener() {
+        descriptionView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 descriptionView.setFocusable(true);
                 if (descriptionView.getText().toString().isEmpty()) {
-                    /* check if description edit */
+                    // check if description edit
                     descriptionView.setError("Cannot leave Ingredient Name Empty");
                     descriptionView.requestFocus();
                 }
@@ -394,9 +395,9 @@ public class AddEditIngredientFragment extends DialogFragment implements
                 }).create();
     }
 
+
     /**
-     * This method removes all present soft keyboards and is used when user clicks on one of the
-     * spinners
+     * This method removes all present soft keyboards and is used when user clicks on one of the spinners
      */
     private void removeKeyboard() {
         InputMethodManager inputMethodManager =

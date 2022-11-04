@@ -73,7 +73,7 @@ public class AddEditIngredientFragmentTest {
 
         solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
         //solo.searchText("2022-12-04");
-        solo.clickOnText("OK");
+        //solo.clickOnText("OK");
         solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
         solo.clickOnText("OK");
     }
