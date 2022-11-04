@@ -1,22 +1,22 @@
-/*
+/**
  * Class Name: IngredientInStorage
  * Version: 1.0
- * Date: Oct 25th, 2022
- * Author: Shihao Liu
+ * Create Date: Oct 25th, 2022
+ * Last Edit Date: Nov 3rd, 2022
+ * Author: Shihao Liu, Marafi Mergani
  * Copyright Notice:
- * */
+ */
 
 package com.example.prepear;
 
 /**
  * This class defines {@link IngredientInStorage} objects which extends Ingredient class
  * and allows setting and accessing the attributes
- * @author: Marafi Mergani
+ * @author: Shihao Liu, Marafi Mergani
  * @version: 1
  */
 public class IngredientInStorage extends Ingredient{
-    // initialize additional class attributes
-    // <access_identifier> variableName;
+    // initialize class attributes
     private String bestBeforeDate;
     private String location;
     private String documentId;
@@ -24,12 +24,12 @@ public class IngredientInStorage extends Ingredient{
     /**
      * This constructor creates an {@link IngredientInStorage} object with the given attributes
      * using the Ingredient class constructor
-     * @param description a String for the description entered
-     * @param category a String for the category entered
-     * @param date a String for the date picked
-     * @param location a String for the location entered
-     * @param amount an int for the number of ingredients
-     * @param unit aa int for the unit cost of the ingredient
+     * @param description a String for the entered description for this in-storage ingredient
+     * @param category a String for the selected category for this in-storage ingredient
+     * @param date a String for the picked best before date for this in-storage ingredient
+     * @param location a String for the entered location  for this in-storage ingredient
+     * @param amount an numerical value for the amount of this in-storage ingredient
+     * @param unit the unit to used to measure and scale this in-storage ingredient
      */
     public IngredientInStorage(String description, String category, String date, String location, String amount, String unit, String documentId){
         super(description, amount, unit, category);
@@ -72,7 +72,6 @@ public class IngredientInStorage extends Ingredient{
 
 
     /**
-     * This method sets the location of the ingredient
      * @return documentId a String for the ingredient's document id inside the storage Collection
      */
     public String getDocumentId() {
@@ -80,7 +79,7 @@ public class IngredientInStorage extends Ingredient{
     }
 
     /**
-     * This method sets the location of the ingredient
+     * This method sets the document id of the ingredient from "Ingredient Storage" Collection
      * @param  documentId a String for the the ingredient's document id inside the storage Collection auto-generated
      */
     public void setDocumentId(String documentId) {
