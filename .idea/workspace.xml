@@ -21,22 +21,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/AddEditIngredientFragmentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/AddEditIngredientFragmentTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/ViewIngredientStorageActivityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/ViewIngredientStorageActivityTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/ViewRecipeActivityTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/AddEditIngredientFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/AddEditIngredientFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/AddEditRecipeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/AddEditRecipeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/CustomRecipeList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/CustomRecipeList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/IngredientStorageCustomList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/IngredientStorageCustomList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/RecipeAddIngredientFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/RecipeAddIngredientFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/RecipeEditIngredientFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/RecipeEditIngredientFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ViewRecipeListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ViewRecipeListActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/IngredientInRecipeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/IngredientInRecipeTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/IngredientInStorageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/IngredientInStorageTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/IngredientStorageDatabaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/IngredientStorageDatabaseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/RecipeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/prepear/RecipeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +84,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Android App.app">
+  <component name="RunManager" selected="Android Instrumented Tests.RecipeListTest">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="PrePear.app.main" />
       <option name="DEPLOY" value="true" />
@@ -369,9 +354,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Android Instrumented Tests.RecipeListTest" />
         <item itemvalue="Gradle.RecipeTest" />
         <item itemvalue="Android Instrumented Tests.testDeleteRecipe()" />
-        <item itemvalue="Android Instrumented Tests.RecipeListTest" />
         <item itemvalue="Android Instrumented Tests.ViewIngredientStorageActivityTest" />
         <item itemvalue="Gradle.IngredientInStorageTest" />
       </list>
