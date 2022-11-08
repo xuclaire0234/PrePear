@@ -2,7 +2,7 @@
  * Classname: ViewRecipeListActivity
  * Version Information: 1.0.0
  * Date: 11/1/2022
- * Author: Yingyue Cao
+ * Author: Yingyue Cao, Jiayin He
  * Copyright notice:
  */
 package com.example.prepear;

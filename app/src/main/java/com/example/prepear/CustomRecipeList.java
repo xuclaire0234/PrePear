@@ -2,7 +2,7 @@
  * Classname: CustomRecipeList
  * Version Information: 1.0.0
  * Date: 11/2/2022
- * Author: Jiayin He
+ * Author: Yingyue Cao
  * Copyright notice:
  */
 package com.example.prepear;
@@ -34,7 +34,7 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
     /**
      * Thia variable keeps list of objects that are of type {@link Recipe}
      */
-    private ArrayList<Recipe> recipes;
+    private RecipeController recipes;
     /**
      * This variable set the context which is of type {@link Context}
      */
@@ -50,71 +50,10 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
      * @param context This is the context which is of type {@link Context}
      * @param recipes This is the list of recipes which is of type {@link Recipe}
      */
-    public CustomRecipeList(Context context, ArrayList<Recipe> recipes) {
-        super(context,0, recipes);
+    public CustomRecipeList(Context context, RecipeController recipes) {
+        super(context,0, recipes.getRecipes());
         this.recipes = recipes;
         this.context = context;
-    }
-
-    /**
-     * This function returns the item the recipes list should be sorted by
-     * @return The return is of type {@link Integer}
-     */
-    public int getSortItemRecipe() {
-        return this.sortItemRecipe;
-    }
-
-    /**
-     * This function sets the item the recipes list should be sorted by
-     * @param sortItemRecipe This is the item the recipes list should be sorted by, which is of type
-     *       {@link Integer}
-     */
-    public void setSortItemRecipe(int sortItemRecipe) {this.sortItemRecipe = sortItemRecipe;}
-
-    /**
-     * This function sorts the recipe list
-     * @param sortItemRecipe his is the item the recipes list should be sorted by, which is of type
-     *       {@link Integer}
-     */
-    public void sortRecipe(int sortItemRecipe) {
-        this.sortItemRecipe = sortItemRecipe;
-        if (sortItemRecipe == 0) {
-            /* If the sort item was 0, this means that the user require the recipe to be sorted by
-             * the title */
-            Collections.sort(this.recipes, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getTitle().compareTo(t1.getTitle());
-                }
-            }); /* Sort the recipe by title */
-        }else if (sortItemRecipe == 1) {
-            /* If the sort item was 1, this means that the user require the recipe to be sorted by
-             * the reparation time */
-            Collections.sort(this.recipes, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getPreparationTime().compareTo(t1.getPreparationTime());
-                }
-            }); /* Sort the recipe by preparation time */
-        }else if (sortItemRecipe == 2) {
-            /* If the sort item was 2, this means that the user require the recipe to be sorted by
-             * the number of servings */
-            Collections.sort(this.recipes, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getNumberOfServings().compareTo(t1.getNumberOfServings());
-                }
-            }); /* Sort the recipe by number of servings */
-        }else if (sortItemRecipe == 3) {
-            /* If the sort item was 3, this means that the user require the recipe to be sorted by
-             * the recipe category */
-            Collections.sort(this.recipes, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getRecipeCategory().compareTo(t1.getRecipeCategory());
-                }
-            }); /* Sort the recipe by recipe category */
-        }
     }
 
     /**
@@ -138,8 +77,8 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
         /*
          * All variables are defined and assigned value here below
          */
-        Recipe recipe = recipes.get(position); /* This variable stores the specific Recipe needed to
-         * show on the ListView */
+        Recipe recipe = recipes.getRecipeAt(position); /* This variable stores the specific Recipe needed to
+        * show on the ListView */
         TextView recipeTitle = view.findViewById
                 (R.id.recipe_text); /* This variable linked to the textview to show the title */
         TextView recipeNumberOfServings = view.findViewById
@@ -180,7 +119,7 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
             /* If the user wanted to sort by title, nothing would change */
         }else if (this.sortItemRecipe == 1) {
             /* If the user wanted to sort by preparation time, the text for preparation time should
-             * be set to black */
+            * be set to black */
             recipePreparationTime.setTextColor(Color.parseColor("#FF000000"));
         }else if (this.sortItemRecipe == 2) {
             /* If the user wanted to sort by number of servings, the text for number of servings
@@ -193,6 +132,20 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
         }
 
         return view;
-
     }
+
+    /**
+     * This function returns the item the recipes list should be sorted by
+     * @return The return is of type {@link Integer}
+     */
+    public int getSortItemRecipe() {
+        return this.sortItemRecipe;
+    }
+
+    /**
+     * This function sets the item the recipes list should be sorted by
+     * @param sortItemRecipe This is the item the recipes list should be sorted by, which is of type
+     *       {@link Integer}
+     */
+    public void setSortItemRecipe(int sortItemRecipe) {this.sortItemRecipe = sortItemRecipe;}
 }

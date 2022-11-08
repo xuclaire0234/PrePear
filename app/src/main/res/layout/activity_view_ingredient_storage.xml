@@ -1,218 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:cropToPadding="true"
-        android:background="@drawable/below"
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/sort_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="2dp"
+
+      android:background="@color/light_grey">
+
+    <TextView
+        android:layout_width="72dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/light_grey"
+        android:text=" Sort By:"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/sort_spinner"
+        android:layout_width="281dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/spinner_bg"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
-    <LinearLayout
-        android:id="@+id/title_LinearLayout"
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+      android:layout_marginTop="44dp"
+      android:orientation="horizontal"
+      app:layout_constraintStart_toStartOf="parent">
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="52dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:background="@drawable/text_broader"
+        android:text="Description"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="61dp"
+        android:textSize="12dp"
+        android:background="@drawable/text_broader"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Best Before Date" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="12dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/text_broader"
+        android:textSize="12dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="Amount"/>
+
+    <TextView
+        android:id="@+id/textView14"
+        android:textSize="12dp"
+        android:layout_width="6dp"
+        android:gravity="center"
+        android:background="@drawable/text_broader"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_weight="1"
+        android:text="Units"  />
+  </LinearLayout>
+
+  <FrameLayout
+      android:id="@+id/ingredient_listview"
+      android:layout_width="match_parent"
+      android:layout_height="440dp"
+      android:layout_below="@id/sort_layout"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:layout_marginStart="0dp"
+      android:layout_marginTop="30dp">
+
+    <ListView
+        android:id="@+id/ingredients_in_storage_listview"
+        android:layout_width="match_parent"
+        android:layout_height="468dp"></ListView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_ingredient_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:orientation="horizontal"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:backgroundTint="@color/dark_brown"
+
+        app:srcCompat="@android:drawable/ic_input_add" />
+  </FrameLayout>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="72dp"
+      android:layout_below="@id/ingredient_listview"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginTop="2dp"
+      android:layout_marginBottom="1dp"
+      android:background="@color/theme_color">
+
+    <ImageButton
+        android:id="@+id/ingredient_storage_button"
+        android:layout_width="54dp"
+        android:layout_height="43dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ingredient"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title:"
-            android:textSize="16sp"/>
+    <ImageButton
+        android:id="@+id/recipe_folder_button"
+        android:layout_width="54dp"
+        android:layout_height="43dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="8dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/home_button"
+        app:layout_constraintStart_toEndOf="@+id/ingredient_storage_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/recipe" />
 
-        <TextView
-            android:id="@+id/title_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:ems="10"
-            android:text="Title"
-            android:textSize="16sp" />
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/home_button"
+        android:layout_width="58dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="30dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/meal_planner_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/home"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-    <LinearLayout
-        android:id="@+id/preparation_time_LinearLayout"
+    <ImageButton
+        android:id="@+id/meal_planner_button"
+        android:layout_width="52dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="111dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/meal_plan_icon" />
+
+    <ImageButton
+        android:id="@+id/shopping_list_button"
+        android:layout_width="64dp"
+        android:layout_height="41dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/meal_planner_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/shopping_list_icon" />
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_LinearLayout">
+        android:layout_marginEnd="3dp"
+        android:text="Ingredients"
+        android:textColor="@color/black"
+        android:textSize="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ingredient_storage_button"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_storage_button" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Preparation Time (/min):"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/preparation_time_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:ems="10"
-            android:text="Preparation Time"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/number_of_servings_LinearLayout"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preparation_time_LinearLayout">
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="44dp"
+        android:text="Recipes"
+        android:textColor="@color/black"
+        android:textSize="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_folder_button"
+        app:layout_constraintVertical_bias="0.466" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Number of Servings:"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/number_of_servings_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:ems="10"
-            android:text="Number of Servings"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recipe_category_LinearLayout"
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/number_of_servings_LinearLayout">
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="8dp"
+        android:text="Home"
+        android:textColor="@color/black"
+        android:textSize="11dp"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/home_button" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recipe Category:"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/recipe_category_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:ems="10"
-            android:text="Recipe Category"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/comments_LinearLayout"
+    <TextView
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout">
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Comments:"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/comments_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:ems="10"
-            android:text="Comments"
-            android:textSize="16sp" />
-    </LinearLayout>
+        android:layout_marginTop="4dp"
+        android:text="Meal Plans"
+        android:textColor="@color/black"
+        android:textSize="11dp"
+        app:layout_constraintStart_toStartOf="@+id/meal_planner_button"
+        app:layout_constraintTop_toBottomOf="@+id/meal_planner_button" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingredients:"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comments_LinearLayout"
-        android:textSize="16sp"/>
-
-    <ListView
-        android:id="@+id/ingredient_in_recipe_ListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        tools:listitem="@android:layout/simple_list_item_1"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/edit_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Shopping List"
+        android:textColor="@color/black"
+        android:textSize="11dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="0.055">
+        app:layout_constraintTop_toBottomOf="@+id/shopping_list_button" />
 
-    </ListView>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:textSize="16sp"/>
-
-    <Button
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/edit_button"
-        app:layout_constraintLeft_toRightOf="@id/return_button"
-        android:textSize="16sp"/>
-
-    <Button
-        android:id="@+id/return_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Return"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:textSize="16sp"/>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

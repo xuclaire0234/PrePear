@@ -2,7 +2,7 @@
  * Classname: AddEditRecipeActivity
  * Version Information: 1.0.0
  * Date: 11/2/2022
- * Author: Jiayin He
+ * Author: Jiayin He, Yingyue Cao
  * Copyright Notice:
  */
 
@@ -288,18 +288,18 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             final String comments = commentsEditText.getText().toString();
             final String imageURI = linkOfImage;
 
-            // checks if there is any necessary information missing
+            /* checks if there is any necessary information missing */
             if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                     || recipeCategory.equals("")) {
                 Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
             } else {
-                // add to database
+                /* add to database */
                 Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
                         numberOfServings.intValue(), recipeCategory, comments);
                 DatabaseController databaseController = new DatabaseController();
                 databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
-                // sends new recipe being added back to the ViewRecipeListActivity and return
+                /* sends new recipe being added back to the ViewRecipeListActivity and return */
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("new recipe", newRecipe);
                 setResult(Activity.RESULT_OK, returnIntent);

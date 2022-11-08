@@ -1,9 +1,9 @@
 /**
- * Classname: CustomIngredientInRecipeList
- * Version Information: 1.0.0
- * Date: 11/2/2022
- * Author: Jiayin He
- * Copyright notice:
+* Classname: CustomIngredientInRecipeList
+* Version Information: 1.0.0
+* Date: 11/2/2022
+* Author: Jiayin He
+* Copyright notice:
  */
 
 package com.example.prepear;

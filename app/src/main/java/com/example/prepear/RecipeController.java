@@ -19,15 +19,20 @@ public class RecipeController {
     private ArrayList<Recipe> recipes;
     private Integer sortItemRecipe;
 
+    /**
+     * This function initializes the recipe controller.
+     */
     public RecipeController() {
         this.recipes = new ArrayList<Recipe>();
     }
+
     /**
      * This function add a new recipe to recipes list
      */
     public void addRecipe(Recipe recipe) {
         this.recipes.add(recipe);
     }
+
     /**
      * This function delete existed recipe in recipes list
      */
@@ -36,6 +41,7 @@ public class RecipeController {
             this.recipes.remove(recipe);
         }
     }
+
     /**
      * This function edit existed recipe in recipes list
      */
@@ -50,6 +56,7 @@ public class RecipeController {
     public void editRecipe(Integer index, Recipe newestVersionOfRecipe) {
         this.recipes.set(index,newestVersionOfRecipe);
     }
+
     /**
      * This function returns the number of recipe in recipes list
      * @return The return is of type {@link int}
@@ -57,6 +64,7 @@ public class RecipeController {
     public int countRecipes() {
         return this.recipes.size();
     }
+
     /**
      * This function returns the list of recipes
      * @return The return is of type {@link ArrayList}
@@ -64,12 +72,14 @@ public class RecipeController {
     public ArrayList<Recipe> getRecipes() {
         return this.recipes;
     }
+
     /**
      * This function set the list of recipes
      */
     public void setRecipes(ArrayList<Recipe> recipes) {
         this.recipes = recipes;
     }
+
     /**
      * This function returns the recipe at given index
      * @return The return is of type {@link Recipe}
@@ -81,6 +91,7 @@ public class RecipeController {
             return null;
         }
     }
+
     /**
      * This function returns index of given recipe
      * @return The return is of type {@link Integer}
@@ -92,6 +103,7 @@ public class RecipeController {
             return -1;
         }
     }
+
     /**
      * This function clear the recipes in the list
      */
