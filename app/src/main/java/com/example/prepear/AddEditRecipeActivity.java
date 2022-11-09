@@ -15,6 +15,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -24,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -73,6 +76,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     private ArrayList<String> editDeleteListSaved;
     private String idOfRecipe;
     private Boolean isEditedRecipe;
+    private TextView showCommentWordCount;
 
     /**
      * This creates the AddEditRecipeActivity.
@@ -95,6 +99,26 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         ingredientInRecipeListView = findViewById(R.id.ingredient_in_recipe_ListView);
         commitButton = findViewById(R.id.commit_button);
         cancelButton = findViewById(R.id.cancel_button);
+        showCommentWordCount = findViewById(R.id.wordsCountComments);
+
+        /* sets up filter to control the length of the comment text */
+        final TextWatcher mTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showCommentWordCount.setText(String.valueOf(charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+        commentsEditText.addTextChangedListener(mTextEditorWatcher);
+
 
         /* sets up recipe category spinner */
         recipeCategorySpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.recipe_category,

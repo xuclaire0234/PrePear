@@ -38,6 +38,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -80,6 +81,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         final ImageButton viewIngredients;
         final ImageButton viewMealPlan;
         final ImageButton viewShoppingList;
+        final ImageButton sortSequence;
         final FloatingActionButton addRecipe;
 
         /*
@@ -92,6 +94,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         viewShoppingList = findViewById(R.id.shopping_list_button);
         addRecipe = findViewById(R.id.add_recipe_button);
         recipeList = findViewById(R.id.recipe_listview);
+        sortSequence = findViewById(R.id.sort_button);
 
         /*
          * Database are defined and connected to collection with id "Recipes" here below
@@ -109,6 +112,18 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         recipeDataList = new RecipeController();
         recipeAdapter = new CustomRecipeList(this, recipeDataList);
         recipeList.setAdapter(recipeAdapter); /* Link the arraylist and adapter(controller) */
+
+
+        /*
+         * When the sort order button were pressed, the sort order should reverse
+         */
+        sortSequence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeDataList.reverseOrder();
+                recipeAdapter.notifyDataSetChanged();
+            }
+        });
 
         /*
          * When the addRecipe button is clicked, a new activity will start, which is activity to add
