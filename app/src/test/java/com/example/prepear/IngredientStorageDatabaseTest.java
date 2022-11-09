@@ -43,9 +43,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
+/**
 * BackEnd Testing for "Ingredient Storage Collection"
-* */
+*/
 public class IngredientStorageDatabaseTest {
     private FirebaseFirestore mockDB; // for connecting
     private CollectionReference mockIngredientStorageCollection;
@@ -70,9 +70,9 @@ public class IngredientStorageDatabaseTest {
 
     @Test
     @DisplayName("On below method is for testing adding a new ingredient into the storage")
-    /* Create a Map object for the mock ingredient's data stored together as key-value pairs ,
+    /** Create a Map object for the mock ingredient's data stored together as key-value pairs ,
      * and use this Map object to test for adding a new ingredient in Ingredient Storage Collection
-     * */
+     */
     void testAddIngredientInStorage(){
         Map<String, Object> mockIngredientData = new HashMap<>(); // initialize the Map object for mock ingredient's data-storage
         // On below: store every key-value pairs into the initialized Map object

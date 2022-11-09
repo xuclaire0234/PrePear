@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
  * This fragment could be directed from AddEditRecipeActivity.
  */
 public class RecipeAddIngredientFragment extends DialogFragment {
-    // declare variables
+    /* declare variables */
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
     private ArrayAdapter<CharSequence> categorySpinnerAdapter;
     private EditText descriptionText;
@@ -94,6 +94,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        /* connects views to its layout */
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
@@ -102,6 +103,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
 
+        /* set up the unit spinner */
         unitSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.units,
                 android.R.layout.simple_spinner_item);
         unitSpinner.setAdapter(unitSpinnerAdapter);
@@ -117,6 +119,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
             }
         });
 
+        /* set up the category spinner */
         categorySpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.ingredient_categories,
                 android.R.layout.simple_spinner_item);
         categorySpinner.setAdapter(categorySpinnerAdapter);
@@ -132,11 +135,10 @@ public class RecipeAddIngredientFragment extends DialogFragment {
             }
         });
 
-
+        /* return the added ingredient back to AddEditRecipeActivity */
         Bundle bundle = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Ingredient");
-
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)

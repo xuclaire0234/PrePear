@@ -69,21 +69,21 @@ public class RecipeControllerTest {
         recipeController.addRecipe(newRecipe);
         assertEquals(1,recipeController.getRecipes().size()); // check the length of controller
         assertTrue(recipeController.getRecipes().contains(newRecipe)); // check if the controller contains
-                                                                       // the newest added recipe
+        // the newest added recipe
 
         /* check add recipe missing image uri to controller */
         newRecipe = mockRecipeWithoutComment();
         recipeController.addRecipe(newRecipe);
         assertEquals(2,recipeController.getRecipes().size()); // check the length of controller
         assertTrue(recipeController.getRecipes().contains(newRecipe)); // check if the controller contains
-                                                                       // the newest added recipe
+        // the newest added recipe
 
         /* check add recipe missing comment to controller */
         newRecipe = mockRecipeWithoutImageUri();
         recipeController.addRecipe(newRecipe);
         assertEquals(3,recipeController.getRecipes().size()); // check the length of controller
         assertTrue(recipeController.getRecipes().contains(newRecipe)); // check if the controller contains
-                                                                       // the newest added recipe
+        // the newest added recipe
     }
 
     /**
@@ -97,20 +97,20 @@ public class RecipeControllerTest {
         recipeController.addRecipe(newRecipe);
         assertEquals(1,recipeController.getRecipes().size()); // check the length of controller
         assertTrue(recipeController.getRecipes().contains(newRecipe)); // check if the controller contains
-                                                                       // the newest added recipe
+        // the newest added recipe
 
         /* test to delete a recipe that's not in the controller */
         Recipe anotherRecipe = mockRecipeWithoutComment();
         recipeController.deleteRecipe(anotherRecipe); // the controller should not changed in this case
         assertEquals(1,recipeController.getRecipes().size()); // check the length of controller
         assertFalse(recipeController.getRecipes().contains(anotherRecipe)); // controller should not contain
-                                                                            // the recipe that is not in the controller
+        // the recipe that is not in the controller
 
         /* test to delete a recipe that's in the controller */
         recipeController.deleteRecipe(newRecipe);
         assertEquals(0,recipeController.getRecipes().size()); // check the length of controller
         assertFalse(recipeController.getRecipes().contains(newRecipe)); // check if the controller contains
-                                                                        // the deleted recipe
+        // the deleted recipe
     }
 
     /**

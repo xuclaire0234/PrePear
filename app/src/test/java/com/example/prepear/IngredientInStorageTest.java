@@ -39,7 +39,7 @@ public class IngredientInStorageTest {
      * This method tests the IngredientInStorage Class getters
      */
     void testGetters() {
-        /* check that ingredient getters return the correct attributes*/
+        /* check that ingredient getters return the correct attributes */
         assertEquals(ingredient.getBestBeforeDate(), "2022-11-03");
         assertEquals(ingredient.getLocation(), "Fridge");
         assertEquals(ingredient.getDocumentId(), null);

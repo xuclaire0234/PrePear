@@ -79,18 +79,5 @@ public class DatabaseControllerTest {
         databaseController.editIngredientInIngredientStorage(this.context,newIngredient);
     }
 
-    /**
-     * Testing deleteIngredientFromIngredientStorage
-     */
-    @Test
-    @DisplayName("This function is for deleteIngredientFromIngredientStorage")
-    void deleteIngredientFromIngredientStorageTest() {
-        /* add a new ingredient to the database */
-        IngredientInStorage newIngredient = mockIngredientInStorage();
-        databaseController.addIngredientToIngredientStorage(this.context,newIngredient);
-
-        /* delete this ingredient */
-        databaseController.deleteIngredientFromIngredientStorage(this.context,newIngredient);
-    }
 
 }

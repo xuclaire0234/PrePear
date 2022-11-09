@@ -50,7 +50,7 @@ import java.util.Map;
 
 public class AddEditIngredientFragment extends DialogFragment implements
         AdapterView.OnItemSelectedListener{
-    // initialize variables for EditText, DatePickerDialog, and fragment interaction listener objects
+    /* initialize variables for EditText, DatePickerDialog, and fragment interaction listener objects */
     private EditText descriptionView;
     private Spinner categoryView;
     private EditText dateView;
@@ -128,7 +128,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
                 R.layout.add_ingredient_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading4);
 
-        /*assign variables to TextView objects and set on click listeners*/
+        /* assign variables to TextView objects and set on click listeners */
         dateView = view.findViewById(R.id.bestBeforeDate);
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
