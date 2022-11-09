@@ -281,8 +281,8 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
 
             /* gets the information of recipe being edited/added */
             final String title = titleEditText.getText().toString();
-            final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
-            final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
+            final String preparationTime = preparationTimeEditText.getText().toString();
+            final String numberOfServings = numberOfServingsEditText.getText().toString();
             final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
             final String comments = commentsEditText.getText().toString();
             final String imageURI = linkOfImage;
@@ -290,11 +290,16 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             /* checks if there is any necessary information missing */
             if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                     || recipeCategory.equals("")) {
-                Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        "You did not enter the full information, commit failed. " +
+                                "Please make sure that all necessary fields " +
+                                "(title, preparation time, number of servings, recipe category) " +
+                                "has been filled.",
+                        Toast.LENGTH_LONG).show();
             } else {
                 /* add to database */
-                Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
-                        numberOfServings.intValue(), recipeCategory, comments);
+                Recipe newRecipe = new Recipe(imageURI, title, Integer.parseInt(preparationTime),
+                        (Integer.parseInt(numberOfServings)), recipeCategory, comments);
                 DatabaseController databaseController = new DatabaseController();
                 databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
@@ -326,22 +331,27 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                /* gets the detailed information being entered by user */
+                                /* gets the information of recipe being edited/added */
                                 final String title = titleEditText.getText().toString();
-                                final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
-                                final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
+                                final String preparationTime = preparationTimeEditText.getText().toString();
+                                final String numberOfServings = numberOfServingsEditText.getText().toString();
                                 final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
                                 final String comments = commentsEditText.getText().toString();
-                                final String imageURI = task.getResult().toString();
+                                final String imageURI = linkOfImage;
 
-                                /* check to see if there is any necessary information not been entered */
+                                /* checks if there is any necessary information missing */
                                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                                         || recipeCategory.equals("")) {
-                                    Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),
+                                            "You did not enter the full information, commit failed. " +
+                                                    "Please make sure that all necessary fields " +
+                                                    "(title, preparation time, number of servings, recipe category) " +
+                                                    "has been filled.",
+                                            Toast.LENGTH_LONG).show();
                                 } else {
                                     /* add to database */
-                                    Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
-                                            numberOfServings.intValue(), recipeCategory, comments);
+                                    Recipe newRecipe = new Recipe(imageURI, title, Integer.parseInt(preparationTime),
+                                            (Integer.parseInt(numberOfServings)), recipeCategory, comments);
                                     DatabaseController databaseController = new DatabaseController();
                                     databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
@@ -351,8 +361,6 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                                     setResult(Activity.RESULT_OK, returnIntent);
                                     finish();
                                 }
-
-
                             } else if (!task.isSuccessful()) {
                                 Toast.makeText(AddEditRecipeActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                             }
