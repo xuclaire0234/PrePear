@@ -1,5 +1,28 @@
 <resources>
     <string name="app_name">PrePear</string>
+    <string name="title_header">Title:</string>
+    <string name="preparation_time_header">Preparation Time (/min):</string>
+    <string name="number_of_servings_header">Number of Servings:</string>
+    <string name="recipe_category_header">Recipe Category:</string>
+    <string name="comments_header">Comments:</string>
+    <string name="ingredient_list_header">Ingredients:</string>
+    <string name="title_text">Title</string>
+    <string name="preparation_time_text">Preparation Time</string>
+    <string name="number_of_servings_text">Number of Servings</string>
+    <string name="recipe_category_text">Recipe Category</string>
+    <string name="comments_text">Comments</string>
+    <string name="brief_description_text">Brief Description</string>
+    <string name="amount_text">Amount</string>
+    <string name="unit_text">Unit</string>
+    <string name="ingredient_category_text">Ingredient Category</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="delete_button_text">Delete</string>
+    <string name="return_button_text">Return</string>
+    <string name="add_ingredient_button_text">Add Ingredient</string>
+    <string name="edit_image_button_text">Edit Image Button</string>
+    <string name="commit_button_text">Commit</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="recipe_image_text">Recipe Image</string>
     <string-array name="ingredient_categories">
         <item></item>
         <item>Eggs, milk, and milk product</item>
