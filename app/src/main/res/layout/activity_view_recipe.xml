@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ViewRecipeActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -12,10 +20,11 @@
         android:scaleType="centerCrop"
         android:cropToPadding="true"
         android:background="@drawable/below"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/recipe_image_text"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/title_LinearLayout"
         tools:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
 
     <LinearLayout
@@ -23,25 +32,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/preparation_time_LinearLayout">
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title:"
+            android:text="@string/title_header"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/title_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="Title"
+            android:text="@string/title_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -50,25 +60,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_LinearLayout">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_LinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/number_of_servings_LinearLayout">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preparation Time (/min):"
+            android:text="@string/preparation_time_header"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/preparation_time_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="Preparation Time"
+            android:text="@string/preparation_time_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -77,25 +88,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preparation_time_LinearLayout">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preparation_time_LinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/recipe_category_LinearLayout">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number of Servings:"
+            android:text="@string/number_of_servings_header"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/number_of_servings_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="Number of Servings"
+            android:text="@string/number_of_servings_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -104,25 +116,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/number_of_servings_LinearLayout">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/number_of_servings_LinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/comments_LinearLayout">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recipe Category:"
+            android:text="@string/recipe_category_header"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/recipe_category_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="Recipe Category"
+            android:text="@string/recipe_category_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -131,25 +144,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/textView6">
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comments:"
+            android:text="@string/comments_header"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/comments_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="Comments"
+            android:text="@string/comments_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -157,62 +171,111 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingredients:"
+        android:text="@string/ingredient_list_header"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comments_LinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/ingredient_list_title"
         android:textSize="16sp"/>
+
+    <LinearLayout
+        android:id="@+id/ingredient_list_title"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintBottom_toTopOf="@id/ingredient_in_recipe_ListView"
+        android:weightSum="20">
+
+        <TextView
+            android:id="@+id/brief_description_TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="@string/brief_description_text"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/amount_TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="@string/amount_text"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/unit_TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="@string/unit_text"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/ingredient_category_TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="@string/ingredient_category_text"
+            android:textSize="16sp"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/ingredient_in_recipe_ListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="180dp"
+        android:fadeScrollbars="false"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="true"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         tools:listitem="@android:layout/simple_list_item_1"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/edit_button"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="0.055">
-
+        app:layout_constraintVertical_bias="0.055"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_list_title"
+        app:layout_constraintBottom_toTopOf="@id/delete_button">
     </ListView>
 
     <Button
         android:id="@+id/edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
+        android:text="@string/edit_button_text"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="5dp"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ingredient_in_recipe_ListView"
         android:textSize="16sp"/>
 
     <Button
         android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="@string/delete_button_text"
         android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/edit_button"
         app:layout_constraintLeft_toRightOf="@id/return_button"
+        app:layout_constraintRight_toLeftOf="@id/edit_button"
+        app:layout_constraintTop_toBottomOf="@id/ingredient_in_recipe_ListView"
         android:textSize="16sp"/>
 
     <Button
         android:id="@+id/return_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Return"
+        android:text="@string/return_button_text"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ingredient_in_recipe_ListView"
         android:textSize="16sp"/>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
