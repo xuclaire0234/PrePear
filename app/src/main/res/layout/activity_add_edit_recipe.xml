@@ -137,7 +137,7 @@
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/number_of_servings_LinearLayout"
-        app:layout_constraintBottom_toTopOf="@id/comments_LinearLayout">
+        app:layout_constraintBottom_toTopOf="@id/new_recipe_category_LinearLayout">
 
         <TextView
             android:id="@+id/textView4"
@@ -156,6 +156,37 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/new_recipe_category_LinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/comments_LinearLayout">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_recipe_category_header"
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/recipe_category_EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textSize="16sp"
+            android:hint="@string/ingredient_category_text"
+            android:importantForAutofill="no"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/comments_LinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -163,7 +194,7 @@
         android:layout_marginStart="20dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/new_recipe_category_LinearLayout"
         app:layout_constraintBottom_toTopOf="@id/textView6">
 
         <TextView

@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,7 +43,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * This class defines the add/edit recipe activity that allows user to either add a new recipe or
@@ -57,6 +60,8 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     private EditText preparationTimeEditText;
     private EditText numberOfServingsEditText;
     private Spinner recipeCategorySpinner;
+    private EditText recipeCategoryEditText;
+    private LinearLayout newRecipeCategoryLinearLayout;
     private EditText commentsEditText;
     private Button addIngredientInRecipeButton;
     private ListView ingredientInRecipeListView;
@@ -89,6 +94,8 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         preparationTimeEditText = findViewById(R.id.preparation_time_EditText);
         numberOfServingsEditText = findViewById(R.id.number_of_servings_EditText);
         recipeCategorySpinner = findViewById(R.id.recipe_category_Spinner);
+        recipeCategoryEditText = findViewById(R.id.recipe_category_EditText);
+        newRecipeCategoryLinearLayout = findViewById(R.id.new_recipe_category_LinearLayout);
         commentsEditText = findViewById(R.id.comments_EditText);
         addIngredientInRecipeButton = findViewById(R.id.add_ingredient_in_recipe_button);
         ingredientInRecipeListView = findViewById(R.id.ingredient_in_recipe_ListView);
@@ -105,7 +112,12 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         recipeCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                String selectedRecipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+                if (selectedRecipeCategory.equals("Other")) {
+                    newRecipeCategoryLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    newRecipeCategoryLinearLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -133,7 +145,15 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             titleEditText.setText(viewedRecipe.getTitle());
             preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString());
             numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
-            recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition(viewedRecipe.getRecipeCategory()));
+            String recipeCategory = viewedRecipe.getRecipeCategory();
+            List<String> recipeCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.recipe_category)));
+            if (recipeCategories.contains(recipeCategory)) {
+                recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition(recipeCategory));
+            } else {
+                recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition("Other"));
+                newRecipeCategoryLinearLayout.setVisibility(View.VISIBLE);
+                recipeCategoryEditText.setText(recipeCategory);
+            }
             commentsEditText.setText(viewedRecipe.getComments());
             ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
@@ -283,7 +303,10 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             final String title = titleEditText.getText().toString();
             final String preparationTime = preparationTimeEditText.getText().toString();
             final String numberOfServings = numberOfServingsEditText.getText().toString();
-            final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+            String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+            if (recipeCategory.equals("Other")) {
+                recipeCategory = recipeCategoryEditText.getText().toString();
+            }
             final String comments = commentsEditText.getText().toString();
             final String imageURI = linkOfImage;
 
@@ -335,7 +358,10 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                                 final String title = titleEditText.getText().toString();
                                 final String preparationTime = preparationTimeEditText.getText().toString();
                                 final String numberOfServings = numberOfServingsEditText.getText().toString();
-                                final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+                                String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+                                if (recipeCategory.equals("Other")) {
+                                    recipeCategory = recipeCategoryEditText.getText().toString();
+                                }
                                 final String comments = commentsEditText.getText().toString();
                                 final String imageURI = linkOfImage;
 

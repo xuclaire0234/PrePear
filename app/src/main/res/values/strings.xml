@@ -4,6 +4,7 @@
     <string name="preparation_time_header">Preparation Time (/min):</string>
     <string name="number_of_servings_header">Number of Servings:</string>
     <string name="recipe_category_header">Recipe Category:</string>
+    <string name="new_recipe_category_header">Enter New Recipe Category:</string>
     <string name="comments_header">Comments:</string>
     <string name="ingredient_list_header">Ingredients:</string>
     <string name="title_text">Title</string>
@@ -33,7 +34,7 @@
         <item>Meat, sausages, and fish</item>
         <item>Pasta, rice, and pulses</item>
         <item>Vegetables</item>
-        <item>Others</item>
+        <item>Other</item>
     </string-array>
     <string-array name="locations">
         <item></item>
@@ -43,6 +44,7 @@
         <item>Fridge</item>
         <item>Pantry</item>
         <item>Shelf</item>
+        <item>Other</item>
     </string-array>
     <string-array name="units">
         <item></item>
@@ -53,6 +55,7 @@
         <item>ml</item>
         <item>L</item>
         <item>quantities</item>
+        <item>Other</item>
     </string-array>
     <string-array name="recipe_category">
         <item></item>
@@ -69,5 +72,6 @@
         <item>Soap</item>
         <item>Holiday</item>
         <item>Vegetarian</item>
+        <item>Other</item>
     </string-array>
 </resources>
