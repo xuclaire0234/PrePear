@@ -15,6 +15,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,6 +55,8 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
     private EditText categoryEditText;
     private LinearLayout newCategoryLinearLayout;
     private OnFragmentInteractionListener listener;
+    private TextView descriptionWordCount;
+    private TextView amountWordCount;
 
     /**
      * This method defines an interface of methods that the AddEditRecipeActivity needs to implement
@@ -118,6 +122,43 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
         categoryEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
         newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
+        descriptionWordCount = view.findViewById(R.id.description_word_count);
+        amountWordCount = view.findViewById(R.id.amount_word_count);
+
+        /* set up word count for amount and description */
+        final TextWatcher descriptionTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                descriptionWordCount.setText(String.valueOf(30 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+        descriptionText.addTextChangedListener(descriptionTextEditorWatcher);
+        final TextWatcher amountTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                amountWordCount.setText(String.valueOf(10 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+        amountText.addTextChangedListener(amountTextEditorWatcher);
 
         /* set up the unit spinner */
         unitSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.units,
