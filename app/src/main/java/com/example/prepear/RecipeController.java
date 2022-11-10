@@ -172,5 +172,12 @@ public class RecipeController {
         }
     }
 
+    /**
+     * This function reverse the order of the recipes in the list
+     */
+    public void reverseOrder() {
+        Collections.reverse(this.recipes);
+    }
+
 
 }

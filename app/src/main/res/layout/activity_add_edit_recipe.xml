@@ -63,9 +63,16 @@
             android:layout_marginStart="20dp"
             android:ems="10"
             android:inputType="text"
+            android:maxLength="30"
             android:textSize="16sp"
             android:hint="@string/title_text"
             android:importantForAutofill="no"/>
+
+        <TextView
+            android:id="@+id/title_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -92,10 +99,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
+            android:maxLength="10"
             android:inputType="number"
             android:textSize="16sp"
             android:hint="@string/preparation_time_text"
             android:importantForAutofill="no"/>
+
+        <TextView
+            android:id="@+id/preparation_time_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -122,10 +136,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
+            android:maxLength="3"
             android:inputType="number"
             android:textSize="16sp"
             android:hint="@string/number_of_servings_text"
             android:importantForAutofill="no"/>
+
+        <TextView
+            android:id="@+id/number_of_servings_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -180,10 +201,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
+            android:maxLength="20"
             android:inputType="text"
             android:textSize="16sp"
             android:hint="@string/ingredient_category_text"
             android:importantForAutofill="no"/>
+
+        <TextView
+            android:id="@+id/recipe_category_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -210,10 +238,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
+            android:maxLength="60"
             android:inputType="text"
             android:textSize="16sp"
             android:hint="@string/comments_text"
             android:importantForAutofill="no"/>
+
+        <TextView
+            android:id="@+id/comments_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <TextView
