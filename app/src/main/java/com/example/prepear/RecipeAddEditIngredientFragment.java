@@ -20,12 +20,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -41,7 +46,11 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
     private EditText descriptionText;
     private EditText amountText;
     private Spinner unitSpinner;
+    private EditText unitEditText;
+    private LinearLayout newUnitLinearLayout;
     private Spinner categorySpinner;
+    private EditText categoryEditText;
+    private LinearLayout newCategoryLinearLayout;
     private OnFragmentInteractionListener listener;
 
     /**
@@ -103,7 +112,11 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         descriptionText = view.findViewById(R.id.description_edit_text);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
+        unitEditText = view.findViewById(R.id.new_ingredient_unit_edit_text);
+        newUnitLinearLayout = view.findViewById(R.id.new_unit_linear_layout);
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
+        categoryEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
+        newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
 
         /* set up the unit spinner */
         unitSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.units,
@@ -112,7 +125,12 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                String selectedRecipeCategory = unitSpinner.getSelectedItem().toString();
+                if (selectedRecipeCategory.equals("Other")) {
+                    newUnitLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    newUnitLinearLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -128,7 +146,12 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                String selectedRecipeCategory = categorySpinner.getSelectedItem().toString();
+                if (selectedRecipeCategory.equals("Other")) {
+                    newCategoryLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    newCategoryLinearLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -144,8 +167,24 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
             IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
             descriptionText.setText(ingredient.getBriefDescription());
             amountText.setText(String.valueOf(ingredient.getAmountString()));
-            unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));
-            categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
+            String unit = ingredient.getUnit();
+            List<String> units = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.units)));
+            if (units.contains(unit)) {
+                unitSpinner.setSelection(unitSpinnerAdapter.getPosition(unit));
+            } else {
+                unitSpinner.setSelection(unitSpinnerAdapter.getPosition("Other"));
+                newUnitLinearLayout.setVisibility(View.VISIBLE);
+                unitEditText.setText(unit);
+            }
+            String ingredientCategory = ingredient.getIngredientCategory();
+            List<String> ingredientCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredient_categories)));
+            if (ingredientCategories.contains(ingredientCategory)) {
+                categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredientCategory));
+            } else {
+                categorySpinner.setSelection(categorySpinnerAdapter.getPosition("Other"));
+                newCategoryLinearLayout.setVisibility(View.VISIBLE);
+                categoryEditText.setText(ingredientCategory);
+            }
 
             /* return the edited ingredient back to AddEditRecipeActivity */
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
@@ -162,7 +201,13 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                             String description = descriptionText.getText().toString();
                             String amount = amountText.getText().toString();
                             String unit = unitSpinner.getSelectedItem().toString();
+                            if (unit.equals("Other")) {
+                                unit = unitEditText.getText().toString();
+                            }
                             String category = categorySpinner.getSelectedItem().toString();
+                            if (category.equals("Other")) {
+                                category = categoryEditText.getText().toString();
+                            }
                             listener.onDeletePressed(new IngredientInRecipe(description, amount, unit, category));
                         }
                     })
@@ -186,7 +231,13 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                                 description = descriptionText.getText().toString();
                                 amount = amountText.getText().toString();
                                 unit = unitSpinner.getSelectedItem().toString();
+                                if (unit.equals("Other")) {
+                                    unit = unitEditText.getText().toString();
+                                }
                                 category = categorySpinner.getSelectedItem().toString();
+                                if (category.equals("Other")) {
+                                    category = categoryEditText.getText().toString();
+                                }
                                 ingredient.setBriefDescription(description);
                                 ingredient.setAmountValue(Double.parseDouble(amount));
                                 ingredient.setUnit(unit);
@@ -226,7 +277,13 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                                 description = descriptionText.getText().toString();
                                 amount = amountText.getText().toString();
                                 unit = unitSpinner.getSelectedItem().toString();
+                                if (unit.equals("Other")) {
+                                    unit = unitEditText.getText().toString();
+                                }
                                 category = categorySpinner.getSelectedItem().toString();
+                                if (category.equals("Other")) {
+                                    category = categoryEditText.getText().toString();
+                                }
                                 listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
                             }
                         }
