@@ -51,8 +51,7 @@ import java.util.List;
  * This class defines the add/edit recipe activity that allows user to either add a new recipe or
  * edit a existing recipe.
  */
-public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEditIngredientFragment.OnFragmentInteractionListener,
-        RecipeAddIngredientFragment.OnFragmentInteractionListener{
+public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAddEditIngredientFragment.OnFragmentInteractionListener {
     private ArrayAdapter<CharSequence> recipeCategorySpinnerAdapter;
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
@@ -170,7 +169,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             @Override
             public void onClick(View v) {
                 positionToEditInViewIngredient = -1;
-                new RecipeAddIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                new RecipeAddEditIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
             }
         });
 
@@ -179,7 +178,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 positionToEditInViewIngredient = position;
-                RecipeEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(),
+                RecipeAddEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(),
                         "EDIT_INGREDIENT_IN_RECIPE");
             }
         });
