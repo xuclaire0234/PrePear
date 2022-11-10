@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -189,8 +190,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
             /* return the edited ingredient back to AddEditRecipeActivity */
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("Edit Ingredient");
-            return builder
-                    .setView(view)
+            builder.setView(view)
                     .setNegativeButton("Cancel", null)
                     .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                         /* set listener for the Delete button, delete the clicked Ingredient
@@ -212,83 +212,84 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                         }
                     })
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        /* set listener for the OK button, get user input,
-                        and call onOkPressed method to edit ingredient item
-                         */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String description;
-                            String amount;
-                            String unit;
-                            String category;
-                            if (descriptionText.getText().toString().equals("")
-                                    || amountText.getText().toString().equals("")
-                                    || unitSpinner.getSelectedItem().toString().equals("")
-                                    || categorySpinner.getSelectedItem().toString().equals("")) {
-                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                description = descriptionText.getText().toString();
-                                amount = amountText.getText().toString();
-                                unit = unitSpinner.getSelectedItem().toString();
-                                if (unit.equals("Other")) {
-                                    unit = unitEditText.getText().toString();
-                                }
-                                category = categorySpinner.getSelectedItem().toString();
-                                if (category.equals("Other")) {
-                                    category = categoryEditText.getText().toString();
-                                }
-                                ingredient.setBriefDescription(description);
-                                ingredient.setAmountValue(Double.parseDouble(amount));
-                                ingredient.setUnit(unit);
-                                ingredient.setIngredientCategory(category);
-                                listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
-                            }
+
                         }
-                    }).create();
+                    });
+            return builder.create();
         } else {
             /* Adding new ingredient */
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
             title.setText("Add Ingredient");
-            return builder
-                    .setView(view)
+            builder.setView(view)
                     .setNegativeButton("Cancel", null)
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                        /* set listener for the Confirm button, get user input,
-                        and call oncConfirmPressed method to add ingredient item
-                         */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            /* get user input
-                             * and make sure that no text field is left empty
-                             * */
-                            String description;
-                            String amount;
-                            String unit;
-                            String category;
 
-                            if (descriptionText.getText().toString().equals("")
-                                    || amountText.getText().toString().equals("")
-                                    || unitSpinner.getSelectedItem().toString().equals("")
-                                    || categorySpinner.getSelectedItem().toString().equals("")) {
-                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                description = descriptionText.getText().toString();
-                                amount = amountText.getText().toString();
-                                unit = unitSpinner.getSelectedItem().toString();
-                                if (unit.equals("Other")) {
-                                    unit = unitEditText.getText().toString();
-                                }
-                                category = categorySpinner.getSelectedItem().toString();
-                                if (category.equals("Other")) {
-                                    category = categoryEditText.getText().toString();
-                                }
-                                listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
-                            }
                         }
-                    }).create();
+                    });
+            return builder.create();
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final AlertDialog d = (AlertDialog) getDialog();
+        if (d != null) {
+            Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener((View v) -> {
+                Boolean wantToCloseDialog = true;
+                String description;
+                String amount;
+                String unit;
+                String category;
+                if (descriptionText.getText().toString().equals("")
+                        || amountText.getText().toString().equals("")
+                        || unitSpinner.getSelectedItem().toString().equals("")
+                        || categorySpinner.getSelectedItem().toString().equals("")) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                            Toast.LENGTH_LONG).show();
+                    wantToCloseDialog = false;
+                } else {
+                    Bundle bundle = getArguments();
+                    if (bundle != null) {
+                        description = descriptionText.getText().toString();
+                        amount = amountText.getText().toString();
+                        unit = unitSpinner.getSelectedItem().toString();
+                        if (unit.equals("Other")) {
+                            unit = unitEditText.getText().toString();
+                        }
+                        category = categorySpinner.getSelectedItem().toString();
+                        if (category.equals("Other")) {
+                            category = categoryEditText.getText().toString();
+                        }
+                        IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
+                        ingredient.setBriefDescription(description);
+                        ingredient.setAmountValue(Double.parseDouble(amount));
+                        ingredient.setUnit(unit);
+                        ingredient.setIngredientCategory(category);
+                        listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
+                    } else {
+                        description = descriptionText.getText().toString();
+                        amount = amountText.getText().toString();
+                        unit = unitSpinner.getSelectedItem().toString();
+                        if (unit.equals("Other")) {
+                            unit = unitEditText.getText().toString();
+                        }
+                        category = categorySpinner.getSelectedItem().toString();
+                        if (category.equals("Other")) {
+                            category = categoryEditText.getText().toString();
+                        }
+                        listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
+                    }
+                }
+                if (wantToCloseDialog) {
+                    d.dismiss();
+                }
+            });
+        }
     }
 }
