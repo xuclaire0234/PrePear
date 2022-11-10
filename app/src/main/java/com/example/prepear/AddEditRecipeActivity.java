@@ -109,7 +109,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showCommentWordCount.setText(String.valueOf(charSequence.length()));
+                showCommentWordCount.setText(String.valueOf(60 - charSequence.length()));
             }
 
             @Override
