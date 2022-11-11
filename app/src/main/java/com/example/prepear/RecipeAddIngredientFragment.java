@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -139,18 +140,13 @@ public class RecipeAddIngredientFragment extends DialogFragment {
         Bundle bundle = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Ingredient");
+
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    /* set listener for the Confirm button, get user input,
-                    and call oncConfirmPressed method to add ingredient item
-                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        /* get user input
-                         * and make sure that no text field is left empty
-                         * */
                         String description;
                         String amount;
                         String unit;

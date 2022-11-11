@@ -11,29 +11,22 @@ package com.example.prepear;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * This class defines the view recipe activity that allows user to view details of a specific recipe.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class ViewRecipeActivity extends AppCompatActivity {
     private ImageView imageImageView;
     private TextView titleTextView;
@@ -52,6 +45,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     /**
      * This creates the ViewRecipeActivity.
      * @param savedInstanceState
+     *      can be used to recreate the activity and load all data from it
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,8 +70,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         Glide.with(ViewRecipeActivity.this)
                 .load(viewedRecipe.getImageURI()).into(imageImageView);
         titleTextView.setText(viewedRecipe.getTitle());
-        preparationTimeTextView.setText(viewedRecipe.getPreparationTime().toString());
-        numberOfServingsTextView.setText(viewedRecipe.getNumberOfServings().toString());
+        preparationTimeTextView.setText(String.format(Locale.getDefault(), "%d", viewedRecipe.getPreparationTime()));
+        numberOfServingsTextView.setText(String.format(Locale.getDefault(), "%d", viewedRecipe.getNumberOfServings()));
         recipeCategoryTextView.setText(viewedRecipe.getRecipeCategory());
         commentsTextView.setText(viewedRecipe.getComments());
         ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
@@ -86,47 +80,38 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         /* sets edit button to jump to AddEditRecipeActivity after clicking it, while at the same time
         pass the recipe object being viewed to the AddEditRecipeActivity to let it display its information */
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent switchActivityIntent = new Intent(ViewRecipeActivity.this, AddEditRecipeActivity.class);
-                switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
-                switchActivityIntent.putExtra("calling activity", "2"); // pass the number 2 to AddEditRecipeActivity to indicate that it should be used to edit recipe
-                startActivity(switchActivityIntent);
+        editButton.setOnClickListener((View v) -> {
+            Intent switchActivityIntent = new Intent(ViewRecipeActivity.this, AddEditRecipeActivity.class);
+            switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
+            switchActivityIntent.putExtra("calling activity", "2"); // pass the number 2 to AddEditRecipeActivity to indicate that it should be used to edit recipe
+            startActivity(switchActivityIntent);
 
-                /* return to the calling ViewRecipeListActivity automatically after editing the recipe */
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
-            }
+            /* return to the calling ViewRecipeListActivity automatically after editing the recipe */
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
         });
 
         /* sets delete button to delete the viewing recipe after clicking it, and then return
         to the ViewRecipeListActivity */
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* delete recipe from database */
-                DatabaseController databaseController = new DatabaseController();
-                databaseController.deleteRecipeFromRecipeList(ViewRecipeActivity.this, viewedRecipe);
+        deleteButton.setOnClickListener((View v) -> {
+            /* delete recipe from database */
+            DatabaseController databaseController = new DatabaseController();
+            databaseController.deleteRecipeFromRecipeList(ViewRecipeActivity.this, viewedRecipe);
 
-                /* return to the calling ViewRecipeListActivity */
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("delete recipe", viewedRecipe);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
+            /* return to the calling ViewRecipeListActivity */
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("delete recipe", viewedRecipe);
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
         });
 
         /* sets return button to directly return to the ViewRecipeListActivity after clicking it */
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* return to the calling ViewRecipeListActivity */
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
-            }
+        returnButton.setOnClickListener((View v) -> {
+            /* return to the calling ViewRecipeListActivity */
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
         });
     }
 }
