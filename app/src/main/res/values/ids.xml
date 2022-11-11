@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="title_TextView" type="id" />
+    <item name="preparation_time_TextView" type="id" />
+    <item name="number_of_servings_TextView" type="id" />
+    <item name="recipe_category_TextView" type="id" />
+    <item name="comments_TextView" type="id" />
+    <item name="edit_button" type="id" />
+    <item name="return_button" type="id" />
+    <item name="edit_image_button" type="id" />
+    <item name="title_EditText" type="id" />
+    <item name="preparation_time_EditText" type="id" />
+    <item name="number_of_servings_EditText" type="id" />
+    <item name="recipe_category_EditText" type="id" />
+    <item name="comments_EditText" type="id" />
+    <item name="add_ingredient_in_recipe_button" type="id" />
+    <item name="commit_button" type="id" />
+    <item name="number_of_servings_texts_view_recipe_list" type="id" />
+    <item name="preparation_time_texts_view_recipe_list" type="id" />
+    <item name="recipe_category_texts_view_recipe_list" type="id" />
+    <item name="imageView_in_recipe_list" type="id" />
+    <item name="bestBeforeDate" type="id" />
+    <item name="ingredients_in_storage_listview" type="id" />
+    <item name="add_ingredient_button" type="id" />
+</resources>

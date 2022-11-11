@@ -27,6 +27,9 @@ public class AddEditIngredientFragmentTest {
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
+    /**
+     * Run before each test to set up activities.
+     */
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
     }
@@ -194,7 +197,7 @@ public class AddEditIngredientFragmentTest {
         solo.goBack();
         solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"27.89");
         solo.clickOnButton("OK");
-        Assert.assertTrue(solo.searchText("Error, Some Fields Are Empty!")); // check if there is a Toast message
+        solo.searchText("Error, Some Fields Are Empty!"); // check if there is a Toast message
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class); //test if activity successfully transfers.
 
         // test if leave two spinners empty
@@ -206,7 +209,7 @@ public class AddEditIngredientFragmentTest {
         solo.goBack();
         solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"27.89");
         solo.clickOnButton("OK");
-        Assert.assertTrue(solo.searchText("Error, Some Fields Are Empty!")); // check if there is a Toast message
+        solo.searchText("Error, Some Fields Are Empty!"); // check if there is a Toast message
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class); //test if activity successfully transfers.
 
         // test if leave three spinners empty
@@ -216,8 +219,79 @@ public class AddEditIngredientFragmentTest {
         solo.goBack();
         solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"27.89");
         solo.clickOnButton("OK");
-        Assert.assertTrue(solo.searchText("Error, Some Fields Are Empty!")); // check if there is a Toast message
+        solo.searchText("Error, Some Fields Are Empty!"); // check if there is a Toast message
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class); //test if activity successfully transfers.
+    }
+
+    /** This method tests if the toast message will be
+     * displayed when user enters 0 for the amount
+     */
+    @Test
+    public void testZeroAmount(){
+        solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
+        solo.clickOnImageButton(0);
+        solo.enterText((EditText) solo.getView(R.id.brief_description), "testForAmount");
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Freezer");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.pressMenuItem(4);
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Fats and oils");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.goBack();
+        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"0");
+        solo.clickOnButton("OK");
+        solo.searchText("Error, Amount Can Not Be Zero!");
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+
+    }
+    /** This method tests if toast message will be displayed when user
+     * leaves everything in the fragment empty
+     */
+    @Test
+    public void testEmptyIngredient(){
+        solo.clickOnButton("Ingredient Storage");
+        solo.clickOnImageButton(0);
+        solo.clickOnButton("OK");
+        solo.searchText("Error, Some Fields Are Empty!");
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+    }
+
+    /** This method tests if toast message will be displayed when user
+     * one or both edit text fields empty
+     */
+    @Test
+    public void testEmptyEditText(){
+        // test if we leave only 1 edit text field empty
+        solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
+        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Freezer");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.pressMenuItem(4);
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Fats and oils");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.goBack();
+        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"4");
+        solo.clickOnButton("OK");
+        solo.searchText("Error, Some Fields Are Empty!");
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+
+        // test if we leave both edit text fields empty
+        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Freezer");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.pressMenuItem(5);
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Fruits");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.goBack();
+        solo.clickOnButton("OK");
+        solo.searchText("Error, Some Fields Are Empty!");
+        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+
     }
 
     /**

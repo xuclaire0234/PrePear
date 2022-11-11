@@ -1,11 +1,9 @@
 /**
- * ViewRecipeListActivity
- *
- * Version 1.0
- *
- * Date
- *
- * Copyright
+ * Classname: ViewRecipeListActivity
+ * Version Information: 1.0.0
+ * Date: 11/1/2022
+ * Author: Yingyue Cao, Jiayin He
+ * Copyright notice:
  */
 package com.example.prepear;
 
@@ -56,7 +54,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
      */
     ListView recipeList;
     CustomRecipeList recipeAdapter;
-    ArrayList<Recipe> recipeDataList;
+    RecipeController recipeDataList;
     Integer sortItemRecipe = 0;
     Integer recipePosition = -1;
     int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
@@ -72,7 +70,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe_list); /* link current activity to its layout
-                                                             * file */
+         * file */
 
         /*
          * All variables to link to the layout elements are defined here below
@@ -108,7 +106,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
          * The arraylist and adapter for the recipes are assigned and linked to each other here
          * below
          */
-        recipeDataList = new ArrayList<>();
+        recipeDataList = new RecipeController();
         recipeAdapter = new CustomRecipeList(this, recipeDataList);
         recipeList.setAdapter(recipeAdapter); /* Link the arraylist and adapter(controller) */
 
@@ -158,7 +156,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
-                recipeDataList.clear(); /* Clear the old list */
+                recipeDataList.clearAllRecipes(); /* Clear the old list */
 
                 /*
                  * Loop through all the documents in the collection named "Recipes"
@@ -193,24 +191,24 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                     /*
                      * add the newly generated recipe item to the recipeDataList
                      */
-                    recipeDataList.add(newRecipe);
+                    recipeDataList.addRecipe(newRecipe);
                 }
 
                 /*
                  * Loop through all the documents and get collections named "Ingredient" which
                  * and get information of all the ingredients needed by one Recipe.
                  */
-                for (int i = 0; i < recipeDataList.size(); i++) {
+                for (int i = 0; i < recipeDataList.countRecipes(); i++) {
                     int indexOfRecipe = i;
 
                     /*
                      * Get information of all the ingredients needed by the recipe at certain index
                      */
-                    db.collection("Recipes").document(recipeDataList.get(indexOfRecipe).getId()).collection("Ingredient")
+                    db.collection("Recipes").document(recipeDataList.getRecipeAt(indexOfRecipe).getId()).collection("Ingredient")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                    recipeDataList.get(indexOfRecipe).deleteAllIngredients();
+                                    recipeDataList.getRecipeAt(indexOfRecipe).deleteAllIngredients();
 
                                     /*
                                      * Loop through all the documents in Ingredient collection
@@ -239,7 +237,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                                         /*
                                          * add the newly generated ingredient item to the recipe in the recipeDataList
                                          */
-                                        recipeDataList.get(indexOfRecipe).addIngredientToRecipe(NewIngredient);
+                                        recipeDataList.getRecipeAt(indexOfRecipe).addIngredientToRecipe(NewIngredient);
                                     }
                                 }
                             });
@@ -261,9 +259,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (i != 0){
             /* If it is not the first item in the spinner, which is a blank, is selected, the recipe
-            * will be sorted by the item selected */
+             * will be sorted by the item selected */
             sortItemRecipe = i - 1; /* get the index of the item the recipes should be sorted by */
-            recipeAdapter.sortRecipe(sortItemRecipe); /* sort the recipes */
+            recipeDataList.sortRecipe(sortItemRecipe); /* sort the recipes */
             recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
         }
     }
@@ -277,6 +275,12 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
 
     }
 
+    /**
+     * This function gets the added recipe or deleted recipe.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -299,6 +303,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         }
     }
 
+    /**
+     * This function restarts the activity to renew the displayed information.
+     */
     @Override
     public void onRestart() {
         super.onRestart();

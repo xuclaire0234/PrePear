@@ -1,11 +1,9 @@
 /**
- * Recipe
- *
- * Version 1.0
- *
- * Date
- *
- * Copyright
+ * Classname: Recipe
+ * Version Information: 1.0.0
+ * Date: 11/2/2022
+ * Author: Yingyue Cao
+ * Copyright notice:
  */
 
 package com.example.prepear;

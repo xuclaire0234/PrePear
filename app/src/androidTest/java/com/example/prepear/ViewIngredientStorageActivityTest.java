@@ -1,4 +1,5 @@
 package com.example.prepear;
+
 import android.widget.Adapter;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -21,12 +22,15 @@ import java.util.ArrayList;
  used
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewIngredientStorageTest {
+public class ViewIngredientStorageActivityTest {
     private Solo solo;
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
+    /**
+     * Run before each test to set up activities.
+     */
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
     }

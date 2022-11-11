@@ -1,8 +1,9 @@
-/*
- * Class Name: RecipeAddIngredientFragment
- * Version Information: Version 1.0
- * Date: Oct 26th, 2022
+/**
+ * Classname: RecipeEditIngredientFragment
+ * Version Information: 1.0.0
+ * Date: 11/1/2022
  * Author: Jamie Lee
+ * Copyright Notice:
  */
 package com.example.prepear;
 
@@ -33,7 +34,7 @@ import javax.annotation.Nullable;
  * This fragment could be directed from AddEditRecipeActivity.
  */
 public class RecipeEditIngredientFragment extends DialogFragment {
-    // declare variables
+    /* declare variables */
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
     private ArrayAdapter<CharSequence> categorySpinnerAdapter;
     private EditText descriptionText;
@@ -94,6 +95,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        /* connects views to its layout */
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_edit_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
@@ -102,6 +104,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         unitSpinner = view.findViewById(R.id.ingredient_unit);
         categorySpinner = view.findViewById(R.id.ingredient_category);
 
+        /* set up the unit spinner */
         unitSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.units,
                 android.R.layout.simple_spinner_item);
         unitSpinner.setAdapter(unitSpinnerAdapter);
@@ -117,6 +120,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
             }
         });
 
+        /* set up the category spinner */
         categorySpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.ingredient_categories,
                 android.R.layout.simple_spinner_item);
         categorySpinner.setAdapter(categorySpinnerAdapter);
@@ -132,6 +136,7 @@ public class RecipeEditIngredientFragment extends DialogFragment {
             }
         });
 
+        /* displays the detailed information of the selected ingredient */
         Bundle bundle = getArguments();
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
@@ -139,13 +144,16 @@ public class RecipeEditIngredientFragment extends DialogFragment {
         unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));
         categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
 
+        /* return the edited ingredient back to AddEditRecipeActivity */
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Edit Ingredient");
-
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    /* set listener for the Delete button, delete the clicked Ingredient
+                    and call onDeletePressed method to delete ingredient item
+                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description = descriptionText.getText().toString();
@@ -156,6 +164,9 @@ public class RecipeEditIngredientFragment extends DialogFragment {
                     }
                 })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    /* set listener for the OK button, get user input,
+                    and call onOkPressed method to edit ingredient item
+                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String description;

@@ -19,7 +19,9 @@ public class IngredientInStorage extends Ingredient{
     // initialize class attributes
     private String bestBeforeDate;
     private String location;
+    // On below: unique id for storing as a document with its detailed information combined into a Map object inside Ingredient Storage collection
     private String documentId;
+    private int iconCode;
 
     /**
      * This constructor creates an {@link IngredientInStorage} object with the given attributes
@@ -30,12 +32,14 @@ public class IngredientInStorage extends Ingredient{
      * @param location a String for the entered location  for this in-storage ingredient
      * @param amount an numerical value for the amount of this in-storage ingredient
      * @param unit the unit to used to measure and scale this in-storage ingredient
+     * @param iconCode store the icon image name that user selected for this in-storage ingredient
      */
-    public IngredientInStorage(String description, String category, String date, String location, String amount, String unit, String documentId){
+    public IngredientInStorage(String description, String category, String date, String location, String amount, String unit, String documentId,int iconCode){
         super(description, amount, unit, category);
         this.bestBeforeDate = date;
         this.location = location;
         this.documentId = documentId;
+        this.iconCode = iconCode;
     }
 
     /**
@@ -84,5 +88,21 @@ public class IngredientInStorage extends Ingredient{
      */
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
+    }
+
+    /**
+     * This method gets the icon code of the ingredient
+     * @return iconCode: an int for the user selected icon
+     */
+    public int getIconCode() {
+        return iconCode;
+    }
+
+    /**
+     * This method sets the icon code of the ingredient
+     * @param iconCode a string for the user selected icon image
+     */
+    public void setIconCode(int iconCode) {
+        this.iconCode = iconCode;
     }
 }
