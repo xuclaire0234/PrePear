@@ -62,6 +62,7 @@ public class RecipeFragment extends Fragment {
          */
         final Spinner sortItemSpinner;
         final FloatingActionButton addRecipe;
+        final ImageButton sortSequence;
 
         /*
          * All variables to link to the layout elements are linked to layout by id here below
@@ -69,6 +70,7 @@ public class RecipeFragment extends Fragment {
         sortItemSpinner = view.findViewById(R.id.sort_spinner);
         addRecipe = view.findViewById(R.id.add_recipe_button);
         recipeList = view.findViewById(R.id.recipe_listview);
+        sortSequence = view.findViewById(R.id.sort_button);
 
         /*
          * Database are defined and connected to collection with id "Recipes" here below
@@ -85,6 +87,17 @@ public class RecipeFragment extends Fragment {
         recipeDataList = new RecipeController();
         recipeAdapter = new CustomRecipeList(this.getContext(), recipeDataList);
         recipeList.setAdapter(recipeAdapter); /* Link the arraylist and adapter(controller) */
+
+        /*
+         * When the sort order button were pressed, the sort order should reverse
+         */
+        sortSequence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeDataList.reverseOrder();
+                recipeAdapter.notifyDataSetChanged();
+            }
+        });
 
         /*
          * When the addRecipe button is clicked, a new activity will start, which is activity to add
