@@ -9,13 +9,10 @@ import androidx.test.rule.ActivityTestRule;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
 
 /**
  * Test class for AddEditIngredientFragment. All the UI tests are written here. Robotium test framework is used
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 public class AddEditIngredientFragmentTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
 
     @Before
     /**

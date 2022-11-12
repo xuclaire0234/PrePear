@@ -16,25 +16,23 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 /**
  * Initialize the opening page of the app
  * Prompts the user to select a section of app by clicking the corresponding button for each section,
  * and direct the user to the user-selected section
 */
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // On below: set the customized MainActivity's content up front after launching the app
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         // On below: grab the Button for (after clicking)launching Ingredient Storage Section of the app
-        final Button ingredientStorageButton = findViewById(R.id.ingredient_storage_button);
+        final Button ingredientStorageButton = findViewById(R.id.log_in);
         directToViewIngredientStorage(ingredientStorageButton);
         // On below: grab the Button for (after clicking)launching Recipe Folder Section of the app
-        final Button recipeListButton = findViewById(R.id.recipe_folder_button);
+        final Button recipeListButton = findViewById(R.id.create_account);
         directToViewRecipeFolder(recipeListButton);
     }
 
@@ -48,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // On below: initialize a intent for launching the Ingredient Storage Activity
-                Intent intentForViewIngredientStorageActivity = new Intent(MainActivity.this,
-                        ViewIngredientStorageActivity.class);
+                Intent intentForViewIngredientStorageActivity = new Intent(LoginActivity.this,
+                        HomeActivity.class);
                 // On below: start launching
                 startActivity(intentForViewIngredientStorageActivity);
             }
@@ -66,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // On below: initialize a intent for launching the Recipe Folder Activity
-                Intent intentForViewRecipeListActivity = new Intent(MainActivity.this,
-                        ViewRecipeListActivity.class);
+                Intent intentForViewRecipeListActivity = new Intent(LoginActivity.this,
+                        HomeActivity.class);
                 // On below: After clicking the button, start launching
                 startActivity(intentForViewRecipeListActivity);
             }
