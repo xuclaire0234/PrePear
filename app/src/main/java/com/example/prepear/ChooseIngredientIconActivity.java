@@ -1,3 +1,11 @@
+/**
+ * Class Name: ChooseIngredientIconActivity
+ * Version Information: Version 1.0
+ * Create Date: Nov 11th, 2022
+ * Author: Jingyi Xu
+ * Copyright Notice:
+ * */
+
 package com.example.prepear;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +22,9 @@ import android.widget.ImageView;
 
 import java.net.URI;
 import java.util.ArrayList;
-
+/**
+ * This class provide icon for ingredient that allows user to choose one of the icon to represent
+ */
 public class ChooseIngredientIconActivity extends AppCompatActivity {
 
     @Override
@@ -24,16 +34,17 @@ public class ChooseIngredientIconActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method will send image tag to AddEditIngredientActivity when user selected one icon
+     * @param view
+     */
     public void PassImage(View view){
         String tag = (String) view.getTag();  // get image name of selected image
         Log.d("image tag", tag);
         Intent intent = new Intent(this, AddEditIngredientActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("Receive code","1");
-        bundle.putString("image tag",tag);
-        intent.putExtras(bundle);
-//        intent.putExtra("image tag", tag);
-        startActivity(intent);
+        intent.putExtra("image tag", tag);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
 }

@@ -93,6 +93,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
                 Intent intent = new Intent(ViewIngredientStorageActivity.this, AddEditIngredientActivity.class);
                 intent.putExtra("Add or Edit", "2");
                 intent.putExtra("ingredientInStorage", clickedFood);
+                intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
                 startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
             }
         });
@@ -133,7 +134,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
                                     String unit = (String) document.getData().get("unit");
                                     String amount = String.valueOf(document.getData().get("amount"));
                                     String category = (String) document.getData().get("category");
-                                    int iconCode = (int) document.getData().get("icon code");
+                                    int iconCode = ((Long) document.getData().get("icon code")).intValue();
 
                                     // On below line: use retrieved data from document and build a new in-storage ingredient entry,
                                     // then add locally into the Ingredient Storage Data List
@@ -151,7 +152,8 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
 
         // On below part: After retrieving all existing in-storage ingredients' data from DB to in-storage ingredient list,
         // sort all retrieved ingredients based on user's picked sort-by choice
-        SortInStorageIngredients(userSelectedSortChoice);
+        IngredientController ingredientController = new IngredientController(ingredientStorageDataList);
+        ingredientController.SortInStorageIngredients(userSelectedSortChoice);
         ingredientStorageListAdapter.notifyDataSetChanged(); // for updating data in the ArrayAdapter
     }
 
@@ -171,8 +173,9 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        IngredientController ingredientController = new IngredientController(ingredientStorageDataList);
         userSelectedSortChoice = userSortChoices[position]; // use position index to locate the sort-by selection the user made
-        SortInStorageIngredients(userSelectedSortChoice); // based on the selection user just made, sort throughout
+        ingredientController.SortInStorageIngredients(userSelectedSortChoice); // based on the selection user just made, sort throughout
         ingredientStorageListAdapter.notifyDataSetChanged(); // notify for updating data after sorting completely
     }
 
@@ -188,134 +191,52 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
         // Auto
     }
 
-
+    @Override
     /**
-     * This method sorts all in-storage ingredients according to the user's selection made for sorting
-     * @param userSelectedSortChoice a String as the user's selection for sorting all in-storage ingredients
+     * This method updates the ingredient list view after the AddEditIngredientActivity concludes
+     * @param requestCode
+     * @param resultCode
+     * @param data
      */
-    public void SortInStorageIngredients(String userSelectedSortChoice){
-        if (Objects.equals(userSelectedSortChoice, "description(ascending)")) { // sort by ingredient's description A->Z alphabetically
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getBriefDescription().compareTo(ingredient2.getBriefDescription());
-                }
-            });
-        } else if (Objects.equals(userSelectedSortChoice, "description(descending)")) { // sort by ingredient's description Z->A alphabetically
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getBriefDescription().compareTo(ingredient1.getBriefDescription());
-                }
-            });
-        } else if (Objects.equals(userSelectedSortChoice, "best before (oldest to newest)")) { // sort by ingredient's best before date from the most recently expired to the most newest expired
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getBestBeforeDate().compareTo(ingredient2.getBestBeforeDate());
-                }
-            });
-        } else if (Objects.equals(userSelectedSortChoice, "best before (newest to oldest)")) { // sort by ingredient's best before date from the most newest expired to the most recently expired
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getBestBeforeDate().compareTo(ingredient1.getBestBeforeDate());
-                }
-            });
-        } else if (Objects.equals(userSelectedSortChoice, "location(ascending)")) { // sort by ingredient's location A->Z alphabetically
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getLocation().compareTo(ingredient2.getLocation());
-                }
-            });
-        } else if (Objects.equals(userSelectedSortChoice, "location(descending)")) { // sort by ingredient's location Z->A alphabetically
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getLocation().compareTo(ingredient1.getLocation());
-                }
-            });
-        }
-        else if (Objects.equals(userSelectedSortChoice, "category(ascending)")) { // sort by ingredient's category A->Z alphabetically
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient1.getIngredientCategory().compareTo(ingredient2.getIngredientCategory());
-                }
-            });
-        } else if (Objects.equals(userSelectedSortChoice, "category(descending)")) { // sort by ingredient's category Z->A alphabetically
-            Collections.sort(this.ingredientStorageDataList, new Comparator<IngredientInStorage>() {
-                @Override
-                public int compare(IngredientInStorage ingredient1, IngredientInStorage ingredient2) {
-                    return ingredient2.getIngredientCategory().compareTo(ingredient1.getIngredientCategory());
-                }
-            });
-        }
-    }
-/*
-    /**
-     * This method will be called during the procedure of adding a new in-storage ingredient
-     * in order to add the new in-storage ingredient entry into ArrayAdapter
-     * @param newIngredientInStorage An IngredientInStorage object will be added in the storage
-     *//*
-    @Override
-    public void onOkPressed (IngredientInStorage newIngredientInStorage) {
-        ingredientStorageListAdapter.add(newIngredientInStorage);
-        onEditPressed(newIngredientInStorage);
-    }
-
-
-    *//**
-     * This method will be called during the process of deleting an existing in-storage ingredient out of ArrayAdapter
-     * @param ingredientInStorage An existing IngredientInStorage object in the storage
-     *//*
-    @Override
-    public void onDeletePressed (IngredientInStorage ingredientInStorage) {
-        ingredientStorageListAdapter.remove(ingredientInStorage);
-        onEditPressed(ingredientInStorage);
-    }
-
-    *//**
-     * This method will be called after editing an existing in-storage ingredient's detailed information
-     *
-     *//*
-    @Override
-    public void onEditPressed (IngredientInStorage ingredientInStorage) {
-        ingredientStorageListAdapter.notifyDataSetChanged(); // notify for updating data in the ingredient list
-    }*/
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LAUNCH_ADD_INGREDIENT_ACTIVITY) {
+        if (requestCode == LAUNCH_ADD_INGREDIENT_ACTIVITY) { // if user adds a new ingredient
             if(resultCode == Activity.RESULT_OK){
+                /** get the ingredient object from the AddEditIngredient activity and add it to the
+                 *  ingredientStorageListAdapter
+                 */
                 IngredientInStorage ingredientToAdd = (IngredientInStorage) data.getSerializableExtra("IngredientToAdd");
-                ingredientStorageListAdapter.add(ingredientToAdd);
+                IngredientController ingredientController = new IngredientController(ingredientStorageDataList);
+                ingredientController.addIngredient(ingredientToAdd);
                 ingredientStorageListAdapter.notifyDataSetChanged();
             }
             else if (resultCode == Activity.RESULT_CANCELED) {
-                // Write your code if there's no result
+                // do nothing
             }
-        }else if (requestCode == LAUNCH_EDIT_INGREDIENT_ACTIVITY){
+        }
+        else if (requestCode == LAUNCH_EDIT_INGREDIENT_ACTIVITY){ // if user edits or deletes an ingredient
             if (resultCode == Activity.RESULT_OK){
+                /* get the ingredient and its index in the ingredientStorageDataList */
+                int index = (int) data.getSerializableExtra("index");
                 IngredientInStorage ingredientToEdit = (IngredientInStorage) data.getSerializableExtra("IngredientToEdit");
                 IngredientInStorage ingredientToDelete = (IngredientInStorage) data.getSerializableExtra("IngredientToDelete");
+                IngredientController ingredientController = new IngredientController(ingredientStorageDataList);
                 if (ingredientToEdit != null){
-
+                    /* replace the edited ingredient with the old ingredient */
+                    ingredientController.replaceIngredient(index, ingredientToEdit);
                     ingredientStorageListAdapter.notifyDataSetChanged();
-                    Log.d("amount", ingredientToEdit.getAmountString());
-
                 } else if (ingredientToDelete != null){
-                    ingredientStorageListAdapter.remove(ingredientToDelete);
+                    /* replace the ingredient to delete with the old ingredient and then remove it */
+                    ingredientController.replaceIngredient(index, ingredientToDelete);
+                    ingredientController.removeIngredient(ingredientToDelete);
                     ingredientStorageListAdapter.notifyDataSetChanged();
 
                 }
             }
             else if (resultCode == Activity.RESULT_CANCELED) {
-                // Write your code if there's no result
+                // do nothing
             }
 
         }
-    } //onActivityResult
+    }
 }
