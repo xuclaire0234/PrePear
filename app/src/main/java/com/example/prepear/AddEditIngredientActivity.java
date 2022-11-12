@@ -349,6 +349,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     otherUnit.setVisibility(View.VISIBLE);  // display the edit text
                     otherUnit.getEditText().setText(unit);
                 }
+
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -385,9 +386,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             /* get category from the edit text if the option 'Other' is selected */
                             unit = otherUnit.getEditText().getText().toString().trim();
                         }
-                        String amount = amountView.getText().toString().trim();
-                        double amountValue = Double.parseDouble(amount); // float value of amount
                         if (validateInput()) {
+                            String amount = amountView.getText().toString().trim();
+                            double amountValue = Double.parseDouble(amount); // float value of amount
                             /* set the same ingredient object with the new user input */
                             ingredientToEdit.setBriefDescription(description);
                             ingredientToEdit.setIngredientCategory(category);
