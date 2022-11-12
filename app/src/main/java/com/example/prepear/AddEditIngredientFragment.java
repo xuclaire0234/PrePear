@@ -355,11 +355,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
+                        int iconCode = 1;
                         // key: value pair as a element in HashMap/Map
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
                         IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
-                                category, date, location, amount, unit, documentId);
+                                category, date, location, amount, unit, documentId,iconCode);
                         DatabaseController database = new DatabaseController();
                         database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
                         listener.onOkPressed(ingredientToAdd);

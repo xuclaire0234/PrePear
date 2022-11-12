@@ -15,6 +15,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -56,12 +59,17 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
     private EditText titleEditText;
+    private TextView showTitleWordCount;
     private EditText preparationTimeEditText;
+    private TextView showPreparationTimeWordCount;
     private EditText numberOfServingsEditText;
+    private TextView showNumberOfServingsWordCount;
     private Spinner recipeCategorySpinner;
     private EditText recipeCategoryEditText;
+    private TextView showRecipeCategoryWordCount;
     private LinearLayout newRecipeCategoryLinearLayout;
     private EditText commentsEditText;
+    private TextView showCommentWordCount;
     private Button addIngredientInRecipeButton;
     private ListView ingredientInRecipeListView;
     private Button commitButton;
@@ -90,12 +98,17 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
         editImageButton = findViewById(R.id.edit_image_button);
         imageImageView = findViewById(R.id.imageView);
         titleEditText = findViewById(R.id.title_EditText);
+        showTitleWordCount = findViewById(R.id.title_word_count);
         preparationTimeEditText = findViewById(R.id.preparation_time_EditText);
+        showPreparationTimeWordCount = findViewById(R.id.preparation_time_word_count);
         numberOfServingsEditText = findViewById(R.id.number_of_servings_EditText);
+        showNumberOfServingsWordCount = findViewById(R.id.number_of_servings_word_count);
         recipeCategorySpinner = findViewById(R.id.recipe_category_Spinner);
         recipeCategoryEditText = findViewById(R.id.recipe_category_EditText);
+        showRecipeCategoryWordCount = findViewById(R.id.recipe_category_word_count);
         newRecipeCategoryLinearLayout = findViewById(R.id.new_recipe_category_LinearLayout);
         commentsEditText = findViewById(R.id.comments_EditText);
+        showCommentWordCount = findViewById(R.id.comments_word_count);
         addIngredientInRecipeButton = findViewById(R.id.add_ingredient_in_recipe_button);
         ingredientInRecipeListView = findViewById(R.id.ingredient_in_recipe_ListView);
         commitButton = findViewById(R.id.commit_button);
@@ -103,6 +116,82 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
         /* connects to firebase storage */
         storageReference = FirebaseStorage.getInstance().getReference("imageFolder");
+
+        /* sets up filter to control the length of the title text */
+        final TextWatcher titleTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showTitleWordCount.setText(String.valueOf(30 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        titleEditText.addTextChangedListener(titleTextEditorWatcher);
+
+        /* sets up filter to control the length of the preparation time text */
+        final TextWatcher preparationTimeTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showPreparationTimeWordCount.setText(String.valueOf(10 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        preparationTimeEditText.addTextChangedListener(preparationTimeTextEditorWatcher);
+
+        /* sets up filter to control the length of the number of servings text */
+        final TextWatcher numberOfServingsTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showNumberOfServingsWordCount.setText(String.valueOf(3 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        numberOfServingsEditText.addTextChangedListener(numberOfServingsTextEditorWatcher);
+
+        /* sets up filter to control the length of the recipe category text */
+        final TextWatcher recipeCategoryTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showRecipeCategoryWordCount.setText(String.valueOf(20 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        recipeCategoryEditText.addTextChangedListener(recipeCategoryTextEditorWatcher);
+
+
+        /* sets up filter to control the length of the comment text */
+        final TextWatcher commentsTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showCommentWordCount.setText(String.valueOf(60 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        commentsEditText.addTextChangedListener(commentsTextEditorWatcher);
 
         /* sets up recipe category spinner */
         recipeCategorySpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.recipe_category,
@@ -362,7 +451,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
                                     recipeCategory = recipeCategoryEditText.getText().toString();
                                 }
                                 final String comments = commentsEditText.getText().toString();
-                                final String imageURI = linkOfImage;
+                                final String imageURI = task.getResult().toString();
 
                                 /* checks if there is any necessary information missing */
                                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")

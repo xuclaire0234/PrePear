@@ -43,6 +43,7 @@ public class DatabaseController {
         data.put("category", ingredientToAdd.getIngredientCategory());
         data.put("amount", ingredientToAdd.getAmountValue());
         data.put("unit", ingredientToAdd.getUnit());
+        data.put("icon code",ingredientToAdd.getIconCode());
 
         /* adds the ingredient document to the ingredient storage collection */
         db
@@ -81,6 +82,7 @@ public class DatabaseController {
                         "bestBeforeDate", ingredientToEdit.getBestBeforeDate(),
                         "amount", ingredientToEdit.getAmountValue(),
                         "unit", ingredientToEdit.getUnit(),
+                        "icon code",ingredientToEdit.getIconCode(),
                         "location", ingredientToEdit.getLocation())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -153,7 +155,7 @@ public class DatabaseController {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(context, "Recipe has been successfully uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Recipe list has been successfully updated", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -191,8 +193,8 @@ public class DatabaseController {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(context, "Ingredients has been successfully uploaded",
-                                    Toast.LENGTH_SHORT).show();
+                            /* Toast.makeText(context, "Ingredients has been successfully uploaded",
+                                    Toast.LENGTH_SHORT).show(); */
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
