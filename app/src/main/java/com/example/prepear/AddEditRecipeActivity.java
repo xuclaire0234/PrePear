@@ -451,7 +451,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
                                     recipeCategory = recipeCategoryEditText.getText().toString();
                                 }
                                 final String comments = commentsEditText.getText().toString();
-                                final String imageURI = linkOfImage;
+                                final String imageURI = task.getResult().toString();
 
                                 /* checks if there is any necessary information missing */
                                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
