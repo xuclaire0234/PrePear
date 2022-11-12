@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,11 +60,17 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         TextView ingredientBestBeforeDate = view.findViewById(R.id.bestBeforeDateText);
         TextView ingredientUnit = view.findViewById(R.id.unitNumberText);
         TextView ingredientAmount = view.findViewById(R.id.amountText);
+        ImageView ingredientIconView = view.findViewById(R.id.ingredient_icon_view);
+
+        int code = ingredientEntry.getIconCode();
+        ingredientIconView.setImageResource(code);
 
         ingredientDescription.setText(ingredientEntry.getBriefDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
         ingredientUnit.setText(ingredientEntry.getUnit());
-        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmountValue()));
+        String ingredientAmountString = String.valueOf(ingredientEntry.getAmountValue());
+        ingredientAmount.setText(ingredientAmountString);
+
 
         return view; // return this view
     }

@@ -43,6 +43,7 @@ public class DatabaseController {
         data.put("category", ingredientToAdd.getIngredientCategory());
         data.put("amount", ingredientToAdd.getAmountValue());
         data.put("unit", ingredientToAdd.getUnit());
+        data.put("icon code",ingredientToAdd.getIconCode());
 
         /* adds the ingredient document to the ingredient storage collection */
         db
@@ -81,6 +82,7 @@ public class DatabaseController {
                         "bestBeforeDate", ingredientToEdit.getBestBeforeDate(),
                         "amount", ingredientToEdit.getAmountValue(),
                         "unit", ingredientToEdit.getUnit(),
+                        "icon code",ingredientToEdit.getIconCode(),
                         "location", ingredientToEdit.getLocation())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
