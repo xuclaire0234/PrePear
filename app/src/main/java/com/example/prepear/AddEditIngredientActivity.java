@@ -297,7 +297,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 IngredientInStorage ingredientToEdit = (IngredientInStorage) getIntent()
                         .getSerializableExtra("ingredientInStorage");  // get ingredient clicked on
                 /* set the previous values of the text fields and spinners */
-                ingredientIcon.setImageResource(ingredientToEdit.getIconCode());
+                int iconCodeEdit = ingredientToEdit.getIconCode();
+                ingredientIcon.setImageResource(iconCodeEdit);
                 descriptionView.getEditText().setText(ingredientToEdit.getBriefDescription());
                 String category = ingredientToEdit.getIngredientCategory();  // get ingredient category
                 /**
@@ -348,6 +349,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     unitView.setSelection(adapterForUnits.getPosition("Other"));
                     otherUnit.setVisibility(View.VISIBLE);  // display the edit text
                     otherUnit.getEditText().setText(unit);
+                }
+
+                if(iconCode == 0 ){
+                    iconCode = iconCodeEdit;
                 }
 
                 delete.setOnClickListener(new View.OnClickListener() {
