@@ -188,6 +188,7 @@ public class RecipeListTest {
 
         /* check commit button in add edit recipe activity*/
         View commitButton = solo.getView(R.id.commit_button);
+        solo.scrollViewToSide(commitButton, Solo.DOWN);
         solo.clickOnView(commitButton);
         solo.waitForText("Orange Juice", 1, 1000);
 
