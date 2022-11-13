@@ -1,5 +1,29 @@
 <resources>
     <string name="app_name">PrePear</string>
+    <string name="title_header">Title:</string>
+    <string name="preparation_time_header">Preparation Time (/min):</string>
+    <string name="number_of_servings_header">Number of Servings:</string>
+    <string name="recipe_category_header">Recipe Category:</string>
+    <string name="new_recipe_category_header">Enter New Recipe Category:</string>
+    <string name="comments_header">Comments:</string>
+    <string name="ingredient_list_header">Ingredients:</string>
+    <string name="title_text">Title</string>
+    <string name="preparation_time_text">Preparation Time</string>
+    <string name="number_of_servings_text">Number of Servings</string>
+    <string name="recipe_category_text">Recipe Category</string>
+    <string name="comments_text">Comments</string>
+    <string name="brief_description_text">Brief Description</string>
+    <string name="amount_text">Amount</string>
+    <string name="unit_text">Unit</string>
+    <string name="ingredient_category_text">Ingredient Category</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="delete_button_text">Delete</string>
+    <string name="return_button_text">Return</string>
+    <string name="add_ingredient_button_text">Add Ingredient</string>
+    <string name="edit_image_button_text">Edit Image Button</string>
+    <string name="commit_button_text">Commit</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="recipe_image_text">Recipe Image</string>
     <string-array name="ingredient_categories">
         <item></item>
         <item>Eggs, milk, and milk product</item>
@@ -48,7 +72,21 @@
         <item>Soap</item>
         <item>Holiday</item>
         <item>Vegetarian</item>
+        <item>Other</item>
     </string-array>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_ingredient">Ingredient</string>
+    <string name="menu_Recipe">Recipe Folder</string>
+    <string name="menu_MealPlan">Meal Plan</string>
+    <string name="menu_ShoppingList">Shopping List</string>
     <string name="title_activity_add_edit_ingredient">AddEditIngredientActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

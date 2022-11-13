@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
+import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
@@ -56,15 +57,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+
 /**
  * This class defines the add/edit ingredientInStorage activity that allows user to either add a new ingredient or
  * edit a existing recipe.
  */
 public class AddEditIngredientActivity extends AppCompatActivity {
-    private Button confirm;
-    private Button delete;
-    private TextInputLayout descriptionView;
-    private Spinner categoryView;
+    private Button confirm; // confirm button after addition/edition of a in-storage ingredient
+    private Button delete; // delete button for deleting the in-storage ingredient when editing it
+    private TextInputLayout descriptionView; // for user to input ingredient's description
+    private Spinner categoryView; // for user to input ingredient's other categories
     private TextInputLayout otherCategory;
     private EditText dateView;
     private Spinner locationView;
@@ -85,11 +88,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_ingredient);
-        /* Set back button */
+        // On below part: set back button
         ActionBar actionBar = getSupportActionBar();  // calling the action bar
         actionBar.setDisplayHomeAsUpEnabled(true);  // showing the back button in action bar
 
-        /* connects the layout with the views and buttons */
+        // On below part: connect the layout with the views and buttons
         descriptionView = findViewById(R.id.brief_description);
         categoryView = (Spinner) findViewById(R.id.ingredient_category);
         otherCategory = findViewById(R.id.other_category);
@@ -104,7 +107,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         ingredientIcon = findViewById(R.id.ingredient_icon);
         addIcon = findViewById(R.id.add_icon_button);
 
-        /* Prompt user to choose an icon from provided icon Activity */
+        // On below part: prompt user to choose an icon from provided icon Activity
         addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,11 +116,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             }
         });
 
-        /* set date picker dialog */
+        // On below part: set date picker dialog
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /* create a date picker for the best before date of the ingredient */
+                // On below part: create a date picker for the best before date of the ingredient
                 Calendar currentDate = Calendar.getInstance();
                 int currentYear = currentDate.get(Calendar.YEAR);
                 int currentMonth = currentDate.get(Calendar.MONTH);
@@ -127,9 +130,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                // On below parts:
-                                // set the day of month , the month of year and the year value in the edit text
-                                // if-conditional statement helps to regulate the format of yyyy-mm-dd.
+                                /* On below parts:
+                                 * set the day of month , the month of year and the year value in the edit text
+                                 * if-conditional statement helps to regulate the format of yyyy-mm-dd.
+                                 * */
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
                                     bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
                                             "-" + "0" + dayOfMonth;
@@ -147,10 +151,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             }
                         }, currentYear, currentMonth, currentDay);
                 dialog.show();
-                /* Temporarily remove keyboards before displaying the dialog */
+                // On below line: temporarily remove keyboards before displaying the dialog
                 removeKeyboard();
             }
         });
+
         setTextWatchers();
         // On below: create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForCategories = ArrayAdapter.createFromResource(this,
@@ -159,18 +164,19 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         adapterForCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryView.setAdapter(adapterForCategories); // set spinner adapter to be the array list
         categoryView.setOnTouchListener(new View.OnTouchListener() {
-            /*Temporarily remove keyboards before displaying spinner */
+            // On below part: temporarily remove keyboards before displaying spinner
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 removeKeyboard();  // remove all keyboards when spinner is on display
                 return false;
             }
         });
+
         categoryView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String category = categoryView.getSelectedItem().toString().trim();
-                /* show edit text if option 'Other' is selected, otherwise hide edit text */
+                // On below part: show edit text if option 'Other' is selected, otherwise hide edit text
                 if (category.equals("Other")) {
                     otherCategory.setVisibility(View.VISIBLE);
                 } else {
@@ -184,11 +190,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             }
         });
 
-
-        // On below: create array adapter for the spinner from array in strings.xml file
+        // On below line: create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForLocation = ArrayAdapter.createFromResource(this, R.array.locations,
                 android.R.layout.simple_spinner_item);
-        // On below: specify the layout the adapter should use to display the spinner list
+        // On below part: specify the layout the adapter should use to display the spinner list
         adapterForLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationView.setAdapter(adapterForLocation);  // set spinner adapter to be the array list
         locationView.setOnTouchListener(new View.OnTouchListener() {
@@ -199,11 +204,12 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         locationView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String location = locationView.getSelectedItem().toString().trim();
-                /* show edit text if option 'Other' is selected, otherwise hide edit text */
+                // On below part: show edit text if option 'Other' is selected, otherwise hide edit text
                 if (location.equals("Other")) {
                     otherLocation.setVisibility(View.VISIBLE);
                 } else {
@@ -218,7 +224,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         });
 
 
-        // create array adapter for the spinner from array in strings.xml file
+        // On below part: create array adapter for the spinner from array in strings.xml file
         ArrayAdapter adapterForUnits = ArrayAdapter.createFromResource(this, R.array.units,
                 android.R.layout.simple_spinner_item);
         adapterForUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -231,11 +237,12 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         unitView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String unit = unitView.getSelectedItem().toString().trim();
-                /* show edit text if option 'Other' is selected, otherwise hide edit text */
+                // On below part: show edit text if option 'Other' is selected, otherwise hide edit text
                 if (unit.equals("Other")) {
                     otherUnit.setVisibility(View.VISIBLE);
                 } else {
@@ -251,26 +258,26 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         try {
             if (getIntent().getStringExtra("Add or Edit").equals("1")) {
-                /* If the user is adding a new ingredient */
+                // If the user is adding a new ingredient
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /* get user input */
+                        // On below part: get user input
                         String description = descriptionView.getEditText().getText().toString().trim();
                         String category = categoryView.getSelectedItem().toString().trim();
                         if (category.equals("Other")) {
-                            /* get input from edit text when option 'Other' is selected */
+                            // On below line: get input from edit text when option 'Other' is selected
                             category = otherCategory.getEditText().getText().toString().trim();
                         }
                         String date = dateView.getText().toString().trim();
                         String location = locationView.getSelectedItem().toString().trim();
                         if (location.equals("Other")) {
-                            /* get input from edit text when option 'Other' is selected */
+                            // On below line: get input from edit text when option 'Other' is selected
                             location = otherLocation.getEditText().getText().toString().trim();
                         }
                         String unit = unitView.getSelectedItem().toString().trim();
                         if (unit.equals("Other")) {
-                            /* get input from edit text when option 'Other' is selected */
+                            // On below line: get input from edit text when option 'Other' is selected
                             unit = otherUnit.getEditText().getText().toString().trim();
                         }
                         String amount = amountView.getText().toString().trim();
@@ -283,7 +290,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                                     category, date, location, amount, unit, documentId, iconCode);
                             DatabaseController database = new DatabaseController();
                             database.addIngredientToIngredientStorage(AddEditIngredientActivity.this, ingredientToAdd);
-                            /* return the new ingredient to be added to the list adapter */
+                            // return the new ingredient to be added to the list adapter
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("IngredientToAdd", ingredientToAdd);
                             setResult(Activity.RESULT_OK, returnIntent);
@@ -292,19 +299,18 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     }
                 });
             } else {
-                /* if user wants to edit or delete an ingredient */
+                // if user wants to edit or delete an ingredient
                 int index = (int) getIntent().getSerializableExtra("index");
                 IngredientInStorage ingredientToEdit = (IngredientInStorage) getIntent()
                         .getSerializableExtra("ingredientInStorage");  // get ingredient clicked on
-                /* set the previous values of the text fields and spinners */
-                int iconCodeEdit = ingredientToEdit.getIconCode();
-                ingredientIcon.setImageResource(iconCodeEdit);
+                // set the previous values of the text fields and spinners
+                ingredientIcon.setImageResource(ingredientToEdit.getIconCode());
                 descriptionView.getEditText().setText(ingredientToEdit.getBriefDescription());
                 String category = ingredientToEdit.getIngredientCategory();  // get ingredient category
                 /**
-                 *  get the list of ingredient categories to check if the ingredient's category
-                 *  is among that list. If it's in the list then show the option on the spinner, otherwise
-                 *  set the spinner to display 'Other', and show the category on the edit text instead
+                 *  get the list of ingredient categories to check if the ingredient's category is among that list.
+                 *  If it's in the list then show the option on the spinner,
+                 *  otherwise set the spinner to display 'Other', and show the category on the edit text instead
                  */
                 List<String> categories = new ArrayList<>(Arrays.asList(getResources()
                         .getStringArray(R.array.ingredient_categories)));
@@ -319,9 +325,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 dateView.setText(ingredientToEdit.getBestBeforeDate()); // set the best before date
                 String location = ingredientToEdit.getLocation();
                 /**
-                 *  get the list of ingredient locations to check if the ingredient's location
-                 *  is among that list. If it's in the list then show the option on the spinner, otherwise
-                 *  set the spinner to display 'Other', and show the location on the edit text instead
+                 *  get the list of ingredient locations to check if the ingredient's location is among that list.
+                 *  If it's in the list then show the option on the spinner,
+                 *  otherwise set the spinner to display 'Other', and show the location on the edit text instead
                  */
                 List<String> locations = new ArrayList<>(Arrays.asList(getResources()
                         .getStringArray(R.array.locations)));
@@ -336,9 +342,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 amountView.setText(String.valueOf(ingredientToEdit.getAmountValue())); // set the amount
                 String unit = ingredientToEdit.getUnit();
                 /**
-                 *  get the list of ingredient unit to check if the ingredient's unit
-                 *  is among that list. If it's in the list then show the option on the spinner, otherwise
-                 *  set the spinner to display 'Other', and show the unit on the edit text instead
+                 *  get the list of ingredient unit to check if the ingredient's unit is among that list.
+                 *  If it's in the list then show the option on the spinner,
+                 *  otherwise set the spinner to display 'Other', and show the unit on the edit text instead
                  */
                 List<String> units = new ArrayList<>(Arrays.asList(getResources()
                         .getStringArray(R.array.units)));
@@ -350,19 +356,14 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     otherUnit.setVisibility(View.VISIBLE);  // display the edit text
                     otherUnit.getEditText().setText(unit);
                 }
-                /*
-                This
-                 */
-                if(iconCode == 0 ){
-                    iconCode = iconCodeEdit;
-                }
+
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /* delete ingredient from the data base */
+                        // On below part: delete ingredient from the data base
                         DatabaseController databaseController = new DatabaseController();
                         databaseController.deleteIngredientFromIngredientStorage(AddEditIngredientActivity.this, ingredientToEdit);
-                        /* return the ingredient to be deleted from the list adapter */
+                        // On below part: return the ingredient to be deleted from the list adapter
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("IngredientToDelete", ingredientToEdit);
                         returnIntent.putExtra("index", index);  // index of ingredient to delete
@@ -373,29 +374,29 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /* get the values of the text fields and spinners */
+                        // On below: get the values of the text fields and spinners
+
                         String description = descriptionView.getEditText().getText().toString().trim();
                         String category = categoryView.getSelectedItem().toString().trim();
                         if (category.equals("Other")) {
-                            /* get category from the edit text if the option 'Other' is selected */
+                            // On below: get category from the edit text if the option 'Other' is selected
                             category = otherCategory.getEditText().getText().toString().trim();
                         }
                         String date = dateView.getText().toString().trim();
                         String location = locationView.getSelectedItem().toString().trim();
                         if (location.equals("Other")) {
-                            /* get category from the edit text if the option 'Other' is selected */
+                            // On below: get category from the edit text if the option 'Other' is selected
                             location = otherLocation.getEditText().getText().toString().trim();
                         }
                         String unit = unitView.getSelectedItem().toString().trim();
                         if (unit.equals("Other")) {
-                            /* get category from the edit text if the option 'Other' is selected */
+                            // On below: get category from the edit text if the option 'Other' is selected
                             unit = otherUnit.getEditText().getText().toString().trim();
                         }
-
                         if (validateInput()) {
                             String amount = amountView.getText().toString().trim();
                             double amountValue = Double.parseDouble(amount); // float value of amount
-                            /* set the same ingredient object with the new user input */
+                            // On below part: set the same ingredient object with the new user input
                             ingredientToEdit.setBriefDescription(description);
                             ingredientToEdit.setIngredientCategory(category);
                             ingredientToEdit.setBestBeforeDate(date);
@@ -407,7 +408,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             // on below: edit the ingredient in the data base
                             DatabaseController database = new DatabaseController();
                             database.editIngredientInIngredientStorage(AddEditIngredientActivity.this, ingredientToEdit);
-                            /* return ingredient to be edited on the list adapter */
+                            // On below part: return ingredient to be edited on the list adapter
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("IngredientToEdit", ingredientToEdit);
                             returnIntent.putExtra("index", index);  // index of ingredient
@@ -446,7 +447,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (descriptionView.getEditText().getText().length() <= 100)
                 { // if the number of characters is reduced
-                    /* change back the color to black and remove error message */
+                    // On below: change back the color to black and remove error message
                     descriptionView.getEditText().setTextColor(Color.BLACK);
                     descriptionView.setError(null);
                 }
@@ -471,7 +472,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (otherUnit.getEditText().getText().length() <= 100)  // if the number of characters is reduced
                 { // if the number of characters is reduced
-                    /* change back the color to black and remove error message */
+                    // On below part: change back the color to black and remove error message
                     otherUnit.getEditText().setTextColor(Color.BLACK);
                     otherUnit.setError(null);
                 }
@@ -496,7 +497,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (otherCategory.getEditText().getText().length() <= 100)
                 { // if the number of characters is reduced
-                    /* change back the color to black and remove error message */
+                    // On below part: change back the color to black and remove error message
                     otherCategory.getEditText().setTextColor(Color.BLACK);
                     otherCategory.setError(null);
                 }
@@ -521,7 +522,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (otherLocation.getEditText().getText().length() <= 100)
                 { // if the number of characters is reduced
-                    /* change back the color to black and remove error message */
+                    // On below part: change back the color to black and remove error message
                     otherLocation.getEditText().setTextColor(Color.BLACK);
                     otherLocation.setError(null);
                 }
@@ -559,8 +560,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
-                Intent intentBack = new Intent(AddEditIngredientActivity.this, ViewIngredientStorageActivity.class);
-                startActivity(intentBack);
+                Intent intentBack = new Intent();
+                setResult(Activity.RESULT_CANCELED,intentBack);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -571,11 +572,12 @@ public class AddEditIngredientActivity extends AppCompatActivity {
      */
     private void removeKeyboard() {
         /* get the input method manager which manages interaction within the system.
-           get System service is used to access Android system-level services like the keyboard */
+         * get System service is used to access Android system-level services like the keyboard
+         */
         InputMethodManager inputMethodManager =
                 (InputMethodManager) AddEditIngredientActivity.this
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
-        // Hide the soft keyboards associated with description and amount edit text fields
+        // On below part: Hide the soft keyboards associated with description and amount edit text fields
         inputMethodManager.hideSoftInputFromWindow(descriptionView.getWindowToken(), 0);
         inputMethodManager.hideSoftInputFromWindow(amountView.getWindowToken(), 0);
     }
@@ -586,61 +588,63 @@ public class AddEditIngredientActivity extends AppCompatActivity {
      */
     public boolean validateInput() {
         Boolean valid = true;  // input is valid initially
-        /* get user input from edit texts and spinners */
+        // On below part: get user input from edit texts and spinners
         String description = descriptionView.getEditText().getText().toString().trim();
         String category = categoryView.getSelectedItem().toString().trim();
         String location = locationView.getSelectedItem().toString().trim();
         String unit = unitView.getSelectedItem().toString().trim();
         String date = dateView.getText().toString().trim();
         String amount = amountView.getText().toString().trim();
-        /* check if any field is empty */
+        // On below: check if any field is empty
         if (category.isEmpty() || date.isEmpty() || location.isEmpty() || amount.isEmpty() || unit.isEmpty()){
-            /* create a toast warning message and return false is any field is empty */
+            // On below part: create a toast warning message and return false is any field is empty
             CharSequence text = "Error, Some Fields Are Empty!";
             Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
             valid = false;
-        } else if (amount.equals("0")) {
-            /* create a toast warning message and return false if amount entered is 0 */
+        } else if (amount.equals("0")) { // if amount entered is 0
+            // On below part: create a toast warning message and return false
             CharSequence text = "Error, Amount can't be zero!";
             Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
             valid = false;
         }
-        if (description.isEmpty()) { // set error message for the edit text
+        if (description.isEmpty()) { // if description field is empty
+            // On below: set error message for the edit text
             descriptionView.setError("Field can't be empty!");
             valid = false;
         } else if (description.length() > 100) { // return false if input is too long
             valid = false;
         }
-        if (category.equals("Other")){
+        if (category.equals("Other")){ // when user selects to input some category dynamically
             String otherCategoryChoice = otherCategory.getEditText().getText().toString().trim();
             if (otherCategoryChoice.isEmpty()){
-                /* set edit text error message and return false if edit text is empty */
+                // On below part: set edit text error message and return false if edit text is empty
                 otherCategory.setError("Field can't be empty!");
                 valid = false;
             } else if(otherCategoryChoice.length() > 100){ // return false if input is too long
                 valid = false;
             }
         }
-        if (location.equals("Other")) {
+        if (location.equals("Other")) { // when user selects to input some location dynamically
             String otherLocationChoice = otherLocation.getEditText().getText().toString().trim();
             if (otherLocationChoice.isEmpty()) {
-                /* set edit text error message and return false if edit text is empty */
+                // On below part: set edit text error message and return false if edit text is empty
                 otherLocation.setError("Field can't be empty!");
                 valid = false;
             } else if(otherLocationChoice.length() > 100){ // return false if input is too long
                 valid = false;
             }
         }
-        if (unit.equals("Other")) {
+        if (unit.equals("Other")) { // when user selects to input some unit dynamically
             String otherUnitChoice = otherUnit.getEditText().getText().toString().trim();
             if (otherUnitChoice.isEmpty()) {
-                /* set edit text error message and return false if edit text is empty */
+                // On below part: set edit text error message and return false if edit text is empty
                 otherUnit.setError("Field can't be empty!");
                 valid = false;
             } else if(otherUnitChoice.length() > 100){ // return false if input is too long
                 valid = false;
             }
         }
+        // return the final boolean value after user's complete inputs for add/edit a in-storage ingredient
         return valid;
     }
 

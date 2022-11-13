@@ -155,7 +155,7 @@ public class DatabaseController {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(context, "Recipe has been successfully uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Recipe list has been successfully updated", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -193,8 +193,8 @@ public class DatabaseController {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(context, "Ingredients has been successfully uploaded",
-                                    Toast.LENGTH_SHORT).show();
+                            /* Toast.makeText(context, "Ingredients has been successfully uploaded",
+                                    Toast.LENGTH_SHORT).show(); */
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
