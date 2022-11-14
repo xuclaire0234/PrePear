@@ -44,57 +44,23 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+
+    <FrameLayout
+        android:id="@+id/ingredient_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="44dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="556dp"
+        android:layout_below="@id/sort_layout"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp">
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="52dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:background="@drawable/text_broader"
-            android:text="Description"
-            android:textSize="12dp" />
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="61dp"
-            android:textSize="12dp"
-            android:background="@drawable/text_broader"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Best Before Date" />
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="12dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/text_broader"
-            android:textSize="12dp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:text="Amount"/>
-
-        <TextView
-            android:id="@+id/textView14"
-            android:textSize="12dp"
-            android:layout_width="6dp"
-            android:gravity="center"
-            android:background="@drawable/text_broader"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:text="Units"  />
+        <ListView
+            android:id="@+id/ingredients_in_storage_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_ingredient_button"
@@ -105,25 +71,6 @@
             android:layout_marginRight="16dp"
             android:clickable="true"
             app:backgroundTint="@color/dark_brown"
-
             app:srcCompat="@android:drawable/ic_input_add" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/ingredient_listview"
-        android:layout_width="match_parent"
-        android:layout_height="440dp"
-        android:layout_below="@id/sort_layout"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="30dp">
-
-        <ListView
-            android:id="@+id/ingredients_in_storage_listview"
-            android:layout_width="match_parent"
-            android:layout_height="468dp"></ListView>
-
     </FrameLayout>
-
 </RelativeLayout>
