@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import androidx.fragment.app.Fragment;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -165,39 +166,6 @@ public class RecipeListTest {
         commitButton = solo.getView(R.id.commit_button);
         solo.clickOnView(commitButton);
         assertTrue(solo.searchText("Ice Cream Cone"));
-    }
-
-    @Test
-    /**
-     * Test if user can delete recipe correctly by going to the view recipe activity.
-     */
-    public void testDeleteRecipe () {
-        /* check the add recipe floating action button */
-        solo.assertCurrentActivity("Wrong Activity", ViewRecipeListActivity.class);
-        View fab = solo.getView(R.id.add_recipe_button);
-        solo.clickOnView(fab);
-        solo.assertCurrentActivity("Wrong Activity", AddEditRecipeActivity.class);
-
-        /* check entering stuff to add edit recipe activity */
-        solo.enterText((EditText) solo.getView(R.id.title_EditText), "Orange Juice");
-        solo.enterText((EditText) solo.getView(R.id.preparation_time_EditText), "15");
-        solo.enterText((EditText) solo.getView(R.id.number_of_servings_EditText), "3");
-        solo.clickOnView(solo.getView(R.id.recipe_category_Spinner));
-        solo.clickOnMenuItem("Dessert");
-        solo.enterText((EditText) solo.getView(R.id.comments_EditText), "None");
-
-        /* check commit button in add edit recipe activity*/
-        View commitButton = solo.getView(R.id.commit_button);
-        solo.scrollViewToSide(commitButton, Solo.DOWN);
-        solo.clickOnView(commitButton);
-        solo.waitForText("Orange Juice", 1, 1000);
-
-        /* check delete button in view recipe activity */
-        solo.clickOnText("Orange Juice");
-        View deleteButton = solo.getView(R.id.delete_button);
-        solo.clickOnView(deleteButton);
-        solo.sleep(5000);
-        assertFalse(solo.searchText("Orange Juice"));
     }
 
     @After
