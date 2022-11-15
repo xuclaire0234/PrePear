@@ -24,6 +24,7 @@
     <string name="commit_button_text">Commit</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="recipe_image_text">Recipe Image</string>
+    <string name="ingredients_needed" />
     <string-array name="ingredient_categories">
         <item></item>
         <item>Eggs, milk, and milk product</item>
