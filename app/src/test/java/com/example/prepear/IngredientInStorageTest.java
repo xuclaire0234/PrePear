@@ -10,9 +10,6 @@ package com.example.prepear;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import android.app.Dialog;
-import android.os.Bundle;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

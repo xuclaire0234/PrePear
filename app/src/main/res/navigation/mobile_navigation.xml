@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.prepear.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_ingredient"
+        android:name="com.example.prepear.ui.Ingredient.IngredientFragment"
+        android:label="@string/menu_ingredient"
+        tools:layout="@layout/fragment_ingredient" />
+
+    <fragment
+        android:id="@+id/nav_recipe"
+        android:name="com.example.prepear.ui.Recipe.RecipeFragment"
+        android:label="@string/menu_Recipe"
+        tools:layout="@layout/fragment_recipe" />
+
+    <fragment
+        android:id="@+id/nav_meal_plan"
+        android:name="com.example.prepear.ui.MealPlan.MealPlanFragment"
+        android:label="@string/menu_MealPlan"
+        tools:layout="@layout/fragment_meal_plan" />
+
+    <fragment
+        android:id="@+id/nav_shopping_list"
+        android:name="com.example.prepear.ui.ShoppingList.ShoppingListFragment"
+        android:label="@string/menu_ShoppingList"
+        tools:layout="@layout/fragment_shopping_list" />
+
+</navigation>

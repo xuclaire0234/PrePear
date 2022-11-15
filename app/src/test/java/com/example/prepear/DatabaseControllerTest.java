@@ -12,7 +12,6 @@ import android.content.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Test class for Database controller

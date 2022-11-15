@@ -431,7 +431,7 @@ public class AddEditIngredientActivityTest {
         solo.clickOnImageButton(0);
         solo.sleep(2000);
         solo.clickOnButton("Choose");
-        solo.assertCurrentActivity("wrong Activity",ChooseIngredientIconActivity.class);
+        solo.assertCurrentActivity("wrong Activity", ChooseIngredientIconActivity.class);
         solo.clickOnView(solo.getView(R.id.banana));
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
         solo.clickOnView(solo.getView(R.id.ingredient_location));
