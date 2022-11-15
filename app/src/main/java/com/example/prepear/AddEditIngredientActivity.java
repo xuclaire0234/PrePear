@@ -1,19 +1,12 @@
 package com.example.prepear;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,20 +25,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.prepear.databinding.ActivityAddEditIngredientBinding;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.protobuf.Field;
-import com.google.protobuf.StringValue;
 
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,8 +38,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 /**
  * This class defines the add/edit ingredientInStorage activity that allows user to either add a new ingredient or
@@ -303,7 +284,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 IngredientInStorage ingredientToEdit = (IngredientInStorage) getIntent()
                         .getSerializableExtra("ingredientInStorage");  // get ingredient clicked on
                 // set the previous values of the text fields and spinners
-                ingredientIcon.setImageResource(ingredientToEdit.getIconCode());
+                int iconCodeEdit = ingredientToEdit.getIconCode();
+                ingredientIcon.setImageResource(iconCodeEdit);
                 descriptionView.getEditText().setText(ingredientToEdit.getBriefDescription());
                 String category = ingredientToEdit.getIngredientCategory();  // get ingredient category
                 /**
@@ -355,7 +337,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     otherUnit.setVisibility(View.VISIBLE);  // display the edit text
                     otherUnit.getEditText().setText(unit);
                 }
-
+                if(iconCode == 0 ){
+                    iconCode = iconCodeEdit;
+                }
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -559,8 +543,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
-                Intent intentBack = new Intent(AddEditIngredientActivity.this, ViewIngredientStorageActivity.class);
-                startActivity(intentBack);
+                Intent intentBack = new Intent();
+                setResult(Activity.RESULT_CANCELED,intentBack);
                 return true;
         }
         return super.onOptionsItemSelected(item);

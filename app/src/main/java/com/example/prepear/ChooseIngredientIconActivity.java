@@ -11,17 +11,13 @@ package com.example.prepear;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
-import java.net.URI;
-import java.util.ArrayList;
+import com.example.prepear.AddEditIngredientActivity;
+import com.example.prepear.R;
+
 /**
  * This class provide icon for ingredient that allows user to choose one of the icon to represent
  */

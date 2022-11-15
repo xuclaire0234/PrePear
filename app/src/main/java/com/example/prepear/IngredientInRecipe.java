@@ -7,9 +7,9 @@
  */
 package com.example.prepear;
 
-import java.io.Serializable;
+import com.example.prepear.Ingredient;
 
-import io.grpc.internal.DnsNameResolver;
+import java.io.Serializable;
 
 /**
  * This Class creates an object to represent an ingredient used in recipe with its brief description

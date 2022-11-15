@@ -20,7 +20,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
+import com.example.prepear.IngredientInStorage;
+import com.example.prepear.R;
 
 import java.util.ArrayList;
 

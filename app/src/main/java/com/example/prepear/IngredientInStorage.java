@@ -15,7 +15,7 @@ package com.example.prepear;
  * @author: Shihao Liu, Marafi Mergani
  * @version: 1
  */
-public class IngredientInStorage extends Ingredient{
+public class IngredientInStorage extends Ingredient {
     // initialize class attributes
     private String bestBeforeDate;
     private String location;
