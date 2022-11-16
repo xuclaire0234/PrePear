@@ -61,7 +61,7 @@ public class Meal implements Serializable {
     }
 
     /**
-     * @param customizedScalingNumber 
+     * @param customizedScalingNumber
      */
     public void setCustomizedScalingNumber(Integer customizedScalingNumber) {
         this.customizedScalingNumber = customizedScalingNumber;
