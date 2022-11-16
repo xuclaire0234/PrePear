@@ -115,7 +115,8 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (check()) {
-                    
+                    MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
+
                 }
             }
         });
