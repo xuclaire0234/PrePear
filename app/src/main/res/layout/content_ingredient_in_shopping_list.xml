@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="20">
+
+    <TextView
+        android:id="@+id/brief_description_TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginStart="10dp"
+        android:text="Brief Description"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/amount_TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginStart="10dp"
+        android:text="Amount"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/unit_TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginStart="10dp"
+        android:text="Unit"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/ingredient_category_TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginStart="10dp"
+        android:text="Ingredient Category"
+        android:textSize="16sp"/>
+
+    <CheckBox
+        android:id="@+id/ingredient_in_shopping_list_CheckBox"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/dark_brown"
+        android:layout_weight="5" />
+
+</LinearLayout>
