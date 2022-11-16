@@ -1,15 +1,7 @@
 package com.example.prepear.ui.ShoppingList;
 
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,23 +16,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.prepear.AddEditIngredientActivity;
-import com.example.prepear.Ingredient;
+import com.example.prepear.AddEditIngredientFragment;
+import com.example.prepear.ComputeShoppingList;
+import com.example.prepear.CustomShoppingList;
 import com.example.prepear.IngredientInRecipe;
 import com.example.prepear.R;
-import com.example.prepear.RecipeAddEditIngredientFragment;
 import com.example.prepear.databinding.FragmentRecipeBinding;
 
-import org.w3c.dom.Text;
-
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -49,15 +38,16 @@ public class ShoppingListFragment extends Fragment {
     private ShoppingListViewModel mViewModel;
     private FragmentRecipeBinding binding;
     private String startDate, endDate, newDate;
-    final String[] sortItemSpinnerContent = {"  ","Description", "Category"};
-    private ArrayList<IngredientInRecipe> ingredientList;
+    final String[] sortItemSpinnerContent = {"  ----select----  ","Description", "Category"};
+    private ArrayList<IngredientInRecipe> ingredientShoppingList = new ArrayList<>();;  // store all the ingredients needed to show in the listView
+    private ArrayAdapter<IngredientInRecipe> ingredientShoppingListAdapter;
     private DatePickerDialog dialog;
 
     TextView fromDateText, toDateText;
     Spinner sortItemSpinner;
     ImageButton sortOrderButton;
     Button confirmButton;
-    ListView ingredientView;
+    ListView shoppingListView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -79,7 +69,15 @@ public class ShoppingListFragment extends Fragment {
         sortItemSpinner = view.findViewById(R.id.sort_spinner);
         sortOrderButton = view.findViewById(R.id.sort_button);
         confirmButton = view.findViewById(R.id.confirm_button);
-        ingredientView = view.findViewById(R.id.ingredient_listview);
+        shoppingListView = view.findViewById(R.id.ingredient_listview);
+
+        // set adapter
+       try {
+           ingredientShoppingListAdapter = new CustomShoppingList(this.getContext(), ingredientShoppingList);
+           shoppingListView.setAdapter(ingredientShoppingListAdapter);
+       }catch (NullPointerException e) {
+       }
+
 
         sortItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -115,7 +113,19 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (check()) {
-                    MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
+                    /* instantiation computeShoppingList class to get the ingredientShoppingList
+                    * since user input valid startDate and endDate
+                    */
+                    ingredientShoppingList.clear();  // clear before data
+                    ComputeShoppingList computeShoppingList = new ComputeShoppingList(startDate,endDate);
+                    try {
+                        ingredientShoppingList = computeShoppingList.calculateShoppingList();
+                        ingredientShoppingListAdapter.notifyDataSetChanged();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }catch (NullPointerException e) {
+                    }
+                    //MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
 
                 }
             }
