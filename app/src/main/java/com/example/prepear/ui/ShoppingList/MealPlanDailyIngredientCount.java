@@ -181,4 +181,12 @@ public class MealPlanDailyIngredientCount {
         }
         return amountValue * scale;
     }
+
+    public ArrayList<IngredientInRecipe> getIngredients() {
+        return ingredients;
+    }
+
+    public String getDate() {
+        return date;
+    }
 }
