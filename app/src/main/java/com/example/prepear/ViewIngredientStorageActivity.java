@@ -86,11 +86,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
                 // Casting this clicked item to IngredientInStorage type from Object type
                 IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
                 // call activity to edit ingredient
-                Intent intent = new Intent(ViewIngredientStorageActivity.this, AddEditIngredientActivity.class);
-                intent.putExtra("Add or Edit", "2");
-                intent.putExtra("ingredientInStorage", clickedFood);
-                intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
-                startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
+
             }
         });
 

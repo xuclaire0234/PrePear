@@ -242,4 +242,104 @@ public class DatabaseController {
                     }
                 });
     }
+
+    public void addEditMealToDailyMealPlan(Context context, DailyMealPlan dailyMealPlan, Meal mealToUpdate) {
+        HashMap<String, Object> data = new HashMap<>();
+        String documentID = mealToUpdate.getDocumentID();
+        data.put("Document ID", documentID);
+        data.put("Customized Scaling Number", mealToUpdate.getCustomizedScalingNumber());
+        data.put("Meal Type", mealToUpdate.getMealType());
+        db
+                .collection("Daily Meal Plans")
+                .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+                .collection("Meals")
+                .document(documentID)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Meal has been successfully updated in daily meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error updating meal.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void deleteMealFromDailyMealPlan(Context context, DailyMealPlan dailyMealPlan, Meal mealToDelete) {
+        db
+                .collection("Daily Meal Plans")
+                .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+                .collection("Meals")
+                .document(mealToDelete.getDocumentID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Meal has been successfully deleted from daily meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error deleting meal.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void addDailyMealPlanToMealPlan(Context context, DailyMealPlan dailyMealPlanToAdd) {
+        HashMap<String, Object> data = new HashMap<>();
+        String date = dailyMealPlanToAdd.getCurrentDailyMealPlanDate();
+        data.put("Date", date);
+        db
+                .collection("Daily Meal Plans")
+                .document(date)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Daily meal plan has been successfully added to meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error adding daily meal plan.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        for (Meal meal: dailyMealPlanToAdd.getDailyMealDataList()) {
+            addEditMealToDailyMealPlan(context, dailyMealPlanToAdd, meal);
+        }
+    }
+
+    public void deleteDailyMealPlanFromMealPlan(Context context, DailyMealPlan dailyMealPlanToDelete) {
+        for (Meal meal: dailyMealPlanToDelete.getDailyMealDataList()) {
+            deleteMealFromDailyMealPlan(context, dailyMealPlanToDelete, meal);
+        }
+
+        db
+                .collection("Daily Meal Plans")
+                .document(dailyMealPlanToDelete.getCurrentDailyMealPlanDate())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Daily meal plan has been successfully deleted from meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error deleting daily meal plan.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }

@@ -1,5 +1,8 @@
 package com.example.prepear.ui.Ingredient;
 
+import static android.content.Intent.getIntent;
+import static android.content.Intent.getIntentOld;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +14,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.prepear.AddEditIngredientActivity;
+import com.example.prepear.AddMealPlanActivity;
 import com.example.prepear.IngredientController;
 import com.example.prepear.IngredientInStorage;
 import com.example.prepear.IngredientStorageCustomList;
@@ -35,6 +40,7 @@ import java.util.ArrayList;
  */
 public class IngredientFragment extends Fragment {
 
+    OnCallbackReceived callback;
     private FragmentIngredientBinding binding;
     int LAUNCH_ADD_INGREDIENT_ACTIVITY = 1;
     int LAUNCH_EDIT_INGREDIENT_ACTIVITY = 2;
@@ -52,10 +58,25 @@ public class IngredientFragment extends Fragment {
     private FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
     private CollectionReference inStorageIngredientCollection = dbForInStorageIngredients.collection("Ingredient Storage");
 
+    public interface OnCallbackReceived {
+        public void addIngredientTypeMeal(IngredientInStorage selectedIngredient);
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            callback = (OnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ingredient, container, false);
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -74,26 +95,40 @@ public class IngredientFragment extends Fragment {
         addInStorageIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // on below call activity for new in-storage ingredient
-                Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
-                intent.putExtra("Add or Edit", "1");
-                startActivityForResult(intent, LAUNCH_ADD_INGREDIENT_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    CharSequence text = "Error, Please Click On an Ingredient From The List!";
+                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+                }else {
+                    // on below call activity for new in-storage ingredient
+                    Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
+                    intent.putExtra("Add or Edit", "1");
+                    startActivityForResult(intent, LAUNCH_ADD_INGREDIENT_ACTIVITY);
+                }
             }
         });
 
         ingredientStorageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Grab the clicked item out of the ListView
-                Object clickedItem = ingredientStorageList.getItemAtPosition(position);
-                // Casting this clicked item to IngredientInStorage type from Object type
-                IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
-                // call activity to edit ingredient
-                Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
-                intent.putExtra("Add or Edit", "2");
-                intent.putExtra("ingredientInStorage", clickedFood);
-                intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
-                startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    // Grab the clicked item out of the ListView
+                    Object clickedItem = ingredientStorageList.getItemAtPosition(position);
+                    // Casting this clicked item to IngredientInStorage type from Object type
+                    IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
+                    callback.addIngredientTypeMeal(clickedFood);
+                }
+                else {
+                    // Grab the clicked item out of the ListView
+                    Object clickedItem = ingredientStorageList.getItemAtPosition(position);
+                    // Casting this clicked item to IngredientInStorage type from Object type
+                    IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
+                    // call activity to edit ingredient
+                    Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
+                    intent.putExtra("Add or Edit", "2");
+                    intent.putExtra("ingredientInStorage", clickedFood);
+                    intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
+                    startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
+                }
             }
         });
 
@@ -223,4 +258,5 @@ public class IngredientFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }

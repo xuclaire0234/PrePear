@@ -1,5 +1,6 @@
 package com.example.prepear.ui.Recipe;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,19 +12,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.prepear.AddEditRecipeActivity;
+import com.example.prepear.AddMealPlanActivity;
 import com.example.prepear.CustomRecipeList;
 import com.example.prepear.IngredientInRecipe;
+import com.example.prepear.IngredientInStorage;
 import com.example.prepear.R;
 import com.example.prepear.Recipe;
 import com.example.prepear.RecipeController;
 import com.example.prepear.ViewRecipeActivity;
 import com.example.prepear.databinding.FragmentRecipeBinding;
+import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -34,6 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class RecipeFragment extends Fragment {
 
+    OnCallbackReceived callback;
     private FragmentRecipeBinding binding;
     ListView recipeList;
     CustomRecipeList recipeAdapter;
@@ -44,6 +50,20 @@ public class RecipeFragment extends Fragment {
     int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"  ","Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
+
+    public interface OnCallbackReceived {
+        public void addRecipeTypeMeal(Recipe selectedRecipe);
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            callback = (OnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -103,10 +123,15 @@ public class RecipeFragment extends Fragment {
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recipePosition = -1;
-                Intent intent = new Intent(getActivity(), AddEditRecipeActivity.class);
-                intent.putExtra("calling activity", "1");
-                startActivityForResult(intent, LAUNCH_ADD_RECIPE_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    CharSequence text = "Error, Please Click On a Recipe From The List!";
+                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+                }else {
+                    recipePosition = -1;
+                    Intent intent = new Intent(getActivity(), AddEditRecipeActivity.class);
+                    intent.putExtra("calling activity", "1");
+                    startActivityForResult(intent, LAUNCH_ADD_RECIPE_ACTIVITY);
+                }
             }
         });
 
@@ -117,11 +142,19 @@ public class RecipeFragment extends Fragment {
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                recipePosition = i;
-                Recipe viewedRecipe = recipeAdapter.getItem(i);
-                Intent intent = new Intent(getActivity(), ViewRecipeActivity.class);
-                intent.putExtra("viewed recipe", viewedRecipe);
-                startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    // Grab the clicked item out of the ListView
+                    Object clickedItem = recipeList.getItemAtPosition(i);
+                    // Casting this clicked item to IngredientInStorage type from Object type
+                    Recipe clickedFood = (Recipe) clickedItem;
+                    callback.addRecipeTypeMeal(clickedFood);
+                }else {
+                    recipePosition = i;
+                    Recipe viewedRecipe = recipeAdapter.getItem(i);
+                    Intent intent = new Intent(getActivity(), ViewRecipeActivity.class);
+                    intent.putExtra("viewed recipe", viewedRecipe);
+                    startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
+                }
             }
         });
 
