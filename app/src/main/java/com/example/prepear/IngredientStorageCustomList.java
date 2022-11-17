@@ -52,8 +52,8 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
             // if the convertView holds nothing, then inflate the ingredient_info.xml
             view = LayoutInflater.from(context).inflate(R.layout.ingredient_info, parent, false);
         }
-        // on below line get the current in-storage ingredient entry,
-        // and extract its information from the in-storage ingredients list
+        /* on below line get the current in-storage ingredient entry,
+        and extract its information from the in-storage ingredients list */
         IngredientInStorage ingredientEntry = ingredientsInStorage.get(position);
         // and set this in-storage ingredient's description,
         // best before date and unit count to the corresponding Textview object for displaying on the activity

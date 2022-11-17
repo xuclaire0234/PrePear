@@ -3,8 +3,8 @@ package com.example.prepear;
 
 import java.io.Serializable;
 
-/*
-* This class creates Meal objects and allows to initialize, set and access the attributes
+/**
+ * This class creates Meal objects and allows to initialize, set and access the attributes
 * */
 public class Meal implements Serializable {
     // On below part: initialize Meal class attributes
@@ -53,16 +53,10 @@ public class Meal implements Serializable {
         this.documentID = documentID;
     }
 
-    /**
-     * @return
-     */
     public Integer getCustomizedScalingNumber() {
         return this.customizedScalingNumber;
     }
 
-    /**
-     * @param customizedScalingNumber
-     */
     public void setCustomizedScalingNumber(Integer customizedScalingNumber) {
         this.customizedScalingNumber = customizedScalingNumber;
     }

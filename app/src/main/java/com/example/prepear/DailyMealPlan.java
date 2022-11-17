@@ -1,4 +1,5 @@
-/*
+/**
+ *
 * */
 package com.example.prepear;
 
@@ -6,13 +7,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-/*
-*
+/**
+ * This class is used to create Daily Meal Plan objects as the storage of every-day meals,
+ * and to be also used as a Daily Meal Plan Controller class to manipulate meal data
 * */
 public class DailyMealPlan {
     private ArrayList<Meal> dailyMealDataList; // contains today's all meals (Meal objects)
-    String currentDailyMealPlanDate; // represents this current daily meal plan's date
-
+    private String currentDailyMealPlanDate; // represents this current daily meal plan's date
+    private DatabaseController databaseController; // 
     /**
      * @return all meals inside this one-day daily meal plan
      */
@@ -41,5 +43,13 @@ public class DailyMealPlan {
         this.currentDailyMealPlanDate = currentDailyMealPlanDate;
     }
 
-    
+    public void addMeal(Meal meal){
+
+    }
+
+    public void deleteMeal(Meal meal){
+
+    }
+
+
 }
