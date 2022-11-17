@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
@@ -8,7 +7,7 @@
     android:weightSum="20">
 
     <TextView
-        android:id="@+id/brief_description_TextView"
+        android:id="@+id/brief_description_TextView_shopping"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
@@ -17,7 +16,7 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:id="@+id/amount_TextView"
+        android:id="@+id/amount_TextView_shopping"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
@@ -26,7 +25,7 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:id="@+id/unit_TextView"
+        android:id="@+id/unit_TextView_shopping"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
@@ -35,7 +34,7 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:id="@+id/ingredient_category_TextView"
+        android:id="@+id/ingredient_category_TextView_shopping"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
