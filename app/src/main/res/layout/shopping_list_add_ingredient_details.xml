@@ -23,7 +23,7 @@
             android:textColor="@color/green_pear"
             android:text="Description:" />
 
-        <EditText
+        <TextView
             android:id="@+id/brief_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:minHeight="48dp" />
     </LinearLayout>
 
@@ -56,14 +55,13 @@
             android:textSize="16dp"
             />
 
-        <EditText
+        <TextView
             android:id="@+id/ingredient_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:ems="10"
-            android:inputType="numberDecimal"
             android:minHeight="48dp"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
@@ -242,5 +240,14 @@
             tools:ignore="TouchTargetSizeCheck" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_view20"
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:textColor="@color/dark_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="\nPlease fill in each blank \nproperly according to the hints" />
 
 </LinearLayout>
