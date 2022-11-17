@@ -1,5 +1,5 @@
 /**
- * Classname: ShoppingListViewIngredientFragment
+ * Classname: ShoppingListClickboxFragment
  * Version Information: 1.0.0
  * Date: 11/16/2022
  * Author: Jamie Lee
@@ -11,10 +11,12 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShoppingListViewIngredientFragment extends DialogFragment {
+import javax.annotation.Nullable;
+
+public class ShoppingListClickboxFragment extends DialogFragment {
     // declare variables
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
     private ArrayAdapter<CharSequence> categorySpinnerAdapter;
@@ -40,28 +44,56 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
     private LinearLayout newCategoryLinearLayout;
     private TextView descriptionWordCount;
     private TextView amountWordCount;
+    private ShoppingListClickboxFragment.OnFragmentInteractionListener listener;
 
     /**
-     * This method creates a new instance of ShoppingListViewIngredient so user can view
-     * the ingredient in given time period of shopping list
+     * This method defines an interface of methods that the ShoppingListViewModel needs to implement
+     * in order to respond to the user clicking Ok buttons.
+     * @see ShoppingListViewModel
+     */
+    public interface OnFragmentInteractionListener {
+        void onOkPressed(IngredientInRecipe ingredient);
+    }
+    /**
+     * This method creates a new instance of ShoppingListClickboxFragment so user can add
+     * the details of ingredient by clicking checkbox
      * @param ingredient {@link IngredientInStorage} that the user clicked on
      * @return fragment the newly created fragment
      */
-    static ShoppingListViewIngredientFragment newInstance(IngredientInStorage ingredient) {
+    static ShoppingListClickboxFragment newInstance(IngredientInStorage ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
-        ShoppingListViewIngredientFragment fragment = new ShoppingListViewIngredientFragment();
+        ShoppingListClickboxFragment fragment = new ShoppingListClickboxFragment();
         fragment.setArguments(args);
         return fragment;
     }
+    /**
+     * This method receives the context from ShoppingListViewModel, checks if the context is of type
+     * {@link ShoppingListClickboxFragment.OnFragmentInteractionListener} and if it is, it assigns
+     * the variable listener to the context, otherwise it raises a runtime error
+     * @param  context information about the current state of the app received from ShoppingListViewModel
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ShoppingListClickboxFragment.OnFragmentInteractionListener) {
+            listener = (ShoppingListClickboxFragment.OnFragmentInteractionListener) context;
+        }
+        else {
+            throw new RuntimeException(context + "must implement OnFragmentInteractionListener");
+        }
+    }
 
     /**
-     * This method creates the view ingredient fragment
+     * This method creates the add ingredient fragment if the user input is valid
+     * and sets errors if the input is invalid
+     * @param  savedInstanceState {@link Bundle} that stores an ingredient {@link IngredientInRecipe} object
      * @return builder a {@link Dialog} object to build the fragment
      */
     @SuppressLint("MissingInflatedId")
     @NonNull
-    public void onCreateDialog() {
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // connects views to its layout
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.shopping_list_view_ingredient_details, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
@@ -74,6 +106,8 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
         categoryEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
         newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
+        descriptionWordCount = view.findViewById(R.id.description_word_count);
+        amountWordCount = view.findViewById(R.id.amount_word_count);
 
         // getting attributes from ingredient
         Bundle bundle = getArguments();
@@ -99,7 +133,44 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
             categoryEditText.setText(ingredientCategory);
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
-        title.setText("View Ingredient");
-        builder.setView(view).setNegativeButton("OK", null);
+        title.setText("Add Details For Ingredient");
+        builder.setView(view)
+                .setNegativeButton("OK", null)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        return builder.create();
+    }
+
+    // need to work on adding details 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final AlertDialog d = (AlertDialog) getDialog();
+        if (d != null) {
+            Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener((View v) -> {
+                Boolean wantToCloseDialog = true;
+                String description = descriptionText.getText().toString();
+                String amount = amountText.getText().toString();
+                String unit = unitSpinner.getSelectedItem().toString();
+                if (unit.equals("Other")) {
+                    unit = unitEditText.getText().toString();
+                }
+                String category = categorySpinner.getSelectedItem().toString();
+                if (category.equals("Other")) {
+                    category = categoryEditText.getText().toString();
+                }
+
+                if (description.equals("")) {
+
+                }
+            });
+        }
     }
 }
+
+
