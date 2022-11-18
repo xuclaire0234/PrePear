@@ -62,10 +62,10 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         TextView ingredientUnit = view.findViewById(R.id.unitNumberText);
         TextView ingredientAmount = view.findViewById(R.id.amountText);
         ImageView ingredientIconView = view.findViewById(R.id.ingredient_icon_view);
-
         int code = ingredientEntry.getIconCode();
-        ingredientIconView.setImageResource(code);
 
+
+        ingredientIconView.setImageResource(code);
         ingredientDescription.setText(ingredientEntry.getBriefDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
         ingredientUnit.setText(ingredientEntry.getUnit());

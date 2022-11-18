@@ -281,13 +281,13 @@ public class DatabaseController {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(context, "Meal has been successfully deleted from daily meal plan",
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Error deleting meal.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Error deleting meal.", Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -304,13 +304,13 @@ public class DatabaseController {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(context, "Daily meal plan has been successfully added to meal plan",
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Error adding daily meal plan.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Error adding daily meal plan.", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -332,13 +332,13 @@ public class DatabaseController {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(context, "Daily meal plan has been successfully deleted from meal plan",
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Error deleting daily meal plan.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Error deleting daily meal plan.", Toast.LENGTH_LONG).show();
                     }
                 });
     }

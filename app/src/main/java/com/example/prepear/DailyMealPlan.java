@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class DailyMealPlan {
     private ArrayList<Meal> dailyMealDataList; // contains today's all meals (Meal objects)
     private String currentDailyMealPlanDate; // represents this current daily meal plan's date
-    private DatabaseController databaseController; // 
+    private DatabaseController databaseController; //
     /**
      * @return all meals inside this one-day daily meal plan
      */
@@ -42,14 +42,5 @@ public class DailyMealPlan {
     public void setCurrentDailyMealPlanDate(String currentDailyMealPlanDate) {
         this.currentDailyMealPlanDate = currentDailyMealPlanDate;
     }
-
-    public void addMeal(Meal meal){
-
-    }
-
-    public void deleteMeal(Meal meal){
-
-    }
-
 
 }
