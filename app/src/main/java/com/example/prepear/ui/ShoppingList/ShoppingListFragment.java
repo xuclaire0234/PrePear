@@ -21,13 +21,24 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prepear.AddEditIngredientFragment;
 import com.example.prepear.ComputeShoppingList;
+import com.example.prepear.CustomRecipeList;
 import com.example.prepear.CustomShoppingList;
 import com.example.prepear.IngredientInRecipe;
 import com.example.prepear.R;
+import com.example.prepear.RecipeController;
 import com.example.prepear.databinding.FragmentRecipeBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -39,15 +50,26 @@ public class ShoppingListFragment extends Fragment {
     private FragmentRecipeBinding binding;
     private String startDate, endDate, newDate;
     final String[] sortItemSpinnerContent = {"  ----select----  ","Description", "Category"};
-    private ArrayList<IngredientInRecipe> ingredientShoppingList = new ArrayList<>();;  // store all the ingredients needed to show in the listView
+    private ArrayList<IngredientInRecipe> ingredientShoppingList;;  // store all the ingredients needed to show in the listView
     private ArrayAdapter<IngredientInRecipe> ingredientShoppingListAdapter;
     private DatePickerDialog dialog;
+    private IngredientInRecipe ingre;
 
     TextView fromDateText, toDateText;
     Spinner sortItemSpinner;
     ImageButton sortOrderButton;
     Button confirmButton;
     ListView shoppingListView;
+
+    private ArrayList<IngredientInRecipe> ingredients;
+    private String date;
+    private String TAG = "Meal Plan";
+    private ArrayList<String> recipeIdsCollection, ingredientIdsCollection;
+    private ArrayList<Double> recipeScaleCollection, ingredientScaleCollection;
+    private ArrayList<String> checkList = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Double scale;
+    private IngredientInRecipe recipe;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -70,6 +92,8 @@ public class ShoppingListFragment extends Fragment {
         sortOrderButton = view.findViewById(R.id.sort_button);
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
+
+        ingredientShoppingList = new ArrayList<>();
 
         // set adapter
        try {
@@ -95,6 +119,11 @@ public class ShoppingListFragment extends Fragment {
         sortItemSpinner.setAdapter(ad);
 
 
+        ingredientShoppingList = new ArrayList<>();
+        ingredientShoppingListAdapter = new CustomShoppingList(getContext(),ingredientShoppingList);
+        shoppingListView.setAdapter(ingredientShoppingListAdapter);
+
+
         fromDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,15 +145,18 @@ public class ShoppingListFragment extends Fragment {
                     /* instantiation computeShoppingList class to get the ingredientShoppingList
                     * since user input valid startDate and endDate
                     */
-                    ingredientShoppingList.clear();  // clear before data
-                    ComputeShoppingList computeShoppingList = new ComputeShoppingList(startDate,endDate);
-                    try {
-                        ingredientShoppingList = computeShoppingList.calculateShoppingList();
-                        ingredientShoppingListAdapter.notifyDataSetChanged();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }catch (NullPointerException e) {
-                    }
+                    ingredientShoppingList.clear();
+                    gainAllIngredientAtDate("2022-11-14");
+                    ingredientShoppingList.add(new IngredientInRecipe("clear","2","kg","new"));
+                    ingredientShoppingListAdapter.notifyDataSetChanged();
+//                    ComputeShoppingList computeShoppingList = new ComputeShoppingList(startDate,endDate);
+//                    try {
+//                        ingredientShoppingList = computeShoppingList.;
+//                        ingredientShoppingListAdapter.notifyDataSetChanged();
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }catch (NullPointerException e) {
+//                    }
                     //MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
 
                 }
@@ -190,6 +222,112 @@ public class ShoppingListFragment extends Fragment {
                     }
                 }, currentYear, currentMonth, currentDay);
         dialog.show();
+    }
+
+
+
+    public void gainAllIngredientAtDate(String date) {
+        ingredients = new ArrayList<>();
+        ingredientIdsCollection = new ArrayList<>();
+        ingredientScaleCollection = new ArrayList<>();
+        recipeIdsCollection = new ArrayList<>();
+        recipeScaleCollection = new ArrayList<>();
+        db
+                .collection("Daily Meal Plans")
+                .document(date)
+                .collection("Meals")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                        for (QueryDocumentSnapshot document : task1.getResult()) {
+                            if (task1.isSuccessful()) {
+                                String id = (String) document.getData().get("Document ID");
+                                String type = (String) document.getData().get("Meal Type");
+                                Number scaleOfItem = (Number) document.getData().get("Customized Scaling Number");
+                                if (type.equals("Recipe")) {
+                                    recipeIdsCollection.add(id);
+                                    recipeScaleCollection.add(scaleOfItem.doubleValue());
+                                } else if (type.equals("Ingredient")) {
+                                    ingredientIdsCollection.add(id);
+                                    ingredientScaleCollection.add(scaleOfItem.doubleValue());
+                                }
+                            }
+                        }
+
+                        for (int i = 0; i < ingredientIdsCollection.size(); i++) {
+                            scale = ingredientScaleCollection.get(i);
+                            db
+                                    .collection("Ingredient Storage")
+                                    .document(ingredientIdsCollection.get(i)).get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
+                                            DocumentSnapshot doc = task2.getResult();
+                                            if (task2.isSuccessful()) {
+                                                String briefDescription = (String) doc.getData().get("description");
+                                                String unit = (String) doc.getData().get("unit");
+                                                String ingredientCategory = (String) doc.getData().get("category");
+
+                                                // might change it later
+                                                ingredientShoppingList.add(new IngredientInRecipe(briefDescription,String.valueOf(scale),unit,ingredientCategory));
+                                                ingredientShoppingListAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    });
+                        }
+
+                        for (int i = 0; i < recipeIdsCollection.size(); i++) {
+                            final Double scaleOfThisRecipe = recipeScaleCollection.get(i);
+                            final String idOfThisRecipe = recipeIdsCollection.get(i);
+                            db
+                                    .collection("Recipes")
+                                    .document(recipeIdsCollection.get(i))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task3) {
+                                            DocumentSnapshot doc2 = task3.getResult();
+                                            Number numberOfServings = (Number) doc2.get("Number of Servings");
+                                            scale = numberOfServings.doubleValue();
+
+                                            scale = scaleOfThisRecipe/scale;
+
+                                            db
+                                                    .collection("Recipes")
+                                                    .document(idOfThisRecipe)
+                                                    .collection("Ingredient")
+                                                    .get()
+                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task4) {
+                                                            for (QueryDocumentSnapshot ingredientDoc : task4.getResult()) {
+                                                                if (task4.isSuccessful()) {
+                                                                    String briefDescription = (String) ingredientDoc.getData().get("Brief Description");
+                                                                    Number amount = (Number) ingredientDoc.getData().get("Amount");
+                                                                    String unit = (String) ingredientDoc.getData().get("Unit");
+                                                                    String ingredientCategory = (String) ingredientDoc.getData().get("Ingredient Category");
+
+                                                                    Double amountValue = amount.doubleValue();
+                                                                    amountValue = amountValue * scale;
+                                                                    ingredientShoppingList.add(new IngredientInRecipe(briefDescription,String.valueOf(amountValue),unit,ingredientCategory));
+                                                                    ingredientShoppingListAdapter.notifyDataSetChanged();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
+
+
+
+                                        }
+                                    });
+
+                        }
+
+
+                    }
+                });
     }
 }
 
