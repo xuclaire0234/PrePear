@@ -16,10 +16,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.example.prepear.AddEditRecipeActivity;
 import com.example.prepear.AddMealPlanActivity;
+import com.example.prepear.ConfirmationDialog;
 import com.example.prepear.CustomRecipeList;
 import com.example.prepear.IngredientInRecipe;
 import com.example.prepear.IngredientInStorage;
@@ -37,9 +39,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class RecipeFragment extends Fragment {
-
-    OnCallbackReceived callback;
+public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener{
+    RecipeOnCallbackReceived callback;
+    Integer positionOfItemClicked;
     private FragmentRecipeBinding binding;
     ListView recipeList;
     CustomRecipeList recipeAdapter;
@@ -51,7 +53,8 @@ public class RecipeFragment extends Fragment {
     final String[] sortItemSpinnerContent = {"  ","Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
 
-    public interface OnCallbackReceived {
+
+    public interface RecipeOnCallbackReceived {
         public void addRecipeTypeMeal(Recipe selectedRecipe);
     }
     @Override
@@ -59,7 +62,7 @@ public class RecipeFragment extends Fragment {
         super.onAttach(activity);
 
         try {
-            callback = (OnCallbackReceived) activity;
+            callback = (RecipeOnCallbackReceived) activity;
         } catch (ClassCastException e) {
 
         }
@@ -144,10 +147,10 @@ public class RecipeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (getActivity() instanceof AddMealPlanActivity) {
                     // Grab the clicked item out of the ListView
-                    Object clickedItem = recipeList.getItemAtPosition(i);
-                    // Casting this clicked item to IngredientInStorage type from Object type
-                    Recipe clickedFood = (Recipe) clickedItem;
-                    callback.addRecipeTypeMeal(clickedFood);
+                    positionOfItemClicked = i;
+                    DialogFragment confirmationDialog = new ConfirmationDialog();
+                    confirmationDialog.setTargetFragment(RecipeFragment.this, 0);
+                    confirmationDialog.show(getFragmentManager(), "confirm selection");
                 }else {
                     recipePosition = i;
                     Recipe viewedRecipe = recipeAdapter.getItem(i);
@@ -278,9 +281,18 @@ public class RecipeFragment extends Fragment {
                 recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
             }
         });
+    }
+    @Override
+    public void onConfirmPressed() {
+        Object clickedItem = recipeList.getItemAtPosition(positionOfItemClicked);
+        // Casting this clicked item to IngredientInStorage type from Object type
+        Recipe clickedFood = (Recipe) clickedItem;
+        callback.addRecipeTypeMeal(clickedFood);
+    }
 
-
-
+    @Override
+    public void onCancelPressed() {
+        callback.addRecipeTypeMeal(null);
     }
 
     @Override
