@@ -20,6 +20,7 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.net.InterfaceAddress;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 public class MealPlanDailyIngredientCount {
@@ -48,7 +49,7 @@ public class MealPlanDailyIngredientCount {
         ingredientScaleCollection = new ArrayList<>();
         recipeIdsCollection = new ArrayList<>();
         recipeScaleCollection = new ArrayList<>();
-        this.test();
+        this.gainAllIngredientAtDate(date);
     }
 
     public void initializeUnit() {
@@ -88,24 +89,32 @@ public class MealPlanDailyIngredientCount {
     }
 
 
-    private void gainData() {
-        this.collectionReference
-                .document("2022-11-14")
+    public void gainAllIngredientAtDate(String date) {
+        ingredients = new ArrayList<>();
+        ingredientIdsCollection = new ArrayList<>();
+        ingredientScaleCollection = new ArrayList<>();
+        recipeIdsCollection = new ArrayList<>();
+        recipeScaleCollection = new ArrayList<>();
+        db
+                .collection("Daily Meal Plans")
+                .document(date)
                 .collection("Meals")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task1) {
                         for (QueryDocumentSnapshot document : task1.getResult()) {
-                            String id = (String) document.getData().get("Document ID");
-                            String type = (String) document.getData().get("Meal Type");
-                            Number scaleOfItem = (Number) document.getData().get("Customized Scaling Number");
-                            if (type.equals("Recipe")) {
-                                recipeIdsCollection.add(id);
-                                recipeScaleCollection.add(scaleOfItem.doubleValue());
-                            } else if (type.equals("Ingredient")) {
-                                ingredientIdsCollection.add(id);
-                                ingredientScaleCollection.add(scaleOfItem.doubleValue());
+                            if (task1.isSuccessful()) {
+                                String id = (String) document.getData().get("Document ID");
+                                String type = (String) document.getData().get("Meal Type");
+                                Number scaleOfItem = (Number) document.getData().get("Customized Scaling Number");
+                                if (type.equals("Recipe")) {
+                                    recipeIdsCollection.add(id);
+                                    recipeScaleCollection.add(scaleOfItem.doubleValue());
+                                } else if (type.equals("Ingredient")) {
+                                    ingredientIdsCollection.add(id);
+                                    ingredientScaleCollection.add(scaleOfItem.doubleValue());
+                                }
                             }
                         }
 
@@ -113,7 +122,7 @@ public class MealPlanDailyIngredientCount {
                             scale = ingredientScaleCollection.get(i);
                             db
                                     .collection("Ingredient Storage")
-                                    .document("2022-11-12 14:25:25").get()
+                                    .document(ingredientIdsCollection.get(i)).get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
@@ -122,75 +131,87 @@ public class MealPlanDailyIngredientCount {
                                                 String briefDescription = (String) doc.getData().get("description");
                                                 String unit = (String) doc.getData().get("unit");
                                                 String ingredientCategory = (String) doc.getData().get("category");
-                                                addIngredients(briefDescription,scale,unit,ingredientCategory);
+
+                                                // might change it later
+                                                ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(scale),unit,ingredientCategory));
                                             }
                                         }
                                     });
                         }
 
                         for (int i = 0; i < recipeIdsCollection.size(); i++) {
-                            db
-                                    .collection("Recipes")
-                                    .document("20221029_215342")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task3) {
-                                    DocumentSnapshot doc2 = task3.getResult();
-                                    Number numberOfServings = (Number) doc2.getData().get("Number of Servings");
-                                    scale = numberOfServings.doubleValue();
-                                }
-                            });
-                            scale = recipeScaleCollection.get(i)/scale;
-
+                            final Double scaleOfThisRecipe = recipeScaleCollection.get(i);
+                            final String idOfThisRecipe = recipeIdsCollection.get(i);
                             db
                                     .collection("Recipes")
                                     .document(recipeIdsCollection.get(i))
-                                    .collection("Ingredient")
                                     .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task4) {
-                                            for (QueryDocumentSnapshot ingredientDoc : task4.getResult()) {
-                                                String briefDescription = (String) ingredientDoc.getData().get("Brief Description");
-                                                Number amount = (Number) ingredientDoc.getData().get("Amount");
-                                                String unit = (String) ingredientDoc.getData().get("Unit");
-                                                String ingredientCategory = (String) ingredientDoc.getData().get("Ingredient Category");
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task3) {
+                                            DocumentSnapshot doc2 = task3.getResult();
+                                            Number numberOfServings = (Number) doc2.get("Number of Servings");
+                                            scale = numberOfServings.doubleValue();
 
-                                                Double amountValue = amount.doubleValue();
-                                                amountValue = amountValue * scale;
-                                                addIngredients(briefDescription,amountValue,unit,ingredientCategory);
-                                            }
+                                            scale = scaleOfThisRecipe/scale;
+
+                                            db
+                                                    .collection("Recipes")
+                                                    .document(idOfThisRecipe)
+                                                    .collection("Ingredient")
+                                                    .get()
+                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task4) {
+                                                            for (QueryDocumentSnapshot ingredientDoc : task4.getResult()) {
+                                                                if (task4.isSuccessful()) {
+                                                                    String briefDescription = (String) ingredientDoc.getData().get("Brief Description");
+                                                                    Number amount = (Number) ingredientDoc.getData().get("Amount");
+                                                                    String unit = (String) ingredientDoc.getData().get("Unit");
+                                                                    String ingredientCategory = (String) ingredientDoc.getData().get("Ingredient Category");
+
+                                                                    Double amountValue = amount.doubleValue();
+                                                                    amountValue = amountValue * scale;
+                                                                    ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(amountValue),unit,ingredientCategory));
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
+
+
+
                                         }
                                     });
+
                         }
+
+
                     }
                 });
     }
 
     private void addIngredients(String briefDescription, Double amount, String unit, String ingredientCategory) {
-        checkList.add(briefDescription);
-        ingredients.add(new IngredientInRecipe(briefDescription, String.valueOf(amount),unit,ingredientCategory));
-//        Double transferredAmount = unitConvert(unit, amount);
-//        String transferredUnit;
-//        if (unit == "l" || unit == "ml"){
-//            transferredUnit = "ml";
-//        }else {
-//            transferredUnit = "g";
-//        }
-//        if (checkList.contains(briefDescription)) {
-//            int index = checkList.indexOf(briefDescription);
-//            String category = ingredients.get(index).getIngredientCategory();
-//            if (!category.contains(ingredientCategory)) {
-//                category = category + ingredientCategory;
-//                ingredients.get(index).setIngredientCategory(category);
-//                addAmount(index,transferredAmount);
-//            }
-//        } else {
-//            checkList.add(briefDescription);
-//            ingredients.add(new IngredientInRecipe(briefDescription,
-//                    String.valueOf(transferredAmount),transferredUnit,ingredientCategory));
-//        }
+        Double transferredAmount = unitConvert(unit, amount);
+        String transferredUnit;
+        if (unit == "l" || unit == "ml"){
+            transferredUnit = "ml";
+        }else {
+            transferredUnit = "g";
+        }
+        if (checkList.contains(briefDescription)) {
+            int index = checkList.indexOf(briefDescription);
+            String category = ingredients.get(index).getIngredientCategory();
+            if (!category.contains(ingredientCategory)) {
+                category = category + ingredientCategory;
+                ingredients.get(index).setIngredientCategory(category);
+                addAmount(index,transferredAmount);
+            }
+        } else {
+            checkList.add(briefDescription);
+            ingredients.add(new IngredientInRecipe(briefDescription,
+                    String.valueOf(transferredAmount),transferredUnit,ingredientCategory));
+        }
     }
 
     private void addAmount(Integer index, Double amount) {
