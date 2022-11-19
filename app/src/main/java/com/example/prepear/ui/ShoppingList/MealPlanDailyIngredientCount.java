@@ -1,6 +1,7 @@
 package com.example.prepear.ui.ShoppingList;
 
 import android.content.Context;
+import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -172,6 +173,7 @@ public class MealPlanDailyIngredientCount {
 
                                                                     Double amountValue = amount.doubleValue();
                                                                     amountValue = amountValue * scale;
+                                                                    amountValue = Math.round(amountValue * 1000d) / 1000d;
                                                                     ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(amountValue),unit,ingredientCategory));
                                                                 }
                                                             }

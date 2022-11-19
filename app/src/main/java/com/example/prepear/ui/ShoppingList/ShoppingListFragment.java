@@ -151,6 +151,8 @@ public class ShoppingListFragment extends Fragment {
 //                    gainAllIngredientAtDate("2022-11-14");
 
                     MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
+
+
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -159,7 +161,8 @@ public class ShoppingListFragment extends Fragment {
                             }
                             ingredientShoppingListAdapter.notifyDataSetChanged();
                         }
-                    }, 9000);
+                    }, 5000);
+                    ingredientShoppingListAdapter.notifyDataSetChanged();
                     ingredientShoppingList.add(new IngredientInRecipe("clear","2","kg","new"));
                     ingredientShoppingListAdapter.notifyDataSetChanged();
 //                    ComputeShoppingList computeShoppingList = new ComputeShoppingList(startDate,endDate);

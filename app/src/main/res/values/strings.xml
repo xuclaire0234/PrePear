@@ -57,7 +57,6 @@
         <item>ml</item>
         <item>L</item>
         <item>quantities</item>
-        <item>Other</item>
     </string-array>
     <string-array name="recipe_category">
         <item></item>
