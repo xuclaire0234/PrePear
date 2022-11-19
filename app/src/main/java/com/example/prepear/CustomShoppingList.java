@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
-public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
+public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> implements ShoppingListClickboxFragment.OnFragmentInteractionListener {
     private ArrayList<IngredientInRecipe> ingredientsInShoppingList;
     private Context context;
 
@@ -65,10 +65,14 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
                 FragmentActivity activity = (FragmentActivity)(context);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 ShoppingListClickboxFragment alertDialog = new ShoppingListClickboxFragment();
-                alertDialog.show(fm, "ADD_INGREDIENT_IN_RECIPE");
-                shoppingListCheckBox.setChecked(true);
+                alertDialog.newInstance(ingredientInShoppingList).show(fm,"ingredient");
             }
         });
         return view;
+    }
+
+    @Override
+    public void onOkPressed(IngredientInStorage ingredientInStorage) {
+
     }
 }

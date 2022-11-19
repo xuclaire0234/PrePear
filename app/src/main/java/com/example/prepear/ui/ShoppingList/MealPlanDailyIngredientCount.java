@@ -27,8 +27,6 @@ import java.util.concurrent.TimeUnit;
 public class MealPlanDailyIngredientCount {
     private ArrayList<IngredientInRecipe> ingredients;
     private String date;
-    private String TAG;
-    private CollectionReference collectionReference;
     private ArrayList<String> unitSet;
     private ArrayList<String> recipeIdsCollection, ingredientIdsCollection;
     private ArrayList<Double> recipeScaleCollection, ingredientScaleCollection;
@@ -64,9 +62,7 @@ public class MealPlanDailyIngredientCount {
     }
 
     private void connectToDB() {
-        this.TAG = "MealPlan";
         this.db = FirebaseFirestore.getInstance();
-        this.collectionReference = db.collection("Daily Meal Plans");
     }
 
     private void test() {

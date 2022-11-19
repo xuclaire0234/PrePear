@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class ShoppingListFragment extends Fragment implements ShoppingListClickboxFragment.OnFragmentInteractionListener {
+public class ShoppingListFragment extends Fragment {
 
     private ShoppingListViewModel mViewModel;
     private FragmentRecipeBinding binding;
@@ -348,9 +348,5 @@ public class ShoppingListFragment extends Fragment implements ShoppingListClickb
 //                });
 //    }
 
-    @Override
-    public void onOkPressed(IngredientInStorage ingredientInStorage) {
-
-    }
 }
 

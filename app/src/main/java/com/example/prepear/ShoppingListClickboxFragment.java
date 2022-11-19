@@ -69,7 +69,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @param ingredient {@link IngredientInStorage} that the user clicked on
      * @return fragment the newly created fragment
      */
-    static ShoppingListClickboxFragment newInstance(IngredientInStorage ingredient) {
+    public ShoppingListClickboxFragment newInstance(IngredientInRecipe ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
         ShoppingListClickboxFragment fragment = new ShoppingListClickboxFragment();
@@ -82,16 +82,16 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * the variable listener to the context, otherwise it raises a runtime error
      * @param  context information about the current state of the app received from ShoppingListViewModel
      */
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof ShoppingListClickboxFragment.OnFragmentInteractionListener) {
-            listener = (ShoppingListClickboxFragment.OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context + "must implement OnFragmentInteractionListener");
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof ShoppingListClickboxFragment.OnFragmentInteractionListener) {
+//            listener = (ShoppingListClickboxFragment.OnFragmentInteractionListener) context;
+//        }
+//        else {
+//            throw new RuntimeException(context + "must implement OnFragmentInteractionListener");
+//        }
+//    }
 
     /**
      * This method creates the add ingredient fragment if the user input is valid
@@ -233,7 +233,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     ingredient.setAmountValue(Double.parseDouble(actualAmount));
                     ingredient.setBestBeforeDate(bestBeforeDate);
                     ingredient.setLocation(location);
-                    listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
+//                    listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
                 }
                 if (wantToCloseDialog) {
                     d.dismiss();
