@@ -58,7 +58,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     /**
      * This method defines an interface of methods that the ShoppingListViewModel needs to implement
      * in order to respond to the user clicking Ok buttons.
-     * @see ShoppingListViewModel
+     * @see
      */
     public interface OnFragmentInteractionListener {
         void onOkPressed(IngredientInStorage ingredientInStorage);
@@ -233,7 +233,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     ingredient.setAmountValue(Double.parseDouble(actualAmount));
                     ingredient.setBestBeforeDate(bestBeforeDate);
                     ingredient.setLocation(location);
-                    listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId()));
+                    listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
                 }
                 if (wantToCloseDialog) {
                     d.dismiss();

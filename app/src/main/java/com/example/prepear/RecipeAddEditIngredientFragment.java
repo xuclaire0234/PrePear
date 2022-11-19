@@ -7,6 +7,8 @@
  */
 package com.example.prepear;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -281,24 +283,30 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
             Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener((View v) -> {
                 Boolean wantToCloseDialog = true;
-                String description = descriptionText.getText().toString();
-                String amount = amountText.getText().toString();
-                String unit = unitSpinner.getSelectedItem().toString();
-                if (unit.equals("Other")) {
-                    unit = unitEditText.getText().toString();
-                }
-                String category = categorySpinner.getSelectedItem().toString();
-                if (category.equals("Other")) {
-                    category = categoryEditText.getText().toString();
-                }
-
-                if (description.equals("") || amount.equals("") || unit.equals("") || category.equals("")) {
+                String description;
+                String amount;
+                String unit;
+                String category;
+                if (descriptionText.getText().toString().equals("")
+                        || amountText.getText().toString().equals("")
+                        || unitSpinner.getSelectedItem().toString().equals("")
+                        || categorySpinner.getSelectedItem().toString().equals("")) {
                     Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                             Toast.LENGTH_LONG).show();
                     wantToCloseDialog = false;
                 } else {
                     Bundle bundle = getArguments();
                     if (bundle != null) {
+                        description = descriptionText.getText().toString();
+                        amount = amountText.getText().toString();
+                        unit = unitSpinner.getSelectedItem().toString();
+                        if (unit.equals("Other")) {
+                            unit = unitEditText.getText().toString();
+                        }
+                        category = categorySpinner.getSelectedItem().toString();
+                        if (category.equals("Other")) {
+                            category = categoryEditText.getText().toString();
+                        }
                         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
                         ingredient.setBriefDescription(description);
                         ingredient.setAmountValue(Double.parseDouble(amount));
@@ -306,6 +314,16 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                         ingredient.setIngredientCategory(category);
                         listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
                     } else {
+                        description = descriptionText.getText().toString();
+                        amount = amountText.getText().toString();
+                        unit = unitSpinner.getSelectedItem().toString();
+                        if (unit.equals("Other")) {
+                            unit = unitEditText.getText().toString();
+                        }
+                        category = categorySpinner.getSelectedItem().toString();
+                        if (category.equals("Other")) {
+                            category = categoryEditText.getText().toString();
+                        }
                         listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
                     }
                 }

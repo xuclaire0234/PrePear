@@ -41,6 +41,8 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
     private TextView descriptionWordCount;
     private TextView amountWordCount;
 
+
+
     /**
      * This method creates a new instance of ShoppingListViewIngredient so user can view
      * the ingredient in given time period of shopping list

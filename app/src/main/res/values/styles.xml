@@ -4,4 +4,12 @@
         <item name="colorAccent">#DFC645</item>
         <item name="colorOnPrimary">@color/black</item>
     </style>
+    <style name="CounterStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/green_pear</item>
+    </style>
+    <style name="counterOverride" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FFA500</item>
+    </style>
 </resources>

@@ -70,8 +70,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_recipe_list); /* link current activity to its layout
-         * file */
+        setContentView(R.layout.activity_view_recipe_list); // link current activity to its layout file
 
         /*
          * All variables to link to the layout elements are defined here below
@@ -111,7 +110,19 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
          */
         recipeDataList = new RecipeController();
         recipeAdapter = new CustomRecipeList(this, recipeDataList);
-        recipeList.setAdapter(recipeAdapter); /* Link the arraylist and adapter(controller) */
+        recipeList.setAdapter(recipeAdapter); // Link the arraylist and adapter(controller)
+
+
+        /*
+         * When the sort order button were pressed, the sort order should reverse
+         */
+        sortSequence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeDataList.reverseOrder();
+                recipeAdapter.notifyDataSetChanged();
+            }
+        });
 
 
         /*
@@ -171,14 +182,13 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
-                recipeDataList.clearAllRecipes(); /* Clear the old list */
+                recipeDataList.clearAllRecipes(); // Clear the old list
 
                 /*
                  * Loop through all the documents in the collection named "Recipes"
                  */
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time"))); /* Set an
-                    error message */
+                    Log.d(TAG, String.valueOf(doc.getData().get("Preparation Time"))); // Set an error message
 
                     /*
                      * get the id of the document
@@ -199,9 +209,8 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                      * Create a new object of type {Recipe} with all the attributes added
                      */
                     newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
-                            numberOfServings.intValue(), recipeCategory, comments); /* initialize
-                                                                                 a recipe object */
-                    newRecipe.setId(id); /* set id of the recipe in database */
+                            numberOfServings.intValue(), recipeCategory, comments); // initialize a recipe object
+                    newRecipe.setId(id); // set id of the recipe in database
 
                     /*
                      * add the newly generated recipe item to the recipeDataList
@@ -229,10 +238,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                                      * Loop through all the documents in Ingredient collection
                                      */
                                     for (QueryDocumentSnapshot doc : value) {
-                                        /*
-                                         * get the id of the document
-                                         */
-                                        String id = doc.getId();
+                                        String id = doc.getId(); // get the id of the document
 
                                         /*
                                          * Get all the attributes in each document
@@ -245,9 +251,8 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                                         /*
                                          * Create a new object of type {Ingredient} with all the attributes added
                                          */
-                                        IngredientInRecipe NewIngredient = new IngredientInRecipe(briefDescription,amount.toString(),unit,ingredientCategory); /* initialize
-                                                                                 a ingredient object */
-                                        NewIngredient.setId(id); /* set id of the ingredient in database */
+                                        IngredientInRecipe NewIngredient = new IngredientInRecipe(briefDescription,amount.toString(),unit,ingredientCategory); // initialize a ingredient object
+                                        NewIngredient.setId(id); // set id of the ingredient in database
 
                                         /*
                                          * add the newly generated ingredient item to the recipe in the recipeDataList
@@ -258,7 +263,7 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
                             });
                 }
 
-                recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
+                recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
     }
@@ -275,9 +280,9 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
         if (i != 0){
             /* If it is not the first item in the spinner, which is a blank, is selected, the recipe
              * will be sorted by the item selected */
-            sortItemRecipe = i - 1; /* get the index of the item the recipes should be sorted by */
-            recipeDataList.sortRecipe(sortItemRecipe); /* sort the recipes */
-            recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
+            sortItemRecipe = i - 1; // get the index of the item the recipes should be sorted by
+            recipeDataList.sortRecipe(sortItemRecipe); // sort the recipes
+            recipeAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
         }
     }
 

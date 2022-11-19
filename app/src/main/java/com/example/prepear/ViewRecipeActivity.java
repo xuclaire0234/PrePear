@@ -81,37 +81,37 @@ public class ViewRecipeActivity extends AppCompatActivity {
         /* sets edit button to jump to AddEditRecipeActivity after clicking it, while at the same time
         pass the recipe object being viewed to the AddEditRecipeActivity to let it display its information */
         editButton.setOnClickListener((View v) -> {
-            Intent switchActivityIntent = new Intent(ViewRecipeActivity.this, AddEditRecipeActivity.class);
-            switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
-            switchActivityIntent.putExtra("calling activity", "2"); // pass the number 2 to AddEditRecipeActivity to indicate that it should be used to edit recipe
-            startActivity(switchActivityIntent);
+                Intent switchActivityIntent = new Intent(ViewRecipeActivity.this, AddEditRecipeActivity.class);
+                switchActivityIntent.putExtra("viewed recipe", viewedRecipe);
+                switchActivityIntent.putExtra("calling activity", "2"); // pass the number 2 to AddEditRecipeActivity to indicate that it should be used to edit recipe
+                startActivity(switchActivityIntent);
 
-            /* return to the calling ViewRecipeListActivity automatically after editing the recipe */
-            Intent returnIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, returnIntent);
-            finish();
+                /* return to the calling ViewRecipeListActivity automatically after editing the recipe */
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                finish();
         });
 
         /* sets delete button to delete the viewing recipe after clicking it, and then return
         to the ViewRecipeListActivity */
         deleteButton.setOnClickListener((View v) -> {
-            /* delete recipe from database */
-            DatabaseController databaseController = new DatabaseController();
-            databaseController.deleteRecipeFromRecipeList(ViewRecipeActivity.this, viewedRecipe);
+                /* delete recipe from database */
+                DatabaseController databaseController = new DatabaseController();
+                databaseController.deleteRecipeFromRecipeList(ViewRecipeActivity.this, viewedRecipe);
 
-            /* return to the calling ViewRecipeListActivity */
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("delete recipe", viewedRecipe);
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
+                /* return to the calling ViewRecipeListActivity */
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("delete recipe", viewedRecipe);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
         });
 
         /* sets return button to directly return to the ViewRecipeListActivity after clicking it */
         returnButton.setOnClickListener((View v) -> {
-            /* return to the calling ViewRecipeListActivity */
-            Intent returnIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, returnIntent);
-            finish();
+                /* return to the calling ViewRecipeListActivity */
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                finish();
         });
     }
 }

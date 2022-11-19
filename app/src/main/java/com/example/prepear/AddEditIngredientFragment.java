@@ -13,7 +13,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,16 +29,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient,
@@ -67,7 +62,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
     /**
      * This method defines an interface of methods that the MainActivity needs to implement
      * in order to respond to the user clicking OK, DELETE, and CANCEL buttons.
-     * @see MainActivity
+     * @see LoginActivity
      */
     public interface OnFragmentInteractionListener {
         /* list of methods implemented in main activity class
@@ -355,11 +350,12 @@ public class AddEditIngredientFragment extends DialogFragment implements
                             Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                             return;
                         }
+                        int iconCode = 1;
                         // key: value pair as a element in HashMap/Map
                         Date dateTimeNow = new Date();
                         String documentId = DATEFORMAT.format(dateTimeNow);
                         IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
-                                category, date, location, amount, unit, documentId);
+                                category, date, location, amount, unit, documentId,iconCode);
                         DatabaseController database = new DatabaseController();
                         database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
                         listener.onOkPressed(ingredientToAdd);
