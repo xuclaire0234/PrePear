@@ -1,7 +1,7 @@
 /**
  * Classname: DatabaseController
- * Version Information: 1.0.0
- * Date: 11/3/2022
+ * Version Information: 2.0.0
+ * Date: 11/17/2022
  * Author: Jiayin He
  * Copyright Notice:
  */
@@ -239,6 +239,137 @@ public class DatabaseController {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(context, "Error deleting recipe", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * This function either adds or edits a meal to/from a daily meal plan of daily meal plans database.
+     * @param context information about the current state of the app received from calling activity
+     * @param dailyMealPlan the daily meal plan where to add/edit the meal to/from
+     * @param mealToUpdate the meal to be added/edited
+     */
+    public void addEditMealToDailyMealPlan(Context context, DailyMealPlan dailyMealPlan, Meal mealToUpdate) {
+        HashMap<String, Object> data = new HashMap<>();
+        String documentID = mealToUpdate.getDocumentID();
+        data.put("Document ID", documentID);
+        String mealType = mealToUpdate.getMealType();
+        data.put("Meal Type", mealType);
+        if (mealType.equals("Recipe")) {
+            data.put("Customized Scaling Number", mealToUpdate.getCustomizedNumberOfServings());
+        } else {
+            data.put("Customized Scaling Number", mealToUpdate.getCustomizedAmount());
+        }
+        db
+                .collection("Daily Meal Plans")
+                .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+                .collection("Meals")
+                .document(documentID)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Meal has been successfully updated in daily meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error updating meal.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * This function deletes a meal from a daily meal plan of daily meal plans database.
+     * @param context information about the current state of the app received from calling activity
+     * @param dailyMealPlan the daily meal plan where to delete the meal
+     * @param mealToDelete the meal to be deleted
+     */
+    public void deleteMealFromDailyMealPlan(Context context, DailyMealPlan dailyMealPlan, Meal mealToDelete) {
+        db
+                .collection("Daily Meal Plans")
+                .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+                .collection("Meals")
+                .document(mealToDelete.getDocumentID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Meal has been successfully deleted from daily meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error deleting meal.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * This function adds a daily meal plan to the daily meal plans database.
+     * @param context information about the current state of the app received from calling activity
+     * @param dailyMealPlanToAdd the daily meal plan to be added
+     */
+    public void addDailyMealPlanToMealPlan(Context context, DailyMealPlan dailyMealPlanToAdd) {
+        // adds the daily meal plan to the daily meal plans database
+        HashMap<String, Object> data = new HashMap<>();
+        String date = dailyMealPlanToAdd.getCurrentDailyMealPlanDate();
+        data.put("Date", date);
+        db
+                .collection("Daily Meal Plans")
+                .document(date)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Daily meal plan has been successfully added to meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error adding daily meal plan.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // adds the list of meals one by one to the daily meal plan document
+        for (Meal meal: dailyMealPlanToAdd.getDailyMealDataList()) {
+            addEditMealToDailyMealPlan(context, dailyMealPlanToAdd, meal);
+        }
+    }
+
+    /**
+     * This function deletes a daily meal plan from daily meal plans database.
+     * @param context information about the current state of the app received from calling activity
+     * @param dailyMealPlanToDelete the daily meal plan to be deleted
+     */
+    public void deleteDailyMealPlanFromMealPlan(Context context, DailyMealPlan dailyMealPlanToDelete) {
+        // deletes the list of meals one by one from daily meal plan document
+        for (Meal meal: dailyMealPlanToDelete.getDailyMealDataList()) {
+            deleteMealFromDailyMealPlan(context, dailyMealPlanToDelete, meal);
+        }
+
+        // deletes daily meal plan from daily meal plans database
+        db
+                .collection("Daily Meal Plans")
+                .document(dailyMealPlanToDelete.getCurrentDailyMealPlanDate())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Daily meal plan has been successfully deleted from meal plan",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error deleting daily meal plan.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

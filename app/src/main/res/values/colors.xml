@@ -16,4 +16,5 @@
     <color name="dark_grey">#ACACAC</color>
     <color name="theme_color">#AF9E7D</color>
     <color name="theme_darker">#867347</color>
+    <color name="blue">#0000FF</color>
 </resources>

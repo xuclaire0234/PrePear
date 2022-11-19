@@ -7,13 +7,24 @@
     <string name="new_recipe_category_header">Enter New Recipe Category:</string>
     <string name="comments_header">Comments:</string>
     <string name="ingredient_list_header">Ingredients:</string>
+    <string name="ingredient_icon_header">Ingredient Icon:</string>
+    <string name="brief_description_header">Brief Description:</string>
+    <string name="best_before_date_header">Best Before Date:</string>
+    <string name="location_header">Location:</string>
+    <string name="amount_header">Amount:</string>
+    <string name="unit_header">Unit:</string>
+    <string name="ingredient_category_header">Ingredient Category:</string>
     <string name="title_text">Title</string>
     <string name="preparation_time_text">Preparation Time</string>
     <string name="number_of_servings_text">Number of Servings</string>
     <string name="recipe_category_text">Recipe Category</string>
     <string name="comments_text">Comments</string>
+    <string name="ingredient_icon_text">Ingredient Icon</string>
     <string name="brief_description_text">Brief Description</string>
+    <string name="best_before_date_text">Best Before Date</string>
+    <string name="location_text">Location</string>
     <string name="amount_text">Amount</string>
+    <string name="customized_amount_text">Customized Amount</string>
     <string name="unit_text">Unit</string>
     <string name="ingredient_category_text">Ingredient Category</string>
     <string name="edit_button_text">Edit</string>
@@ -24,6 +35,10 @@
     <string name="commit_button_text">Commit</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="recipe_image_text">Recipe Image</string>
+    <string name="customize_number_of_servings_header">Enter number of servings to prepare for:</string>
+    <string name="original_number_of_servings_hint_header">Original number of servings in recipe:</string>
+    <string name="original_number_of_servings_hint_text">Original Number of Servings</string>
+
     <string-array name="ingredient_categories">
         <item></item>
         <item>Eggs, milk, and milk product</item>

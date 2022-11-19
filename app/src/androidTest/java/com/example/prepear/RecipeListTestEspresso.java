@@ -30,6 +30,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.example.prepear.ui.Recipe.RecipeFragment;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +40,11 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class RecipeListTestEspresso {
     @Rule
-    public ActivityScenarioRule<ViewRecipeListActivity> activityRule =
-            new ActivityScenarioRule<>(ViewRecipeListActivity.class);
+        public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
     public void testAddDeleteRecipe() {
+        onView(withId(R.id.create_account)).perform(click());
         // checks adding new recipe called orange juice to recipe list
         onView(withId(R.id.add_recipe_button)).perform(click());
         onView(withId(R.id.title_EditText)).perform(ViewActions.typeText("Orange Juice"));
@@ -102,5 +104,6 @@ public class RecipeListTestEspresso {
         // checks commit button in add edit recipe activity
         onView(withId(R.id.commit_button)).perform(ScrollToAction.betterScrollTo()).perform(click());
         onView(withId(R.id.recipe_listview)).check(matches(hasDescendant(withText(containsString("Ice Cream")))));
+
     }
 }
