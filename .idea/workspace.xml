@@ -18,6 +18,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d98042c1-8c56-4c07-8f56-873a3bce47c3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ShoppingListClickboxFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ShoppingListClickboxFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,6 +90,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="android-custom-view/Users/jamielee/Library/Android/sdk/sources/android-33/android/view/View.java_SELECTED" value="View" />
     <property name="android-custom-view/Users/jamielee/Library/Android/sdk/sources/android-33/android/widget/AdapterView.java_SELECTED" value="AdapterView" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />

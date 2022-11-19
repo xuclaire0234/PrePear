@@ -9,6 +9,7 @@ package com.example.prepear;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.Calendar;
 
 import javax.annotation.Nullable;
 
@@ -45,8 +49,10 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     private TextView amountWordCount;
     private EditText actualAmountEditText;
     private EditText bestBeforeDateEditText;
+    private String bestBeforeDateString;  // best before date string
     private Spinner locationSpinner;
     private EditText locationEditText;
+    private DatePickerDialog dialog;      // create datePicker for best before date
     private ShoppingListClickboxFragment.OnFragmentInteractionListener listener;
 
     /**
@@ -175,6 +181,45 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                 String actualAmount = actualAmountEditText.getText().toString();
                 String bestBeforeDate = bestBeforeDateEditText.getText().toString();
                 String location = locationSpinner.getSelectedItem().toString();
+
+                bestBeforeDateEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // create a date picker for the best before date of the ingredient 
+                        Calendar currentDate = Calendar.getInstance();
+                        int currentYear = currentDate.get(Calendar.YEAR);
+                        int currentMonth = currentDate.get(Calendar.MONTH);
+                        int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                        dialog = new DatePickerDialog(getContext(), R.style.activity_date_picker,
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year,
+                                                          int monthOfYear, int dayOfMonth) {
+                                        // On below parts:
+                                        // set the day of month , the month of year and the year value in the edit text
+                                        // if-conditional statement helps to regulate the format of yyyy-mm-dd.
+                                        if (monthOfYear < 9 && dayOfMonth < 10) {
+                                            bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
+                                                    "-" + "0" + dayOfMonth;
+                                        } else if (dayOfMonth < 10) {
+                                            bestBeforeDateString = year + "-" + (monthOfYear + 1) +
+                                                    "-" + "0" + dayOfMonth;
+                                        } else if (monthOfYear < 9) {
+                                            bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
+                                                    "-" + dayOfMonth;
+                                        } else {
+                                            bestBeforeDateString = year + "-" + (monthOfYear + 1) +
+                                                    "-" + dayOfMonth;
+                                        }
+                                        bestBeforeDateEditText.setText(bestBeforeDateString);
+                                    }
+                                }, currentYear, currentMonth, currentDay);
+                        dialog.show();
+                        // Temporarily remove keyboards before displaying the dialog
+                        // removeKeyboard();
+                    }
+                });
+
                 if (location.equals("Other")) {
                     newLocationLinearLayout.setVisibility(View.VISIBLE);
                     location = locationEditText.getText().toString();
