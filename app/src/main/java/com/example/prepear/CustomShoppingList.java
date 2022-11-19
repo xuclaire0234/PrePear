@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -50,18 +52,23 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         unitTextView.setText(ingredientInShoppingList.getUnit());
         ingredientCategoryTextView.setText(ingredientInShoppingList.getIngredientCategory());
         shoppingListCheckBox.setChecked(false);
-//        shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                /*
-//                On below:
-//                show first pop up the dialogFragment
-//                then, compare actual amount with needed amount
-//                if actual amount < needed amount -> setChecked(false) -> update amount -> store the actual amount into db
-//                if actual amount >= needed amount -> setChecked(true) -> directly store in the db
-//                 */
-//            }
-//        });
+        shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                On below:
+                show first pop up the dialogFragment
+                then, compare actual amount with needed amount
+                if actual amount < needed amount -> setChecked(false) -> update amount -> store the actual amount into db
+                if actual amount >= needed amount -> setChecked(true) -> directly store in the db
+                 */
+                FragmentActivity activity = (FragmentActivity)(context);
+                FragmentManager fm = activity.getSupportFragmentManager();
+                ShoppingListClickboxFragment alertDialog = new ShoppingListClickboxFragment();
+                alertDialog.show(fm, "ADD_INGREDIENT_IN_RECIPE");
+                shoppingListCheckBox.setChecked(true);
+            }
+        });
         return view;
     }
 }

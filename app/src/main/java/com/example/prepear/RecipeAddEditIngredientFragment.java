@@ -46,10 +46,10 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
     /* declare variables */
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
     private ArrayAdapter<CharSequence> categorySpinnerAdapter;
-    private Spinner descriptionSpinner;
+    private EditText descriptionText;
     private EditText amountText;
     private Spinner unitSpinner;
-    private EditText descriptionEditText;
+    private EditText unitEditText;
     private LinearLayout newUnitLinearLayout;
     private Spinner categorySpinner;
     private EditText categoryEditText;
@@ -114,11 +114,11 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
-        descriptionSpinner = view.findViewById(R.id.description_spinner);
+        descriptionText = view.findViewById(R.id.description_edit_text);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
-        descriptionEditText = view.findViewById(R.id.new_ingredient_description_edit_text);
-        newUnitLinearLayout = view.findViewById(R.id.new_description_linear_layout);
+        unitEditText = view.findViewById(R.id.new_ingredient_unit_edit_text);
+        newUnitLinearLayout = view.findViewById(R.id.new_unit_linear_layout);
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
         categoryEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
         newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
@@ -142,7 +142,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
 
             }
         };
-        descriptionEditText.addTextChangedListener(descriptionTextEditorWatcher);
+        descriptionText.addTextChangedListener(descriptionTextEditorWatcher);
         final TextWatcher amountTextEditorWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -150,7 +150,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                amountWordCount.setText(String.valueOf(30 - charSequence.length()));
+                amountWordCount.setText(String.valueOf(10 - charSequence.length()));
             }
 
             @Override
@@ -207,7 +207,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         if (bundle != null) {
             /* Editing existing ingredient */
             IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
-            descriptionSpinner.setText(ingredient.getBriefDescription());
+            descriptionText.setText(ingredient.getBriefDescription());
             amountText.setText(String.valueOf(ingredient.getAmountString()));
             String unit = ingredient.getUnit();
             List<String> units = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.units)));

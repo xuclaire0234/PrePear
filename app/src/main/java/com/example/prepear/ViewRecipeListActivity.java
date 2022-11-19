@@ -124,6 +124,18 @@ public class ViewRecipeListActivity extends AppCompatActivity implements Adapter
             }
         });
 
+
+        /*
+         * When the sort order button were pressed, the sort order should reverse
+         */
+        sortSequence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeDataList.reverseOrder();
+                recipeAdapter.notifyDataSetChanged();
+            }
+        });
+
         /*
          * When the addRecipe button is clicked, a new activity will start, which is activity to add
          * recipe.

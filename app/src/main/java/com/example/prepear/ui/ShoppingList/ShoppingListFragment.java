@@ -29,8 +29,10 @@ import com.example.prepear.ComputeShoppingList;
 import com.example.prepear.CustomRecipeList;
 import com.example.prepear.CustomShoppingList;
 import com.example.prepear.IngredientInRecipe;
+import com.example.prepear.IngredientInStorage;
 import com.example.prepear.R;
 import com.example.prepear.RecipeController;
+import com.example.prepear.ShoppingListClickboxFragment;
 import com.example.prepear.databinding.FragmentRecipeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class ShoppingListFragment extends Fragment {
+public class ShoppingListFragment extends Fragment implements ShoppingListClickboxFragment.OnFragmentInteractionListener {
 
     private ShoppingListViewModel mViewModel;
     private FragmentRecipeBinding binding;
@@ -345,5 +347,10 @@ public class ShoppingListFragment extends Fragment {
 //                    }
 //                });
 //    }
+
+    @Override
+    public void onOkPressed(IngredientInStorage ingredientInStorage) {
+
+    }
 }
 
