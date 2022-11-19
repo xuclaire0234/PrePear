@@ -29,6 +29,7 @@ import com.example.prepear.ViewMealPlanActivity;
 import com.example.prepear.databinding.FragmentMealPlanBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MealPlanFragment extends Fragment {
@@ -83,6 +84,7 @@ public class MealPlanFragment extends Fragment {
                 DailyMealPlan clickedFood= (DailyMealPlan) clickedItem;
                 // call activity to edit ingredient
                 Intent intent = new Intent(getActivity(), ViewDailyMealPlanActivity.class);
+                intent.putExtra("selected meal", clickedFood);
                 startActivity(intent);
             }
         });
@@ -108,10 +110,24 @@ public class MealPlanFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LAUNCH_ADD_MEAL_PLAN_ACTIVITY){
             if (resultCode == Activity.RESULT_OK){
-                Integer counter = (Integer) Integer.valueOf(data.getSerializableExtra("counter").toString());
+                Integer counter =  Integer.valueOf(data.getSerializableExtra("counter").toString());
+                int size = mealPlanDataList.size();
                 for (int i = 1; i <= counter; i++){
                     DailyMealPlan mealToAdd = (DailyMealPlan) data.getSerializableExtra("meal"+i);
-                    mealPlanAdapter.add(mealToAdd);
+                    if (mealPlanDataList.size() == 0){
+                        mealPlanAdapter.add(mealToAdd);
+                    }else {
+                        for (int j = 0; j < size; j++) {
+                            if (mealPlanDataList.get(j).getCurrentDailyMealPlanDate().matches(mealToAdd.getCurrentDailyMealPlanDate())) {
+                                mealPlanDataList.get(j).getDailyMealDataList().add(mealToAdd.getDailyMealDataList().get(0));
+                                mealToAdd = null;
+                                break;
+                            }
+                        }
+                        if (mealToAdd != null){
+                            mealPlanAdapter.add(mealToAdd);
+                        }
+                    }
                 }
             }else{
                 // do nothing

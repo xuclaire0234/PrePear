@@ -245,6 +245,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                         }
                     }
                 }, currentYear, currentMonth, currentDay);
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         dialog.show();
         // On below line: temporarily remove keyboards before displaying the dialog
         removeKeyboard();
@@ -253,49 +254,79 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void addIngredientTypeMeal(IngredientInStorage selectedIngredient) {
         setContentView(R.layout.activity_add_meal_plan);
+        amountEditText = findViewById(R.id.amount);
         amountLayout = findViewById(R.id.amount_layout);
-        numberOfServingsLayout =  findViewById(R.id.number_of_servings_layout);
+        numberOfServingsLayout = findViewById(R.id.number_of_servings_layout);
+        startDateView = findViewById(R.id.start_date);
+        endDateView = findViewById(R.id.end_date);
+        ingredientButton = findViewById(R.id.ingredient_radioButton);
+        recipeButton = findViewById(R.id.recipe_radioButton);
+        confirm = findViewById(R.id.confirm);
+        ingredientButton.setChecked(true);
+        if (startDate != null){
+            startDateView.setText(startDate);
+            startDateView.setOnClickListener(this);
+
+        }else{
+            startDateView.setOnClickListener(this);
+        }
+        if (endDate != null){
+            endDateView.setText(endDate);
+            endDateView.setOnClickListener(this);
+
+        }else{
+            endDateView.setOnClickListener(this);
+        }
+        recipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recipeButton.setChecked(false);
+                CharSequence text = "Error, Please Finish Adding This Ingredient Or Click Cancel!";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+            }
+        });
         if (selectedIngredient != null) {
             amountLayout.setVisibility(View.VISIBLE);
             numberOfServingsLayout.setVisibility(View.GONE);
-            ingredientButton.setChecked(true);
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String amount = amountEditText.getText().toString().trim();
-                    if (amount.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
+                    if (amount.isEmpty()) {
                         CharSequence text = "Error, Please Enter an Amount!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                    }else if(startDate.isEmpty() || endDate.isEmpty()){
+                        CharSequence text = "Error, Please Finish Selecting The Dates!";
+                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                    }else if (amount.equals("0")){
+                        CharSequence text = "Error, Please Enter An Amount Greater Than Zero!";
+                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     } else {
+                        Intent intentBack = new Intent();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Bundle bundle = null;
                         try {
-                            bundle = new Bundle();
                             // convert date strings to local dates
                             Date start = sdf.parse(startDate);
                             LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                             Date end = sdf.parse(endDate);
                             LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                            Integer counter = 1;  // counter for the number of Meal objects
-                            for (LocalDate date = localStart; date.isEqual(localEnd); date = date.plusDays(1)) {
+                            Integer counter = 0;  // counter for the number of Meal objects
+
+                            for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
                                 // create a Meal object for each DailyMealPlan object
                                 Meal firstMeal = new Meal(selectedIngredient.getDocumentId(), Integer.parseInt(amount), "IngredientInStorage");
+                                counter += 1;
                                 // create the DailyMealPlan object
                                 DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
                                 // send DailyMealPlan object to MealFragment
-                                bundle.putSerializable("meal" + counter, newMeal);
-                                counter += 1;
+                                intentBack.putExtra("meal" + counter, newMeal);
                             }
-                            bundle.putSerializable("counter", counter);
-                            /*MealPlanFragment fragment = new MealPlanFragment();
-                            fragment.setArguments(bundle);*/
+                            intentBack.putExtra("counter", counter);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        finish(); // exit activity
-                        Intent intentBack = new Intent();
-                        intentBack.putExtras(bundle);
                         setResult(Activity.RESULT_OK, intentBack);
+                        finish(); // exit activity
                     }
                 }
             });
@@ -311,49 +342,80 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void addRecipeTypeMeal(Recipe selectedRecipe) {
         setContentView(R.layout.activity_add_meal_plan);
+        numberOfServingsEditText = findViewById(R.id.number_of_servings);
         amountLayout = findViewById(R.id.amount_layout);
         numberOfServingsLayout = findViewById(R.id.number_of_servings_layout);
+        startDateView = findViewById(R.id.start_date);
+        endDateView = findViewById(R.id.end_date);
+        ingredientButton = findViewById(R.id.ingredient_radioButton);
+        numberOfServingsLayout =  findViewById(R.id.number_of_servings_layout);
+        recipeButton = findViewById(R.id.recipe_radioButton);
+        confirm = findViewById(R.id.confirm);
+        recipeButton.setChecked(true);
+        if (startDate != null){
+            startDateView.setText(startDate);
+            startDateView.setOnClickListener(this);
+
+        }else{
+            startDateView.setOnClickListener(this);
+        }
+        if (endDate != null){
+            endDateView.setText(endDate);
+            endDateView.setOnClickListener(this);
+
+        }else{
+            endDateView.setOnClickListener(this);
+        }
+        ingredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ingredientButton.setChecked(false);
+                CharSequence text = "Error, Please Finish Adding This Recipe Or Click Cancel!";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+            }
+        });
         if (selectedRecipe != null) {
             amountLayout.setVisibility(View.GONE);
             numberOfServingsLayout.setVisibility(View.VISIBLE);
-            ingredientButton.setChecked(true);
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String numberOfServings = numberOfServingsEditText.getText().toString().trim();
-                    if (numberOfServings.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
+                    if (numberOfServings.isEmpty()) {
                         CharSequence text = "Error, Please Enter The Number Of Servings!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-                    } else {
+                    } else if(startDate.isEmpty() || endDate.isEmpty()){
+                        CharSequence text = "Error, Please Finish Selecting The Dates!";
+                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                    }else if (numberOfServings.equals("0")){
+                        CharSequence text = "Error, Please Enter a Number Of Servings Greater Than Zero!";
+                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                    }else {
+                        Intent intentBack = new Intent();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         Bundle bundle = null;
                         try {
-                            bundle = new Bundle();
                             // convert date strings to local dates
                             Date start = sdf.parse(startDate);
                             LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                             Date end = sdf.parse(endDate);
                             LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                            Integer counter = 1;  // counter for the number of Meal objects
-                            for (LocalDate date = localStart; date.isEqual(localEnd); date = date.plusDays(1)) {
+                            Integer counter = 0;  // counter for the number of Meal objects
+                            for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
                                 // create a Meal object for each DailyMealPlan object
-                                Meal firstMeal = new Meal(selectedRecipe.getId(), Integer.parseInt(numberOfServings), "IngredientInStorage");
+                                Meal firstMeal = new Meal(selectedRecipe.getId(), Integer.parseInt(numberOfServings), "Recipe");
                                 // create the DailyMealPlan object
+                                counter += 1;
                                 DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
                                 // send DailyMealPlan object to MealFragment
-                                bundle.putSerializable("meal" + counter, newMeal);
-                                counter += 1;
+                                intentBack.putExtra("meal" + counter, newMeal);
                             }
-                            bundle.putSerializable("counter", counter);
-                            /*MealPlanFragment fragment = new MealPlanFragment();
-                            fragment.setArguments(bundle);*/
+                            intentBack.putExtra("counter", counter);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        finish(); // exit activity
-                        Intent intentBack = new Intent();
-                        intentBack.putExtras(bundle);
                         setResult(Activity.RESULT_OK, intentBack);
+                        finish(); // exit activity
                     }
                 }
             });
@@ -362,7 +424,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
             // set cancel result
             finish(); // exit activity
             Intent intentBack = new Intent();
-            setResult(Activity.RESULT_CANCELED, intentBack);
+            setResult(Activity.RESULT_CANCELED, intentBack);;
         }
 
     }

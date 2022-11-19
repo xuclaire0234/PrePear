@@ -10,17 +10,20 @@
 
         <TextView
             android:id="@+id/meal_date"
-            android:layout_width="273dp"
-            android:layout_height="40dp"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="78dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="59dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="68dp"
+            android:background="@mipmap/meal_plan_banner_background"
             android:gravity="center"
             android:maxEms="10"
-            android:text="Date" />
+            android:text="Date"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
