@@ -80,24 +80,8 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
         IngredientInStorage ingredient = (IngredientInStorage) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
         amountText.setText(ingredient.getAmountString());
-        String unit = ingredient.getUnit();
-        List<String> units = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.units)));
-        if (units.contains(unit)) {
-            unitSpinner.setSelection(unitSpinnerAdapter.getPosition(unit));
-        } else {
-            unitSpinner.setSelection(unitSpinnerAdapter.getPosition("Other"));
-            newUnitLinearLayout.setVisibility(View.VISIBLE);
-            unitEditText.setText(unit);
-        }
-        String ingredientCategory = ingredient.getIngredientCategory();
-        List<String> ingredientCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredient_categories)));
-        if (ingredientCategories.contains(ingredientCategory)) {
-            categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredientCategory));
-        } else {
-            categorySpinner.setSelection(categorySpinnerAdapter.getPosition("Other"));
-            newCategoryLinearLayout.setVisibility(View.VISIBLE);
-            categoryEditText.setText(ingredientCategory);
-        }
+        unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));;
+        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("View Ingredient");
         builder.setView(view).setNegativeButton("OK", null);

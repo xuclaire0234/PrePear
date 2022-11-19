@@ -15,11 +15,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -34,6 +37,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     // declare variables
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
     private ArrayAdapter<CharSequence> categorySpinnerAdapter;
+    private ArrayAdapter<CharSequence> locationSpinnerAdapter;
     private TextView descriptionText;
     private TextView amountText;
     private Spinner unitSpinner;
@@ -44,6 +48,10 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     private LinearLayout newCategoryLinearLayout;
     private TextView descriptionWordCount;
     private TextView amountWordCount;
+    private EditText actualAmountEditText;
+    private EditText bestBeforeDateEditText;
+    private Spinner locationSpinner;
+    private EditText locationEditText;
     private ShoppingListClickboxFragment.OnFragmentInteractionListener listener;
 
     /**
@@ -52,7 +60,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @see ShoppingListViewModel
      */
     public interface OnFragmentInteractionListener {
-        void onOkPressed(IngredientInRecipe ingredient);
+        void onOkPressed();
     }
     /**
      * This method creates a new instance of ShoppingListClickboxFragment so user can add
@@ -87,7 +95,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     /**
      * This method creates the add ingredient fragment if the user input is valid
      * and sets errors if the input is invalid
-     * @param  savedInstanceState {@link Bundle} that stores an ingredient {@link IngredientInRecipe} object
+     * @param  savedInstanceState {@link Bundle} that stores an ingredient {@link IngredientInStorage} object
      * @return builder a {@link Dialog} object to build the fragment
      */
     @SuppressLint("MissingInflatedId")
@@ -108,34 +116,44 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
         descriptionWordCount = view.findViewById(R.id.description_word_count);
         amountWordCount = view.findViewById(R.id.amount_word_count);
+        actualAmountEditText = view.findViewById(R.id.ingredient_actual_amount);
+        bestBeforeDateEditText = view.findViewById(R.id.best_before_date);
+        locationEditText = view.findViewById(R.id.new_ingredient_location_edit_text);
+        locationSpinner = view.findViewById(R.id.ingredient_location);
 
-        // getting attributes from ingredient
+        // getting attributes from ingredient and display it on fragment
         Bundle bundle = getArguments();
         IngredientInStorage ingredient = (IngredientInStorage) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
         amountText.setText(ingredient.getAmountString());
-        String unit = ingredient.getUnit();
-        List<String> units = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.units)));
-        if (units.contains(unit)) {
-            unitSpinner.setSelection(unitSpinnerAdapter.getPosition(unit));
-        } else {
-            unitSpinner.setSelection(unitSpinnerAdapter.getPosition("Other"));
-            newUnitLinearLayout.setVisibility(View.VISIBLE);
-            unitEditText.setText(unit);
-        }
-        String ingredientCategory = ingredient.getIngredientCategory();
-        List<String> ingredientCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredient_categories)));
-        if (ingredientCategories.contains(ingredientCategory)) {
-            categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredientCategory));
-        } else {
-            categorySpinner.setSelection(categorySpinnerAdapter.getPosition("Other"));
-            newCategoryLinearLayout.setVisibility(View.VISIBLE);
-            categoryEditText.setText(ingredientCategory);
-        }
+        unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));;
+        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
+
+        // set up the location spinner
+        locationSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.locations,
+                android.R.layout.simple_spinner_item);
+        locationSpinner.setAdapter(locationSpinnerAdapter);
+        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedIngredientLocation = locationSpinner.getSelectedItem().toString();
+                if (selectedIngredientLocation.equals("Other")) {
+                    newUnitLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    newUnitLinearLayout.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Details For Ingredient");
         builder.setView(view)
-                .setNegativeButton("OK", null)
+                .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -145,29 +163,39 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         return builder.create();
     }
 
-    // need to work on adding details 
+    // need to work on adding details
     @Override
     public void onResume() {
         super.onResume();
         final AlertDialog d = (AlertDialog) getDialog();
         if (d != null) {
+            Bundle bundle = getArguments();
             Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener((View v) -> {
+                // still needs to change bestBeforeDate to date picker
                 Boolean wantToCloseDialog = true;
-                String description = descriptionText.getText().toString();
-                String amount = amountText.getText().toString();
-                String unit = unitSpinner.getSelectedItem().toString();
-                if (unit.equals("Other")) {
-                    unit = unitEditText.getText().toString();
+                String actualAmount = actualAmountEditText.getText().toString();
+                String bestBeforeDate = bestBeforeDateEditText.getText().toString();
+                String location = locationSpinner.getSelectedItem().toString();
+                if (location.equals("Other")) {
+                    location = locationEditText.getText().toString();
                 }
-                String category = categorySpinner.getSelectedItem().toString();
-                if (category.equals("Other")) {
-                    category = categoryEditText.getText().toString();
+                if (actualAmount.equals("") || bestBeforeDate.equals("") || location.equals("")) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                            Toast.LENGTH_LONG).show();
+                    wantToCloseDialog = false;
+                } else {
+                    IngredientInStorage ingredient = (IngredientInStorage) bundle.getSerializable("ingredient");
+                    ingredient.setAmountValue(Double.parseDouble(actualAmount));
+                    ingredient.setBestBeforeDate(bestBeforeDate);
+                    ingredient.setLocation(location);
+                    listener.onOkPressed();
+                    // listener.onOkPressed(new IngredientInStorage(actualAmount, bestBeforeDate, location));
+                }
+                if (wantToCloseDialog) {
+                    d.dismiss();
                 }
 
-                if (description.equals("")) {
-
-                }
             });
         }
     }

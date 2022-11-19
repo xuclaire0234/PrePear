@@ -195,7 +195,7 @@
             android:textSize="16dp" />
 
         <EditText
-            android:id="@+id/bestBeforeDate"
+            android:id="@+id/best_before_date"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -239,6 +239,34 @@
             android:spinnerMode="dropdown"
             tools:ignore="TouchTargetSizeCheck" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_ingredient_location_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/location1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="12dp"
+            android:textStyle="bold"
+            android:text="Enter New Location:"
+            android:textColor="@color/green_pear" />
+
+        <EditText
+            android:id="@+id/new_ingredient_location_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType= "textPersonName"
+            android:minHeight="48dp"/>
     </LinearLayout>
 
     <TextView
