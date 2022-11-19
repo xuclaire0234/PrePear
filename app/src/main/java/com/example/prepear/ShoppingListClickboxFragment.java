@@ -27,10 +27,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 public class ShoppingListClickboxFragment extends DialogFragment {
@@ -60,7 +56,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @see ShoppingListViewModel
      */
     public interface OnFragmentInteractionListener {
-        void onOkPressed();
+        void onOkPressed(IngredientInStorage ingredientInStorage);
     }
     /**
      * This method creates a new instance of ShoppingListClickboxFragment so user can add
@@ -163,7 +159,10 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         return builder.create();
     }
 
-    // need to work on adding details
+    /**
+     *
+     *
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -189,8 +188,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     ingredient.setAmountValue(Double.parseDouble(actualAmount));
                     ingredient.setBestBeforeDate(bestBeforeDate);
                     ingredient.setLocation(location);
-                    listener.onOkPressed();
-                    // listener.onOkPressed(new IngredientInStorage(actualAmount, bestBeforeDate, location));
+                    listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId()));
                 }
                 if (wantToCloseDialog) {
                     d.dismiss();
