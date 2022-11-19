@@ -29,7 +29,8 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_daily_meal_plan);
 
-
+        DailyMealPlan clickedDailyMealPlan = (DailyMealPlan) getIntent().getSerializableExtra("clicked daily meal plan");
+        currentDailyMealPlanDate = clickedDailyMealPlan.getCurrentDailyMealPlanDate();
         Button addDailyMealButton = findViewById(R.id.add_daily_meal_button); // used to add a new meal in when clicking
         ListView dailyMealListView = findViewById(R.id.daily_meals_listView); // display the meal items
         dailyMealArrayAdapter = new DailyMealPlanCustomList(getApplicationContext(), dailyMealPlan.getDailyMealDataList());
@@ -49,6 +50,7 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Meal clickedMeal = (Meal) dailyMealArrayAdapter.getItem(position);
+                
             }
         });
     }
