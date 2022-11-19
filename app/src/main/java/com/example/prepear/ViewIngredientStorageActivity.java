@@ -60,7 +60,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
 
         // On below: Grab the ListView object for use
         ingredientStorageList = findViewById(R.id.ingredients_in_storage_listview);
-        // On below: initialize the used-defined ArrayAdapter for use
+        // On below: initialize the defined ArrayAdapter for use
         ingredientStorageListAdapter = new IngredientStorageCustomList(this,
                 ingredientStorageDataList);
         // On below: build a connection between the in-storage ingredients data list and the ArrayAdapter

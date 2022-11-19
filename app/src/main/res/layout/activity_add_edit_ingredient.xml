@@ -333,11 +333,18 @@
 
         <TextView
             android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="232dp"
+            android:layout_height="71dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Please fill in each blank \n properly according to the hints " />
+
+        <Button
+            android:id="@+id/add_to_meal_plan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add in Meal Plan" />
     </LinearLayout>
 
     <LinearLayout

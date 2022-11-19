@@ -12,7 +12,7 @@ package com.example.prepear;
 import java.io.Serializable;
 
 /**
- * This class creates ingredient objects and allows setting and accessing the attributes
+ * This class creates Ingredient objects and allows setting and accessing the attributes
  */
 
 public class Ingredient implements Serializable {

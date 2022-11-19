@@ -21,13 +21,10 @@ public class TestingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testing);
 
-        dailyMealPlan = new DailyMealPlan();
-        dailyMealPlan.setCurrentDailyMealPlanDate("2022-11-14");
+
         Meal meal = new Meal("Recipe", "20221029_215342");
         meal.setCustomizedNumberOfServings(6);
-        ArrayList<Meal> arrayList = new ArrayList<>();
-        arrayList.add(meal);
-        dailyMealPlan.setDailyMealDataList(arrayList);
+        dailyMealPlan = new DailyMealPlan("2022-11-14", meal);
 
         /*
         dailyMealPlan = new DailyMealPlan();
