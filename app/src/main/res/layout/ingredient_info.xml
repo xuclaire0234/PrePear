@@ -50,6 +50,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="258dp"
             android:layout_marginTop="36dp"
+            android:layout_marginEnd="11dp"
+            android:layout_toStartOf="@+id/unitNumberText"
             android:gravity="center"
             android:singleLine="true"
             android:text="Amount"

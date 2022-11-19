@@ -57,7 +57,28 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ViewMealPlanActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ChooseIngredientIconActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ViewDailyMealPlanActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AddMealPlanActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

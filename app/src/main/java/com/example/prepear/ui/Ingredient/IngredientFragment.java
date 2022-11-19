@@ -1,5 +1,8 @@
 package com.example.prepear.ui.Ingredient;
 
+import static android.content.Intent.getIntent;
+import static android.content.Intent.getIntentOld;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +14,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.example.prepear.AddEditIngredientActivity;
+import com.example.prepear.AddEditIngredientFragment;
+import com.example.prepear.AddMealPlanActivity;
+import com.example.prepear.ConfirmationDialog;
 import com.example.prepear.IngredientController;
 import com.example.prepear.IngredientInStorage;
 import com.example.prepear.IngredientStorageCustomList;
 import com.example.prepear.R;
+import com.example.prepear.Recipe;
 import com.example.prepear.databinding.FragmentIngredientBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,8 +42,9 @@ import java.util.ArrayList;
 /**
  * This class is an Fragment Class for displaying the all in-storage ingredients with its detailed info on a ListView
  */
-public class IngredientFragment extends Fragment {
-
+public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener {
+    private Integer positionOfItemClicked;
+    IngredientOnCallbackReceived callback;
     private FragmentIngredientBinding binding;
     int LAUNCH_ADD_INGREDIENT_ACTIVITY = 1;
     int LAUNCH_EDIT_INGREDIENT_ACTIVITY = 2;
@@ -52,10 +62,21 @@ public class IngredientFragment extends Fragment {
     private FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
     private CollectionReference inStorageIngredientCollection = dbForInStorageIngredients.collection("Ingredient Storage");
 
+    public interface IngredientOnCallbackReceived {
+        void addIngredientTypeMeal(IngredientInStorage selectedIngredient);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callback = (IngredientOnCallbackReceived) activity;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ingredient, container, false);
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -74,26 +95,39 @@ public class IngredientFragment extends Fragment {
         addInStorageIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // on below call activity for new in-storage ingredient
-                Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
-                intent.putExtra("Add or Edit", "1");
-                startActivityForResult(intent, LAUNCH_ADD_INGREDIENT_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    CharSequence text = "Error, Please Click On an Ingredient From The List!";
+                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+                }else {
+                    // on below call activity for new in-storage ingredient
+                    Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
+                    intent.putExtra("Add or Edit", "1");
+                    startActivityForResult(intent, LAUNCH_ADD_INGREDIENT_ACTIVITY);
+                }
             }
         });
 
         ingredientStorageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Grab the clicked item out of the ListView
-                Object clickedItem = ingredientStorageList.getItemAtPosition(position);
-                // Casting this clicked item to IngredientInStorage type from Object type
-                IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
-                // call activity to edit ingredient
-                Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
-                intent.putExtra("Add or Edit", "2");
-                intent.putExtra("ingredientInStorage", clickedFood);
-                intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
-                startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    positionOfItemClicked = position;
+                    DialogFragment confirmationDialog = new ConfirmationDialog();
+                    confirmationDialog.setTargetFragment(IngredientFragment.this, 0);
+                    confirmationDialog.show(getFragmentManager(), "confirm selection");
+                }
+                else {
+                    // Grab the clicked item out of the ListView
+                    Object clickedItem = ingredientStorageList.getItemAtPosition(position);
+                    // Casting this clicked item to IngredientInStorage type from Object type
+                    IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
+                    // call activity to edit ingredient
+                    Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
+                    intent.putExtra("Add or Edit", "2");
+                    intent.putExtra("ingredientInStorage", clickedFood);
+                    intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
+                    startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
+                }
             }
         });
 
@@ -217,10 +251,26 @@ public class IngredientFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onConfirmPressed() {
+        // Grab the clicked item out of the ListView
+        Object clickedItem = ingredientStorageList.getItemAtPosition(positionOfItemClicked);
+        // Casting this clicked item to IngredientInStorage type from Object type
+        IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
+        //setContentView(R.layout.activity_add_meal_plan);
+        callback.addIngredientTypeMeal(clickedFood);
+    }
+
+    @Override
+    public void onCancelPressed() {
+        callback.addIngredientTypeMeal(null);
+    }
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 }
