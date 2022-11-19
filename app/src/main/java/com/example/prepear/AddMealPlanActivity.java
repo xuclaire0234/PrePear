@@ -268,7 +268,8 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                             }else {
                                 for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
                                     // create a Meal object for each DailyMealPlan object
-                                    Meal firstMeal = new Meal(selectedIngredient.getDocumentId(), Integer.parseInt(amount), "IngredientInStorage");
+                                    Meal firstMeal = new Meal("IngredientInStorage", selectedIngredient.getDocumentId());
+                                    firstMeal.setCustomizedAmount( Double.parseDouble(amount));
                                     counter += 1;
                                     // create the DailyMealPlan object
                                     DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
@@ -372,7 +373,8 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                             } else {
                                 for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
                                     // create a Meal object for each DailyMealPlan object
-                                    Meal firstMeal = new Meal(selectedRecipe.getId(), Integer.parseInt(numberOfServings), "Recipe");
+                                    Meal firstMeal = new Meal("Recipe",selectedRecipe.getId());
+                                    firstMeal.setCustomizedNumberOfServings(Integer.parseInt(numberOfServings));
                                     // create the DailyMealPlan object
                                     counter += 1;
                                     DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);

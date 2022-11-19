@@ -1,5 +1,6 @@
 package com.example.prepear.ui.MealPlan;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
@@ -20,20 +21,24 @@ import android.widget.ListView;
 
 import com.example.prepear.AddEditIngredientFragment;
 import com.example.prepear.AddMealPlanActivity;
+import com.example.prepear.ConfirmationDialog;
 import com.example.prepear.DailyMealPlan;
+import com.example.prepear.DeleteMealPlanDialog;
 import com.example.prepear.IngredientInStorage;
 import com.example.prepear.Meal;
+import com.example.prepear.MealPlanController;
 import com.example.prepear.MealPlanCustomList;
 import com.example.prepear.R;
 import com.example.prepear.ViewDailyMealPlanActivity;
 import com.example.prepear.ViewMealPlanActivity;
 import com.example.prepear.databinding.FragmentMealPlanBinding;
+import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MealPlanFragment extends Fragment {
+public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.OnFragmentInteractionListener {
 
     private MealPlanViewModel mViewModel;
     private FragmentMealPlanBinding binding;
@@ -43,6 +48,7 @@ public class MealPlanFragment extends Fragment {
     private ArrayAdapter<DailyMealPlan> mealPlanAdapter;
     private ArrayList<DailyMealPlan> mealPlanDataList = new ArrayList<DailyMealPlan>(); // store meal plan entries
     private int LAUNCH_ADD_MEAL_PLAN_ACTIVITY = 1;
+    private int positionOfPlanToRemove;
 
     public static MealPlanFragment newInstance() {
         return new MealPlanFragment();
@@ -89,6 +95,16 @@ public class MealPlanFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        mealPlanList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                positionOfPlanToRemove = position;
+                DialogFragment deletePlan = new DeleteMealPlanDialog();
+                deletePlan.setTargetFragment(MealPlanFragment.this, 0);
+                deletePlan.show(getFragmentManager(), "Attention");
+                return false;
+            }
+        });
 
     }
 
@@ -109,38 +125,59 @@ public class MealPlanFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LAUNCH_ADD_MEAL_PLAN_ACTIVITY){
+            MealPlanController mealPlanController = new MealPlanController(mealPlanDataList);
             if (resultCode == Activity.RESULT_OK){
                 Integer counter =  Integer.valueOf(data.getSerializableExtra("counter").toString());
-                int size = mealPlanDataList.size();
+                int size = mealPlanController.getSize();
                 for (int i = 1; i <= counter; i++){
                     DailyMealPlan mealToAdd = (DailyMealPlan) data.getSerializableExtra("meal"+i);
-                    if (mealPlanDataList.size() == 0){
-                        mealPlanAdapter.add(mealToAdd);
+                    if (mealPlanController.getSize() == 0){
+                        mealPlanController.addMealPlan(mealToAdd);
+                        mealPlanAdapter.notifyDataSetChanged();
                     }else {
                         for (int j = 0; j < size; j++) {
-                            if (mealPlanDataList.get(j).getCurrentDailyMealPlanDate().matches(mealToAdd.getCurrentDailyMealPlanDate())) {
-                                DailyMealPlan duplicateDay = mealPlanDataList.get(j);
+                            if (mealPlanController.getMealPlan(j).getCurrentDailyMealPlanDate().matches(mealToAdd.getCurrentDailyMealPlanDate())) {
+                                DailyMealPlan duplicateDay = mealPlanController.getMealPlan(j);
                                 for (int k = 0; k < duplicateDay.getDailyMealDataList().size(); k++){
-                                    if (duplicateDay.getDailyMealDataList().get(k).getDocumentID().matches(mealToAdd.getDailyMealDataList().get(0).getDocumentID())){
-                                        int initialScalingNumber = duplicateDay.getDailyMealDataList().get(k).getCustomizedScalingNumber();
-                                        mealPlanDataList.get(j).getDailyMealDataList().get(k).setCustomizedScalingNumber(initialScalingNumber +
-                                                mealToAdd.getDailyMealDataList().get(0).getCustomizedScalingNumber());
+                                    if (duplicateDay.getDailyMealDataList().get(k).getDocumentID().matches(mealToAdd.getDailyMealDataList().get(0).getDocumentID())
+                                    && mealToAdd.getDailyMealDataList().get(0).getMealType().matches("IngredientInStorage")){
+                                        Double initialScalingNumber = duplicateDay.getDailyMealDataList().get(k).getCustomizedAmount();
+                                        mealPlanController.getMealPlan(j).getDailyMealDataList().get(k).setCustomizedAmount(initialScalingNumber +
+                                                mealToAdd.getDailyMealDataList().get(0).getCustomizedAmount());
+                                        mealToAdd = null;
                                         break;
                                     }
                                 }
-                                mealToAdd = null;
-                                break;
+                                if (mealToAdd != null){
+                                    mealPlanController.getMealPlan(j).getDailyMealDataList().add(mealToAdd.getDailyMealDataList().get(0));
+                                    mealToAdd = null;
+                                    break;
+                                }
+                                }
                             }
-                        }
                         if (mealToAdd != null){
-                            mealPlanAdapter.add(mealToAdd);
+                            mealPlanController.addMealPlan(mealToAdd);
+                            mealPlanAdapter.notifyDataSetChanged();
                         }
                     }
                 }
             }else{
+                //do nothing
+            }
+        }else{
                 // do nothing
             }
-        }
-
-        }
     }
+
+    @Override
+    public void onYesPressed() {
+        MealPlanController mealPlanController = new MealPlanController(mealPlanDataList);
+        mealPlanController.removeMealPlan(positionOfPlanToRemove);
+        mealPlanAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNoPressed() {
+        // do nothing
+    }
+}
