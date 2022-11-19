@@ -64,6 +64,24 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         ingredientButton = findViewById(R.id.ingredient_radioButton);
         recipeButton = findViewById(R.id.recipe_radioButton);
 
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence text = "Error, Please Finish Adding This Ingredient Or Click Cancel!";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // return to view fragment
+                // set cancel result
+                finish(); // exit activity
+                Intent intentBack = new Intent();
+                setResult(Activity.RESULT_CANCELED, intentBack);
+            }
+        });
+
         // set date picker dialog
         startDateView.setOnClickListener(this);
         endDateView.setOnClickListener(this);
@@ -119,74 +137,6 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         // On below part: Hide the soft keyboards associated with description and amount edit text fields
         inputMethodManager.hideSoftInputFromWindow(amountLayout.getWindowToken(), 0);
         inputMethodManager.hideSoftInputFromWindow(numberOfServingsLayout.getWindowToken(), 0);
-    }
-
-    @Override
-    /**
-     * This method updates the ingredient list view after the AddEditIngredientActivity concludes
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LAUNCH_INGREDIENT_FRAGMENT) { // if user adds a new ingredient
-            if (resultCode == Activity.RESULT_OK) {
-                //get ingredient
-                //IngredientInStorage ingredientToAdd = (IngredientInStorage) data.getSerializableExtra("IngredientToAdd");
-                /*numberOfServingsLayout.setVisibility(View.GONE);
-                amountLayout.setVisibility(View.VISIBLE);
-                confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String amount = amountEditText.getText().toString().trim();
-                        if (amount.isEmpty() || startDate.isEmpty() || endDate.isEmpty()){
-                            CharSequence text = "Error, Please Enter an Amount!";
-                            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(AddMealPlanActivity.this, MealPlanFragment.class);
-                            intent.putExtra("New Meal Plan", "1");
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            try {
-                                // convert date strings to local dates
-                                Date start = sdf.parse(startDate);
-                                LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                                Date end = sdf.parse(endDate);
-                                LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                                Integer counter = 1;  // counter for the number of Meal objects
-                                for (LocalDate date = localStart; date.isEqual(localEnd); date = date.plusDays(1)){
-                                    // create a Meal object for each DailyMealPlan object
-                                    Meal firstMeal = new Meal(ingredientToAdd.getDocumentId(), 0, "IngredientInStorage");
-                                    // create the DailyMealPlan object
-                                    DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
-                                    // send DailyMealPlan object to MealFragment
-                                    intent.putExtra("meal"+counter.toString(), newMeal);
-                                    counter += 1;
-                                }
-                                intent.putExtra("counter", counter); // send the number of DailyMealPlan objects created
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            setResult(Activity.RESULT_OK, intent);
-                            finish(); // exit activity
-                        }
-                    }
-                });*/
-            } else {
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-
-            }
-        } else {
-            if (resultCode == Activity.RESULT_OK) {
-                amountLayout.setVisibility(View.GONE);
-                numberOfServingsLayout.setVisibility(View.VISIBLE);
-
-            }else{
-
-            }
-        }
     }
 
     @Override
@@ -262,6 +212,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         ingredientButton = findViewById(R.id.ingredient_radioButton);
         recipeButton = findViewById(R.id.recipe_radioButton);
         confirm = findViewById(R.id.confirm);
+        cancel = findViewById(R.id.cancel);
         ingredientButton.setChecked(true);
         if (startDate != null){
             startDateView.setText(startDate);
@@ -311,23 +262,37 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                             Date end = sdf.parse(endDate);
                             LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                             Integer counter = 0;  // counter for the number of Meal objects
-
-                            for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
-                                // create a Meal object for each DailyMealPlan object
-                                Meal firstMeal = new Meal(selectedIngredient.getDocumentId(), Integer.parseInt(amount), "IngredientInStorage");
-                                counter += 1;
-                                // create the DailyMealPlan object
-                                DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
-                                // send DailyMealPlan object to MealFragment
-                                intentBack.putExtra("meal" + counter, newMeal);
+                            if(localEnd.isBefore(localStart)){
+                                CharSequence text = "Error, End Date Must Come After Start Date!";
+                                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                            }else {
+                                for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
+                                    // create a Meal object for each DailyMealPlan object
+                                    Meal firstMeal = new Meal(selectedIngredient.getDocumentId(), Integer.parseInt(amount), "IngredientInStorage");
+                                    counter += 1;
+                                    // create the DailyMealPlan object
+                                    DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
+                                    // send DailyMealPlan object to MealFragment
+                                    intentBack.putExtra("meal" + counter, newMeal);
+                                }
+                                intentBack.putExtra("counter", counter);
+                                setResult(Activity.RESULT_OK, intentBack);
+                                finish(); // exit activity
                             }
-                            intentBack.putExtra("counter", counter);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        setResult(Activity.RESULT_OK, intentBack);
-                        finish(); // exit activity
                     }
+                }
+            });
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // return to view fragment
+                    // set cancel result
+                    finish(); // exit activity
+                    Intent intentBack = new Intent();
+                    setResult(Activity.RESULT_CANCELED, intentBack);
                 }
             });
         }else{
@@ -351,6 +316,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         numberOfServingsLayout =  findViewById(R.id.number_of_servings_layout);
         recipeButton = findViewById(R.id.recipe_radioButton);
         confirm = findViewById(R.id.confirm);
+        cancel = findViewById(R.id.cancel);
         recipeButton.setChecked(true);
         if (startDate != null){
             startDateView.setText(startDate);
@@ -393,7 +359,6 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                     }else {
                         Intent intentBack = new Intent();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Bundle bundle = null;
                         try {
                             // convert date strings to local dates
                             Date start = sdf.parse(startDate);
@@ -401,22 +366,35 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                             Date end = sdf.parse(endDate);
                             LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                             Integer counter = 0;  // counter for the number of Meal objects
-                            for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
-                                // create a Meal object for each DailyMealPlan object
-                                Meal firstMeal = new Meal(selectedRecipe.getId(), Integer.parseInt(numberOfServings), "Recipe");
-                                // create the DailyMealPlan object
-                                counter += 1;
-                                DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
-                                // send DailyMealPlan object to MealFragment
-                                intentBack.putExtra("meal" + counter, newMeal);
+                            if(localEnd.isBefore(localStart)){
+                                CharSequence text = "Error, End Date Must Come After Start Date!";
+                                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                            } else {
+                                for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
+                                    // create a Meal object for each DailyMealPlan object
+                                    Meal firstMeal = new Meal(selectedRecipe.getId(), Integer.parseInt(numberOfServings), "Recipe");
+                                    // create the DailyMealPlan object
+                                    counter += 1;
+                                    DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
+                                    // send DailyMealPlan object to MealFragment
+                                    intentBack.putExtra("meal" + counter, newMeal);
+                                }
+                                intentBack.putExtra("counter", counter);
+                                setResult(Activity.RESULT_OK, intentBack);
+                                finish(); // exit activity
                             }
-                            intentBack.putExtra("counter", counter);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        setResult(Activity.RESULT_OK, intentBack);
-                        finish(); // exit activity
                     }
+                }
+            });
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish(); // exit activity
+                    Intent intentBack = new Intent();
+                    setResult(Activity.RESULT_CANCELED, intentBack);
                 }
             });
         } else {

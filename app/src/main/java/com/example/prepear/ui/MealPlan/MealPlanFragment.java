@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,6 @@ public class MealPlanFragment extends Fragment {
             }
         });
 
-
     }
 
     @Override
@@ -119,7 +119,15 @@ public class MealPlanFragment extends Fragment {
                     }else {
                         for (int j = 0; j < size; j++) {
                             if (mealPlanDataList.get(j).getCurrentDailyMealPlanDate().matches(mealToAdd.getCurrentDailyMealPlanDate())) {
-                                mealPlanDataList.get(j).getDailyMealDataList().add(mealToAdd.getDailyMealDataList().get(0));
+                                DailyMealPlan duplicateDay = mealPlanDataList.get(j);
+                                for (int k = 0; k < duplicateDay.getDailyMealDataList().size(); k++){
+                                    if (duplicateDay.getDailyMealDataList().get(k).getDocumentID().matches(mealToAdd.getDailyMealDataList().get(0).getDocumentID())){
+                                        int initialScalingNumber = duplicateDay.getDailyMealDataList().get(k).getCustomizedScalingNumber();
+                                        mealPlanDataList.get(j).getDailyMealDataList().get(k).setCustomizedScalingNumber(initialScalingNumber +
+                                                mealToAdd.getDailyMealDataList().get(0).getCustomizedScalingNumber());
+                                        break;
+                                    }
+                                }
                                 mealToAdd = null;
                                 break;
                             }
@@ -132,7 +140,6 @@ public class MealPlanFragment extends Fragment {
             }else{
                 // do nothing
             }
-
         }
 
         }
