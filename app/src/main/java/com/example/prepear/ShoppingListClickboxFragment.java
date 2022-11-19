@@ -40,8 +40,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     private TextView unitEditText;
     private LinearLayout newUnitLinearLayout;
     private Spinner categorySpinner;
-    private TextView categoryEditText;
-    private LinearLayout newCategoryLinearLayout;
+    private LinearLayout newLocationLinearLayout;
     private TextView descriptionWordCount;
     private TextView amountWordCount;
     private EditText actualAmountEditText;
@@ -108,8 +107,8 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         unitEditText = view.findViewById(R.id.new_ingredient_unit_edit_text);
         newUnitLinearLayout = view.findViewById(R.id.new_unit_linear_layout);
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
-        categoryEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
-        newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
+        locationEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
+        newLocationLinearLayout = view.findViewById(R.id.new_ingredient_location_linear_layout);
         descriptionWordCount = view.findViewById(R.id.description_word_count);
         amountWordCount = view.findViewById(R.id.amount_word_count);
         actualAmountEditText = view.findViewById(R.id.ingredient_actual_amount);
@@ -134,9 +133,9 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedIngredientLocation = locationSpinner.getSelectedItem().toString();
                 if (selectedIngredientLocation.equals("Other")) {
-                    newUnitLinearLayout.setVisibility(View.VISIBLE);
+                    newLocationLinearLayout.setVisibility(View.VISIBLE);
                 } else {
-                    newUnitLinearLayout.setVisibility(View.GONE);
+                    newLocationLinearLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -177,6 +176,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                 String bestBeforeDate = bestBeforeDateEditText.getText().toString();
                 String location = locationSpinner.getSelectedItem().toString();
                 if (location.equals("Other")) {
+                    newLocationLinearLayout.setVisibility(View.VISIBLE);
                     location = locationEditText.getText().toString();
                 }
                 if (actualAmount.equals("") || bestBeforeDate.equals("") || location.equals("")) {
