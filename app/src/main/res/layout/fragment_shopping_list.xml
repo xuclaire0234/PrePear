@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
-                android:text="from"
+                android:text="from "
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -96,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="date"
-                android:text="to"
+                android:text="to "
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/fromDate_textView" />
 
@@ -137,10 +138,10 @@
         <ListView
             android:id="@+id/ingredient_listview"
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="match_parent">
 
         </ListView>
 
     </FrameLayout>
 
-</RelativeLayout>
+</LinearLayout>
