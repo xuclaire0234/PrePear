@@ -91,7 +91,6 @@ public class ShoppingListFragment extends Fragment {
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
 
-        ingredientShoppingList = new ArrayList<>();
 
         // set adapter
         try {
@@ -182,7 +181,7 @@ public class ShoppingListFragment extends Fragment {
                                     calculateShoppingList(targetDay);
                                     startDay.add(Calendar.DATE, 1);
                                     //ingredientShoppingListAdapter.notifyDataSetChanged();
-
+                                    Log.d("size",String.valueOf(ingredientShoppingList.size()));
                                 }
                             }catch (ParseException ex) {
                                 ex.printStackTrace();
@@ -410,15 +409,33 @@ public class ShoppingListFragment extends Fragment {
                             ingredientShoppingListAdapter.notifyDataSetChanged();
                         }
                         if (dailyKey) {  // check if dailyKey has been changed
-                            ingredientShoppingList.add(targetIngredient);
-                            ingredientShoppingListAdapter.notifyDataSetChanged();
-                            dailyKey = false;
+                            // if there is no same ingredients in the storage, just directly add into shoppingList
+                            boolean updateKey = true;
+                            while (updateKey) {  // this while loop helps to check if shopping has the existing ingredient
+                                for (int a = 0; a < ingredientShoppingList.size(); a++) {
+                                    IngredientInRecipe ingredientForShopping = ingredientShoppingList.get(a);
+                                    if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
+                                        double exitingAmount = ingredientForShopping.getAmountValue();
+                                        double updateAmount = exitingAmount + unitConvert(targetIngredient.getUnit(),targetIngredient.getAmountValue()); // existing amount add needed amount
+                                        ingredientForShopping.setAmountValue(updateAmount);
+                                        updateKey = false;
+                                        dailyKey = false;
+                                    }
+                                }
+                                if (updateKey) {
+                                    /* after iterating ingredientInShoppingList, if there is no existing one */
+                                    ingredientShoppingList.add(targetIngredient);
+                                    updateKey = false;
+                                    ingredientShoppingListAdapter.notifyDataSetChanged();
+                                    dailyKey = false;
+//
+                                }
+                            }
                         }
-                        // if there is no same ingredients in the storage, just directly add into shoppingList
                     }
-//                        Log.d("add shopping", ingredientShoppingList.get(i).getBriefDescription());
                     }
                     //Log.d("size shopping", String.valueOf(ingredientShoppingList.size()));
+                    ingredientShoppingListAdapter.notifyDataSetChanged();
                 }
             }, 2000);
 //            startDay.add(Calendar.DATE, 1);
