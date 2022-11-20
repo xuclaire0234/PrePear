@@ -39,6 +39,7 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
     private TextView bestBeforeDateTextView;
     private TextView locationTextView;
     private EditText amountEditText;
+    private TextView originalAmountTextView;
     private TextView unitTextView;
     private TextView ingredientCategoryTextView;
     private Button deleteButton;
@@ -62,6 +63,7 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
         bestBeforeDateTextView = findViewById(R.id.best_before_date_text_view);
         locationTextView = findViewById(R.id.location_text_view);
         amountEditText = findViewById(R.id.amount_edit_text);
+        originalAmountTextView = findViewById(R.id.original_amount_hint_text_view);
         unitTextView = findViewById(R.id.unit_text_view);
         ingredientCategoryTextView = findViewById(R.id.ingredient_category_text_view);
         deleteButton = findViewById(R.id.delete_button);
@@ -83,6 +85,7 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
                         bestBeforeDateTextView.setText((String) document.getData().get("bestBeforeDate"));
                         locationTextView.setText((String) document.getData().get("location"));
                         originalAmount = (Double) document.getData().get("amount");  // stores the original amount
+                        originalAmountTextView.setText(originalAmount.toString());
                         unitTextView.setText((String) document.getData().get("unit"));
                         ingredientCategoryTextView.setText((String) document.getData().get("category"));
                     } else {

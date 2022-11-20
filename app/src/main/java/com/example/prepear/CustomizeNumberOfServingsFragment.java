@@ -27,7 +27,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 /**
  *  This class defines the customize number of servings activity that allows user to edit the number
  *  of servings.
@@ -99,7 +98,7 @@ public class CustomizeNumberOfServingsFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                customizedNumberOfServingsWordCount.setText(String.valueOf(3 - charSequence.length()));
+                customizedNumberOfServingsWordCount.setText(String.valueOf(5 - charSequence.length()));
             }
 
             @Override

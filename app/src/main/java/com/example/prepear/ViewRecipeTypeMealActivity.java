@@ -87,7 +87,7 @@ public class ViewRecipeTypeMealActivity extends AppCompatActivity implements Cus
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
 
-        // sets up a new array list for storing original ingredient in recipe list
+        // sets up a new array list for storing original amount needed for each ingredient in recipe list
         originalIngredientInRecipeAmountList = new ArrayList<Double>();
 
         /* gets the information of the specific recipe being clicked inside ViewDailyMealPlanActivity
@@ -123,7 +123,8 @@ public class ViewRecipeTypeMealActivity extends AppCompatActivity implements Cus
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    // Loop through all the documents in Ingredient collection
+                                    /* Loop through all the documents in Ingredient collection to get the
+                                    ingredient in recipe list and their original amount being needed */
                                     for (QueryDocumentSnapshot doc : task.getResult()) {
                                         String briefDescription = (String) doc.getData().get("Brief Description");
                                         Double amount = (Double) doc.getData().get("Amount");
@@ -136,7 +137,6 @@ public class ViewRecipeTypeMealActivity extends AppCompatActivity implements Cus
                                         originalIngredientInRecipeAmountList.add(amount);
                                     }
                                     ingredientInRecipeArrayAdapter.notifyDataSetChanged();
-                                    Log.d(TAG, "Get all information");
 
                                     // scales the ingredient amounts to be displayed
                                     scaleIngredientAmounts(originalNumberOfServings, originalCustomizedNumberOfServings);
@@ -181,7 +181,7 @@ public class ViewRecipeTypeMealActivity extends AppCompatActivity implements Cus
             finish();
         });
 
-        // sets commit button to update the customized number of servings
+        // sets commit button to update the customized number of servings of the meal
         commitButton.setOnClickListener((View v) -> {
             Intent returnIntent = new Intent();
             String currentCustomizedNumberOfServings = numberOfServingsEditText.getText().toString();
@@ -200,7 +200,8 @@ public class ViewRecipeTypeMealActivity extends AppCompatActivity implements Cus
     }
 
     /**
-     * This method gets the new customized number of servings set by user inside CustomizeNumberOfServingsFragment.
+     * This method gets the new customized number of servings set by user inside CustomizeNumberOfServingsFragment
+     * and scales the ingredients in recipe based on it.
      * @param newCustomizedNumberOfServings the newly customized number of servings of type {@link String}
      */
     public void onConfirmPressed(String newCustomizedNumberOfServings) {
@@ -209,7 +210,7 @@ public class ViewRecipeTypeMealActivity extends AppCompatActivity implements Cus
     }
 
     /**
-     * This method updates the amount of each ingredient that is needed by the recipe.
+     * This method scales the ingredients needed in recipe and updates it to data list for displaying purpose.
      * @param originalNumberOfServings the original number of servings that belongs to the recipe that is of type {@link Integer}
      * @param customizedNumberOfServings the customized number of servings entered by user that is of type {@link Integer}
      */

@@ -38,6 +38,8 @@
     <string name="customize_number_of_servings_header">Enter number of servings to prepare for:</string>
     <string name="original_number_of_servings_hint_header">Original number of servings in recipe:</string>
     <string name="original_number_of_servings_hint_text">Original Number of Servings</string>
+    <string name="original_amount_hint_header">Amount currently stored in ingredient storage:</string>
+    <string name="original_amount_hint_text">Amount currently stored in ingredient storage</string>
 
     <string-array name="ingredient_categories">
         <item></item>

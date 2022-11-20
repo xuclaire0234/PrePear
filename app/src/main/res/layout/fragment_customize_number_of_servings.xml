@@ -30,7 +30,7 @@
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="number"
-            android:maxLength="3"
+            android:maxLength="5"
             android:textSize="14sp" />
 
         <TextView

@@ -120,7 +120,7 @@ android {
     }
     defaultConfig {
         applicationId "com.example.prepear"
-        minSdkVersion 21
+        minSdkVersion 26
         multiDexEnabled true
         targetSdkVersion 33
         versionCode 1

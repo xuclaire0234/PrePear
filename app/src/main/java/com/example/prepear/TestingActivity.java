@@ -21,20 +21,17 @@ public class TestingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testing);
 
-
+        /*
         Meal meal = new Meal("Recipe", "20221029_215342");
         meal.setCustomizedNumberOfServings(6);
         dailyMealPlan = new DailyMealPlan("2022-11-14", meal);
 
-        /*
-        dailyMealPlan = new DailyMealPlan();
-        dailyMealPlan.setCurrentDailyMealPlanDate("2022-11-14");
+         */
+
         Meal meal = new Meal("Ingredient", "2022-11-18 00:19:14");
         meal.setCustomizedAmount(6);
-        ArrayList<Meal> arrayList = new ArrayList<>();
-        arrayList.add(meal);
-        dailyMealPlan.setDailyMealDataList(arrayList);
-         */
+        dailyMealPlan = new DailyMealPlan("2022-11-14", meal);
+
 
         Button button = findViewById(R.id.button1);
         button.setOnClickListener((View v) -> {
