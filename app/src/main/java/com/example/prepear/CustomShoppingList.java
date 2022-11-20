@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> implements ShoppingListClickboxFragment.OnFragmentInteractionListener {
     private ArrayList<IngredientInRecipe> ingredientsInShoppingList;
@@ -41,6 +43,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
         IngredientInRecipe ingredientInShoppingList = ingredientsInShoppingList.get(position);
 
         /* connects the the layout with the views */
+        ListView ingredientInShoppingListView = view.findViewById(R.id.ingredient_listview);
         TextView briefDescriptionTextView = view.findViewById(R.id.brief_description_TextView_shopping);
         TextView amountTextView = view.findViewById(R.id.amount_TextView_shopping);
         TextView unitTextView = view.findViewById(R.id.unit_TextView_shopping);
@@ -73,6 +76,16 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
                 shoppingListCheckBox.setChecked(true);
 
 
+            }
+        });
+        // sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
+        ingredientInShoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentActivity activity = (FragmentActivity)(context);
+                FragmentManager fm = activity.getSupportFragmentManager();
+                ShoppingListViewIngredientFragment.newInstance(ingredientInShoppingList)
+                        .show(fm, "ADD_INGREDIENT_DETAILS");
             }
         });
         return view;

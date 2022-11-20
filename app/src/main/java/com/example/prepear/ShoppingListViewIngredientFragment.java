@@ -46,10 +46,10 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
     /**
      * This method creates a new instance of ShoppingListViewIngredient so user can view
      * the ingredient in given time period of shopping list
-     * @param ingredient {@link IngredientInStorage} that the user clicked on
+     * @param ingredient {@link IngredientInRecipe} that the user clicked on
      * @return fragment the newly created fragment
      */
-    static ShoppingListViewIngredientFragment newInstance(IngredientInStorage ingredient) {
+    static ShoppingListViewIngredientFragment newInstance(IngredientInRecipe ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
         ShoppingListViewIngredientFragment fragment = new ShoppingListViewIngredientFragment();
@@ -79,7 +79,7 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
 
         // getting attributes from ingredient
         Bundle bundle = getArguments();
-        IngredientInStorage ingredient = (IngredientInStorage) bundle.getSerializable("ingredient");
+        IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
         amountText.setText(ingredient.getAmountString());
         unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));;

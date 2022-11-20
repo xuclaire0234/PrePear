@@ -161,7 +161,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Details For Ingredient");
         builder.setView(view);
-        
+
         // set date picker dialog for bestBeforeDate
         String actualAmount = actualAmountEditText.getText().toString();
         String bestBeforeDate = bestBeforeDateEditText.getText().toString();
@@ -180,9 +180,9 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                // On below parts:
-                                // set the day of month , the month of year and the year value in the edit text
-                                // if-conditional statement helps to regulate the format of yyyy-mm-dd.
+                                /* On below parts:
+                                 set the day of month , the month of year and the year value in the edit text
+                                 if-conditional statement helps to regulate the format of yyyy-mm-dd. */
                                 if (monthOfYear < 9 && dayOfMonth < 10) {
                                     bestBeforeDateString = year + "-" + "0" + (monthOfYear + 1) +
                                             "-" + "0" + dayOfMonth;
@@ -200,7 +200,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                             }
                         }, currentYear, currentMonth, currentDay);
                 dialog.show();
-                /* Temporarily remove keyboards before displaying the dialog */
+                // Temporarily remove keyboards before displaying the dialog
                 removeKeyboard();
             }
         });
@@ -217,13 +217,12 @@ public class ShoppingListClickboxFragment extends DialogFragment {
 //                    ingredient.setAmountValue(Double.parseDouble(actualAmount));
 //                    ingredient.setBestBeforeDate(bestBeforeDate);
 //                    ingredient.setLocation(location);
-            //listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
         }
         builder.setNegativeButton("Cancel", null);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                // listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
             }
         });
         return builder.create();
