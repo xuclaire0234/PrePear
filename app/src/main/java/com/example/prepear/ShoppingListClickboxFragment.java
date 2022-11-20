@@ -35,15 +35,13 @@ import javax.annotation.Nullable;
 
 public class ShoppingListClickboxFragment extends DialogFragment {
     // declare variables
-    private ArrayAdapter<CharSequence> unitSpinnerAdapter;
-    private ArrayAdapter<CharSequence> categorySpinnerAdapter;
     private ArrayAdapter<CharSequence> locationSpinnerAdapter;
     private TextView descriptionText;
     private TextView amountText;
-    private Spinner unitSpinner;
+    private TextView unitText;
     private TextView unitEditText;
     private LinearLayout newUnitLinearLayout;
-    private Spinner categorySpinner;
+    private TextView categoryText;
     private LinearLayout newLocationLinearLayout;
     private TextView descriptionWordCount;
     private TextView amountWordCount;
@@ -61,7 +59,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @see
      */
     public interface OnFragmentInteractionListener {
-        void onOkPressed(IngredientInStorage ingredientInStorage);
+        //void onOkPressed(IngredientInStorage ingredientInStorage);
     }
     /**
      * This method creates a new instance of ShoppingListClickboxFragment so user can add
@@ -69,7 +67,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @param ingredient {@link IngredientInStorage} that the user clicked on
      * @return fragment the newly created fragment
      */
-    static ShoppingListClickboxFragment newInstance(IngredientInRecipe ingredient) {
+    public static ShoppingListClickboxFragment newInstance(IngredientInRecipe ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
         ShoppingListClickboxFragment fragment = new ShoppingListClickboxFragment();
@@ -109,10 +107,8 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
         descriptionText = view.findViewById(R.id.brief_description);
         amountText = view.findViewById(R.id.ingredient_amount);
-        unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
-        unitEditText = view.findViewById(R.id.new_ingredient_unit_edit_text);
-        newUnitLinearLayout = view.findViewById(R.id.new_unit_linear_layout);
-        categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
+        unitText = view.findViewById(R.id.ingredient_unit);
+        categoryText = view.findViewById(R.id.ingredient_category);
         locationEditText = view.findViewById(R.id.new_ingredient_category_edit_text);
         newLocationLinearLayout = view.findViewById(R.id.new_ingredient_location_linear_layout);
         descriptionWordCount = view.findViewById(R.id.description_word_count);
@@ -127,8 +123,8 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
         amountText.setText(ingredient.getAmountString());
-        unitSpinner.setSelection(unitSpinnerAdapter.getPosition(ingredient.getUnit()));;
-        categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredient.getIngredientCategory()));
+        unitText.setText(ingredient.getUnit());
+        categoryText.setText(ingredient.getIngredientCategory());
 
         // set up the location spinner
         locationSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.locations,
@@ -233,7 +229,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     ingredient.setAmountValue(Double.parseDouble(actualAmount));
                     ingredient.setBestBeforeDate(bestBeforeDate);
                     ingredient.setLocation(location);
-                    listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
+                    //listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
                 }
                 if (wantToCloseDialog) {
                     d.dismiss();

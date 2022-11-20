@@ -348,9 +348,9 @@ public class ShoppingListFragment extends Fragment implements ShoppingListClickb
 //                });
 //    }
 
-    @Override
-    public void onOkPressed(IngredientInStorage ingredientInStorage) {
-
-    }
+//    @Override
+//    public void onOkPressed(IngredientInStorage ingredientInStorage) {
+//
+//    }
 }
 
