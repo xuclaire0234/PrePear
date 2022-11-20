@@ -60,7 +60,11 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        callback = (RecipeOnCallbackReceived) activity;
+        try {
+            callback = (RecipeOnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

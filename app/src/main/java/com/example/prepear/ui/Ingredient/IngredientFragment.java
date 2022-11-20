@@ -69,7 +69,11 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        callback = (IngredientOnCallbackReceived) activity;
+        try {
+            callback = (IngredientOnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
