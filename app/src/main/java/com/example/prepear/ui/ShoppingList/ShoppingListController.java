@@ -68,7 +68,7 @@ public class ShoppingListController {
         }
     }
 
-    public void reverse() {
+    public void reverseOrder() {
         Collections.reverse(this.ingredients);
     }
 }

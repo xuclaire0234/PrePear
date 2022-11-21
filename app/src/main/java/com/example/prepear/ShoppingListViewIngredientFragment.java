@@ -68,7 +68,7 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.shopping_list_view_ingredient_details, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
-        descriptionText = view.findViewById(R.id.description_edit_text);
+        descriptionText = view.findViewById(R.id.brief_description);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
         unitEditText = view.findViewById(R.id.new_ingredient_unit_edit_text);

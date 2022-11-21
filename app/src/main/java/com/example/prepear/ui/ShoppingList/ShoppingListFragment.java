@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prepear.ComputeShoppingList;
 import com.example.prepear.CustomShoppingList;
@@ -104,8 +105,8 @@ public class ShoppingListFragment extends Fragment {
         sortOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ingredientShoppingList.reverse();
-//                ingredientShoppingListAdapter.notifyDataSetChanged();
+                ingredientShoppingList.reverseOrder();
+                ingredientShoppingListAdapter.notifyDataSetChanged();
             }
         });
 
