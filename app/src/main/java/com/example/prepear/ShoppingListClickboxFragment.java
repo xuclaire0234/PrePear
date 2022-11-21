@@ -14,12 +14,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -28,10 +29,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -101,6 +106,10 @@ public class ShoppingListClickboxFragment extends DialogFragment {
 //        }
 //    }
 
+    final String TAG = "Ingredient Storage";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    final CollectionReference collectionReference = db.collection("Ingredient Storage");
+
     /**
      * This method creates the add ingredient fragment if the user input is valid
      * and sets errors if the input is invalid
@@ -128,6 +137,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         bestBeforeDateEditText = view.findViewById(R.id.best_before_date);
         locationEditText = view.findViewById(R.id.new_ingredient_location_edit_text);
         locationSpinner = view.findViewById(R.id.ingredient_location);
+        CheckBox shoppingListCheckBox = view.findViewById(R.id.ingredient_in_shopping_list_CheckBox);
 
         // getting attributes from ingredient and display it on fragment
         Bundle bundle = getArguments();
@@ -219,10 +229,53 @@ public class ShoppingListClickboxFragment extends DialogFragment {
 //                    ingredient.setLocation(location);
         }
         builder.setNegativeButton("Cancel", null);
+        String finalLocation = location;
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
+                // Loop through all the documents in the collection named "Recipes"
+                collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
+                            FirebaseFirestoreException error) {
+                        String description = ingredient.getBriefDescription();
+                        // Loop through all the documents in the collection named "Recipes"
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Log.d(TAG, String.valueOf(doc.getData().get("description"))); // Set an error message
+
+                            // Get description and category attributes
+                            String descriptionIngredientInStorage = (String) doc.getData().get("description");
+                            String ingredientIconCode = (String) doc.getData().get("icon code");
+                            String ingredientId = doc.getId();
+
+                            // if ingredient is also in Ingredient Storage, auto-fill category with existing attribute
+                            if (descriptionIngredientInStorage.equals(description)) {
+                                db
+                                        .collection("Ingredient Storage")
+                                        .document(ingredientId)
+                                        .update("description", description,
+                                        "category", ingredient.getIngredientCategory(),
+                                        "bestBeforeDate", bestBeforeDate,
+                                        "amount", actualAmount,
+                                        "unit", ingredient.getUnit(),
+                                        "icon code",ingredientIconCode,
+                                        "location", finalLocation);
+
+                                Toast.makeText(getActivity().getApplicationContext(),
+                                        "Ingredient in storage has been updated",
+                                        Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    }
+                });
+                if (Double.parseDouble(actualAmount) >= ingredient.getAmountValue()) {
+                    shoppingListCheckBox.setChecked(true);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Actual amount is less than needed amount.",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
         return builder.create();

@@ -69,11 +69,9 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
                  */
                 FragmentActivity activity = (FragmentActivity)(context);
                 FragmentManager fm = activity.getSupportFragmentManager();
-                //ShoppingListClickboxFragment alertDialog = new ShoppingListClickboxFragment();
-                //alertDialog.newInstance(ingredientInShoppingList).show(fm, "ingredient");
                 ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
                         .show(fm, "ADD_INGREDIENT_DETAILS");
-                shoppingListCheckBox.setChecked(true);
+                // shoppingListCheckBox.setChecked(true);
 
 
             }
@@ -84,8 +82,8 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentActivity activity = (FragmentActivity)(context);
                 FragmentManager fm = activity.getSupportFragmentManager();
-                ShoppingListViewIngredientFragment.newInstance(ingredientInShoppingList)
-                        .show(fm, "ADD_INGREDIENT_DETAILS");
+                ShoppingListViewIngredientFragment.newInstance(ingredientsInShoppingList.get(position))
+                        .show(fm, "VIEW_INGREDIENT");
             }
         });
         return view;
