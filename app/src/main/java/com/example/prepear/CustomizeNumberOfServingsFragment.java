@@ -28,7 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- *  This class defines the customize number of servings activity that allows user to edit the number
+ *  This class defines the customize num
+ *  ber of servings activity that allows user to edit the number
  *  of servings.
  */
 public class CustomizeNumberOfServingsFragment extends DialogFragment {

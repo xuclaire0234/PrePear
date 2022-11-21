@@ -19,7 +19,6 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
     // On below part: initialize activity class attributes
     private String currentDailyMealPlanDate; // storing current daily meal plan's date
     private ArrayList<Meal> dailyMealDataList; // contains all meals inside this current daily meal plan
-    private DailyMealPlan dailyMealPlan; //
     private ArrayAdapter<Meal> dailyMealArrayAdapter; // initialize a customized ArrayAdapter for future use
     private DatabaseController databaseController;
     private final String DAILY_MEAL_PLAN_COLLECTION_NAME = "Daily Meal Plans";
@@ -29,11 +28,12 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_daily_meal_plan);
 
-        DailyMealPlan clickedDailyMealPlan = (DailyMealPlan) getIntent().getSerializableExtra("clicked daily meal plan");
+        DailyMealPlan clickedDailyMealPlan = (DailyMealPlan) getIntent().getSerializableExtra("selected daily meal plan");
         currentDailyMealPlanDate = clickedDailyMealPlan.getCurrentDailyMealPlanDate();
+        dailyMealDataList = clickedDailyMealPlan.getDailyMealDataList();
         Button addDailyMealButton = findViewById(R.id.add_daily_meal_button); // used to add a new meal in when clicking
         ListView dailyMealListView = findViewById(R.id.daily_meals_listView); // display the meal items
-        dailyMealArrayAdapter = new DailyMealPlanCustomList(getApplicationContext(), dailyMealPlan.getDailyMealDataList());
+        dailyMealArrayAdapter = new DailyMealPlanCustomList(getApplicationContext(), dailyMealDataList);
         dailyMealListView.setAdapter(dailyMealArrayAdapter);
         FirebaseFirestore appDatabase = FirebaseFirestore.getInstance(); // instantiate
 
@@ -42,6 +42,7 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent addMealIntent = new Intent(ViewDailyMealPlanActivity.this, AddDailyMealActivity.class);
+                addMealIntent.putExtra("current daily meal plan", clickedDailyMealPlan);
                 startActivity(addMealIntent);
             }
         });
@@ -50,7 +51,7 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Meal clickedMeal = (Meal) dailyMealArrayAdapter.getItem(position);
-                
+
             }
         });
     }

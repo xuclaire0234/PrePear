@@ -16,13 +16,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
@@ -58,22 +63,37 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         String mealDocumentID = meal.getDocumentID();
         DocumentReference mealDocRef;
         if (Objects.equals(meal.getMealType(), "IngredientInStorage")) { // if meal type is an in-storage ingredient
+//            mealDocRef = db.collection("Ingredient Storage").document(mealDocumentID);
+//            mealDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                @Override
+//                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                    // On below part: set the current meal item's name TextView
+//                    String mealName = (String) documentSnapshot.getData().get("description");
+//                    mealTitle.setText(mealName);
+//                    // On below part: display the current meal item's image/icon based on its meal type
+////                    long mealIconCode = (long) documentSnapshot.getData().get("icon code");
+//                    mealPicture.setImageResource(((Long) documentSnapshot.getData().get("icon code")).intValue());
+//                    mealPicture.setVisibility(View.VISIBLE);
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Log.d(TAG, "onFailure: " + e.getMessage());
+//                }
+//            });
             mealDocRef = db.collection("Ingredient Storage").document(mealDocumentID);
-            mealDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            mealDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    // On below part: set the current meal item's name TextView
-                    String mealName = (String) documentSnapshot.get("description");
-                    mealTitle.setText(mealName);
-                    // On below part: display the current meal item's image/icon based on its meal type
-                    int mealIconCode = (Integer) documentSnapshot.get("icon code");
-                    mealPicture.setImageResource(mealIconCode);
-                    mealPicture.setVisibility(View.VISIBLE);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "onFailure: " + e.getMessage());
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot.exists()) {
+                            String mealName = (String) documentSnapshot.getData().get("description");
+                            mealTitle.setText(mealName);
+                            int mealIconCode = ((Long)documentSnapshot.getData().get("icon code")).intValue();
+                            mealPicture.setImageResource(mealIconCode);
+                        }
+                    }
                 }
             });
         } else if (Objects.equals(meal.getMealType(), "Recipe")) { // if
@@ -82,11 +102,13 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     // On below part: set the current meal item's name TextView
-                    String mealName = (String) documentSnapshot.get("Title");
+                    String mealName = (String) documentSnapshot.getData().get("Title");
                     mealTitle.setText(mealName);
                     // On below part: display the current meal item's image/icon based on its meal type
-                    String mealImageURI = (String) documentSnapshot.get("icon code");
+                    String mealImageURI = (String) documentSnapshot.getData().get("Image URI");
                     mealPicture.setImageURI(Uri.parse(mealImageURI));
+//                    Glide.with(ViewDailyMealPlanActivity)
+//                            .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
                     mealPicture.setVisibility(View.VISIBLE);
                 }
             }).addOnFailureListener(new OnFailureListener() {

@@ -15,9 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:layout_marginEnd="52dp"
+            android:layout_marginEnd="48dp"
             android:text="TextView"
-            android:textSize="16sp"
+            android:textSize="19sp"
             app:layout_constraintEnd_toStartOf="@+id/eaten_cooked_status_checkBox"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,10 +40,9 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="59dp"
             app:layout_constraintEnd_toStartOf="@+id/meal_name_textView"
-            app:layout_constraintHorizontal_bias="0.721"
+            app:layout_constraintHorizontal_bias="0.705"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:mipmap/sym_def_app_icon"
-            tools:visibility="invisible" />
+            app:srcCompat="@android:mipmap/sym_def_app_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

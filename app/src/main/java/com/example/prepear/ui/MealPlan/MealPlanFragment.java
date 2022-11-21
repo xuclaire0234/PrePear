@@ -129,33 +129,38 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
             if (resultCode == Activity.RESULT_OK){
                 Integer counter =  Integer.valueOf(data.getSerializableExtra("counter").toString());
                 int size = mealPlanController.getSize();
-                for (int i = 1; i <= counter; i++){
+                for (int i = 1; i <= counter; i++){// for each daily meal plan
                     DailyMealPlan mealToAdd = (DailyMealPlan) data.getSerializableExtra("meal"+i);
                     if (mealPlanController.getSize() == 0){
                         mealPlanController.addMealPlan(mealToAdd);
+                        Log.d("tag", mealToAdd.getDailyMealDataList().get(0).getMealType());
                         mealPlanAdapter.notifyDataSetChanged();
                     }else {
-                        for (int j = 0; j < size; j++) {
+                        for (int j = 0; j < size; j++) {// compare the new meal plan date with the existing ones
                             if (mealPlanController.getMealPlan(j).getCurrentDailyMealPlanDate().matches(mealToAdd.getCurrentDailyMealPlanDate())) {
                                 DailyMealPlan duplicateDay = mealPlanController.getMealPlan(j);
-                                for (int k = 0; k < duplicateDay.getDailyMealDataList().size(); k++){
+                                for (int k = 0; k < duplicateDay.getDailyMealDataList().size(); k++){// if there is a matching date, compare the documentID of each
+                                    // meal plan with the document ID of the new meal plan
                                     if (duplicateDay.getDailyMealDataList().get(k).getDocumentID().matches(mealToAdd.getDailyMealDataList().get(0).getDocumentID())
-                                    && mealToAdd.getDailyMealDataList().get(0).getMealType().matches("IngredientInStorage")){
-                                        Double initialScalingNumber = duplicateDay.getDailyMealDataList().get(k).getCustomizedAmount();
+                                            && mealToAdd.getDailyMealDataList().get(0).getMealType().matches("IngredientInStorage")){
+                                        // if document ID matches, and the daily meal plan type is ingredient, add the amounts into one
+                                        double initialScalingNumber = duplicateDay.getDailyMealDataList().get(k).getCustomizedAmount();
                                         mealPlanController.getMealPlan(j).getDailyMealDataList().get(k).setCustomizedAmount(initialScalingNumber +
                                                 mealToAdd.getDailyMealDataList().get(0).getCustomizedAmount());
-                                        mealToAdd = null;
+                                        mealToAdd = null; // set daily meal plan to null (use this to check if its added to the list later)
                                         break;
                                     }
                                 }
-                                if (mealToAdd != null){
+                                if (mealToAdd != null){ // means that daily meal plan isn't added to the list either because the document ID
+                                    // don't match or because the meal type is recipe
                                     mealPlanController.getMealPlan(j).getDailyMealDataList().add(mealToAdd.getDailyMealDataList().get(0));
+                                    // the meal plan date matches an existing date, so add meal plan to the array list of the existing meal plan
                                     mealToAdd = null;
                                     break;
                                 }
-                                }
                             }
-                        if (mealToAdd != null){
+                        }
+                        if (mealToAdd != null){// means that the meal plan date does not match any date in the list
                             mealPlanController.addMealPlan(mealToAdd);
                             mealPlanAdapter.notifyDataSetChanged();
                         }
@@ -165,8 +170,8 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                 //do nothing
             }
         }else{
-                // do nothing
-            }
+            // do nothing
+        }
     }
 
     @Override
