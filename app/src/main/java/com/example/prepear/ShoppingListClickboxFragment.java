@@ -253,6 +253,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                             String descriptionIngredientInStorage = (String) doc.getData().get("description");
                             int ingredientIconCode = Integer.parseInt(doc.getData().get("icon code").toString());
                             String ingredientId = (String) doc.getData().get("document id");
+                            double finalActualAmount = Double.parseDouble(actualAmount);
 
                             // if ingredient is also in Ingredient Storage, update value
                             if (descriptionIngredientInStorage.equals(description)) {
@@ -262,7 +263,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                         .update("description", description,
                                         "category", ingredient.getIngredientCategory(),
                                         "bestBeforeDate", bestBeforeDateString,
-                                        "amount", actualAmount,
+                                        "amount", finalActualAmount,
                                         "unit", ingredient.getUnit(),
                                         "icon code",ingredientIconCode,
                                         "location", finalLocation);
