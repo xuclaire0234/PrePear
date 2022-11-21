@@ -1,8 +1,5 @@
 package com.example.prepear.ui.Ingredient;
 
-import static android.content.Intent.getIntent;
-import static android.content.Intent.getIntentOld;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,15 +17,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.example.prepear.AddDailyMealActivity;
+import com.example.prepear.AddDailyMealConfirmationFragment;
 import com.example.prepear.AddEditIngredientActivity;
-import com.example.prepear.AddEditIngredientFragment;
 import com.example.prepear.AddMealPlanActivity;
 import com.example.prepear.ConfirmationDialog;
 import com.example.prepear.IngredientController;
 import com.example.prepear.IngredientInStorage;
 import com.example.prepear.IngredientStorageCustomList;
 import com.example.prepear.R;
-import com.example.prepear.Recipe;
 import com.example.prepear.databinding.FragmentIngredientBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,8 +41,9 @@ import java.util.ArrayList;
  */
 public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener {
     private Integer positionOfItemClicked;
-    IngredientOnCallbackReceived callback;
+    private IngredientOnCallbackReceived callback;
     private FragmentIngredientBinding binding;
+    private IngredientTypeMealChoiceReceiver ingredientTypeMealChoiceReceiver;
     int LAUNCH_ADD_INGREDIENT_ACTIVITY = 1;
     int LAUNCH_EDIT_INGREDIENT_ACTIVITY = 2;
     private ListView ingredientStorageList; // for displaying all added in-storage ingredients
@@ -66,11 +64,16 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
         void addIngredientTypeMeal(IngredientInStorage selectedIngredient);
     }
 
+    public interface IngredientTypeMealChoiceReceiver{
+        void addIngredientTypeMealInDailyMealPlan(IngredientInStorage clickedIngredient);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             callback = (IngredientOnCallbackReceived) activity;
+            ingredientTypeMealChoiceReceiver = (IngredientTypeMealChoiceReceiver) activity;
         } catch (ClassCastException e) {
 
         }
@@ -120,7 +123,12 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
                     confirmationDialog.setTargetFragment(IngredientFragment.this, 0);
                     confirmationDialog.show(getFragmentManager(), "confirm selection");
                 }
-                else {
+                else if (getActivity() instanceof AddDailyMealActivity) {
+                    positionOfItemClicked = position;
+                    DialogFragment addDailyMealConfirmationFragment = new AddDailyMealConfirmationFragment();
+                    addDailyMealConfirmationFragment.setTargetFragment(IngredientFragment.this, 0);
+                    addDailyMealConfirmationFragment.show(getFragmentManager(), "Daily Meal Addition Confirmation");
+                } else {
                     // Grab the clicked item out of the ListView
                     Object clickedItem = ingredientStorageList.getItemAtPosition(position);
                     // Casting this clicked item to IngredientInStorage type from Object type
@@ -270,11 +278,22 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
         callback.addIngredientTypeMeal(null);
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(null);
+    }
+
+    @Override
+    public void onOkPressed() {
+        Object clickedItem = ingredientStorageList.getItemAtPosition(positionOfItemClicked);
+        IngredientInStorage clickedIngredient = (IngredientInStorage) clickedItem;
+        ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(clickedIngredient);
     }
 
 }

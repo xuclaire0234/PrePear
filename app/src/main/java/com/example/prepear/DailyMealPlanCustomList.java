@@ -105,10 +105,11 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                     String mealName = (String) documentSnapshot.getData().get("Title");
                     mealTitle.setText(mealName);
                     // On below part: display the current meal item's image/icon based on its meal type
-                    String mealImageURI = (String) documentSnapshot.getData().get("Image URI");
-                    mealPicture.setImageURI(Uri.parse(mealImageURI));
-//                    Glide.with(ViewDailyMealPlanActivity)
-//                            .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
+                    //String mealImageURI = (String) documentSnapshot.getData().get("Image URI");
+                    // mealPicture.setImageURI(Uri.parse(mealImageURI));
+                    Glide.with(getContext())
+                            .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
+                    Log.d(TAG, (String) documentSnapshot.getData().get("Image URI"));
                     mealPicture.setVisibility(View.VISIBLE);
                 }
             }).addOnFailureListener(new OnFailureListener() {

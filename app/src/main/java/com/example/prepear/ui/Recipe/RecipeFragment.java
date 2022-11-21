@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.example.prepear.AddDailyMealActivity;
+import com.example.prepear.AddDailyMealConfirmationFragment;
 import com.example.prepear.AddEditRecipeActivity;
 import com.example.prepear.AddMealPlanActivity;
 import com.example.prepear.ConfirmationDialog;
@@ -40,7 +42,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener{
-    RecipeOnCallbackReceived callback;
+    private RecipeOnCallbackReceived callback;
+    private RecipeTypeMealChoiceReceiver recipeTypeMealChoiceReceiver;
     Integer positionOfItemClicked;
     private FragmentRecipeBinding binding;
     ListView recipeList;
@@ -57,11 +60,17 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
     public interface RecipeOnCallbackReceived {
         public void addRecipeTypeMeal(Recipe selectedRecipe);
     }
+
+    public interface RecipeTypeMealChoiceReceiver{
+        public void addRecipeTypeMealInDailyMealPlan(Recipe clickedRecipe);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             callback = (RecipeOnCallbackReceived) activity;
+            recipeTypeMealChoiceReceiver = (RecipeTypeMealChoiceReceiver) activity;
         } catch (ClassCastException e) {
 
         }
@@ -150,7 +159,11 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
                     DialogFragment confirmationDialog = new ConfirmationDialog();
                     confirmationDialog.setTargetFragment(RecipeFragment.this, 0);
                     confirmationDialog.show(getFragmentManager(), "confirm selection");
-                }else {
+                } else if (getActivity() instanceof AddDailyMealActivity) {
+                    DialogFragment confirmationFragment = new AddDailyMealConfirmationFragment();
+                    confirmationFragment.setTargetFragment(RecipeFragment.this, 0);
+                    confirmationFragment.show(getFragmentManager(), "Recipe Type Meal Addition Confirmation");
+                } else {
                     recipePosition = i;
                     Recipe viewedRecipe = recipeAdapter.getItem(i);
                     Intent intent = new Intent(getActivity(), ViewRecipeActivity.class);
@@ -292,6 +305,18 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
     @Override
     public void onCancelPressed() {
         callback.addRecipeTypeMeal(null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        recipeTypeMealChoiceReceiver.addRecipeTypeMealInDailyMealPlan(null);
+    }
+
+    @Override
+    public void onOkPressed() {
+        Object clickedItem = recipeList.getItemAtPosition(positionOfItemClicked);
+        Recipe clickedRecipe = (Recipe) clickedItem;
+        recipeTypeMealChoiceReceiver.addRecipeTypeMealInDailyMealPlan(clickedRecipe);
     }
 
     @Override

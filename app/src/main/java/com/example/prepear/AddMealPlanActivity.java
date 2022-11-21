@@ -32,8 +32,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddMealPlanActivity extends AppCompatActivity implements View.OnClickListener, IngredientFragment.IngredientOnCallbackReceived, RecipeFragment.RecipeOnCallbackReceived{
-    private Integer LAUNCH_INGREDIENT_FRAGMENT = 1;
-    private Integer LAUNCH_RECIPE_FRAGMENT = 2;
     private String startDate;
     private String endDate;
     private EditText startDateView;

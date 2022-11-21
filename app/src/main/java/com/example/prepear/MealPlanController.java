@@ -12,7 +12,7 @@ public class MealPlanController {
     }
 
     public MealPlanController(){
-        this.MealPlanDataList = new ArrayList<DailyMealPlan>();
+        this.MealPlanDataList = new ArrayList<>();
     }
     public DailyMealPlan getMealPlan(int index){
         return this.MealPlanDataList.get(index);

@@ -32,6 +32,10 @@ public class ConfirmationDialog extends DialogFragment {
         void onConfirmPressed();
 
         void onCancelPressed();
+
+        void onBackPressed();
+
+        void onOkPressed();
     }
 
     /**
@@ -99,6 +103,5 @@ public class ConfirmationDialog extends DialogFragment {
                 }).create();
 
 
-        }
     }
-
+}
