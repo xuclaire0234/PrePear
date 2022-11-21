@@ -172,11 +172,6 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         title.setText("Add Details For Ingredient");
         builder.setView(view);
 
-        // set date picker dialog for bestBeforeDate
-        String actualAmount = actualAmountEditText.getText().toString();
-        String bestBeforeDate = bestBeforeDateEditText.getText().toString();
-        String location = locationSpinner.getSelectedItem().toString();
-
         bestBeforeDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,30 +210,36 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             }
         });
 
-        if (location.equals("Other")) {
-            newLocationLinearLayout.setVisibility(View.VISIBLE);
-            location = locationEditText.getText().toString();
-        }
         builder.setNegativeButton("Cancel", null);
-        String finalLocation = location;
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
                 // Loop through all the documents in the collection named "Recipes"
 
-                if (actualAmount.equals("") || bestBeforeDate.equals("") || finalLocation.equals("")) {
+                // set date picker dialog for bestBeforeDate
+                String actualAmount = actualAmountEditText.getText().toString();
+                String bestBeforeDate = bestBeforeDateEditText.getText().toString();
+                String location = locationSpinner.getSelectedItem().toString();
+
+                if (location.equals("Other")) {
+                    newLocationLinearLayout.setVisibility(View.VISIBLE);
+                    location = locationEditText.getText().toString();
+                }
+
+                if (actualAmount.equals("") || bestBeforeDate.equals("") || location.equals("")) {
                     Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                             Toast.LENGTH_LONG).show();
                 } else {
                     if (Double.parseDouble(actualAmount) >= ingredient.getAmountValue()) {
-                        shoppingListCheckBox.setChecked(true);
+                        // shoppingListCheckBox.setChecked(true);
                     } else {
                         Toast.makeText(getActivity().getApplicationContext(), "Actual amount is less than needed amount.",
                                 Toast.LENGTH_LONG).show();
                     }
                 }
 
+                String finalLocation = location;
                 collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
@@ -250,8 +251,8 @@ public class ShoppingListClickboxFragment extends DialogFragment {
 
                             // Get description and category attributes
                             String descriptionIngredientInStorage = (String) doc.getData().get("description");
-                            String ingredientIconCode = doc.getData().get("icon code").toString();
-                            String ingredientId = doc.getId();
+                            int ingredientIconCode = Integer.parseInt(doc.getData().get("icon code").toString());
+                            String ingredientId = (String) doc.getData().get("document id");
 
                             // if ingredient is also in Ingredient Storage, update value
                             if (descriptionIngredientInStorage.equals(description)) {
@@ -260,7 +261,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                         .document(ingredientId)
                                         .update("description", description,
                                         "category", ingredient.getIngredientCategory(),
-                                        "bestBeforeDate", bestBeforeDate,
+                                        "bestBeforeDate", bestBeforeDateString,
                                         "amount", actualAmount,
                                         "unit", ingredient.getUnit(),
                                         "icon code",ingredientIconCode,
