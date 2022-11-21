@@ -48,7 +48,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
 
         /* sets the detailed information to the view */
         briefDescriptionTextView.setText(ingredientInShoppingList.getBriefDescription());
-        amountTextView.setText(String.valueOf(ingredientInShoppingList.getAmountString()));
+        amountTextView.setText(String.valueOf(ingredientInShoppingList.getAmountValue()));
         unitTextView.setText(ingredientInShoppingList.getUnit());
         ingredientCategoryTextView.setText(ingredientInShoppingList.getIngredientCategory());
         shoppingListCheckBox.setChecked(false);
