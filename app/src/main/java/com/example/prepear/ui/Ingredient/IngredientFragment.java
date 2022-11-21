@@ -39,7 +39,7 @@ import java.util.ArrayList;
 /**
  * This class is an Fragment Class for displaying the all in-storage ingredients with its detailed info on a ListView
  */
-public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener {
+public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener {
     private Integer positionOfItemClicked;
     private IngredientOnCallbackReceived callback;
     private FragmentIngredientBinding binding;
@@ -182,7 +182,7 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
                                     Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("location")));
                                     Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("category")));
                                     Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("amount")));
-
+                                    Log.d(IN_STORAGE_INGREDIENTS_COLLECTION_NAME, String.valueOf(document.getData().get("icon code")));
                                     // On below part: grab the stored values inside each document with its corresponding key
                                     String documentID = document.getId();
                                     String description = (String) document.getData().get("description");

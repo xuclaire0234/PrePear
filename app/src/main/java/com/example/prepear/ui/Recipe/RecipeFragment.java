@@ -41,7 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener{
+public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener{
     private RecipeOnCallbackReceived callback;
     private RecipeTypeMealChoiceReceiver recipeTypeMealChoiceReceiver;
     Integer positionOfItemClicked;

@@ -74,9 +74,9 @@ public class AddDailyMealConfirmationFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        View view = getLayoutInflater().inflate(
-                R.layout.confirmation_dialog, null);
-        View titleView = getLayoutInflater().inflate(
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.fragment_add_daily_meal_confirmation, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(
                 R.layout.add_ingredient_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading4);
 

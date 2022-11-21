@@ -1,20 +1,26 @@
 package com.example.prepear;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prepear.ui.Ingredient.IngredientFragment;
+import com.example.prepear.ui.Recipe.RecipeFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
-public class AddDailyMealActivity extends AppCompatActivity implements IngredientFragment.IngredientTypeMealChoiceReceiver {
+public class AddDailyMealActivity extends AppCompatActivity implements IngredientFragment.IngredientTypeMealChoiceReceiver, RecipeFragment.RecipeTypeMealChoiceReceiver, View.OnClickListener {
     private String mealNameStr; //
     private DatabaseController databaseController;
     private DailyMealPlan currentDailyMealPlan;
@@ -29,12 +35,27 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
         Button pickIngredientTypeMealButton = findViewById(R.id.pick_in_storage_meal_button);
         Button pickRecipeTypeMealButton = findViewById(R.id.pick_recipe_meal_button);
         currentDailyMealPlan = (DailyMealPlan) getIntent().getSerializableExtra("current daily meal plan");
+
+        pickIngredientTypeMealButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ingredientFragmentTransition;
+                ingredientFragmentTransition = getSupportFragmentManager().beginTransaction();
+                FrameLayout frameLayout = findViewById(android.R.id.content);
+                frameLayout.removeAllViews();
+                ingredientFragmentTransition.replace(android.R.id.content, new IngredientFragment(), "selectIngredient");
+                ingredientFragmentTransition.addToBackStack(null);
+                ingredientFragmentTransition.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+        });
     }
 
     /**
      * @param clickedIngredient
      */
     public void addIngredientTypeMealInDailyMealPlan(IngredientInStorage clickedIngredient) {
+        Log.d(TAG, "addIngredientTypeMealInDailyMealPlan: Reach!!!!!!");
         setContentView(R.layout.activity_add_daily_meal);
         TextView addedMealNameTextView = findViewById(R.id.meal_name_text);
         TextInputEditText addedMealAmountEditText = findViewById(R.id.meal_amount_input);
@@ -75,7 +96,7 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
         }
     }
 
-    void addRecipeTypeMealInDailyMealPlan(Recipe clickedRecipe) {
+    public void addRecipeTypeMealInDailyMealPlan(Recipe clickedRecipe) {
         setContentView(R.layout.activity_add_daily_meal);
         TextView addedMealNameTextView = findViewById(R.id.meal_name_text);
         TextInputEditText addedMealNumberOfServingsEditText = findViewById(R.id.meal_amount_input);
@@ -114,4 +135,13 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
         }
     }
 
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+
+    }
 }
