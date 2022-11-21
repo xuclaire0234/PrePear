@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 public class ShoppingListFragment extends Fragment {
@@ -45,7 +46,7 @@ public class ShoppingListFragment extends Fragment {
     private FragmentRecipeBinding binding;
     private String startDate, endDate, newDate;
     final String[] sortItemSpinnerContent = {"  ----select----  ", "Description", "Category"};
-    private ArrayList<IngredientInRecipe> ingredientShoppingList;  // store all the ingredients needed to show in the listView
+    private ShoppingListController ingredientShoppingList;  // store all the ingredients needed to show in the listView
     private ArrayAdapter<IngredientInRecipe> ingredientShoppingListAdapter;
     private DatePickerDialog dialog;
     private IngredientInRecipe ingre;
@@ -94,16 +95,28 @@ public class ShoppingListFragment extends Fragment {
 
         // set adapter
         try {
-            ingredientShoppingListAdapter = new CustomShoppingList(this.getContext(), ingredientShoppingList);
+            ingredientShoppingList = new ShoppingListController();
+            ingredientShoppingListAdapter = new CustomShoppingList(this.getContext(), ingredientShoppingList.getIngredients());
             shoppingListView.setAdapter(ingredientShoppingListAdapter);
         } catch (NullPointerException e) {
         }
+
+        sortOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                ingredientShoppingList.reverse();
+//                ingredientShoppingListAdapter.notifyDataSetChanged();
+            }
+        });
 
 
         sortItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                if (i != 0) {
+                    ingredientShoppingList.sortIngredient(i-1);
+                    ingredientShoppingListAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -116,8 +129,8 @@ public class ShoppingListFragment extends Fragment {
         sortItemSpinner.setAdapter(ad);
 
 
-        ingredientShoppingList = new ArrayList<>();
-        ingredientShoppingListAdapter = new CustomShoppingList(getContext(), ingredientShoppingList);
+        ingredientShoppingList = new ShoppingListController();
+        ingredientShoppingListAdapter = new CustomShoppingList(getContext(), ingredientShoppingList.getIngredients());
         shoppingListView.setAdapter(ingredientShoppingListAdapter);
 
 
@@ -181,7 +194,7 @@ public class ShoppingListFragment extends Fragment {
                                     calculateShoppingList(targetDay);
                                     startDay.add(Calendar.DATE, 1);
                                     //ingredientShoppingListAdapter.notifyDataSetChanged();
-                                    Log.d("size",String.valueOf(ingredientShoppingList.size()));
+                                    Log.d("size",String.valueOf(ingredientShoppingList.countIngredients()));
                                 }
                             }catch (ParseException ex) {
                                 ex.printStackTrace();
@@ -359,8 +372,8 @@ public class ShoppingListFragment extends Fragment {
                                         boolean key = true;
 
                                         while (key) {
-                                            for (int k = 0; k < ingredientShoppingList.size(); k++) {
-                                                IngredientInRecipe ingredientForShopping = ingredientShoppingList.get(k);
+                                            for (int k = 0; k < ingredientShoppingList.countIngredients(); k++) {
+                                                IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(k);
                                                 if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
                                                     // there is an existing ingredient in ingredientInShoppingList
                                                     double exitingAmount = ingredientForShopping.getAmountValue();
@@ -385,8 +398,8 @@ public class ShoppingListFragment extends Fragment {
                                     // otherwise, update amount for that ingredient
                                     boolean anotherKey = true;
                                     while (anotherKey) {
-                                        for (int p = 0; p < ingredientShoppingList.size(); p++) {
-                                            IngredientInRecipe ingredientForShopping = ingredientShoppingList.get(p);
+                                        for (int p = 0; p < ingredientShoppingList.countIngredients(); p++) {
+                                            IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(p);
                                             if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
                                                 double exitingAmount = ingredientForShopping.getAmountValue();
                                                 double updateAmount = exitingAmount + targetIngredient.getAmountValue(); // existing amount add needed amount
@@ -412,8 +425,8 @@ public class ShoppingListFragment extends Fragment {
                             // if there is no same ingredients in the storage, just directly add into shoppingList
                             boolean updateKey = true;
                             while (updateKey) {  // this while loop helps to check if shopping has the existing ingredient
-                                for (int a = 0; a < ingredientShoppingList.size(); a++) {
-                                    IngredientInRecipe ingredientForShopping = ingredientShoppingList.get(a);
+                                for (int a = 0; a < ingredientShoppingList.countIngredients(); a++) {
+                                    IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(a);
                                     if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
                                         double exitingAmount = ingredientForShopping.getAmountValue();
                                         double updateAmount = exitingAmount + unitConvert(targetIngredient.getUnit(),targetIngredient.getAmountValue()); // existing amount add needed amount

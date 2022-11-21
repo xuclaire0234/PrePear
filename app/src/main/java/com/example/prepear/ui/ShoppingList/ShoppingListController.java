@@ -15,7 +15,7 @@ public class ShoppingListController {
         this.ingredients = new ArrayList<>();
     }
 
-    public void addIngredient(IngredientInRecipe ingredient) {
+    public void add(IngredientInRecipe ingredient) {
         this.ingredients.add(ingredient);
     }
      public void deleteRecipe(IngredientInRecipe ingredient) {
@@ -50,6 +50,7 @@ public class ShoppingListController {
     }
 
     public void sortIngredient(int sortItemRecipe) {
+        this.sortItemRecipe = sortItemRecipe;
         if (sortItemRecipe == 0) {
             Collections.sort(this.ingredients, new Comparator<IngredientInRecipe>() {
                 @Override
@@ -65,5 +66,9 @@ public class ShoppingListController {
                 }
             });
         }
+    }
+
+    public void reverse() {
+        Collections.reverse(this.ingredients);
     }
 }
