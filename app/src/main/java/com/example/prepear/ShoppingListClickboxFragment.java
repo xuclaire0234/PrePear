@@ -219,15 +219,6 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             newLocationLinearLayout.setVisibility(View.VISIBLE);
             location = locationEditText.getText().toString();
         }
-        if (actualAmount.equals("") || bestBeforeDate.equals("") || location.equals("")) {
-            Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
-                    Toast.LENGTH_LONG).show();
-        } else {
-//                    IngredientInStorage ingredient = (IngredientInStorage) bundle.getSerializable("ingredient");
-//                    ingredient.setAmountValue(Double.parseDouble(actualAmount));
-//                    ingredient.setBestBeforeDate(bestBeforeDate);
-//                    ingredient.setLocation(location);
-        }
         builder.setNegativeButton("Cancel", null);
         String finalLocation = location;
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -235,6 +226,19 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 // listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
                 // Loop through all the documents in the collection named "Recipes"
+
+                if (actualAmount.equals("") || bestBeforeDate.equals("") || finalLocation.equals("")) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    if (Double.parseDouble(actualAmount) >= ingredient.getAmountValue()) {
+                        shoppingListCheckBox.setChecked(true);
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(), "Actual amount is less than needed amount.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+
                 collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
@@ -246,10 +250,10 @@ public class ShoppingListClickboxFragment extends DialogFragment {
 
                             // Get description and category attributes
                             String descriptionIngredientInStorage = (String) doc.getData().get("description");
-                            String ingredientIconCode = (String) doc.getData().get("icon code");
+                            String ingredientIconCode = doc.getData().get("icon code").toString();
                             String ingredientId = doc.getId();
 
-                            // if ingredient is also in Ingredient Storage, auto-fill category with existing attribute
+                            // if ingredient is also in Ingredient Storage, update value
                             if (descriptionIngredientInStorage.equals(description)) {
                                 db
                                         .collection("Ingredient Storage")
@@ -262,20 +266,14 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                         "icon code",ingredientIconCode,
                                         "location", finalLocation);
 
-                                Toast.makeText(getActivity().getApplicationContext(),
-                                        "Ingredient in storage has been updated",
-                                        Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getActivity().getApplicationContext(),
+//                                        "Ingredient in storage has been updated",
+//                                        Toast.LENGTH_LONG).show();
                                 return;
                             }
                         }
                     }
                 });
-                if (Double.parseDouble(actualAmount) >= ingredient.getAmountValue()) {
-                    shoppingListCheckBox.setChecked(true);
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Actual amount is less than needed amount.",
-                            Toast.LENGTH_LONG).show();
-                }
             }
         });
         return builder.create();
