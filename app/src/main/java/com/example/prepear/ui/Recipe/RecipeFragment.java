@@ -256,7 +256,9 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
                     /*
                      * Get information of all the ingredients needed by the recipe at certain index
                      */
-                    db.collection("Recipes").document(recipeDataList.getRecipeAt(indexOfRecipe).getId()).collection("Ingredient")
+                    db.collection("Recipes")
+                            .document(recipeDataList.getRecipeAt(indexOfRecipe).getId())
+                            .collection("Ingredient")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

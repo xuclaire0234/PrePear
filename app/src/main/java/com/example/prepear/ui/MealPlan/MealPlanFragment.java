@@ -34,12 +34,21 @@ import com.example.prepear.ViewDailyMealPlanActivity;
 import com.example.prepear.ViewMealPlanActivity;
 import com.example.prepear.databinding.FragmentMealPlanBinding;
 import com.example.prepear.ui.Ingredient.IngredientFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.OnFragmentInteractionListener {
 
@@ -51,9 +60,12 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
     private final int LAUNCH_ADD_MEAL_PLAN_ACTIVITY = 1;
     private int positionOfPlanToRemove;
     private DatabaseController databaseController;
+    // On below: class constructor
     public static MealPlanFragment newInstance() {
         return new MealPlanFragment();
     }
+    private FirebaseFirestore dbMealPlanPart = FirebaseFirestore.getInstance();
+    private CollectionReference dailyMealPlansCollection = dbMealPlanPart.collection("Daily Meal Plans");
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -68,9 +80,64 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
         // On below: Grab the ListView object for use
         mealPlanList = view.findViewById(R.id.meal_plan_listview);
         // On below: initialize the used-defined ArrayAdapter for use
+        dailyMealPlansCollection
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        mealPlanDataList.clear();
+                        if (task.isSuccessful()) {
+                            // On below part: continually updating and retrieve data from "Daily Meal Plans" Collection to local after a update in database
+                            // On below line: use for-loop traverse through every document(stores every daily meal plan detailed information)
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    // On below part: grab the stored values inside each document with its corresponding key
+                                    String currentDailyMealPlanDate = document.getId();
+
+                                    // On below line: use retrieved data from document and build a new daily meal plan entry,
+                                    // then add locally into the Meal Plan Data List
+                                    mealPlanDataList.add(new DailyMealPlan(currentDailyMealPlanDate));
+                                    // Notifying the adapter to render any new data fetched from the cloud
+                                    mealPlanAdapter.notifyDataSetChanged();
+                                } else {
+                                    Log.d("This document", "onComplete: DNE! ");
+                                }
+                            }
+                        }
+                    }
+                });
+        for (DailyMealPlan dailyMealPlan: mealPlanDataList) {
+            dbMealPlanPart
+                    .collection("Daily Meal Plans")
+                    .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+                    .collection("Meals")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            dailyMealPlan.emptyDailyMealDataList();
+                            for (QueryDocumentSnapshot documentSnapshot: value) {
+                                String documentID = (String) documentSnapshot.getData().get("Document ID");
+                                String mealType = (String) documentSnapshot.getData().get("Meal Type");
+                                if (Objects.equals(mealType, "IngredientInStorage")) {
+                                    double customizedMealAmount = (double) documentSnapshot.getData().get("Customized Scaling Number");
+                                    Meal currentMeal = new Meal(mealType,documentID);
+                                    currentMeal.setCustomizedAmount(customizedMealAmount);
+                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
+                                } else if (Objects.equals(mealType, "Recipe")) {
+                                    int customizedMealNumberOfServings = (int) documentSnapshot.getData().get("Customized Scaling Number");
+                                    Meal currentMeal = new Meal(mealType,documentID);
+                                    currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
+                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
+                                }
+                            }
+                        }
+                    });
+
+        }
         mealPlanAdapter = new MealPlanCustomList(this.getContext(), mealPlanDataList);
         // On below: build a connection between the meal plan data list and the ArrayAdapter
         mealPlanList.setAdapter(mealPlanAdapter);
+        mealPlanAdapter.notifyDataSetChanged();
         databaseController = new DatabaseController();
         // On below: grab the ingredient addition button for use
         final FloatingActionButton addMealPlanButton = view.findViewById(R.id.add_meal_plan_button);

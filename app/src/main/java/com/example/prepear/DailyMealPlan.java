@@ -21,6 +21,10 @@ public class DailyMealPlan implements Serializable {
         this.dailyMealDataList = new ArrayList<>();
         dailyMealDataList.add(firstMeal);
     }
+    public DailyMealPlan (String currentDailyMealPlanDate) {
+        this.currentDailyMealPlanDate = currentDailyMealPlanDate;
+        this.dailyMealDataList = new ArrayList<>();
+    }
 
     /**
      * @return all meals inside this one-day daily meal plan
@@ -50,5 +54,7 @@ public class DailyMealPlan implements Serializable {
         this.currentDailyMealPlanDate = currentDailyMealPlanDate;
     }
 
-
+    public void emptyDailyMealDataList(){
+        this.dailyMealDataList.clear();
+    }
 }
