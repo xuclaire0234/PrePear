@@ -1,7 +1,11 @@
 package com.example.prepear;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -10,16 +14,25 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> implements ShoppingListClickboxFragment.OnFragmentInteractionListener {
+public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
     private ArrayList<IngredientInRecipe> ingredientsInShoppingList;
     private Context context;
 
@@ -71,9 +84,39 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
                 FragmentManager fm = activity.getSupportFragmentManager();
                 ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
                         .show(fm, "ADD_INGREDIENT_DETAILS");
-                // shoppingListCheckBox.setChecked(true);
 
+                final String TAG = "Ingredient Storage";
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final CollectionReference collectionReference = db.collection("Ingredient Storage");
 
+                collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
+                            FirebaseFirestoreException error) {
+                        /*
+                         * Loop through all the documents in the collection named "Ingredient Storage"
+                         */
+                        Double actualAmount = 0.0;
+                        String description = ingredientInShoppingList.getBriefDescription();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Log.d(TAG, String.valueOf(doc.getData().get("description")));
+
+                            /*
+                             * Get description and category attributes
+                             */
+                            String descriptionIngredientInStorage = (String) doc.getData().get("description");
+                            Double amountIngredientInStorage = new Double(doc.getData().get("amount").toString());
+
+                            if (descriptionIngredientInStorage.equals(description)) {
+                                if (amountIngredientInStorage >= Double.parseDouble(ingredientInShoppingList.getAmountString())) {
+                                    shoppingListCheckBox.setChecked(true);
+                                } else {
+                                    shoppingListCheckBox.setChecked(false);
+                                }
+                            }
+                        }
+                    }
+                });
             }
         });
 

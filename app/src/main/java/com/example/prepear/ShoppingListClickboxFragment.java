@@ -52,8 +52,6 @@ public class ShoppingListClickboxFragment extends DialogFragment {
     private TextView descriptionText;
     private TextView amountText;
     private TextView unitText;
-    private TextView unitEditText;
-    private LinearLayout newUnitLinearLayout;
     private TextView categoryText;
     private LinearLayout newLocationLinearLayout;
     private TextView descriptionWordCount;
@@ -74,7 +72,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @see
      */
     public interface OnFragmentInteractionListener {
-        //void onOkPressed(IngredientInStorage ingredientInStorage);
+        void onOkPressed(boolean actualAmountGreaterThanNeeded);
     }
 
     /**
