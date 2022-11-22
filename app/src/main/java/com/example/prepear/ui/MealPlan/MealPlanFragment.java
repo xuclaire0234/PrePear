@@ -80,6 +80,9 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
         // On below: Grab the ListView object for use
         mealPlanList = view.findViewById(R.id.meal_plan_listview);
         // On below: initialize the used-defined ArrayAdapter for use
+        mealPlanAdapter = new MealPlanCustomList(this.getContext(), mealPlanDataList);
+        // On below: build a connection between the meal plan data list and the ArrayAdapter
+        mealPlanList.setAdapter(mealPlanAdapter);
         dailyMealPlansCollection
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -98,45 +101,69 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                                     // then add locally into the Meal Plan Data List
                                     mealPlanDataList.add(new DailyMealPlan(currentDailyMealPlanDate));
                                     // Notifying the adapter to render any new data fetched from the cloud
-                                    mealPlanAdapter.notifyDataSetChanged();
                                 } else {
                                     Log.d("This document", "onComplete: DNE! ");
                                 }
                             }
+                            for (DailyMealPlan dailyMealPlan: mealPlanDataList) {
+                                dailyMealPlansCollection
+                                        .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+                                        .collection("Meals")
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                dailyMealPlan.emptyDailyMealDataList();
+                                                for (QueryDocumentSnapshot documentSnapshot: value) {
+                                                    String documentID = documentSnapshot.getId();
+                                                    String mealType = (String) documentSnapshot.getData().get("Meal Type");
+                                                    if (Objects.equals(mealType, "IngredientInStorage")) {
+                                                        double customizedMealAmount = (double) documentSnapshot.getData().get("Customized Scaling Number");
+                                                        Meal currentMeal = new Meal(mealType,documentID);
+                                                        currentMeal.setCustomizedAmount(customizedMealAmount);
+                                                        dailyMealPlan.getDailyMealDataList().add(currentMeal);
+                                                    } else if (Objects.equals(mealType, "Recipe")) {
+                                                        int customizedMealNumberOfServings = ((Long)documentSnapshot.getData().get("Customized Scaling Number")).intValue();
+                                                        Meal currentMeal = new Meal(mealType,documentID);
+                                                        currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
+                                                        dailyMealPlan.getDailyMealDataList().add(currentMeal);
+                                                    }
+                                                }
+                                                mealPlanAdapter.notifyDataSetChanged();
+                                            }
+
+                                        });
+
+                            }
                         }
                     }
                 });
-        for (DailyMealPlan dailyMealPlan: mealPlanDataList) {
-            dbMealPlanPart
-                    .collection("Daily Meal Plans")
-                    .document(dailyMealPlan.getCurrentDailyMealPlanDate())
-                    .collection("Meals")
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            dailyMealPlan.emptyDailyMealDataList();
-                            for (QueryDocumentSnapshot documentSnapshot: value) {
-                                String documentID = (String) documentSnapshot.getData().get("Document ID");
-                                String mealType = (String) documentSnapshot.getData().get("Meal Type");
-                                if (Objects.equals(mealType, "IngredientInStorage")) {
-                                    double customizedMealAmount = (double) documentSnapshot.getData().get("Customized Scaling Number");
-                                    Meal currentMeal = new Meal(mealType,documentID);
-                                    currentMeal.setCustomizedAmount(customizedMealAmount);
-                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
-                                } else if (Objects.equals(mealType, "Recipe")) {
-                                    int customizedMealNumberOfServings = (int) documentSnapshot.getData().get("Customized Scaling Number");
-                                    Meal currentMeal = new Meal(mealType,documentID);
-                                    currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
-                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
-                                }
-                            }
-                        }
-                    });
-
-        }
-        mealPlanAdapter = new MealPlanCustomList(this.getContext(), mealPlanDataList);
-        // On below: build a connection between the meal plan data list and the ArrayAdapter
-        mealPlanList.setAdapter(mealPlanAdapter);
+//        for (DailyMealPlan dailyMealPlan: mealPlanDataList) {
+//            dailyMealPlansCollection
+//                    .document(dailyMealPlan.getCurrentDailyMealPlanDate())
+//                    .collection("Meals")
+//                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                            dailyMealPlan.emptyDailyMealDataList();
+//                            for (QueryDocumentSnapshot documentSnapshot: value) {
+//                                String documentID = documentSnapshot.getId();
+//                                String mealType = (String) documentSnapshot.getData().get("Meal Type");
+//                                if (Objects.equals(mealType, "IngredientInStorage")) {
+//                                    double customizedMealAmount = (double) documentSnapshot.getData().get("Customized Scaling Number");
+//                                    Meal currentMeal = new Meal(mealType,documentID);
+//                                    currentMeal.setCustomizedAmount(customizedMealAmount);
+//                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
+//                                } else if (Objects.equals(mealType, "Recipe")) {
+//                                    int customizedMealNumberOfServings = (int) documentSnapshot.getData().get("Customized Scaling Number");
+//                                    Meal currentMeal = new Meal(mealType,documentID);
+//                                    currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
+//                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//        }
         mealPlanAdapter.notifyDataSetChanged();
         databaseController = new DatabaseController();
         // On below: grab the ingredient addition button for use
