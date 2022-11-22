@@ -12,41 +12,41 @@
 
         <TextView
             android:id="@+id/meal_name_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="144dp"
+            android:layout_width="231dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="60dp"
             android:text="TextView"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/eaten_cooked_status_checkBox"
-            app:layout_constraintHorizontal_bias="0.266"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/meal_imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/eaten_cooked_status_checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Cooked or Eaten?"
+            android:layout_width="104dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="103dp"
+            android:layout_marginEnd="132dp"
+            android:enabled="false"
+            android:text="Eaten already?"
             android:textSize="10sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/meal_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/meal_name_textView" />
 
         <ImageView
             android:id="@+id/meal_imageView"
-            android:layout_width="234dp"
-            android:layout_height="167dp"
-            android:layout_marginTop="23dp"
+            android:layout_width="167dp"
+            android:layout_height="165dp"
+            android:layout_marginTop="60dp"
             android:layout_marginEnd="59dp"
-            android:layout_marginBottom="348dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.745"
+            app:layout_constraintHorizontal_bias="0.054"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eaten_cooked_status_checkBox"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:mipmap/sym_def_app_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

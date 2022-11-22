@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment;
 import javax.security.auth.callback.Callback;
 
 public class AddDailyMealConfirmationFragment extends DialogFragment {
-    private OnFragmentInteractionListener listener;
+    private OnFragmentInteractionListener onFragmentInteractionListener;
 
 
     /**
@@ -56,7 +56,7 @@ public class AddDailyMealConfirmationFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         try {
-            listener = (OnFragmentInteractionListener) getTargetFragment();
+            onFragmentInteractionListener = (OnFragmentInteractionListener) getTargetFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement DialogClickListener interface");
         }
@@ -87,14 +87,14 @@ public class AddDailyMealConfirmationFragment extends DialogFragment {
                 .setNegativeButton("BACK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onBackPressed();
+                        onFragmentInteractionListener.onBackPressed();
                     }
                 })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
-                        listener.onOkPressed();
+                        onFragmentInteractionListener.onOkPressed();
                     }
                 }).create();
 

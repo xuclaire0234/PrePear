@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is the controller of database which is responsible of adding, editing, and deleting
@@ -316,7 +317,7 @@ public class DatabaseController {
      */
     public void addDailyMealPlanToMealPlan(Context context, DailyMealPlan dailyMealPlanToAdd) {
         // adds the daily meal plan to the daily meal plans database
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         String date = dailyMealPlanToAdd.getCurrentDailyMealPlanDate();
         data.put("Date", date);
         db

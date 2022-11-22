@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class TestingActivity extends AppCompatActivity {
     DailyMealPlan dailyMealPlan;
-    int LAUNCH_VIEW_INGREDIENT_TYPE_MEAL_ACTIVITY = 1;
+    private final int LAUNCH_VIEW_INGREDIENT_TYPE_MEAL_ACTIVITY = 1;
     int LAUNCH_VIEW_RECIPE_TYPE_MEAL_ACTIVITY = 2;
 
     @Override

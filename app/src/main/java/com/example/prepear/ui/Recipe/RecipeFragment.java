@@ -44,13 +44,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener{
     private RecipeOnCallbackReceived callback;
     private RecipeTypeMealChoiceReceiver recipeTypeMealChoiceReceiver;
-    Integer positionOfItemClicked;
+    int positionOfItemClicked;
     private FragmentRecipeBinding binding;
     ListView recipeList;
     CustomRecipeList recipeAdapter;
     RecipeController recipeDataList;
-    Integer sortItemRecipe = 0;
-    Integer recipePosition = -1;
+    int sortItemRecipe = 0;
+    int recipePosition = -1;
     int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
     int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"  ","Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
@@ -70,6 +70,10 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         super.onAttach(activity);
         try {
             callback = (RecipeOnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
+        try {
             recipeTypeMealChoiceReceiver = (RecipeTypeMealChoiceReceiver) activity;
         } catch (ClassCastException e) {
 
@@ -134,7 +138,7 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getActivity() instanceof AddMealPlanActivity) {
+                if (getActivity() instanceof AddMealPlanActivity || getActivity() instanceof AddDailyMealActivity) {
                     CharSequence text = "Error, Please Click On a Recipe From The List!";
                     Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                 }else {
@@ -160,6 +164,7 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
                     confirmationDialog.setTargetFragment(RecipeFragment.this, 0);
                     confirmationDialog.show(getFragmentManager(), "confirm selection");
                 } else if (getActivity() instanceof AddDailyMealActivity) {
+                    positionOfItemClicked = i;
                     DialogFragment confirmationFragment = new AddDailyMealConfirmationFragment();
                     confirmationFragment.setTargetFragment(RecipeFragment.this, 0);
                     confirmationFragment.show(getFragmentManager(), "Recipe Type Meal Addition Confirmation");
@@ -195,7 +200,7 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
             }
         });
 
-        ArrayAdapter<String> ad = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, sortItemSpinnerContent);
+        ArrayAdapter<String> ad = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortItemSpinner.setAdapter(ad);
 

@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:hint="Meal Amount / Number of Servings:"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:textColor="@color/black"
         android:textColorHint="@color/white"
         android:visibility="invisible"

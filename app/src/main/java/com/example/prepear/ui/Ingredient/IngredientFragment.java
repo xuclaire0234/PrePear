@@ -40,9 +40,9 @@ import java.util.ArrayList;
  * This class is an Fragment Class for displaying the all in-storage ingredients with its detailed info on a ListView
  */
 public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener {
-    private Integer positionOfItemClicked;
+    private int positionOfItemClicked;
+    private int clickedItemPosition;
     private IngredientOnCallbackReceived callback;
-    private FragmentIngredientBinding binding;
     private IngredientTypeMealChoiceReceiver ingredientTypeMealChoiceReceiver;
     int LAUNCH_ADD_INGREDIENT_ACTIVITY = 1;
     int LAUNCH_EDIT_INGREDIENT_ACTIVITY = 2;
@@ -69,10 +69,14 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         try {
             callback = (IngredientOnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
+        try {
             ingredientTypeMealChoiceReceiver = (IngredientTypeMealChoiceReceiver) activity;
         } catch (ClassCastException e) {
 
@@ -86,7 +90,7 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
 
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // On below: Grab the ListView object for use
@@ -102,7 +106,7 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
         addInStorageIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity() instanceof AddMealPlanActivity) {
+                if ((getActivity() instanceof AddMealPlanActivity) || (getActivity() instanceof AddDailyMealActivity)) {
                     CharSequence text = "Error, Please Click On an Ingredient From The List!";
                     Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
                 }else {
@@ -122,9 +126,8 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
                     DialogFragment confirmationDialog = new ConfirmationDialog();
                     confirmationDialog.setTargetFragment(IngredientFragment.this, 0);
                     confirmationDialog.show(getFragmentManager(), "confirm selection");
-                }
-                else if (getActivity() instanceof AddDailyMealActivity) {
-                    positionOfItemClicked = position;
+                } else if (getActivity() instanceof AddDailyMealActivity) {
+                    clickedItemPosition = position;
                     DialogFragment addDailyMealConfirmationFragment = new AddDailyMealConfirmationFragment();
                     addDailyMealConfirmationFragment.setTargetFragment(IngredientFragment.this, 0);
                     addDailyMealConfirmationFragment.show(getFragmentManager(), "Daily Meal Addition Confirmation");
@@ -263,37 +266,52 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void onConfirmPressed() {
-        // Grab the clicked item out of the ListView
+        // On below line: grab the clicked item out of the ListView
         Object clickedItem = ingredientStorageList.getItemAtPosition(positionOfItemClicked);
-        // Casting this clicked item to IngredientInStorage type from Object type
+        // On below line: casting this clicked item to IngredientInStorage type from Object type
         IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
-        //setContentView(R.layout.activity_add_meal_plan);
+        // On below line: add this select in-storage ingredient into the Meal Plan over a time period
         callback.addIngredientTypeMeal(clickedFood);
     }
 
+    /**
+     *
+     */
     @Override
     public void onCancelPressed() {
         callback.addIngredientTypeMeal(null);
     }
 
+    /**
+     *
+     */
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void onOkPressed() {
+        Object clickedItem = ingredientStorageList.getItemAtPosition(clickedItemPosition);
+        IngredientInStorage clickedIngredient = (IngredientInStorage) clickedItem;
+        ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(clickedIngredient);
     }
 
+    /**
+     *
+     */
     @Override
     public void onBackPressed() {
         ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(null);
     }
 
+    /**
+     *
+     */
     @Override
-    public void onOkPressed() {
-        Object clickedItem = ingredientStorageList.getItemAtPosition(positionOfItemClicked);
-        IngredientInStorage clickedIngredient = (IngredientInStorage) clickedItem;
-        ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(clickedIngredient);
+    public void onDestroyView() {
+        super.onDestroyView();
+        com.example.prepear.databinding.FragmentIngredientBinding binding = null;
     }
 
 }

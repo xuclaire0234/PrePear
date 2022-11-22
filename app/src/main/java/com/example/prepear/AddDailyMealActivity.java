@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,13 +50,27 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
                 getSupportFragmentManager().executePendingTransactions();
             }
         });
+
+        pickRecipeTypeMealButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction recipeFragmentTransition;
+                recipeFragmentTransition = getSupportFragmentManager().beginTransaction();
+                FrameLayout frameLayout = findViewById(android.R.id.content);
+                frameLayout.removeAllViews();
+                recipeFragmentTransition.replace(android.R.id.content, new RecipeFragment(), "selectRecipe");
+                recipeFragmentTransition.addToBackStack(null);
+                recipeFragmentTransition.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+        });
     }
 
     /**
      * @param clickedIngredient
      */
+    @Override
     public void addIngredientTypeMealInDailyMealPlan(IngredientInStorage clickedIngredient) {
-        Log.d(TAG, "addIngredientTypeMealInDailyMealPlan: Reach!!!!!!");
         setContentView(R.layout.activity_add_daily_meal);
         TextView addedMealNameTextView = findViewById(R.id.meal_name_text);
         TextInputEditText addedMealAmountEditText = findViewById(R.id.meal_amount_input);
@@ -74,6 +89,7 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
         if (clickedIngredient != null) {
             addedMealAmountEditText.setVisibility(View.VISIBLE);
             addMealButton.setEnabled(true);
+            addedMealNameTextView.setText(clickedIngredient.getBriefDescription());
             addMealButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -86,9 +102,12 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
                         Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's amount!!", Toast.LENGTH_LONG).show();
                     } else {
                         Intent receivedIntent = new Intent();
-                        addedMealNameTextView.setText(clickedIngredient.getBriefDescription());
                         Meal addedMeal = new Meal("IngredientInStorage", clickedIngredient.getDocumentId());
-                        databaseController.addEditMealToDailyMealPlan(getApplicationContext(), currentDailyMealPlan, addedMeal);
+                        addedMeal.setCustomizedAmount(userMealAmountValue);
+                        receivedIntent.putExtra("added meal", addedMeal);
+//                        databaseController.addEditMealToDailyMealPlan(getApplicationContext(), currentDailyMealPlan, addedMeal);
+                        setResult(Activity.RESULT_OK, receivedIntent);
+                        finish(); // exit activity
                     }
 
                 }
@@ -96,6 +115,10 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
         }
     }
 
+    /**
+     * @param clickedRecipe
+     */
+    @Override
     public void addRecipeTypeMealInDailyMealPlan(Recipe clickedRecipe) {
         setContentView(R.layout.activity_add_daily_meal);
         TextView addedMealNameTextView = findViewById(R.id.meal_name_text);
@@ -119,7 +142,9 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
                 @Override
                 public void onClick(View v) {
                     String userMealNumberOfServingsInput = addedMealNumberOfServingsEditText.getText().toString().trim();
-                    Integer userMealNumOfServesValue = Integer.parseInt(userMealNumberOfServingsInput);
+                    double userMealNumberOfServingsInputDoubleValue = Double.parseDouble(userMealNumberOfServingsInput);
+//                    int userMealNumOfServesValue = (int) userMealNumberOfServingsInputDoubleValue ;
+                    int userMealNumOfServesValue = (int) Math.round(userMealNumberOfServingsInputDoubleValue);
                     if (userMealNumberOfServingsInput.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Please enter a number of servings value for this meal.", Toast.LENGTH_LONG).show();
                     } else if (userMealNumOfServesValue <= 0) {
@@ -127,8 +152,12 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
                     } else {
                         Intent receivedIntent = new Intent();
                         addedMealNameTextView.setText(clickedRecipe.getTitle());
-                        Meal addedMeal = new Meal("IngredientInStorage", clickedRecipe.getId());
-                        databaseController.addEditMealToDailyMealPlan(getApplicationContext(), currentDailyMealPlan, addedMeal);
+                        Meal addedMeal = new Meal("Recipe", clickedRecipe.getId());
+                        addedMeal.setCustomizedNumberOfServings(userMealNumOfServesValue);
+                        receivedIntent.putExtra("added meal", addedMeal);
+                        setResult(Activity.RESULT_OK, receivedIntent);
+                        finish();
+//                        databaseController.addEditMealToDailyMealPlan(getApplicationContext(), currentDailyMealPlan, addedMeal);
                     }
                 }
             });
