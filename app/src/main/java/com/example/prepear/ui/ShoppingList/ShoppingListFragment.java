@@ -77,7 +77,22 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        ListView shoppingListView = (ListView) view.findViewById(R.id.ingredient_listview);
+        ingredientShoppingList = new ShoppingListController();
+        ingredientShoppingListAdapter = new CustomShoppingList(getContext(), ingredientShoppingList.getIngredients());
+        shoppingListView.setAdapter(ingredientShoppingListAdapter);
+
+        /*// sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
+        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ShoppingListViewIngredientFragment.newInstance(ingredientShoppingListAdapter.getItem(position))
+                        .show(getParentFragmentManager(), "VIEW_INGREDIENT");
+                Log.v("TAG", "CLICKED row number: " + position);
+            }
+        });*/
+        return view;
     }
 
 //    @Override
@@ -120,16 +135,6 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
             }
         });
 
-        // sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
-        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShoppingListViewIngredientFragment.newInstance(ingredientShoppingListAdapter.getItem(position))
-                        .show(getFragmentManager(),"VIEW_INGREDIENT");
-            }
-        });
-
-
         sortItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -148,12 +153,6 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortItemSpinner.setAdapter(ad);
 
-
-        ingredientShoppingList = new ShoppingListController();
-        ingredientShoppingListAdapter = new CustomShoppingList(getContext(), ingredientShoppingList.getIngredients());
-        shoppingListView.setAdapter(ingredientShoppingListAdapter);
-
-
         fromDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +166,16 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
                 createDatePicker(toDateText);
             }
         });
+
+        // sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
+//        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                ShoppingListViewIngredientFragment.newInstance(ingredientShoppingListAdapter.getItem(position))
+//                        .show(getParentFragmentManager(), "VIEW_INGREDIENT");
+//                Log.v("TAG", "CLICKED row number: " + position);
+//            }
+//        });
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override

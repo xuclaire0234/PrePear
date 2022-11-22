@@ -41,6 +41,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 import javax.annotation.Nullable;
 
@@ -245,6 +247,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
                             FirebaseFirestoreException error) {
                         String description = ingredient.getBriefDescription();
+                        boolean ingredientInStorage = true;
                         // Loop through all the documents in the collection named "Recipes"
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Log.d(TAG, String.valueOf(doc.getData().get("description"))); // Set an error message
@@ -255,24 +258,35 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                             String ingredientId = (String) doc.getData().get("document id");
                             double finalActualAmount = Double.parseDouble(actualAmount);
 
-                            // if ingredient is also in Ingredient Storage, update value
+                            // if ingredient is also in Ingredient Storage, update database
                             if (descriptionIngredientInStorage.equals(description)) {
                                 db
                                         .collection("Ingredient Storage")
                                         .document(ingredientId)
                                         .update("description", description,
-                                        "category", ingredient.getIngredientCategory(),
-                                        "bestBeforeDate", bestBeforeDateString,
-                                        "amount", finalActualAmount,
-                                        "unit", ingredient.getUnit(),
-                                        "icon code",ingredientIconCode,
-                                        "location", finalLocation);
+                                                "category", ingredient.getIngredientCategory(),
+                                                "bestBeforeDate", bestBeforeDateString,
+                                                "amount", finalActualAmount,
+                                                "unit", ingredient.getUnit(),
+                                                "icon code",ingredientIconCode,
+                                                "location", finalLocation);
 
 //                                Toast.makeText(getActivity().getApplicationContext(),
 //                                        "Ingredient in storage has been updated",
 //                                        Toast.LENGTH_LONG).show();
                                 return;
+                            } else {
+                                ingredientInStorage = false;
                             }
+                        }
+                        // if ingredient is not in storage, add to database
+                        if (ingredientInStorage == false) {
+                            Date dateTimeNow = new Date();
+                            String documentId = DATEFORMAT.format(dateTimeNow);
+                            IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
+                                    ingredient.getIngredientCategory(), bestBeforeDate, finalLocation, actualAmount, ingredient.getUnit(), documentId,0);
+                            DatabaseController database = new DatabaseController();
+                            database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
                         }
                     }
                 });
@@ -293,6 +307,5 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         inputMethodManager.hideSoftInputFromWindow(actualAmountEditText.getWindowToken(), 0);
     }
 }
-
 
 
