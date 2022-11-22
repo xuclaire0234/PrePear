@@ -40,8 +40,7 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
     private LinearLayout newCategoryLinearLayout;
     private TextView descriptionWordCount;
     private TextView amountWordCount;
-
-
+    private ShoppingListClickboxFragment.OnFragmentInteractionListener listener;
 
     /**
      * This method creates a new instance of ShoppingListViewIngredient so user can view
@@ -49,12 +48,22 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
      * @param ingredient {@link IngredientInRecipe} that the user clicked on
      * @return fragment the newly created fragment
      */
-    static ShoppingListViewIngredientFragment newInstance(IngredientInRecipe ingredient) {
+    public static ShoppingListViewIngredientFragment newInstance(IngredientInRecipe ingredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
         ShoppingListViewIngredientFragment fragment = new ShoppingListViewIngredientFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * This method defines an interface of methods that the ShoppingListViewModel needs to implement
+     * in order to respond to the user clicking Ok buttons.
+     *
+     * @see
+     */
+    public interface OnFragmentInteractionListener {
+        //void onOkPressed(IngredientInStorage ingredientInStorage);
     }
 
     /**

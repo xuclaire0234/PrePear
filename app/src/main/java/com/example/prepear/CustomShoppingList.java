@@ -77,16 +77,16 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
             }
         });
 
-        /*// sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
-        ingredientInShoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentActivity activity = (FragmentActivity)(context);
-                FragmentManager fm = activity.getSupportFragmentManager();
-                ShoppingListViewIngredientFragment.newInstance(ingredientsInShoppingList.get(position))
-                        .show(fm, "VIEW_INGREDIENT");
-            }
-        });*/
+//        // sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
+//        ingredientInShoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                FragmentActivity activity = (FragmentActivity)(context);
+//                FragmentManager fm = activity.getSupportFragmentManager();
+//                ShoppingListViewIngredientFragment.newInstance(ingredientsInShoppingList.get(position))
+//                        .show(fm, "VIEW_INGREDIENT");
+//            }
+//        });
         return view;
     }
 }
