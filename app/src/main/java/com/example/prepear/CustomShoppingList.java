@@ -70,6 +70,8 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         amountTextView.setText(String.valueOf(ingredientInShoppingList.getAmountString()));
         unitTextView.setText(ingredientInShoppingList.getUnit());
         ingredientCategoryTextView.setText(ingredientInShoppingList.getIngredientCategory());
+
+        // when user click checkbox
         shoppingListCheckBox.setChecked(false);
         shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,17 +96,13 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
                     @Override
                     public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
                             FirebaseFirestoreException error) {
-                        /*
-                         * Loop through all the documents in the collection named "Ingredient Storage"
-                         */
+                        // Loop through all the documents in the collection named "Ingredient Storage"
                         Double actualAmount = 0.0;
                         String description = ingredientInShoppingList.getBriefDescription();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Log.d(TAG, String.valueOf(doc.getData().get("description")));
 
-                            /*
-                             * Get description and category attributes
-                             */
+                            // Get description and category attributes
                             String descriptionIngredientInStorage = (String) doc.getData().get("description");
                             Double amountIngredientInStorage = new Double(doc.getData().get("amount").toString());
 
@@ -122,10 +120,15 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
                 });
             }
         });
+
         // when user click on ingredient in listview
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
+                On below:
+                show first pop up the dialogFragment to display details of ingredient
+                 */
                 FragmentActivity activity = (FragmentActivity)(context);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 ShoppingListViewIngredientFragment.newInstance(ingredientInShoppingList)

@@ -203,9 +203,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    if (Double.parseDouble(actualAmount) >= ingredient.getAmountValue()) {
-                        // shoppingListCheckBox.setChecked(true);
-                    } else {
+                    if (Double.parseDouble(actualAmount) < ingredient.getAmountValue()) {
                         Toast.makeText(getActivity().getApplicationContext(), "Actual amount is less than needed amount.",
                                 Toast.LENGTH_LONG).show();
                     }
