@@ -93,4 +93,11 @@ public class Meal implements Serializable {
     public void setCustomizedNumberOfServings(Integer customizedNumberOfServings) {
         this.customizedNumberOfServings = customizedNumberOfServings;
     }
+
+    /**
+     * @param extraCustomizedAmount
+     */
+    public void addExtraCustomizedAmount(double extraCustomizedAmount) {
+        this.customizedAmount += extraCustomizedAmount;
+    }
 }

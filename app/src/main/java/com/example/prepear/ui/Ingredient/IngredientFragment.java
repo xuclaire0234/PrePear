@@ -302,7 +302,8 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
      */
     @Override
     public void onBackPressed() {
-        ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(null);
+        getActivity().finish();
+        startActivity(new Intent(getActivity(), AddDailyMealActivity.class));
     }
 
     /**

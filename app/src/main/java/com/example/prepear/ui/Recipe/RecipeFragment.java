@@ -316,7 +316,8 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
 
     @Override
     public void onBackPressed() {
-        recipeTypeMealChoiceReceiver.addRecipeTypeMealInDailyMealPlan(null);
+        getActivity().finish();
+        startActivity(new Intent(getActivity(), AddDailyMealActivity.class));
     }
 
     @Override

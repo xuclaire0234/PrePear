@@ -98,6 +98,7 @@ public class AddDailyMealActivity extends AppCompatActivity implements Ingredien
                     double userMealAmountValue = Double.parseDouble(userMealAmountInput);
                     if (userMealAmountInput.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Please enter a amount value for this meal.", Toast.LENGTH_LONG).show();
+
                     } else if (userMealAmountValue <= 0) {
                         Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's amount!!", Toast.LENGTH_LONG).show();
                     } else {
