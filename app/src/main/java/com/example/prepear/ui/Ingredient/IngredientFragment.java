@@ -1,3 +1,10 @@
+/**
+ * Class Name: IngredientFragment
+ * Version Information: Version 1.0
+ * Date:
+ * Author: Shihao Liu
+ * Copyright Notice:
+ */
 package com.example.prepear.ui.Ingredient;
 
 import android.app.Activity;

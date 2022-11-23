@@ -35,7 +35,8 @@
         </activity>
         <activity
             android:name=".AddDailyMealActivity"
-            android:exported="false" >
+            android:exported="false"
+            android:parentActivityName=".ViewDailyMealPlanActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
