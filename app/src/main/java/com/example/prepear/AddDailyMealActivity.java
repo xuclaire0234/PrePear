@@ -1,6 +1,6 @@
 /**
  * Class Name: AddDailyMealPlanActivity
- * Version Information: Version 1.0
+ * Version Information: Version 1.0.0
  * Date: Nov 22nd, 2022
  * Author: Shihao Liu
  * Copyright Notice:
