@@ -8,15 +8,13 @@
 
 package com.example.prepear;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -129,10 +127,10 @@ public class AddDailyMealActivity extends AppCompatActivity
                     } else { // user input success after checking for validation
                         Intent receivedIntent = new Intent(); // initialize an intent for passing the current picked Meal object
                         Meal addedMeal = new Meal("IngredientInStorage", clickedIngredient.getDocumentId());
-                        addedMeal.setCustomizedAmount(userMealAmountValue);
-                        receivedIntent.putExtra("added meal", addedMeal); //
+                        addedMeal.setCustomizedAmount(userMealAmountValue); // store user-input meal amount double type value in picked Meal object
+                        receivedIntent.putExtra("added meal", addedMeal); // pass this picked Meal object in the upcoming activity
                         setResult(Activity.RESULT_OK, receivedIntent);
-                        finish(); // exit activity
+                        finish(); // after launching the activity, exit afterwards
                     }
                 }
             });
