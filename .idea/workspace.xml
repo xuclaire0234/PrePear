@@ -18,6 +18,8 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/AddDailyMealActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/AddDailyMealActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ViewIngredientTypeMealActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ViewIngredientTypeMealActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ui/MealPlan/MealPlanFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ui/MealPlan/MealPlanFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -471,16 +473,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/prepear/ui/MealPlan/MealPlanFragment.java</url>
-          <line>119</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

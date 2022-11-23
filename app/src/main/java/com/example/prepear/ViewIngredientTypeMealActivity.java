@@ -84,7 +84,7 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
                         briefDescriptionTextView.setText((String) document.getData().get("description"));
                         bestBeforeDateTextView.setText((String) document.getData().get("bestBeforeDate"));
                         locationTextView.setText((String) document.getData().get("location"));
-                        originalAmount = (Double) document.getData().get("amount");  // stores the original amount
+                        originalAmount = ((Number)document.getData().get("amount")).doubleValue();  // stores the original amount
                         originalAmountTextView.setText(originalAmount.toString());
                         unitTextView.setText((String) document.getData().get("unit"));
                         ingredientCategoryTextView.setText((String) document.getData().get("category"));
