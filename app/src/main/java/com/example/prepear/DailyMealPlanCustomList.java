@@ -122,5 +122,15 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         return view; // return this view
     }
 
-
+    public void updateMealInfo(Meal updatedMeal) {
+        for (Meal eachMeal: mealsInOneDailyPlan) {
+            if (Objects.equals(eachMeal.getDocumentID(), updatedMeal.getDocumentID())){
+                if (Objects.equals(eachMeal.getMealType(), "IngredientInStorage")) {
+                    eachMeal.setCustomizedAmount(updatedMeal.getCustomizedAmount());
+                } else if (Objects.equals(eachMeal.getMealType(), "Recipe")) {
+                    eachMeal.setCustomizedNumberOfServings(updatedMeal.getCustomizedNumberOfServings());
+                }
+            }
+        }
+    }
 }
