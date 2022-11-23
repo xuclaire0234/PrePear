@@ -56,7 +56,7 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         dailyMealListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Meal clickedMeal = (Meal) dailyMealArrayAdapter.getItem(position);
+                Meal clickedMeal = dailyMealArrayAdapter.getItem(position);
                 if (clickedMeal.getMealType().equals("Recipe")) {
                     Intent switchActivityIntent = new Intent(ViewDailyMealPlanActivity.this, ViewRecipeTypeMealActivity.class);
                     switchActivityIntent.putExtra("viewed meal", clickedMeal);
@@ -74,11 +74,21 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data); //
         DatabaseController databaseController = new DatabaseController();
+        boolean currentMealIsExisting = false;
         if (requestCode == LAUNCH_ADD_DAILY_MEAL_ACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
                 Meal addedMeal = (Meal) data.getSerializableExtra("added meal");
-                dailyMealArrayAdapter.add(addedMeal);
-                databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, addedMeal);
+                for (Meal existingMeal : dailyMealDataList) {
+                    if (Objects.equals(existingMeal.getDocumentID(), addedMeal.getDocumentID())) {
+                        existingMeal.addExtraCustomizedAmount(addedMeal.getCustomizedAmount());
+                        databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, existingMeal);
+                        currentMealIsExisting = true;
+                    }
+                }
+                if ( ! currentMealIsExisting) {
+                    dailyMealArrayAdapter.add(addedMeal);
+                    databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, addedMeal);
+                }
             }
         } else {
             if (resultCode == Activity.RESULT_OK) {

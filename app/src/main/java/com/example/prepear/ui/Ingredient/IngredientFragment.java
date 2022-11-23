@@ -1,3 +1,10 @@
+/**
+ * Class Name: IngredientFragment
+ * Version Information: Version 1.0
+ * Date:
+ * Author: Shihao Liu
+ * Copyright Notice:
+ */
 package com.example.prepear.ui.Ingredient;
 
 import android.app.Activity;
@@ -302,7 +309,8 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
      */
     @Override
     public void onBackPressed() {
-        ingredientTypeMealChoiceReceiver.addIngredientTypeMealInDailyMealPlan(null);
+        getActivity().finish();
+        startActivity(new Intent(getActivity(), AddDailyMealActivity.class));
     }
 
     /**

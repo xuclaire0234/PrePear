@@ -117,7 +117,7 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                                                     String documentID = documentSnapshot.getId();
                                                     String mealType = (String) documentSnapshot.getData().get("Meal Type");
                                                     if (Objects.equals(mealType, "IngredientInStorage")) {
-                                                        double customizedMealAmount = (double) documentSnapshot.getData().get("Customized Scaling Number");
+                                                        double customizedMealAmount = (Double) documentSnapshot.getData().get("Customized Scaling Number");
                                                         Meal currentMeal = new Meal(mealType,documentID);
                                                         currentMeal.setCustomizedAmount(customizedMealAmount);
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);

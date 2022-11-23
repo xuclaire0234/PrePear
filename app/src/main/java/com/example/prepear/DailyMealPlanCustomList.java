@@ -63,24 +63,6 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         String mealDocumentID = meal.getDocumentID();
         DocumentReference mealDocRef;
         if (Objects.equals(meal.getMealType(), "IngredientInStorage")) { // if meal type is an in-storage ingredient
-//            mealDocRef = db.collection("Ingredient Storage").document(mealDocumentID);
-//            mealDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                @Override
-//                public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                    // On below part: set the current meal item's name TextView
-//                    String mealName = (String) documentSnapshot.getData().get("description");
-//                    mealTitle.setText(mealName);
-//                    // On below part: display the current meal item's image/icon based on its meal type
-////                    long mealIconCode = (long) documentSnapshot.getData().get("icon code");
-//                    mealPicture.setImageResource(((Long) documentSnapshot.getData().get("icon code")).intValue());
-//                    mealPicture.setVisibility(View.VISIBLE);
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Log.d(TAG, "onFailure: " + e.getMessage());
-//                }
-//            });
             mealDocRef = db.collection("Ingredient Storage").document(mealDocumentID);
             mealDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
