@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.prepear.ui.ShoppingList.ShoppingListController;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -109,6 +110,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
 
                             if (descriptionIngredientInStorage.equals(description)) {
                                 if (amountIngredientInStorage >= Double.parseDouble(ingredientInShoppingList.getAmountString())) {
+                                    // if actualAmount is greater than needed amount, set check box to true
                                     shoppingListCheckBox.setChecked(true);
                                 } else {
                                     shoppingListCheckBox.setChecked(false);
@@ -119,17 +121,16 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
                 });
             }
         });
-
-//        // sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
-//        ingredientInShoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                FragmentActivity activity = (FragmentActivity)(context);
-//                FragmentManager fm = activity.getSupportFragmentManager();
-//                ShoppingListViewIngredientFragment.newInstance(ingredientsInShoppingList.get(position))
-//                        .show(fm, "VIEW_INGREDIENT");
-//            }
-//        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity activity = (FragmentActivity)(context);
+                FragmentManager fm = activity.getSupportFragmentManager();
+                ShoppingListViewIngredientFragment.newInstance(ingredientInShoppingList)
+                        .show(fm, "VIEW_INGREDIENT");
+                Log.d("CLICKED", "row number: " + position);
+            }
+        });
         return view;
     }
 }

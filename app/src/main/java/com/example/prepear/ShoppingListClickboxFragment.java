@@ -137,7 +137,6 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         bestBeforeDateEditText = view.findViewById(R.id.best_before_date);
         locationEditText = view.findViewById(R.id.new_ingredient_location_edit_text);
         locationSpinner = view.findViewById(R.id.ingredient_location);
-        CheckBox shoppingListCheckBox = view.findViewById(R.id.ingredient_in_shopping_list_CheckBox);
 
         // getting attributes from ingredient and display it on fragment
         Bundle bundle = getArguments();

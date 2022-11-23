@@ -44,7 +44,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
-public class ShoppingListFragment extends Fragment implements ShoppingListViewIngredientFragment.OnFragmentInteractionListener {
+public class ShoppingListFragment extends Fragment {
 
     private ShoppingListViewModel mViewModel;
     private FragmentRecipeBinding binding;
@@ -78,31 +78,8 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
-        ListView shoppingListView = (ListView) view.findViewById(R.id.ingredient_listview);
-        ingredientShoppingList = new ShoppingListController();
-        ingredientShoppingListAdapter = new CustomShoppingList(getContext(), ingredientShoppingList.getIngredients());
-        shoppingListView.setAdapter(ingredientShoppingListAdapter);
-
-        /*// sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
-        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShoppingListViewIngredientFragment.newInstance(ingredientShoppingListAdapter.getItem(position))
-                        .show(getParentFragmentManager(), "VIEW_INGREDIENT");
-                Log.v("TAG", "CLICKED row number: " + position);
-            }
-        });*/
         return view;
     }
-
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstance) {
-//        super.onCreate(savedInstance);
-//        dialog.setContentView(R.layout.fragment_shopping_list);
-//
-//
-//
-//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -167,16 +144,6 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
             }
         });
 
-        // sets each ingredient object on listview to direct to ShoppingListViewIngredientFragment
-//        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                ShoppingListViewIngredientFragment.newInstance(ingredientShoppingListAdapter.getItem(position))
-//                        .show(getParentFragmentManager(), "VIEW_INGREDIENT");
-//                Log.v("TAG", "CLICKED row number: " + position);
-//            }
-//        });
-
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -232,7 +199,6 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
                         }
                     },2000);
 
-
 //                    gainAllIngredientAtDate("2022-11-14");
 
 //                    MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
@@ -262,8 +228,6 @@ public class ShoppingListFragment extends Fragment implements ShoppingListViewIn
                 }
             }
         });
-
-
     }
 
     private Boolean check() {
