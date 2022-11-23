@@ -66,7 +66,7 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
         unitEditText = view.findViewById(R.id.ingredient_unit);
         categoryEditText = view.findViewById(R.id.ingredient_category);
 
-        // getting attributes from ingredient
+        // getting attributes from ingredient and display it
         Bundle bundle = getArguments();
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());

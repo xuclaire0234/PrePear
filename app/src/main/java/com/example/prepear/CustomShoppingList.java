@@ -49,14 +49,14 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         // return super.getView(position, convertView, parent);
         View view = convertView;
 
-        /* check error */
+        // check error
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.content_ingredient_in_shopping_list, parent, false);
         }
 
         IngredientInRecipe ingredientInShoppingList = ingredientsInShoppingList.get(position);
 
-        /* connects the the layout with the views */
+        // connects the the layout with the views
         ListView ingredientInShoppingListView = view.findViewById(R.id.ingredient_listview);
         TextView briefDescriptionTextView = view.findViewById(R.id.brief_description_TextView_shopping);
         TextView amountTextView = view.findViewById(R.id.amount_TextView_shopping);
@@ -65,7 +65,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         CheckBox shoppingListCheckBox = view.findViewById(R.id.ingredient_in_shopping_list_CheckBox);
 
 
-        /* sets the detailed information to the view */
+        // sets the detailed information to the view
         briefDescriptionTextView.setText(ingredientInShoppingList.getBriefDescription());
         amountTextView.setText(String.valueOf(ingredientInShoppingList.getAmountString()));
         unitTextView.setText(ingredientInShoppingList.getUnit());
@@ -115,12 +115,14 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
                                 } else {
                                     shoppingListCheckBox.setChecked(false);
                                 }
+                                break;
                             }
                         }
                     }
                 });
             }
         });
+        // when user click on ingredient in listview
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
