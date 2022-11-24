@@ -89,22 +89,6 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    /**
-     * This method receives the context from ShoppingListViewModel, checks if the context is of type
-     * {@link ShoppingListClickboxFragment.OnFragmentInteractionListener} and if it is, it assigns
-     * the variable listener to the context, otherwise it raises a runtime error
-     * @param  context information about the current state of the app received from ShoppingListViewModel
-     */
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            listener = (OnFragmentInteractionListener) context;
-//        }
-//        else {
-//            throw new RuntimeException(context + "must implement OnFragmentInteractionListener");
-//        }
-//    }
 
     final String TAG = "Ingredient Storage";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -155,6 +139,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedIngredientLocation = locationSpinner.getSelectedItem().toString();
                 if (selectedIngredientLocation.equals("Other")) {
+                    // if user select other, ask user to dynamically input location
                     newLocationLinearLayout.setVisibility(View.VISIBLE);
                 } else {
                     newLocationLinearLayout.setVisibility(View.GONE);
@@ -171,10 +156,10 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         title.setText("Add Details For Ingredient");
         builder.setView(view);
 
+        // create a date picker for the best before date of the ingredient
         bestBeforeDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // create a date picker for the best before date of the ingredient
                 Calendar currentDate = Calendar.getInstance();
                 int currentYear = currentDate.get(Calendar.YEAR);
                 int currentMonth = currentDate.get(Calendar.MONTH);
@@ -238,6 +223,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     }
                 }
 
+                // add or update input details to database
                 String finalLocation = location;
                 collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -268,9 +254,6 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                                 "icon code",ingredientIconCode,
                                                 "location", finalLocation);
 
-//                                Toast.makeText(getActivity().getApplicationContext(),
-//                                        "Ingredient in storage has been updated",
-//                                        Toast.LENGTH_LONG).show();
                                 return;
                             } else {
                                 ingredientInStorage = false;
