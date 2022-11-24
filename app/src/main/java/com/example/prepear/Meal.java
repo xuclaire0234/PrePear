@@ -19,15 +19,17 @@ public class Meal implements Serializable {
     private String documentID; // contains the same Document ID as its corresponding in-storage ingredient / recipe has inside database
     private double customizedAmount = 0; // represents user-entered customized amount
     private Integer customizedNumberOfServings = 0; // represents user-entered customized number of servings
+    private String mealID;
 
     /**
      * This method creates a object which is of type {@link Meal}.
      * @param mealType the type of the meal which is of type {@link String}
      * @param documentID the document id of the associated ingredient/recipe in ingredientInStorage/RecipeList
      */
-    public Meal(String mealType, String documentID) {
+    public Meal(String mealType, String documentID, String mealID) {
         this.mealType = mealType;
         this.documentID = documentID;
+        this.mealID = mealID;
     }
 
     /**
@@ -99,5 +101,22 @@ public class Meal implements Serializable {
      */
     public void addExtraCustomizedAmount(double extraCustomizedAmount) {
         this.customizedAmount += extraCustomizedAmount;
+        this.customizedAmount = Math.round(this.customizedAmount * 100.0) / 100.0;
     }
+
+
+    /**
+     * @return
+     */
+    public String getMealID() {
+        return mealID;
+    }
+
+    /**
+     * @param mealID
+     */
+    public void setMealID(String mealID) {
+        this.mealID = mealID;
+    }
+
 }

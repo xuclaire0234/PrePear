@@ -1,6 +1,6 @@
 /**
  * Class Name: AddDailyMealPlanActivity
- * Version Information: Version 1.0
+ * Version Information: Version 1.0.0
  * Date: Nov 22nd, 2022
  * Author: Shihao Liu
  * Copyright Notice:
@@ -25,6 +25,9 @@ import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.example.prepear.ui.Recipe.RecipeFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -33,11 +36,11 @@ import java.util.Objects;
  */
 public class AddDailyMealActivity extends AppCompatActivity
         implements IngredientFragment.IngredientTypeMealChoiceReceiver,
-            RecipeFragment.RecipeTypeMealChoiceReceiver, View.OnClickListener {
+        RecipeFragment.RecipeTypeMealChoiceReceiver, View.OnClickListener {
     // On below: initialize class attributes
     // On below line: String which represents the meal's name (description if the meal is an in-storage ingredient / title if a recipe)
     private String mealNameStr;
-
+    private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +98,9 @@ public class AddDailyMealActivity extends AppCompatActivity
         Button pickRecipeTypeMealButton = findViewById(R.id.pick_recipe_meal_button);
 
         /*
-        * On below part: restrict the user not to re-direct Recipe Fragment during the process of picking a meal in Ingredient Fragment
-        * pop-up Toast message to remind the user with the current meal-picking process in the Ingredient Storage
-        * */
+         * On below part: restrict the user not to re-direct Recipe Fragment during the process of picking a meal in Ingredient Fragment
+         * pop-up Toast message to remind the user with the current meal-picking process in the Ingredient Storage
+         * */
         pickRecipeTypeMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +129,7 @@ public class AddDailyMealActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's amount!!", Toast.LENGTH_LONG).show();
                     } else { // user input success after checking for validation
                         Intent receivedIntent = new Intent(); // initialize an intent for passing the current picked Meal object
-                        Meal addedMeal = new Meal("IngredientInStorage", clickedIngredient.getDocumentId());
+                        Meal addedMeal = new Meal("IngredientInStorage", clickedIngredient.getDocumentId(), clickedIngredient.getDocumentId());
                         addedMeal.setCustomizedAmount(userMealAmountValue); // store user-input meal amount double type value in picked Meal object
                         receivedIntent.putExtra("added meal", addedMeal); // pass this picked Meal object in the upcoming activity
                         setResult(Activity.RESULT_OK, receivedIntent);
@@ -165,7 +168,6 @@ public class AddDailyMealActivity extends AppCompatActivity
                 public void onClick(View v) {
                     String userMealNumberOfServingsInput = addedMealNumberOfServingsEditText.getText().toString().trim();
                     double userMealNumberOfServingsInputDoubleValue = Double.parseDouble(userMealNumberOfServingsInput);
-//                    int userMealNumOfServesValue = (int) userMealNumberOfServingsInputDoubleValue ;
                     int userMealNumOfServesValue = (int) Math.round(userMealNumberOfServingsInputDoubleValue);
                     if (userMealNumberOfServingsInput.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Please enter a number of servings value for this meal.", Toast.LENGTH_LONG).show();
@@ -174,7 +176,7 @@ public class AddDailyMealActivity extends AppCompatActivity
                     } else {
                         Intent receivedIntent = new Intent();
                         addedMealNameTextView.setText(clickedRecipe.getTitle());
-                        Meal addedMeal = new Meal("Recipe", clickedRecipe.getId());
+                        Meal addedMeal = new Meal("Recipe", clickedRecipe.getId(), String.valueOf(new Date()));
                         addedMeal.setCustomizedNumberOfServings(userMealNumOfServesValue);
                         receivedIntent.putExtra("added meal", addedMeal);
                         setResult(Activity.RESULT_OK, receivedIntent);

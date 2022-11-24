@@ -28,7 +28,7 @@ public class TestingActivity extends AppCompatActivity {
 
          */
 
-        Meal meal = new Meal("Ingredient", "2022-11-18 00:19:14");
+        Meal meal = new Meal("Ingredient", "2022-11-18 00:19:14", null);
         meal.setCustomizedAmount(6);
         dailyMealPlan = new DailyMealPlan("2022-11-14", meal);
 

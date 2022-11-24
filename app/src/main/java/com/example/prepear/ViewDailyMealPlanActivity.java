@@ -78,17 +78,23 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         if (requestCode == LAUNCH_ADD_DAILY_MEAL_ACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
                 Meal addedMeal = (Meal) data.getSerializableExtra("added meal");
-                for (Meal existingMeal : dailyMealDataList) {
-                    if (Objects.equals(existingMeal.getDocumentID(), addedMeal.getDocumentID())) {
-                        existingMeal.addExtraCustomizedAmount(addedMeal.getCustomizedAmount());
-                        databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, existingMeal);
-                        currentMealIsExisting = true;
+                if (Objects.equals(addedMeal.getMealType(), "IngredientInStorage")) {
+                    for (Meal existingMeal : dailyMealDataList) {
+                        if (Objects.equals(existingMeal.getDocumentID(), addedMeal.getDocumentID())) {
+                            existingMeal.addExtraCustomizedAmount(addedMeal.getCustomizedAmount());
+                            databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, existingMeal);
+                            currentMealIsExisting = true;
+                        }
                     }
-                }
-                if ( ! currentMealIsExisting) {
+                    if ( ! currentMealIsExisting) {
+                        dailyMealArrayAdapter.add(addedMeal);
+                        databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, addedMeal);
+                    }
+                } else if (Objects.equals(addedMeal.getMealType(), "Recipe")) {
                     dailyMealArrayAdapter.add(addedMeal);
                     databaseController.addEditMealToDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, addedMeal);
                 }
+
             }
         } else {
             if (resultCode == Activity.RESULT_OK) {
@@ -122,6 +128,5 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
             }
             dailyMealArrayAdapter.notifyDataSetChanged();
         }
-
     }
 }
