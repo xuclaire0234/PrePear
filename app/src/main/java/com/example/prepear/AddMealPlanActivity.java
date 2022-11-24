@@ -1,3 +1,10 @@
+/**
+ * Class Name: AddMealPlanActivity
+ * Version Information: Version 1.0
+ * Date: Nov 23nd, 2022
+ * Author: Marafi Mergani
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import android.app.Activity;
@@ -32,7 +39,12 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddMealPlanActivity extends AppCompatActivity implements View.OnClickListener, IngredientFragment.IngredientOnCallbackReceived, RecipeFragment.RecipeOnCallbackReceived{
+/**
+ * This class defines the add meal plan activity that allows user to either add a new meal plan or
+ * view an existing one.
+ */
+public class AddMealPlanActivity extends AppCompatActivity implements View.OnClickListener,
+        IngredientFragment.IngredientOnCallbackReceived, RecipeFragment.RecipeOnCallbackReceived{
     private String startDate;
     private String endDate;
     private EditText startDateView;
@@ -47,11 +59,13 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
     private RadioButton ingredientButton;
     private RadioButton recipeButton;
     private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meal_plan);
 
+        // connect variables to view objects
         startDateView = findViewById(R.id.start_date);
         endDateView = findViewById(R.id.end_date);
         amountLayout = findViewById(R.id.amount_layout);
@@ -63,10 +77,12 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         ingredientButton = findViewById(R.id.ingredient_radioButton);
         recipeButton = findViewById(R.id.recipe_radioButton);
 
+        // set on click listener to confirm button
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CharSequence text = "Error, Please Finish Adding This Ingredient Or Click Cancel!";
+                // display toast message, since user needs to finish adding the meal plan
+                CharSequence text = "Error, Please Finish Adding This Meal Plan Or Click Cancel!";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
             }
         });
@@ -74,10 +90,9 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 // return to view fragment
-                // set cancel result
                 finish(); // exit activity
                 Intent intentBack = new Intent();
-                setResult(Activity.RESULT_CANCELED, intentBack);
+                setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
             }
         });
 
@@ -90,10 +105,12 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 ingredientButton.setChecked(true);
                 recipeButton.setChecked(false);
+                // on below: call IngredientFragment
                 FragmentTransaction transaction;
-                transaction = getSupportFragmentManager().beginTransaction();
+                transaction = getSupportFragmentManager().beginTransaction(); // begin fragment transaction
                 FrameLayout fl = findViewById(android.R.id.content);
-                fl.removeAllViews();
+                fl.removeAllViews();    // remove all views from display
+                // replace the current view with the fragment
                 transaction.replace(android.R.id.content, new IngredientFragment(), "selectIngredient");
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -105,11 +122,12 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 recipeButton.setChecked(true);
                 ingredientButton.setChecked(false);
-                // on below call activity for new in-storage ingredient
+                // on below call RecipeFragment
                 FragmentTransaction transaction;
-                transaction = getSupportFragmentManager().beginTransaction();
+                transaction = getSupportFragmentManager().beginTransaction(); // begin fragment transaction
                 FrameLayout fl = findViewById(android.R.id.content);
-                fl.removeAllViews();
+                fl.removeAllViews(); // remove all views from display
+                // replace the current view with the fragment
                 transaction.replace(android.R.id.content, new RecipeFragment(), "selectRecipe");
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -200,9 +218,15 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         removeKeyboard();
     }
 
+    /**
+     * This method receives the selected ingredient and sends it to MealPlanFragment if
+     * all other input is valid
+     * @param selectedIngredient the user selected ingredient
+     */
     @Override
     public void addIngredientTypeMeal(IngredientInStorage selectedIngredient) {
         setContentView(R.layout.activity_add_meal_plan);
+        // connect variables with the view objects
         amountEditText = findViewById(R.id.amount);
         amountLayout = findViewById(R.id.amount_layout);
         numberOfServingsLayout = findViewById(R.id.number_of_servings_layout);
@@ -212,70 +236,80 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         recipeButton = findViewById(R.id.recipe_radioButton);
         confirm = findViewById(R.id.confirm);
         cancel = findViewById(R.id.cancel);
+        // check off the ingredient radio button
         ingredientButton.setChecked(true);
-        if (startDate != null){
-            startDateView.setText(startDate);
-            startDateView.setOnClickListener(this);
-
-        }else{
-            startDateView.setOnClickListener(this);
+        // set dialog click listener
+        startDateView.setOnClickListener(this);
+        endDateView.setOnClickListener(this);
+        if (startDate != null){ // if user selected a start date before choosing an ingredient
+            startDateView.setText(startDate); // display the start date
         }
-        if (endDate != null){
-            endDateView.setText(endDate);
-            endDateView.setOnClickListener(this);
-
-        }else{
-            endDateView.setOnClickListener(this);
+        if (endDate != null){ // if user selected an end date before choosing an ingredient
+            endDateView.setText(endDate); // display the end date
         }
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable the recipe radio button
                 recipeButton.setChecked(false);
+                // display toast error message
                 CharSequence text = "Error, Please Finish Adding This Ingredient Or Click Cancel!";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
             }
         });
         if (selectedIngredient != null) {
+            // display amount layout, and hide number of servings layout
             amountLayout.setVisibility(View.VISIBLE);
             numberOfServingsLayout.setVisibility(View.GONE);
+            // set click listener for the confirm button
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // get the entered amount
                     String amount = amountEditText.getText().toString().trim();
                     if (amount.isEmpty()) {
+                        // display a toast error message if amount is left empty
                         CharSequence text = "Error, Please Enter an Amount!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     }else if(startDate.isEmpty() || endDate.isEmpty()){
+                        // display a toast error message if start or end dates are left empty
                         CharSequence text = "Error, Please Finish Selecting The Dates!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     }else if (amount.equals("0")){
+                        // display a toast error message if amount is entered as zero
                         CharSequence text = "Error, Please Enter An Amount Greater Than Zero!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     } else {
+                        // input is valid so create a new intent to call the MealPlanFragment
                         Intent intentBack = new Intent();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         try {
                             // convert date strings to local dates
-                            Date start = sdf.parse(startDate);
-                            LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                            Date start = sdf.parse(startDate); // parse string dates using the sdf format
+                            LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
                             Date end = sdf.parse(endDate);
-                            LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                            LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
                             Integer counter = 0;  // counter for the number of Meal objects
                             if(localEnd.isBefore(localStart)){
+                                // set error message if end date is before start date
                                 CharSequence text = "Error, End Date Must Come After Start Date!";
                                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                             }else {
-                                for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
+                                for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd);
+                                     date = date.plusDays(1)) {
                                     // create a Meal object for each DailyMealPlan object
-                                    Meal firstMeal = new Meal("IngredientInStorage", selectedIngredient.getDocumentId(), selectedIngredient.getDocumentId());
+                                    Meal firstMeal = new Meal("IngredientInStorage",
+                                            selectedIngredient.getDocumentId(), selectedIngredient.getDocumentId());
                                     firstMeal.setCustomizedAmount( Double.parseDouble(amount));
-                                    counter += 1;
+                                    counter += 1; // counts the number of meals created
                                     // create the DailyMealPlan object
                                     DailyMealPlan newMeal = new DailyMealPlan(date.toString(), firstMeal);
                                     // send DailyMealPlan object to MealFragment
                                     intentBack.putExtra("meal" + counter, newMeal);
                                 }
-                                intentBack.putExtra("counter", counter);
+                                intentBack.putExtra("counter", counter); // send the counter back
                                 setResult(Activity.RESULT_OK, intentBack);
                                 finish(); // exit activity
                             }
@@ -289,24 +323,23 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onClick(View v) {
                     // return to view fragment
-                    // set cancel result
                     finish(); // exit activity
                     Intent intentBack = new Intent();
-                    setResult(Activity.RESULT_CANCELED, intentBack);
+                    setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
                 }
             });
         }else{
             // return to view fragment
-            // set cancel result
             finish(); // exit activity
             Intent intentBack = new Intent();
-            setResult(Activity.RESULT_CANCELED, intentBack);
+            setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
         }
     }
 
     @Override
     public void addRecipeTypeMeal(Recipe selectedRecipe) {
         setContentView(R.layout.activity_add_meal_plan);
+        // connect variables with the view objects
         numberOfServingsEditText = findViewById(R.id.number_of_servings);
         amountLayout = findViewById(R.id.amount_layout);
         numberOfServingsLayout = findViewById(R.id.number_of_servings_layout);
@@ -317,60 +350,69 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         recipeButton = findViewById(R.id.recipe_radioButton);
         confirm = findViewById(R.id.confirm);
         cancel = findViewById(R.id.cancel);
+        // check off the recipe radio button
         recipeButton.setChecked(true);
-        if (startDate != null){
-            startDateView.setText(startDate);
-            startDateView.setOnClickListener(this);
-
-        }else{
-            startDateView.setOnClickListener(this);
+        // set dialog click listener
+        startDateView.setOnClickListener(this);
+        endDateView.setOnClickListener(this);
+        if (startDate != null){  // if user selected a start date before choosing an ingredient
+            startDateView.setText(startDate); // display the start date
         }
-        if (endDate != null){
-            endDateView.setText(endDate);
-            endDateView.setOnClickListener(this);
-
-        }else{
-            endDateView.setOnClickListener(this);
+        if (endDate != null){ // if user selected an end date before choosing an ingredient
+            endDateView.setText(endDate); // display the end date
         }
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable the ingredient radio button
                 ingredientButton.setChecked(false);
+                // display error message
                 CharSequence text = "Error, Please Finish Adding This Recipe Or Click Cancel!";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
             }
         });
         if (selectedRecipe != null) {
+            // display number of servings layout, and hide amount layout
             amountLayout.setVisibility(View.GONE);
             numberOfServingsLayout.setVisibility(View.VISIBLE);
+            // set click listener for the confirm button
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // get entered number of servings
                     String numberOfServings = numberOfServingsEditText.getText().toString().trim();
                     if (numberOfServings.isEmpty()) {
+                        // display a toast error message if amount is left empty
                         CharSequence text = "Error, Please Enter The Number Of Servings!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     } else if(startDate.isEmpty() || endDate.isEmpty()){
+                        // display a toast error message if start or end dates are left empty
                         CharSequence text = "Error, Please Finish Selecting The Dates!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     }else if (numberOfServings.equals("0")){
+                        // display a toast error message if number of servings is zero
                         CharSequence text = "Error, Please Enter a Number Of Servings Greater Than Zero!";
                         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     }else {
+                        // input is valid so create an intent
                         Intent intentBack = new Intent();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         try {
                             // convert date strings to local dates
-                            Date start = sdf.parse(startDate);
-                            LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                            Date start = sdf.parse(startDate); // parse string dates using the sdf format
+                            LocalDate localStart = start.toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
                             Date end = sdf.parse(endDate);
-                            LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                            LocalDate localEnd = end.toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
                             Integer counter = 0;  // counter for the number of Meal objects
                             if(localEnd.isBefore(localStart)){
+                                // set error message if end date is before start date
                                 CharSequence text = "Error, End Date Must Come After Start Date!";
                                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                             } else {
-                                for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
+                                for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd);
+                                     date = date.plusDays(1)) {
                                     // create a Meal object for each DailyMealPlan object
                                     Meal firstMeal = new Meal("Recipe",selectedRecipe.getId(),String.valueOf(new Date()));
                                     firstMeal.setCustomizedNumberOfServings(Integer.parseInt(numberOfServings));
@@ -395,15 +437,14 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                 public void onClick(View v) {
                     finish(); // exit activity
                     Intent intentBack = new Intent();
-                    setResult(Activity.RESULT_CANCELED, intentBack);
+                    setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
                 }
             });
         } else {
             // return to view fragment
-            // set cancel result
             finish(); // exit activity
             Intent intentBack = new Intent();
-            setResult(Activity.RESULT_CANCELED, intentBack);;
+            setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
         }
 
     }

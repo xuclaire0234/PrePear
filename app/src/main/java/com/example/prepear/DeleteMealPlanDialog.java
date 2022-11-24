@@ -1,3 +1,11 @@
+/**
+ * Class Name: DeleteMealPlanDialog
+ * Version Information: Version 1.0
+ * Date: Nov 19th, 2022
+ * Author: Marafi Mergani
+ * Copyright Notice:
+ */
+
 package com.example.prepear;
 
 import android.app.AlertDialog;
@@ -12,44 +20,35 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * This class creates a delete confirmation dialog to confirm if the user want to delete the
+ * selected meal plan
+ */
 public class DeleteMealPlanDialog extends DialogFragment {
     private DeleteMealPlanDialog.OnFragmentInteractionListener listener;
 
 
     /**
-     * This method defines an interface of methods that the MainActivity needs to implement
-     * in order to respond to the user clicking OK, DELETE, and CANCEL buttons.
+     * This method defines an interface of methods that the MealPlanFragment needs to implement
+     * in order to respond to the user clicking Yes, and No buttons.
      *
      * @see LoginActivity
      */
     public interface OnFragmentInteractionListener {
-        /* list of methods implemented in main activity class
+        /* list of methods implemented in MealPlanFragment class
          */
         void onYesPressed();
         void onNoPressed();
     }
 
     /**
-     * This method receives the context from MainActivity, checks if the context is of type
-     * {@link AddEditIngredientFragment.OnFragmentInteractionListener} and if it is, it assigns
-     * the variable listener to the context, otherwise it raises a runtime error
-     *
-     * //@param context information about the current state of the app received from MainActivity
+     * This method is called when the fragment is created, to check if the parent fragment implements
+     * the fragment interface OnFragmentInteractionListener
+     * @param savedInstanceState
      */
-    /*@Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof ConfirmationDialog.OnFragmentInteractionListener) {
-            listener = (ConfirmationDialog.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() +
-                    "must implement OnFragmentInteractionListener");
-        }
-    }*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try {
             listener = (DeleteMealPlanDialog.OnFragmentInteractionListener) getTargetFragment();
         } catch (ClassCastException e) {
@@ -58,11 +57,9 @@ public class DeleteMealPlanDialog extends DialogFragment {
     }
 
     /**
-     * This method creates the add/edit ingredient fragment if the user input is valid
-     * and sets errors if the input is invalid
-     *
-     * @param savedInstanceState an object of type {@link Bundle} that stores an
-     *                           {@link IngredientInStorage} object
+     * This method creates the delete meal plan fragment if the user long-clicks on a meal plan
+     * @param savedInstanceState a {@link Bundle} a Bundle that provides a previous state for the fragment
+     *                           to re-construct it
      * @return builder a {@link Dialog} object to build the fragment
      */
     @NonNull
@@ -75,6 +72,7 @@ public class DeleteMealPlanDialog extends DialogFragment {
                 R.layout.add_ingredient_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading4);
 
+        // create a dialog builder and set the title
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Confirmation");
         return builder
@@ -82,13 +80,13 @@ public class DeleteMealPlanDialog extends DialogFragment {
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onNoPressed();
+                        listener.onNoPressed(); // call interface method
                     }
                 })
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onYesPressed();
+                        listener.onYesPressed(); // call interface method
                     }
                 }).create();
 

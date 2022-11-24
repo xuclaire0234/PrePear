@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 public class AddDailyMealActivity extends AppCompatActivity
         implements IngredientFragment.IngredientTypeMealChoiceReceiver,
-            RecipeFragment.RecipeTypeMealChoiceReceiver, View.OnClickListener {
+        RecipeFragment.RecipeTypeMealChoiceReceiver, View.OnClickListener {
     // On below: initialize class attributes
     // On below line: String which represents the meal's name (description if the meal is an in-storage ingredient / title if a recipe)
     private String mealNameStr;

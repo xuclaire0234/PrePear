@@ -58,6 +58,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
 
         Meal meal = mealsInOneDailyPlan.get(position); // use position to locate the current meal item on Daily Meal Plan ListView
         TextView mealTitle = view.findViewById(R.id.meal_name_textView);
+        TextView mealScale = view.findViewById(R.id.customized_number);
 
         ImageView mealPicture = view.findViewById(R.id.meal_imageView);
         String mealDocumentID = meal.getDocumentID();
@@ -72,7 +73,9 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if (documentSnapshot.exists()) {
                             String mealName = (String) documentSnapshot.getData().get("description");
+                            String mealAmount = (String) documentSnapshot.getData().get("Customized Scaling Number");
                             mealTitle.setText(mealName);
+                            mealScale.setText(mealAmount);
                             int mealIconCode = ((Long)documentSnapshot.getData().get("icon code")).intValue();
                             mealPicture.setImageResource(mealIconCode);
                         }
@@ -86,7 +89,9 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     // On below part: set the current meal item's name TextView
                     String mealName = (String) documentSnapshot.getData().get("Title");
+                    String numberOfServings = (String) documentSnapshot.getData().get("Customized Scaling Number");
                     mealTitle.setText(mealName);
+                    mealScale.setText(numberOfServings);
                     // On below part: display the current meal item's image/icon based on its meal type
                     Glide.with(getContext())
                             .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
