@@ -66,11 +66,11 @@ public class ShoppingListViewIngredientFragment extends DialogFragment {
         unitEditText = view.findViewById(R.id.ingredient_unit);
         categoryEditText = view.findViewById(R.id.ingredient_category);
 
-        // getting attributes from ingredient and display it
+        // getting attributes from ingredient
         Bundle bundle = getArguments();
         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
         descriptionText.setText(ingredient.getBriefDescription());
-        amountText.setText(ingredient.getAmountString());
+        amountText.setText(String.valueOf(ingredient.getAmountValue()));
         unitEditText.setText(ingredient.getUnit());
         categoryEditText.setText(ingredient.getIngredientCategory());
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);

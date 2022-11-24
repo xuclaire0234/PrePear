@@ -16,21 +16,23 @@ public class ShoppingListController {
     }
 
     public void add(IngredientInRecipe ingredient) {
-        this.ingredients.add(ingredient);
+        if (! ingredients.contains(ingredient)) {
+            this.ingredients.add(ingredient);
+        }
     }
-    public void deleteRecipe(IngredientInRecipe ingredient) {
+     public void deleteRecipe(IngredientInRecipe ingredient) {
         if (this.ingredients.contains(ingredient)) {
             this.ingredients.remove(ingredient);
         }
-    }
+     }
 
-    public void clear() {
+     public void clear() {
         this.ingredients.clear();
-    }
+     }
 
-    public int countIngredients() {
+     public int countIngredients() {
         return this.ingredients.size();
-    }
+     }
 
 
     public ArrayList<IngredientInRecipe> getIngredients() {
@@ -46,7 +48,11 @@ public class ShoppingListController {
     }
 
     public IngredientInRecipe getIngredientAt (int index) {
-        return ingredients.get(index);
+        if (ingredients.size() > index && index > -1) {
+            return ingredients.get(index);
+        } else {
+            return null;
+        }
     }
 
     public void sortIngredient(int sortItemRecipe) {
@@ -68,7 +74,7 @@ public class ShoppingListController {
         }
     }
 
-    public void reverse() {
+    public void reverseOrder() {
         Collections.reverse(this.ingredients);
     }
 }
