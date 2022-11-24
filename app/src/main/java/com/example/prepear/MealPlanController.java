@@ -32,8 +32,8 @@ public class MealPlanController {
     /**
      * This function delete existed ingredient in the ingredient data list
      */
-    public void removeMealPlan(int index) {
-        this.MealPlanDataList.remove(index);
+    public DailyMealPlan removeMealPlan(int index) {
+        return this.MealPlanDataList.remove(index);
     }
 
     /**

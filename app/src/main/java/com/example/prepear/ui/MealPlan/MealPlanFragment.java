@@ -1,5 +1,7 @@
 package com.example.prepear.ui.MealPlan;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -126,7 +128,7 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);
                                                     } else if (Objects.equals(mealType, "Recipe")) {
                                                         int customizedMealNumberOfServings = ((Long) documentSnapshot.getData().get("Customized Scaling Number")).intValue();
-                                                        Meal currentMeal = new Meal(mealType,documentID,(String) documentSnapshot.getData().get("Meal ID"));
+                                                        Meal currentMeal = new Meal(mealType,documentID,((String) documentSnapshot.getData().get("Meal ID")));
                                                         currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);
                                                     }
@@ -140,33 +142,6 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                         }
                     }
                 });
-//        for (DailyMealPlan dailyMealPlan: mealPlanDataList) {
-//            dailyMealPlansCollection
-//                    .document(dailyMealPlan.getCurrentDailyMealPlanDate())
-//                    .collection("Meals")
-//                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                            dailyMealPlan.emptyDailyMealDataList();
-//                            for (QueryDocumentSnapshot documentSnapshot: value) {
-//                                String documentID = documentSnapshot.getId();
-//                                String mealType = (String) documentSnapshot.getData().get("Meal Type");
-//                                if (Objects.equals(mealType, "IngredientInStorage")) {
-//                                    double customizedMealAmount = (double) documentSnapshot.getData().get("Customized Scaling Number");
-//                                    Meal currentMeal = new Meal(mealType,documentID);
-//                                    currentMeal.setCustomizedAmount(customizedMealAmount);
-//                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
-//                                } else if (Objects.equals(mealType, "Recipe")) {
-//                                    int customizedMealNumberOfServings = (int) documentSnapshot.getData().get("Customized Scaling Number");
-//                                    Meal currentMeal = new Meal(mealType,documentID);
-//                                    currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
-//                                    dailyMealPlan.getDailyMealDataList().add(currentMeal);
-//                                }
-//                            }
-//                        }
-//                    });
-//
-//        }
         mealPlanAdapter.notifyDataSetChanged();
         databaseController = new DatabaseController();
         // On below: grab the ingredient addition button for use
@@ -186,7 +161,7 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                 // Grab the clicked item out of the ListView
                 Object clickedItem = mealPlanList.getItemAtPosition(position);
                 // Casting this clicked item to IngredientInStorage type from Object type
-                DailyMealPlan clickedDailyMealPlan= (DailyMealPlan) clickedItem;
+                DailyMealPlan clickedDailyMealPlan = (DailyMealPlan) clickedItem;
                 // call activity to edit ingredient
                 Intent intent = new Intent(getActivity(), ViewDailyMealPlanActivity.class);
                 intent.putExtra("selected daily meal plan", clickedDailyMealPlan);
@@ -200,7 +175,7 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                 DialogFragment deletePlan = new DeleteMealPlanDialog();
                 deletePlan.setTargetFragment(MealPlanFragment.this, 0);
                 deletePlan.show(getFragmentManager(), "Attention");
-                return false;
+                return true;
             }
         });
 
@@ -219,38 +194,36 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
         binding = null;
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LAUNCH_ADD_MEAL_PLAN_ACTIVITY){
             MealPlanController mealPlanController = new MealPlanController(mealPlanDataList);
             if (resultCode == Activity.RESULT_OK){
-                int counter =  Integer.parseInt(data.getSerializableExtra("counter").toString()); // counter = num of days = num of meals initially added
-                int size = mealPlanController.getSize();
+                int counter =  Integer.parseInt(data.getSerializableExtra("counter").toString()); // counter = number of days = num of meals initially added
                 for (int i = 1; i <= counter; i++){ // for each daily meal plan
                     DailyMealPlan currentDailyMealPlan = (DailyMealPlan) data.getSerializableExtra("meal" + i);
-//                    databaseController.addDailyMealPlanToMealPlan(MealPlanFragment.newInstance().getContext(), currentDailyMealPlan);
                     if (mealPlanController.getSize() == 0){
-                        databaseController.addDailyMealPlanToMealPlan(getContext(), currentDailyMealPlan);
                         mealPlanController.addMealPlan(currentDailyMealPlan);
+                        databaseController.addDailyMealPlanToMealPlan(getContext(), currentDailyMealPlan);
                         mealPlanAdapter.notifyDataSetChanged();
-                    }else {
-                        for (int j = 0; j < size; j++) {// compare the new meal plan date with the existing ones
-                            // On below line: // if the new meal date matches any one of the existing meal plan date
+                    }else { // if the current daily meal plan DataList contains some meal(s)
+                        for (int j = 0; j < mealPlanController.getSize(); j++) {// compare the new meal plan date with the existing ones
+                            // On below line: if the new meal date matches the current existing meal plan date inside current looping traversal
                             if (mealPlanController.getMealPlan(j).getCurrentDailyMealPlanDate().matches(currentDailyMealPlan.getCurrentDailyMealPlanDate())) {
                                 DailyMealPlan duplicateDay = mealPlanController.getMealPlan(j);
                                 for (int k = 0; k < duplicateDay.getDailyMealDataList().size(); k++){
                                     // On below line: if there is a matching date, compare the documentID of each meal plan with the document ID of the new meal plan
-                                    if (duplicateDay.getDailyMealDataList().get(k).getDocumentID().matches(currentDailyMealPlan.getDailyMealDataList().get(0).getDocumentID())
+                                    if (duplicateDay.getDailyMealDataList().get(k).getDocumentID()
+                                            .matches(currentDailyMealPlan.getDailyMealDataList().get(0).getDocumentID())
                                             && currentDailyMealPlan.getDailyMealDataList().get(0).getMealType().matches("IngredientInStorage")){
                                         // if document ID matches, and the daily meal plan type is ingredient, add the amounts into one
                                         double initialScalingNumber = duplicateDay.getDailyMealDataList().get(k).getCustomizedAmount();
-                                        mealPlanController.getMealPlan(j).getDailyMealDataList().get(k).setCustomizedAmount(initialScalingNumber +
-                                                currentDailyMealPlan.getDailyMealDataList().get(0).getCustomizedAmount());
+                                        mealPlanController.getMealPlan(j).getDailyMealDataList().get(k).setCustomizedAmount(Math.round((initialScalingNumber +
+                                                currentDailyMealPlan.getDailyMealDataList().get(0).getCustomizedAmount()) * 100.0) / 100.0);
                                         databaseController.addEditMealToDailyMealPlan(getContext(),
                                                 duplicateDay, duplicateDay.getDailyMealDataList().get(k));
-                                        currentDailyMealPlan = null; // set daily meal plan to null (use this to check if its added to the list later)
+//                                        currentDailyMealPlan = null; // set daily meal plan to null (use this to check if its added to the list later)
                                         break;
                                     }
                                 }
@@ -274,13 +247,10 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
         }
     }
 
-
-
     @Override
     public void onYesPressed() {
         MealPlanController mealPlanController = new MealPlanController(mealPlanDataList);
-        mealPlanController.removeMealPlan(positionOfPlanToRemove);
-        databaseController.deleteDailyMealPlanFromMealPlan(getContext(),mealPlanDataList.get(positionOfPlanToRemove));
+        databaseController.deleteDailyMealPlanFromMealPlan(getContext(), mealPlanController.removeMealPlan(positionOfPlanToRemove));
         mealPlanAdapter.notifyDataSetChanged();
     }
 

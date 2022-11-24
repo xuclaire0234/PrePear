@@ -28,15 +28,14 @@
         </activity>
         <activity
             android:name=".AddDailyMealActivity"
-            android:exported="false"
-            android:parentActivityName=".ViewDailyMealPlanActivity">
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ViewDailyMealPlanActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
