@@ -68,7 +68,7 @@ import java.util.Objects;
  */
 public class MealPlanFragment extends Fragment implements
         DeleteMealPlanDialog.OnFragmentInteractionListener {
-
+    private boolean mealAddedToDataList;
     private MealPlanViewModel mViewModel;
     private FragmentMealPlanBinding binding;
     private ListView mealPlanList; // for displaying all added meal plans
@@ -281,6 +281,7 @@ public class MealPlanFragment extends Fragment implements
                 // counter = num of days = num of meals initially added
                 int counter =  Integer.parseInt(data.getSerializableExtra("counter").toString()); // counter = number of days = num of meals initially added
                 for (int i = 1; i <= counter; i++){ // for each daily meal plan
+                    mealAddedToDataList = false;
                     DailyMealPlan currentDailyMealPlan = (DailyMealPlan) data.getSerializableExtra("meal" + i);
                     if (mealPlanController.getSize() == 0){ // if this is the first plan in the list
                         // add plan to the data base and to the list of daily meal plans
@@ -309,26 +310,26 @@ public class MealPlanFragment extends Fragment implements
                                         // add the edited meal plan to the data base
                                         databaseController.addEditMealToDailyMealPlan(getContext(),
                                                 duplicateDay, duplicateDay.getDailyMealDataList().get(k));
-//                                        currentDailyMealPlan = null; // set daily meal plan to null (use this to check if its added to the list later)
+                                        mealAddedToDataList = true;
                                         break;
                                     }
                                 }
                                 /* if daily meal plan isn't added to the list either because
                                        the document ID don't match or because the meal type is recipe
                                  */
-                                if (currentDailyMealPlan != null){
+                                if (!mealAddedToDataList){
                                     /* the meal plan date matches an existing date, so add meal plan
                                      to the array list of the existing meal plan
                                      */
                                     mealPlanController.getMealPlan(j).getDailyMealDataList()
                                             .add(currentDailyMealPlan.getDailyMealDataList().get(0));
-                                    currentDailyMealPlan = null;
+                                    mealAddedToDataList = true;
                                     break;
                                 }
                             }
                         }
                         // if the meal plan date does not match any date in the list
-                        if (currentDailyMealPlan != null){
+                        if (!mealAddedToDataList){
                             // add meal plan to the list, database and update the adapter
                             databaseController.addDailyMealPlanToMealPlan(getContext(), currentDailyMealPlan);
                             mealPlanController.addMealPlan(currentDailyMealPlan);
