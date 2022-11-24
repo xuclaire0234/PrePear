@@ -36,7 +36,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
     private FirebaseFirestore db;
 
 
-    /* constructor comment */
+    // class constructor
     public DailyMealPlanCustomList(Context contextParameter,
                                    ArrayList<Meal> mealsParameter) {
         super(contextParameter, 0, mealsParameter);
@@ -64,6 +64,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         DocumentReference mealDocRef;
         if (Objects.equals(meal.getMealType(), "IngredientInStorage")) { // if meal type is an in-storage ingredient
             mealDocRef = db.collection("Ingredient Storage").document(mealDocumentID);
+            // On below part: retrieve the data (detailed information) of a Meal object
             mealDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -87,11 +88,8 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                     String mealName = (String) documentSnapshot.getData().get("Title");
                     mealTitle.setText(mealName);
                     // On below part: display the current meal item's image/icon based on its meal type
-                    //String mealImageURI = (String) documentSnapshot.getData().get("Image URI");
-                    // mealPicture.setImageURI(Uri.parse(mealImageURI));
                     Glide.with(getContext())
                             .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
-                    Log.d(TAG, (String) documentSnapshot.getData().get("Image URI"));
                     mealPicture.setVisibility(View.VISIBLE);
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -104,6 +102,9 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         return view; // return this view
     }
 
+    /**
+     * @param updatedMeal The Meal object that will be updated
+     */
     public void updateMealInfo(Meal updatedMeal) {
         for (Meal eachMeal: mealsInOneDailyPlan) {
             if (Objects.equals(eachMeal.getDocumentID(), updatedMeal.getDocumentID())){

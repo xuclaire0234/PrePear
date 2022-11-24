@@ -19,7 +19,7 @@ public class Meal implements Serializable {
     private String documentID; // contains the same Document ID as its corresponding in-storage ingredient / recipe has inside database
     private double customizedAmount = 0; // represents user-entered customized amount
     private Integer customizedNumberOfServings = 0; // represents user-entered customized number of servings
-    private String mealID;
+    private String mealID; // represents the meal's own ID
 
     /**
      * This method creates a object which is of type {@link Meal}.
@@ -97,7 +97,8 @@ public class Meal implements Serializable {
     }
 
     /**
-     * @param extraCustomizedAmount
+     * This method does adding extra meal amount for the existing ingredient type meal
+     * @param extraCustomizedAmount the amount that the user want to add extra on the same ingredient type meal object
      */
     public void addExtraCustomizedAmount(double extraCustomizedAmount) {
         this.customizedAmount += extraCustomizedAmount;
@@ -106,14 +107,15 @@ public class Meal implements Serializable {
 
 
     /**
-     * @return
+     * @return a String object represents the meal's own ID
      */
     public String getMealID() {
         return mealID;
     }
 
     /**
-     * @param mealID
+     * This method is used to set the meal's own id by assigning it with a String object containing the new meal ID value
+     * @param mealID String contains containing the new meal ID value
      */
     public void setMealID(String mealID) {
         this.mealID = mealID;
