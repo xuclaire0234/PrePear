@@ -18,9 +18,10 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
-public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
+public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> implements ShoppingListClickboxFragment.OnFragmentInteractionListener {
     private ArrayList<IngredientInRecipe> ingredientsInShoppingList;
     private Context context;
+    private CheckBox shoppingListCheckBox;
 
     public CustomShoppingList(Context context, ArrayList<IngredientInRecipe> ingredientsInShoppingList) {
         super(context, 0, ingredientsInShoppingList);
@@ -45,7 +46,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         TextView amountTextView = view.findViewById(R.id.amount_TextView_shopping);
         TextView unitTextView = view.findViewById(R.id.unit_TextView_shopping);
         TextView ingredientCategoryTextView = view.findViewById(R.id.ingredient_category_TextView_shopping);
-        CheckBox shoppingListCheckBox = view.findViewById(R.id.ingredient_in_shopping_list_CheckBox);
+        shoppingListCheckBox = view.findViewById(R.id.ingredient_in_shopping_list_CheckBox);
 
 
         /* sets the detailed information to the view */
@@ -53,24 +54,37 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         amountTextView.setText(String.valueOf(ingredientInShoppingList.getAmountValue()));
         unitTextView.setText(ingredientInShoppingList.getUnit());
         ingredientCategoryTextView.setText(ingredientInShoppingList.getIngredientCategory());
-        shoppingListCheckBox.setChecked(false);
-        shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
+//        shoppingListCheckBox.setChecked(false);
+        shoppingListCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                /*
-                On below:
-                show first pop up the dialogFragment
-                then, compare actual amount with needed amount
-                if actual amount < needed amount -> setChecked(false) -> update amount -> store the actual amount into db
-                if actual amount >= needed amount -> setChecked(true) -> directly store in the db
-                 */
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                shoppingListCheckBox.setChecked(false);
                 FragmentActivity activity = (FragmentActivity)(context);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
                         .show(fm, "ADD_INGREDIENT_DETAILS");
-                shoppingListCheckBox.setChecked(true);
+//                shoppingListCheckBox.setChecked(true);
             }
         });
+//        shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                /*
+//                On below:
+//                show first pop up the dialogFragment
+//                then, compare actual amount with needed amount
+//                if actual amount < needed amount -> setChecked(false) -> update amount -> store the actual amount into db
+//                if actual amount >= needed amount -> setChecked(true) -> directly store in the db
+//                 */
+//                shoppingListCheckBox.setChecked(false);
+//                FragmentActivity activity = (FragmentActivity)(context);
+//                FragmentManager fm = activity.getSupportFragmentManager();
+//                ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
+//                        .show(fm, "ADD_INGREDIENT_DETAILS");
+////                shoppingListCheckBox.setChecked(true);
+//                shoppingListCheckBox.setChecked(false);
+//            }
+//        });
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +99,11 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
 //    @Override
 //    public void onOkPressed(IngredientInStorage ingredientInStorage) {
 
+    }
+
+    @Override
+    public void onOkPressed(boolean actualAmountGreaterThanNeeded) {
+        shoppingListCheckBox.setChecked(true);
     }
 }
 
