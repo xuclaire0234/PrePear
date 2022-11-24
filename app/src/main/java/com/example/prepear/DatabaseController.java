@@ -252,6 +252,8 @@ public class DatabaseController {
      */
     public void addEditMealToDailyMealPlan(Context context, DailyMealPlan dailyMealPlan, Meal mealToUpdate) {
         HashMap<String, Object> data = new HashMap<>();
+        String mealID = mealToUpdate.getMealID();
+        data.put("Meal ID", mealID);
         String documentID = mealToUpdate.getDocumentID();
         data.put("Document ID", documentID);
         String mealType = mealToUpdate.getMealType();
@@ -265,7 +267,7 @@ public class DatabaseController {
                 .collection("Daily Meal Plans")
                 .document(dailyMealPlan.getCurrentDailyMealPlanDate())
                 .collection("Meals")
-                .document(documentID)
+                .document(mealID)
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -293,7 +295,7 @@ public class DatabaseController {
                 .collection("Daily Meal Plans")
                 .document(dailyMealPlan.getCurrentDailyMealPlanDate())
                 .collection("Meals")
-                .document(mealToDelete.getDocumentID())
+                .document(mealToDelete.getMealID())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
