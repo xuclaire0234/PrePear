@@ -45,9 +45,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Objects;
 
 public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.OnFragmentInteractionListener {
@@ -66,7 +69,7 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
     }
     private FirebaseFirestore dbMealPlanPart = FirebaseFirestore.getInstance();
     private CollectionReference dailyMealPlansCollection = dbMealPlanPart.collection("Daily Meal Plans");
-
+    private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -114,16 +117,16 @@ public class MealPlanFragment extends Fragment implements DeleteMealPlanDialog.O
                                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                                                 dailyMealPlan.emptyDailyMealDataList();
                                                 for (QueryDocumentSnapshot documentSnapshot: value) {
-                                                    String documentID = documentSnapshot.getId();
+                                                    String documentID = (String) documentSnapshot.getData().get("Document ID");
                                                     String mealType = (String) documentSnapshot.getData().get("Meal Type");
                                                     if (Objects.equals(mealType, "IngredientInStorage")) {
-                                                        double customizedMealAmount = ((Number)documentSnapshot.getData().get("Customized Scaling Number")).doubleValue();
-                                                        Meal currentMeal = new Meal(mealType,documentID);
+                                                        double customizedMealAmount = ((Number) documentSnapshot.getData().get("Customized Scaling Number")).doubleValue();
+                                                        Meal currentMeal = new Meal(mealType,documentID, documentID);
                                                         currentMeal.setCustomizedAmount(customizedMealAmount);
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);
                                                     } else if (Objects.equals(mealType, "Recipe")) {
-                                                        int customizedMealNumberOfServings = ((Long)documentSnapshot.getData().get("Customized Scaling Number")).intValue();
-                                                        Meal currentMeal = new Meal(mealType,documentID);
+                                                        int customizedMealNumberOfServings = ((Long) documentSnapshot.getData().get("Customized Scaling Number")).intValue();
+                                                        Meal currentMeal = new Meal(mealType,documentID,(String) documentSnapshot.getData().get("Meal ID"));
                                                         currentMeal.setCustomizedNumberOfServings(customizedMealNumberOfServings);
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);
                                                     }

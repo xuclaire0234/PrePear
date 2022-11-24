@@ -101,6 +101,7 @@ public class Meal implements Serializable {
      */
     public void addExtraCustomizedAmount(double extraCustomizedAmount) {
         this.customizedAmount += extraCustomizedAmount;
+        this.customizedAmount = Math.round(this.customizedAmount * 100.0) / 100.0;
     }
 
 

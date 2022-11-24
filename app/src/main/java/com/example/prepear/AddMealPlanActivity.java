@@ -24,6 +24,7 @@ import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.example.prepear.ui.MealPlan.MealPlanFragment;
 import com.example.prepear.ui.Recipe.RecipeFragment;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -45,7 +46,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
     private DatePickerDialog dialog; // create datePicker for best dates
     private RadioButton ingredientButton;
     private RadioButton recipeButton;
-
+    private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -266,7 +267,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                             }else {
                                 for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
                                     // create a Meal object for each DailyMealPlan object
-                                    Meal firstMeal = new Meal("IngredientInStorage", selectedIngredient.getDocumentId());
+                                    Meal firstMeal = new Meal("IngredientInStorage", selectedIngredient.getDocumentId(), selectedIngredient.getDocumentId());
                                     firstMeal.setCustomizedAmount( Double.parseDouble(amount));
                                     counter += 1;
                                     // create the DailyMealPlan object
@@ -371,7 +372,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                             } else {
                                 for (LocalDate date = localStart; date.isBefore(localEnd) || date.isEqual(localEnd); date = date.plusDays(1)) {
                                     // create a Meal object for each DailyMealPlan object
-                                    Meal firstMeal = new Meal("Recipe",selectedRecipe.getId());
+                                    Meal firstMeal = new Meal("Recipe",selectedRecipe.getId(),String.valueOf(new Date()));
                                     firstMeal.setCustomizedNumberOfServings(Integer.parseInt(numberOfServings));
                                     // create the DailyMealPlan object
                                     counter += 1;
