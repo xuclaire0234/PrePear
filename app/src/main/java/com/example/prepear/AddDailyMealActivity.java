@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-
 /**
  * This Activity class is used to launch the daily-meal-adding activity for the user to choose a daily meal either from Ingredient Storage or from Recipes
  */
@@ -46,23 +45,31 @@ public class AddDailyMealActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_daily_meal);
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true); // back arrow Toolbar
         TextView addedMealNameTextView = findViewById(R.id.meal_name_text); // TextView for displaying the picked meal's name
         TextInputEditText addedMealAmountEditText = findViewById(R.id.meal_amount_input); // EditText for user's meal amount / number of servings
         Button addMealButton = findViewById(R.id.add_meal_in_plan_button); // meal-adding confirmation Button
         Button pickIngredientTypeMealButton = findViewById(R.id.pick_in_storage_meal_button); // Button for picking a meal from the Ingredient Storage
         Button pickRecipeTypeMealButton = findViewById(R.id.pick_recipe_meal_button); // Button for picking a meal from the Recipes
+        Button backButton = findViewById(R.id.back_button);
         // On below line: receive the passed-in Daily Meal Plan object from ViewMealPlan Activity
         DailyMealPlan currentDailyMealPlan = (DailyMealPlan) getIntent().getSerializableExtra("current daily meal plan");
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         pickIngredientTypeMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // On below part: launch and direct to the Ingredient Fragment for user to pick a meal inside
-                FragmentTransaction ingredientFragmentTransition;
+                FragmentTransaction ingredientFragmentTransition; // begin fragment transaction
                 ingredientFragmentTransition = getSupportFragmentManager().beginTransaction();
                 FrameLayout frameLayout = findViewById(android.R.id.content);
-                frameLayout.removeAllViews();
+                frameLayout.removeAllViews(); // remove all views from display
+                // On below line: replace the current view with the fragment
                 ingredientFragmentTransition.replace(android.R.id.content, new IngredientFragment(), "selectIngredient");
                 ingredientFragmentTransition.addToBackStack(null);
                 ingredientFragmentTransition.commit();
@@ -74,10 +81,11 @@ public class AddDailyMealActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // On below part: launch and direct to the Recipe Fragment for user to pick a meal inside
-                FragmentTransaction recipeFragmentTransition;
+                FragmentTransaction recipeFragmentTransition; // begin fragment transaction
                 recipeFragmentTransition = getSupportFragmentManager().beginTransaction();
                 FrameLayout frameLayout = findViewById(android.R.id.content);
-                frameLayout.removeAllViews();
+                frameLayout.removeAllViews(); // remove all views from display
+                // On below line: replace the current view with the fragment
                 recipeFragmentTransition.replace(android.R.id.content, new RecipeFragment(), "selectRecipe");
                 recipeFragmentTransition.addToBackStack(null);
                 recipeFragmentTransition.commit();

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,13 +20,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ViewDailyMealPlanActivity extends AppCompatActivity{
-    // On below part: initialize activity class attributes
-    private String currentDailyMealPlanDate; // storing current daily meal plan's date
     private DailyMealPlan clickedDailyMealPlan;
     private ArrayList<Meal> dailyMealDataList; // contains all meals inside this current daily meal plan
     private ArrayAdapter<Meal> dailyMealArrayAdapter; // initialize a customized ArrayAdapter for future use
-    private DatabaseController databaseController;
-    private final String DAILY_MEAL_PLAN_COLLECTION_NAME = "Daily Meal Plans";
     private final int LAUNCH_ADD_DAILY_MEAL_ACTIVITY = 3;
     private final int LAUNCH_VIEW_INGREDIENT_TYPE_MEAL_ACTIVITY = 1;
     private final int LAUNCH_VIEW_RECIPE_TYPE_MEAL_ACTIVITY = 2;
@@ -37,13 +34,27 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         setContentView(R.layout.activity_view_daily_meal_plan);
 
         clickedDailyMealPlan = (DailyMealPlan) getIntent().getSerializableExtra("selected daily meal plan");
-        currentDailyMealPlanDate = clickedDailyMealPlan.getCurrentDailyMealPlanDate();
+        // On below part: initialize activity class attributes
+        // storing current daily meal plan's date
+        String currentDailyMealPlanDate = clickedDailyMealPlan.getCurrentDailyMealPlanDate();
         dailyMealDataList = clickedDailyMealPlan.getDailyMealDataList();
         Button addDailyMealButton = findViewById(R.id.add_daily_meal_button); // used to add a new meal in when clicking
+        Button backButton = findViewById(R.id.back_button);
+        TextView currentDailyMealPlanDateTextView = findViewById(R.id.current_daily_meal_plan_date_text);
         ListView dailyMealListView = findViewById(R.id.daily_meals_listView); // display the meal items
         dailyMealArrayAdapter = new DailyMealPlanCustomList(getApplicationContext(), dailyMealDataList);
         dailyMealListView.setAdapter(dailyMealArrayAdapter);
-        databaseController = new DatabaseController();
+        DatabaseController databaseController = new DatabaseController();
+
+        currentDailyMealPlanDateTextView.setText(currentDailyMealPlanDate);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         addDailyMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
