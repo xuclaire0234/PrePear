@@ -84,7 +84,7 @@ public class MealPlanDailyIngredientCount {
                                 if (type.equals("Recipe")) {
                                     recipeIdsCollection.add(id);
                                     recipeScaleCollection.add(scaleOfItem.doubleValue());
-                                } else if (type.equals("Ingredient")) {
+                                } else if (type.equals("IngredientInStorage")) {
                                     ingredientIdsCollection.add(id);
                                     ingredientScaleCollection.add(scaleOfItem.doubleValue());
                                 }

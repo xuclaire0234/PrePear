@@ -86,20 +86,16 @@
             android:textSize="16dp"
             />
 
-        <Spinner
+        <TextView
             android:id="@+id/ingredient_unit"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="90dp"
-            android:background="@drawable/spinner_bg"
+            android:layout_marginLeft="10dp"
             android:ems="10"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:spinnerMode="dropdown"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="SpeakableTextPresentCheck" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -123,18 +119,16 @@
             android:textSize="16dp"
             />
 
-        <Spinner
+        <TextView
             android:id="@+id/ingredient_category"
-            android:layout_width="213dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/spinner_bg"
             android:ems="10"
-            android:importantForAutofill="no"
             android:minHeight="48dp"
-            android:spinnerMode="dropdown"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="SpeakableTextPresentCheck" />
+
     </LinearLayout>
 
     <View

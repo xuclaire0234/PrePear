@@ -16,7 +16,7 @@ public class ShoppingListController {
     }
 
     public void add(IngredientInRecipe ingredient) {
-        if (! this.ingredients.contains(ingredient)) {
+        if (! ingredients.contains(ingredient)) {
             this.ingredients.add(ingredient);
         }
     }
@@ -48,10 +48,11 @@ public class ShoppingListController {
     }
 
     public IngredientInRecipe getIngredientAt (int index) {
-        if (index > ingredients.size() - 1) {
+        if (ingredients.size() > index && index > -1) {
+            return ingredients.get(index);
+        } else {
             return null;
         }
-        return ingredients.get(index);
     }
 
     public void sortIngredient(int sortItemRecipe) {
