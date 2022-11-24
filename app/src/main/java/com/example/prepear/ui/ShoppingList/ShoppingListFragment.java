@@ -7,8 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -31,8 +29,6 @@ import com.example.prepear.CustomShoppingList;
 import com.example.prepear.IngredientInRecipe;
 import com.example.prepear.IngredientInStorage;
 import com.example.prepear.R;
-import com.example.prepear.RecipeAddEditIngredientFragment;
-import com.example.prepear.ShoppingListViewIngredientFragment;
 import com.example.prepear.databinding.FragmentRecipeBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,9 +73,9 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -96,6 +92,7 @@ public class ShoppingListFragment extends Fragment {
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
 
+
         // set adapter
         try {
             ingredientShoppingList = new ShoppingListController();
@@ -111,6 +108,7 @@ public class ShoppingListFragment extends Fragment {
 //                ingredientShoppingListAdapter.notifyDataSetChanged();
             }
         });
+
 
         sortItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -129,6 +127,12 @@ public class ShoppingListFragment extends Fragment {
         ArrayAdapter<String> ad = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortItemSpinner.setAdapter(ad);
+
+
+        ingredientShoppingList = new ShoppingListController();
+        ingredientShoppingListAdapter = new CustomShoppingList(getContext(), ingredientShoppingList.getIngredients());
+        shoppingListView.setAdapter(ingredientShoppingListAdapter);
+
 
         fromDateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,6 +203,7 @@ public class ShoppingListFragment extends Fragment {
                         }
                     },2000);
 
+
 //                    gainAllIngredientAtDate("2022-11-14");
 
 //                    MealPlanDailyIngredientCount count = new MealPlanDailyIngredientCount("2022-11-14");
@@ -228,6 +233,8 @@ public class ShoppingListFragment extends Fragment {
                 }
             }
         });
+
+
     }
 
     private Boolean check() {

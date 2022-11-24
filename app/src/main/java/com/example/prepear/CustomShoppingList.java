@@ -88,36 +88,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
                 ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
                         .show(fm, "ADD_INGREDIENT_DETAILS");
 
-                final String TAG = "Ingredient Storage";
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                final CollectionReference collectionReference = db.collection("Ingredient Storage");
-
-                collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
-                            FirebaseFirestoreException error) {
-                        // Loop through all the documents in the collection named "Ingredient Storage"
-                        Double actualAmount = 0.0;
-                        String description = ingredientInShoppingList.getBriefDescription();
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            Log.d(TAG, String.valueOf(doc.getData().get("description")));
-
-                            // Get description and category attributes
-                            String descriptionIngredientInStorage = (String) doc.getData().get("description");
-                            Double amountIngredientInStorage = new Double(doc.getData().get("amount").toString());
-
-                            if (descriptionIngredientInStorage.equals(description)) {
-                                if (amountIngredientInStorage >= Double.parseDouble(ingredientInShoppingList.getAmountString())) {
-                                    // if actualAmount is greater than needed amount, set check box to true
-                                    shoppingListCheckBox.setChecked(true);
-                                } else {
-                                    shoppingListCheckBox.setChecked(false);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                });
+                shoppingListCheckBox.setChecked(true);
             }
         });
 
