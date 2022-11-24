@@ -20,7 +20,7 @@ public class ShoppingListController {
             this.ingredients.add(ingredient);
         }
     }
-     public void deleteRecipe(IngredientInRecipe ingredient) {
+     public void deleteIngredient(IngredientInRecipe ingredient) {
         if (this.ingredients.contains(ingredient)) {
             this.ingredients.remove(ingredient);
         }
