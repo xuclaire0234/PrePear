@@ -1,6 +1,8 @@
 package com.example.prepear;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -50,6 +54,41 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
         unitTextView.setText(ingredientInShoppingList.getUnit());
         ingredientCategoryTextView.setText(ingredientInShoppingList.getIngredientCategory());
         shoppingListCheckBox.setChecked(false);
+        shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                On below:
+                show first pop up the dialogFragment
+                then, compare actual amount with needed amount
+                if actual amount < needed amount -> setChecked(false) -> update amount -> store the actual amount into db
+                if actual amount >= needed amount -> setChecked(true) -> directly store in the db
+                 */
+                FragmentActivity activity = (FragmentActivity)(context);
+                FragmentManager fm = activity.getSupportFragmentManager();
+                ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
+                        .show(fm, "ADD_INGREDIENT_DETAILS");
+                shoppingListCheckBox.setChecked(true);
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity activity = (FragmentActivity)(context);
+                FragmentManager fm = activity.getSupportFragmentManager();
+                ShoppingListViewIngredientFragment.newInstance(ingredientInShoppingList)
+                        .show(fm, "VIEW_INGREDIENT");
+                Log.d("CLICKED", "row number: " + position);
+            }
+        });
+        return view;
+//    @Override
+//    public void onOkPressed(IngredientInStorage ingredientInStorage) {
+
+    }
+}
+
+//        shoppingListCheckBox.setChecked(false);
 //        shoppingListCheckBox.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -60,8 +99,20 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> {
 //                if actual amount < needed amount -> setChecked(false) -> update amount -> store the actual amount into db
 //                if actual amount >= needed amount -> setChecked(true) -> directly store in the db
 //                 */
+//                FragmentActivity activity = (FragmentActivity)(context);
+//                FragmentManager fm = activity.getSupportFragmentManager();
+//                ShoppingListClickboxFragment.newInstance(ingredientInShoppingList)
+//                        .show(fm, "ADD_INGREDIENT_DETAILS");
+//                shoppingListCheckBox.setChecked(true);
 //            }
 //        });
-        return view;
-    }
-}
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentActivity activity = (FragmentActivity)(context);
+//                FragmentManager fm = activity.getSupportFragmentManager();
+//                ShoppingListViewIngredientFragment.newInstance(ingredientInShoppingList)
+//                        .show(fm, "VIEW_INGREDIENT");
+//                Log.d("CLICKED", "row number: " + position);
+//            }
+//        });

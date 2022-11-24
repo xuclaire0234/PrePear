@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test class for Recipe class.
  */
-public class RecipeControllerTest {
+public class ShoppingListControllerTest {
 
     private RecipeController recipeController;
 
