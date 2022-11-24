@@ -25,6 +25,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -73,11 +74,10 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if (documentSnapshot.exists()) {
                             String mealName = (String) documentSnapshot.getData().get("description");
-                            String mealAmount = (String) documentSnapshot.getData().get("Customized Scaling Number");
                             mealTitle.setText(mealName);
-                            mealScale.setText(mealAmount);
                             int mealIconCode = ((Long)documentSnapshot.getData().get("icon code")).intValue();
                             mealPicture.setImageResource(mealIconCode);
+                            mealScale.setText("Amount: " + (meal.getCustomizedAmount()));
                         }
                     }
                 }
@@ -89,9 +89,8 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     // On below part: set the current meal item's name TextView
                     String mealName = (String) documentSnapshot.getData().get("Title");
-                    String numberOfServings = (String) documentSnapshot.getData().get("Customized Scaling Number");
                     mealTitle.setText(mealName);
-                    mealScale.setText(numberOfServings);
+                    mealScale.setText("# of Servings: " + (meal.getCustomizedNumberOfServings()));
                     // On below part: display the current meal item's image/icon based on its meal type
                     Glide.with(getContext())
                             .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
