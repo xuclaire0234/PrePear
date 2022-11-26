@@ -7,6 +7,8 @@
  */
 package com.example.prepear;
 
+import static com.google.common.reflect.Reflection.getPackageName;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -263,8 +265,9 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                         if (ingredientInStorage == false) {
                             Date dateTimeNow = new Date();
                             String documentId = DATEFORMAT.format(dateTimeNow);
+                            int iconCode = getResources().getIdentifier("ic_baseline_add_photo_alternate_24", "drawable", "com.example.prepear");
                             IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
-                                    ingredient.getIngredientCategory(), bestBeforeDate, finalLocation, actualAmount, ingredient.getUnit(), documentId,0);
+                                    ingredient.getIngredientCategory(), bestBeforeDate, finalLocation, actualAmount, ingredient.getUnit(), documentId, iconCode);
                             DatabaseController database = new DatabaseController();
                             database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
                         }
@@ -274,6 +277,11 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         });
         return builder.create();
     }
+
+//    // onDestroy method may never be called ,
+//    public void onDestroy() {
+//        super.onDestroy();
+//    }
 
     /**
      * This method removes all present soft keyboards and is used when user clicks on one of the spinners

@@ -27,7 +27,7 @@ public class AddEditIngredientActivityTest {
     private IngredientController ingredientController;
 
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
 
     @Before
     /**
