@@ -29,8 +29,10 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prepear.ComputeShoppingList;
 import com.example.prepear.CustomShoppingList;
@@ -75,6 +77,7 @@ public class ShoppingListFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Double scale;
     private IngredientInRecipe recipe;
+    private ProgressBar progressBarShopping;
 
     private CollectionReference collectionReference = db.collection("Ingredient Storage");
 
@@ -103,6 +106,7 @@ public class ShoppingListFragment extends Fragment {
         sortOrderButton = view.findViewById(R.id.sort_button);
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
+        progressBarShopping = view.findViewById(R.id.progressBar_shopping);
 
 
         // set adapter
@@ -185,6 +189,14 @@ public class ShoppingListFragment extends Fragment {
                      * Therefore, we can continue to calculate what ingredients user has to buy by calling
                      * method calculateShoppingList(Date)
                      */
+                    progressBarShopping.setVisibility(View.VISIBLE);
+                    Handler newHandler = new Handler();
+                    newHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBarShopping.setVisibility(View.INVISIBLE);
+                        }
+                    },9000);
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -210,7 +222,11 @@ public class ShoppingListFragment extends Fragment {
                                     Date targetDay = startDay.getTime(); // current date
                                     calculateShoppingList(targetDay);
                                     startDay.add(Calendar.DATE, 1);  // date + 1 to get ingredients for the next day
+                                    //progressBarShopping.setVisibility(View.INVISIBLE);
                                 }
+
+                                // progressBarShopping.setVisibility(View.INVISIBLE);
+
                             }catch (ParseException ex) {
                                 ex.printStackTrace();
                             }
@@ -220,6 +236,7 @@ public class ShoppingListFragment extends Fragment {
                 }
             }
         });
+
 
 
     }
@@ -494,7 +511,7 @@ public class ShoppingListFragment extends Fragment {
                 }
                 ingredientShoppingListAdapter.notifyDataSetChanged();
             }
-        }, 4000);
+        }, 5000);
     }
 
     /**

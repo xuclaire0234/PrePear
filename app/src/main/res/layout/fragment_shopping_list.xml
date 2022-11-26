@@ -51,6 +51,7 @@
         android:layout_below="@id/sort_layout"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/custom_layout"
         android:orientation="vertical">
 
@@ -124,7 +125,10 @@
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent" />
+
+
     </LinearLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -133,8 +137,15 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="1dp">
-
+        android:layout_marginTop="7dp">
+        <ProgressBar
+            android:id="@+id/progressBar_shopping"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/green_pear"
+            android:visibility="invisible"
+            android:layout_height="wrap_content" />
         <ListView
             android:id="@+id/ingredient_listview"
             android:layout_width="match_parent"

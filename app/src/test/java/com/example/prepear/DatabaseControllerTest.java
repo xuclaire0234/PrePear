@@ -50,7 +50,7 @@ public class DatabaseControllerTest {
      * @return the return is of type {@link IngredientInStorage}
      */
     private IngredientInStorage mockIngredientInStorage() {
-        return new IngredientInStorage("Egg","egg","2022-11-24","box","3","quantities","2022-11-04 02:26:44");
+        return new IngredientInStorage("Egg","egg","2022-11-24","box","3","quantities","2022-11-04 02:26:44",0);
     }
 
     /**

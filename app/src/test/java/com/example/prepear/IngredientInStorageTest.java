@@ -30,7 +30,7 @@ public class IngredientInStorageTest {
      */
     private void createIngredient() {
         ingredient = new IngredientInStorage("Tomato", "Vegetables",
-                "2022-11-03", "Fridge", "4", "g", null);
+                "2022-11-03", "Fridge", "4", "g", null,0);
     }
 
     @Test

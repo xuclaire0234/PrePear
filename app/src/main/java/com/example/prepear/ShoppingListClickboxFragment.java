@@ -95,16 +95,17 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * the variable listener to the context, otherwise it raises a runtime error
      * @param  context information about the current state of the app received from ShoppingListViewModel
      */
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            listener = (OnFragmentInteractionListener) context;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (OnFragmentInteractionListener) getParentFragment();
+//        if (getParentFragment() instanceof OnFragmentInteractionListener) {
+//            listener = (OnFragmentInteractionListener) getParentFragment();
 //        }
 //        else {
 //            throw new RuntimeException(context + "must implement OnFragmentInteractionListener");
 //        }
-//    }
+    }
 
     final String TAG = "Ingredient Storage";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
