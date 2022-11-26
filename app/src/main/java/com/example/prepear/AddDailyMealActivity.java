@@ -130,9 +130,9 @@ public class AddDailyMealActivity extends AppCompatActivity
                     String userMealAmountInput = Objects.requireNonNull(addedMealAmountEditText.getText())
                             .toString()
                             .trim();
+                    // On below part: check if user input is valid
                     // On below line: cast and convert user-input meal amount into double type value for use
                     double userMealAmountValue = Double.parseDouble(userMealAmountInput);
-                    // On below part: check if user input is valid
                     if (userMealAmountInput.isEmpty()) { // if user doesn't input any value on EditText input field for meal amount
                         Toast.makeText(getApplicationContext(), "Please enter a amount value for this meal.", Toast.LENGTH_LONG).show();
                     } else if (userMealAmountValue <= 0) { // if user-input meal amount actual value <= 0
