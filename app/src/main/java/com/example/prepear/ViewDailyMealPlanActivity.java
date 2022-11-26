@@ -118,6 +118,7 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
                             dailyMealArrayAdapter.remove(eachMeal);
                             dailyMealDataList.remove(eachMeal);
                             dailyMealArrayAdapter.notifyDataSetChanged();
+                            break;
                         }
                     }
                     databaseController.deleteMealFromDailyMealPlan(ViewDailyMealPlanActivity.this, clickedDailyMealPlan, mealToDelete);
