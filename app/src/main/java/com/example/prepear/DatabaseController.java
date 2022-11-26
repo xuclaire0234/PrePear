@@ -1,6 +1,6 @@
 /**
  * Classname: DatabaseController
- * Version Information: 2.0.0
+ * Version Information: 3.0.0
  * Date: 11/17/2022
  * Author: Jiayin He
  * Copyright Notice:
@@ -258,6 +258,10 @@ public class DatabaseController {
         data.put("Document ID", documentID);
         String mealType = mealToUpdate.getMealType();
         data.put("Meal Type", mealType);
+        Integer eatHour = mealToUpdate.getEatHour();
+        data.put("Eat Hour", eatHour);
+        Integer eatMinute = mealToUpdate.getEatMinute();
+        data.put("Eat Minute", eatMinute);
         if (mealType.equals("Recipe")) {
             data.put("Customized Scaling Number", mealToUpdate.getCustomizedNumberOfServings());
         } else {

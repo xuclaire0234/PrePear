@@ -42,6 +42,7 @@ import java.util.Locale;
  * a specific recipe type meal that is inside the specific daily meal plan.
  */
 public class ViewRecipeTypeMealActivity extends AppCompatActivity implements CustomizeNumberOfServingsFragment.OnFragmentInteractionListener {
+    // initializes class attributes
     private ImageView imageImageView;
     private TextView titleTextView;
     private TextView preparationTimeTextView;

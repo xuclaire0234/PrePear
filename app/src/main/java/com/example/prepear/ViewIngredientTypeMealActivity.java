@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * a specific ingredient type meal that is inside the specific daily meal plan.
  */
 public class ViewIngredientTypeMealActivity extends AppCompatActivity {
+    // initializes class attributes
     private ImageView ingredientIconImageView;
     private TextView briefDescriptionTextView;
     private TextView bestBeforeDateTextView;

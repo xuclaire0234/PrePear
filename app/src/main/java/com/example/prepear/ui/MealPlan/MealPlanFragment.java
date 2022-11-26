@@ -164,6 +164,8 @@ public class MealPlanFragment extends Fragment implements
                                                 for (QueryDocumentSnapshot documentSnapshot: value) {
                                                     String documentID = (String) documentSnapshot.getData().get("Document ID");
                                                     String mealType = (String) documentSnapshot.getData().get("Meal Type");
+                                                    Integer eatHour = Integer.parseInt(documentSnapshot.getData().get("Eat Hour").toString());
+                                                    Integer eatMinute = Integer.parseInt(documentSnapshot.getData().get("Eat Minute").toString());
                                                     if (Objects.equals(mealType, "IngredientInStorage")) {
                                                         // get amount and cast it to double
                                                         double customizedMealAmount = ((Number) documentSnapshot
@@ -171,6 +173,8 @@ public class MealPlanFragment extends Fragment implements
                                                         // create a new Meal object
                                                         Meal currentMeal = new Meal(mealType,documentID, documentID);
                                                         currentMeal.setCustomizedAmount(customizedMealAmount);
+                                                        currentMeal.setEatHour(eatHour);
+                                                        currentMeal.setEatMinute(eatMinute);
                                                         // add new meal to the daily meal plan list
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);
                                                     } else if (Objects.equals(mealType, "Recipe")) {
@@ -182,9 +186,12 @@ public class MealPlanFragment extends Fragment implements
                                                         Meal currentMeal = new Meal(mealType,documentID, (String) documentSnapshot.getData().get("Meal ID"));
                                                         currentMeal.setCustomizedNumberOfServings
                                                                 (customizedMealNumberOfServings);
+                                                        currentMeal.setEatHour(eatHour);
+                                                        currentMeal.setEatMinute(eatMinute);
                                                         // add new meal to the daily meal plan list
                                                         dailyMealPlan.getDailyMealDataList().add(currentMeal);
                                                     }
+
                                                 }
                                                 // notify the adapter about change
                                                 mealPlanAdapter.notifyDataSetChanged();

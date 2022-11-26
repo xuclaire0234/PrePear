@@ -1,6 +1,6 @@
 /**
  * Classname: Meal
- * Version Information: 1.0.0
+ * Version Information: 2.0.0
  * Date: 11/16/2022
  * Author: Jiayin He, Shihao Liu
  * Copyright Notice:
@@ -15,11 +15,13 @@ import java.io.Serializable;
  */
 public class Meal implements Serializable {
     // On below part: initialize Meal class attributes
-    private String mealType; // represents the meal type, either an in-storage ingredient or a dish cooked based on a recipe
-    private String documentID; // contains the same Document ID as its corresponding in-storage ingredient / recipe has inside database
-    private double customizedAmount = 0; // represents user-entered customized amount
+    private String mealID;  // represents the meal's own ID
+    private String mealType;    // represents the meal type, either an in-storage ingredient or a dish cooked based on a recipe
+    private String documentID;  // contains the same Document ID as its corresponding in-storage ingredient / recipe has inside database
+    private double customizedAmount = 0;    // represents user-entered customized amount
     private Integer customizedNumberOfServings = 0; // represents user-entered customized number of servings
-    private String mealID; // represents the meal's own ID
+    private Integer eatHour = 24;   // represents the hour of the day user defined to eat the meal
+    private Integer eatMinute = 24; // represents the minute of the day user defined to eat the meal
 
     /**
      * This method creates a object which is of type {@link Meal}.
@@ -29,6 +31,22 @@ public class Meal implements Serializable {
     public Meal(String mealType, String documentID, String mealID) {
         this.mealType = mealType;
         this.documentID = documentID;
+        this.mealID = mealID;
+    }
+
+    /**
+     * This method gets the id of the meal.
+     * @return the id of the meal to be set
+     */
+    public String getMealID() {
+        return mealID;
+    }
+
+    /**
+     * This method sets the id of the meal.
+     * @param mealID the id of the meal to be set
+     */
+    public void setMealID(String mealID) {
         this.mealID = mealID;
     }
 
@@ -105,20 +123,35 @@ public class Meal implements Serializable {
         this.customizedAmount = Math.round(this.customizedAmount * 100.0) / 100.0;
     }
 
-
     /**
-     * @return a String object represents the meal's own ID
+     * This method gets the hour of the day user defined to eat the meal
+     * @return the hour of the day user defined to eat the meal
      */
-    public String getMealID() {
-        return mealID;
+    public Integer getEatHour() {
+        return eatHour;
     }
 
     /**
-     * This method is used to set the meal's own id by assigning it with a String object containing the new meal ID value
-     * @param mealID String contains containing the new meal ID value
+     * This method sets the hour of the day user defined to eat the meal.
+     * @param eatHour the hour of the day user defined to eat the meal to be set
      */
-    public void setMealID(String mealID) {
-        this.mealID = mealID;
+    public void setEatHour(Integer eatHour) {
+        this.eatHour = eatHour;
     }
 
+    /**
+     * This method gets the minute of the day user defined to eat the meal.
+     * @return the minute of the day user defined to eat the meal
+     */
+    public Integer getEatMinute() {
+        return eatMinute;
+    }
+
+    /**
+     * This method sets the minute of the day user defined to eat the meal.
+     * @param eatMinute the minute of the day user defined to eat the meal to be set
+     */
+    public void setEatMinute(Integer eatMinute) {
+        this.eatMinute = eatMinute;
+    }
 }

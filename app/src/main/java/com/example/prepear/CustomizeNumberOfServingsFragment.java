@@ -33,6 +33,7 @@ import android.widget.Toast;
  *  of servings.
  */
 public class CustomizeNumberOfServingsFragment extends DialogFragment {
+    // initializes class attributes
     private EditText customizeNumberOfServingsEditText;
     private OnFragmentInteractionListener listener;
 
