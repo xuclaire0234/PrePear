@@ -15,18 +15,21 @@
         android:layout_marginTop="104dp"
         android:text="Meal Name: "
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/meal_name_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
         android:layout_marginStart="80dp"
         android:layout_marginTop="104dp"
+        android:background="@color/white"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
+        android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/meal_title_helper_text"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,14 +56,13 @@
         android:layout_width="198dp"
         android:layout_height="81dp"
         android:layout_marginStart="156dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="161dp"
         android:backgroundTint="@color/theme_color"
         android:text="Pick a meal from My Ingredient Storage"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_meal_order_text" />
 
@@ -98,11 +100,14 @@
         android:id="@+id/add_meal_order_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:text="Please pick a meal first then add it !! "
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.482" />
 
     <Button
         android:id="@+id/add_meal_in_plan_button"
