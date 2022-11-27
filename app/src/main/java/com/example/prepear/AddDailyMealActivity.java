@@ -152,6 +152,14 @@ public class AddDailyMealActivity extends AppCompatActivity
                     }
                 }
             });
+
+            // On below part: the user clicks the back button
+            findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish(); // finish the current activity and re-direct to the previous activity (ViewDailyMealPlan Activity)
+                }
+            });
         }
     }
     // On below part: override the method inside RecipeTypeMealChoiceReceiver interface for RecipeFragment for use
@@ -208,6 +216,14 @@ public class AddDailyMealActivity extends AppCompatActivity
                             finish(); // exit current activity after passing this Meal object back to previous activity for use
                         }
                     }
+                }
+            });
+
+            // On below part: the user clicks the back button
+            findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish(); // finish the current activity and re-direct to the previous activity (ViewDailyMealPlan Activity)
                 }
             });
         }
