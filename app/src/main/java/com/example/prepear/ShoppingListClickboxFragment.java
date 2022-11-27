@@ -251,7 +251,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                         .update("description", description,
                                                 "category", ingredient.getIngredientCategory(),
                                                 "bestBeforeDate", bestBeforeDateString,
-                                                "amount", finalActualAmount,
+                                                "amount", finalActualAmount + ingredient.getAmountValue(),
                                                 "unit", ingredient.getUnit(),
                                                 "icon code",ingredientIconCode,
                                                 "location", finalLocation);

@@ -17,7 +17,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d98042c1-8c56-4c07-8f56-873a3bce47c3" name="Changes" comment="" />
+    <list default="true" id="d98042c1-8c56-4c07-8f56-873a3bce47c3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/AddEditIngredientActivityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/example/prepear/AddEditIngredientActivityTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ui/ShoppingList/ShoppingListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/prepear/ui/ShoppingList/ShoppingListFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_shopping_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_shopping_list.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -104,7 +108,7 @@
       <recent name="com.example.prepear" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.app">
+  <component name="RunManager" selected="Android Instrumented Tests.AddEditIngredientActivityTest">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="PrePear.app.main" />
       <option name="DEPLOY" value="true" />
@@ -436,11 +440,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Android Instrumented Tests.AddEditIngredientActivityTest" />
         <item itemvalue="Android Instrumented Tests.RecipeListTest" />
         <item itemvalue="Android Instrumented Tests.testAddEditRecipe()" />
         <item itemvalue="Android Instrumented Tests.testDeleteRecipe()" />
         <item itemvalue="Android Instrumented Tests.testGoToViewRecipeActivity()" />
-        <item itemvalue="Android Instrumented Tests.AddEditIngredientActivityTest" />
       </list>
     </recent_temporary>
   </component>

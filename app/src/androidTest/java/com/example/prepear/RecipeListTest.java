@@ -144,14 +144,14 @@ public class RecipeListTest {
         View addIngredientButton = solo.getView(R.id.add_ingredient_in_recipe_button);
         solo.clickOnView(addIngredientButton);
         solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.recipe_add_ingredient_fragment);
-        solo.enterText((EditText) solo.getView(R.id.description_edit_text), "Milk");
+        //solo.enterText((EditText) solo.getView(R.id.description_edit_text), "Milk");
         solo.clickOnText("Cancel");
         assertTrue(solo.searchText("Milk"));
 
         // check confirm button in add ingredient in recipe fragment
         addIngredientButton = solo.getView(R.id.add_ingredient_in_recipe_button);
         solo.clickOnView(addIngredientButton);
-        solo.enterText((EditText) solo.getView(R.id.description_edit_text), "Milk");
+        //solo.enterText((EditText) solo.getView(R.id.description_edit_text), "Milk");
         solo.enterText((EditText) solo.getView(R.id.ingredient_amount_edit_text), "10");
         solo.clickOnView(solo.getView(R.id.ingredient_unit_edit_text));
         solo.clickOnMenuItem("ml");

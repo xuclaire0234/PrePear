@@ -30,8 +30,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prepear.ComputeShoppingList;
 import com.example.prepear.CustomShoppingList;
@@ -65,6 +67,11 @@ public class ShoppingListFragment extends Fragment {
 
     private ArrayList<IngredientInStorage> allIngredientInStorage = new ArrayList<>();
     private Boolean reverse = Boolean.FALSE;
+    private ArrayList<String> checkList = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Double scale;
+    private IngredientInRecipe recipe;
+    private ProgressBar progressBarShopping;
 
 
 
@@ -94,6 +101,7 @@ public class ShoppingListFragment extends Fragment {
         sortOrderButton.setImageResource(R.drawable.ic_sort);
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
+        progressBarShopping = view.findViewById(R.id.progressBar_shopping);
 
 
         // set adapter
@@ -185,6 +193,14 @@ public class ShoppingListFragment extends Fragment {
                      * Therefore, we can continue to calculate what ingredients user has to buy by calling
                      * method calculateShoppingList(Date)
                      */
+                    progressBarShopping.setVisibility(View.VISIBLE);
+                    Handler newHandler = new Handler();
+                    newHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBarShopping.setVisibility(View.INVISIBLE);
+                        }
+                    },9000);
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -494,7 +510,7 @@ public class ShoppingListFragment extends Fragment {
                 }
                 ingredientShoppingListAdapter.notifyDataSetChanged();
             }
-        }, 4000);
+        }, 5000);
     }
 
     /**
