@@ -32,7 +32,7 @@
     <string name="return_button_text">Return</string>
     <string name="add_ingredient_button_text">Add Ingredient</string>
     <string name="edit_image_button_text">Edit Image Button</string>
-    <string name="commit_button_text">Commit</string>
+    <string name="commit_button_text">Confirm</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="recipe_image_text">Recipe Image</string>
     <string name="customize_number_of_servings_header">Enter number of servings to prepare for:</string>

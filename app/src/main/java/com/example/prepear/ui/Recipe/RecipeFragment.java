@@ -320,11 +320,11 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         callback.addRecipeTypeMeal(clickedFood);
     }
 
-    @Override
-    public void onCancelPressed() {
-        callback.addRecipeTypeMeal(null);
-    }
-
+    /*@Override
+   public void onCancelPressed() {
+       callback.addRecipeTypeMeal(null);
+   }
+*/
     @Override
     public void onBackPressed() {
         getActivity().finish();

@@ -288,11 +288,11 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
 
     /**
      *
-     */
+     *//*
     @Override
     public void onCancelPressed() {
         callback.addIngredientTypeMeal(null);
-    }
+    }*/
 
     /**
      *

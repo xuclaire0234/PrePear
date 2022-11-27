@@ -1,10 +1,11 @@
 /**
  * Class Name: MealPlanFragment
  * Version Information: Version 1.0
- * Date: Nov 23nd, 2022
+ * Date: Nov 23, 2022
  * Author: Marafi Mergani, Shihao Liu
  * Copyright Notice:
  */
+
 package com.example.prepear.ui.MealPlan;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;

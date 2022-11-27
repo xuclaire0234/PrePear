@@ -10,5 +10,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="Are you sure you want to Delete\n this Whole meal plan?" />
+        android:text="Are you sure you want to Delete\n this whole daily meal plan?" />
 </LinearLayout>

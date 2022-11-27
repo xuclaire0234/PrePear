@@ -42,7 +42,7 @@ public class ConfirmationDialog extends DialogFragment {
          */
         void onConfirmPressed();
 
-        void onCancelPressed();
+        //void onCancelPressed();
     }
 
     /**
@@ -80,19 +80,17 @@ public class ConfirmationDialog extends DialogFragment {
         title.setText("Confirmation");
         return builder
                 .setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.onCancelPressed(); // call interface method
-                    }
-                })
+                .setNegativeButton("Cancel", null)
+                /* @Override
+                 public void onClick(DialogInterface dialog, int which) {
+                     listener.onCancelPressed(); // call interface method
+                 }
+             })*/
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onConfirmPressed(); // call interface method
                     }
                 }).create();
-
-
     }
 }

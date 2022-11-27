@@ -1,7 +1,7 @@
 /**
  * Class Name: AddMealPlanActivity
  * Version Information: Version 1.0
- * Date: Nov 23nd, 2022
+ * Date: Nov 23, 2022
  * Author: Marafi Mergani
  * Copyright Notice:
  */
@@ -103,6 +103,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeKeyboard();
                 ingredientButton.setChecked(true);
                 recipeButton.setChecked(false);
                 // on below: call IngredientFragment
@@ -120,6 +121,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeKeyboard();
                 recipeButton.setChecked(true);
                 ingredientButton.setChecked(false);
                 // on below call RecipeFragment
@@ -250,6 +252,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeKeyboard();
                 // disable the recipe radio button
                 recipeButton.setChecked(false);
                 // display toast error message
@@ -328,12 +331,12 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                     setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
                 }
             });
-        }else{
+        }/*else{
             // return to view fragment
             finish(); // exit activity
             Intent intentBack = new Intent();
             setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
-        }
+        }*/
     }
 
     @Override
@@ -364,6 +367,7 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeKeyboard();
                 // disable the ingredient radio button
                 ingredientButton.setChecked(false);
                 // display error message
@@ -440,12 +444,11 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                     setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
                 }
             });
-        } else {
+        } /*else {
             // return to view fragment
             finish(); // exit activity
             Intent intentBack = new Intent();
             setResult(Activity.RESULT_CANCELED, intentBack); // set cancel result
-        }
-
+        }*/
     }
 }
