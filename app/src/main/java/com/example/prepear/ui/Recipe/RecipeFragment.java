@@ -47,6 +47,7 @@ public class RecipeFragment extends Fragment {
     int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"  ","Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
+    Boolean reverse = Boolean.FALSE;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class RecipeFragment extends Fragment {
         addRecipe = view.findViewById(R.id.add_recipe_button);
         recipeList = view.findViewById(R.id.recipe_listview);
         sortSequence = view.findViewById(R.id.sort_button);
+        sortSequence.setImageResource(R.drawable.ic_sort);
 
         /*
          * Database are defined and connected to collection with id "Recipes" here below
@@ -94,6 +96,13 @@ public class RecipeFragment extends Fragment {
         sortSequence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (reverse) {
+                    sortSequence.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
+                } else {
+                    sortSequence.setImageResource(R.drawable.ic_sort_reverse);
+                    reverse = Boolean.TRUE;
+                }
                 recipeDataList.reverseOrder();
                 recipeAdapter.notifyDataSetChanged();
             }
@@ -141,6 +150,8 @@ public class RecipeFragment extends Fragment {
                     sortItemRecipe = i - 1; /* get the index of the item the recipes should be sorted by */
                     recipeDataList.sortRecipe(sortItemRecipe); /* sort the recipes */
                     recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
+                    sortSequence.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
                 }
             }
 

@@ -6,12 +6,14 @@
     android:orientation="horizontal">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:background="@drawable/custom_layout_recipe_folder">
         <ImageView
             android:id="@+id/imageView_in_recipe_list"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:cropToPadding="true"
             android:background="@drawable/below"
@@ -25,8 +27,7 @@
             <TextView
                 android:id="@+id/recipe_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
+                android:layout_height="55dp"
                 android:text="Recipe Title"
                 android:textSize="35sp"
                 android:textColor="@color/black">

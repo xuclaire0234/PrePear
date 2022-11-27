@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -50,14 +51,11 @@ import java.util.Date;
 
 public class ShoppingListFragment extends Fragment {
 
-    private ShoppingListViewModel mViewModel;
-    private FragmentRecipeBinding binding;
     private String startDate, endDate, newDate;
     final String[] sortItemSpinnerContent = {"  ----select----  ", "Description", "Category"};
     private ShoppingListController ingredientShoppingList;  // store all the ingredients needed to show in the listView
     private ArrayAdapter<IngredientInRecipe> ingredientShoppingListAdapter;
     private DatePickerDialog dialog;
-    private IngredientInRecipe ingre;
 
     TextView fromDateText, toDateText;
     Spinner sortItemSpinner;
@@ -65,18 +63,10 @@ public class ShoppingListFragment extends Fragment {
     Button confirmButton;
     ListView shoppingListView;
 
-    private ArrayList<IngredientInRecipe> ingredients;
-    private String date;
-    private String TAG = "Meal Plan";
-    private ArrayList<String> recipeIdsCollection, ingredientIdsCollection;
-    private ArrayList<Double> recipeScaleCollection, ingredientScaleCollection;
     private ArrayList<IngredientInStorage> allIngredientInStorage = new ArrayList<>();
-    private ArrayList<String> checkList = new ArrayList<>();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Double scale;
-    private IngredientInRecipe recipe;
+    private Boolean reverse = Boolean.FALSE;
 
-    private CollectionReference collectionReference = db.collection("Ingredient Storage");
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -101,6 +91,7 @@ public class ShoppingListFragment extends Fragment {
         toDateText = view.findViewById(R.id.toDate_textView);
         sortItemSpinner = view.findViewById(R.id.sort_spinner);
         sortOrderButton = view.findViewById(R.id.sort_button);
+        sortOrderButton.setImageResource(R.drawable.ic_sort);
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
 
@@ -119,6 +110,13 @@ public class ShoppingListFragment extends Fragment {
         sortOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (reverse) {
+                    sortOrderButton.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
+                } else {
+                    reverse = Boolean.TRUE;
+                    sortOrderButton.setImageResource(R.drawable.ic_sort_reverse);
+                }
                 ingredientShoppingList.reverseOrder();
                 ingredientShoppingListAdapter.notifyDataSetChanged();
             }
@@ -134,6 +132,8 @@ public class ShoppingListFragment extends Fragment {
                 if (i != 0) {
                     ingredientShoppingList.sortIngredient(i-1);
                     ingredientShoppingListAdapter.notifyDataSetChanged();
+                    sortOrderButton.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
                 }
             }
 
@@ -236,7 +236,7 @@ public class ShoppingListFragment extends Fragment {
         String newFromDate = fromDateText.getText().toString();
         String newToDate = toDateText.getText().toString();
 
-        if (newFromDate == "" || newToDate == "") {   // if both dates are empty
+        if (newFromDate.isEmpty() || newToDate.isEmpty()) {   // if both dates are empty
             check = Boolean.FALSE;
 
         } else {   // since both dates are not empty

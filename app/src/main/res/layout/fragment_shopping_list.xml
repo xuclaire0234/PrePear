@@ -16,10 +16,10 @@
         <Spinner
             android:id="@+id/sort_spinner"
             android:layout_width="200dp"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:background="@drawable/spinner_bg"
+            android:background="@drawable/custom_layout_recipe_folder"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sort_button"
@@ -34,12 +34,10 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="4dp"
-            android:background="@android:color/transparent"
             android:padding="5sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -69,7 +67,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="45dp"
             android:orientation="horizontal">
 
             <TextView
@@ -81,13 +79,13 @@
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
+            <EditText
                 android:id="@+id/fromDate_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:hint="__________"
+                android:hint="          "
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/to_textView"
                 app:layout_constraintStart_toEndOf="@+id/from_textView" />
@@ -101,13 +99,13 @@
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/fromDate_textView" />
 
-            <TextView
+            <EditText
                 android:id="@+id/toDate_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:hint="__________"
+                android:hint="          "
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/to_textView" />
         </LinearLayout>
@@ -125,6 +123,15 @@
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_shopping"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/green_pear"
+        android:visibility="invisible"
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:layout_width="match_parent"

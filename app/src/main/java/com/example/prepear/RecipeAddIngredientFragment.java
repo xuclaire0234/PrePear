@@ -99,7 +99,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
-        descriptionText = view.findViewById(R.id.description_edit_text);
+        descriptionText = view.findViewById(R.id.brief_description_editText);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
