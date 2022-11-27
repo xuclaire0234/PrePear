@@ -24,5 +24,6 @@
             android:id="@+id/nav_shopping_list"
             android:icon="@drawable/shopping_list_icon"
             android:title="@string/menu_ShoppingList" />
+        
     </group>
 </menu>

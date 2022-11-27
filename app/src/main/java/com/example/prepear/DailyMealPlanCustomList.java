@@ -130,7 +130,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                             mealPicture.setImageResource(mealIconCode);
 
                             // sets the user defined time to eat current meal to the select time button
-                            if (meal.getEatHour() == 24) {
+                            if (meal.getEatHour() == -1) {
                                 selectTimeButton.setText("Select Time");
                             } else {
                                 selectTimeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", meal.getEatHour(), meal.getEatMinute()));
@@ -166,7 +166,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                             mealPicture.setVisibility(View.VISIBLE);
 
                             // sets the user defined time to eat current meal to the select time button
-                            if (meal.getEatHour() == 24) {
+                            if (meal.getEatHour() == -1) {
                                 selectTimeButton.setText("Select Time");
                             } else {
                                 selectTimeButton.setText(String.format(Locale.getDefault(),

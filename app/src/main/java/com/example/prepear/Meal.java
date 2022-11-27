@@ -20,8 +20,8 @@ public class Meal implements Serializable {
     private String documentID;  // contains the same Document ID as its corresponding in-storage ingredient / recipe has inside database
     private double customizedAmount = 0;    // represents user-entered customized amount
     private Integer customizedNumberOfServings = 0; // represents user-entered customized number of servings
-    private Integer eatHour = 24;   // represents the hour of the day user defined to eat the meal
-    private Integer eatMinute = 24; // represents the minute of the day user defined to eat the meal
+    private Integer eatHour = -1;   // represents the hour of the day user defined to eat the meal
+    private Integer eatMinute = -1; // represents the minute of the day user defined to eat the meal
 
     /**
      * This method creates a object which is of type {@link Meal}.

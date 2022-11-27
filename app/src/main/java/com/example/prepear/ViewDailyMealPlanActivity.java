@@ -205,4 +205,30 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         });
         dailyMealArrayAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * This method resorts the daily meal plan list view by time picked by user after starting to the activity.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // resorts the daily meal plan list view by time picked by user through comparing hours and minutes
+        Collections.sort(dailyMealDataList, new Comparator<Meal>() {
+            @Override
+            public int compare(Meal meal1, Meal meal2) {
+                String time1 = String.format(Locale.getDefault(), "%02d:%02d", meal1.getEatHour(), meal1.getEatMinute());
+                String time2 = String.format(Locale.getDefault(), "%02d:%02d", meal2.getEatHour(), meal2.getEatMinute());
+                return time1.compareTo(time2);
+                /*
+                if (meal1.getEatHour().equals(meal2.getEatHour())) {
+                    return meal1.getEatMinute().compareTo(meal2.getEatMinute());
+                } else {
+                    return meal1.getEatHour().compareTo(meal2.getEatHour());
+                }
+                 */
+            }
+        });
+        dailyMealArrayAdapter.notifyDataSetChanged();
+    }
 }
