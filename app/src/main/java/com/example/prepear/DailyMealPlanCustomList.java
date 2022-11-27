@@ -185,36 +185,6 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                     }
                 }
             });
-            /*
-            mealDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    // sets the current meal item's name TextView and customized number of servings TextView
-                    String mealName = (String) documentSnapshot.getData().get("Title");
-                    mealTitle.setText(mealName);
-                    mealScale.setText("# of Servings: " + (meal.getCustomizedNumberOfServings()));
-
-                    // displays the current meal item's image/icon based on its meal type
-                    Glide.with(getContext())
-                            .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
-                    mealPicture.setVisibility(View.VISIBLE);
-
-                    // sets the user defined time to eat current meal to the select time button
-                    if (meal.getEatHour() == 24) {
-                        selectTimeButton.setText("Select Time");
-                    } else {
-                        selectTimeButton.setText(String.format(Locale.getDefault(),
-                                "%02d:%02d", meal.getEatHour(), meal.getEatMinute()));
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "onFailure: " + e.getMessage());
-                }
-            });
-
-             */
         }
 
         // sets up the select time button for displaying time picker after clicking it

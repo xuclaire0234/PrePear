@@ -8,6 +8,8 @@
 
 package com.example.prepear;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -15,6 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -132,18 +135,20 @@ public class AddDailyMealActivity extends AppCompatActivity
                             .trim();
                     // On below part: check if user input is valid
                     // On below line: cast and convert user-input meal amount into double type value for use
-                    double userMealAmountValue = Double.parseDouble(userMealAmountInput);
                     if (userMealAmountInput.isEmpty()) { // if user doesn't input any value on EditText input field for meal amount
                         Toast.makeText(getApplicationContext(), "Please enter a amount value for this meal.", Toast.LENGTH_LONG).show();
-                    } else if (userMealAmountValue <= 0) { // if user-input meal amount actual value <= 0
-                        Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's amount!!", Toast.LENGTH_LONG).show();
-                    } else { // user input success after checking for validation
-                        Intent receivedIntent = new Intent(); // initialize an intent for passing the current picked Meal object
-                        Meal addedMeal = new Meal("IngredientInStorage", clickedIngredient.getDocumentId(), clickedIngredient.getDocumentId());
-                        addedMeal.setCustomizedAmount(userMealAmountValue); // store user-input meal amount double type value in picked Meal object
-                        receivedIntent.putExtra("added meal", addedMeal); // store this picked Meal object and pack it for passing back
-                        setResult(Activity.RESULT_OK, receivedIntent); // pass the picked Meal object back to previous activity for use
-                        finish(); // exit after launching the activity
+                    } else {
+                        double userMealAmountValue = Double.parseDouble(userMealAmountInput);
+                        if (userMealAmountValue <= 0) { // if user-input meal amount actual value <= 0
+                            Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's amount!!", Toast.LENGTH_LONG).show();
+                        } else { // user input success after checking for validation
+                            Intent receivedIntent = new Intent(); // initialize an intent for passing the current picked Meal object
+                            Meal addedMeal = new Meal("IngredientInStorage", clickedIngredient.getDocumentId(), clickedIngredient.getDocumentId());
+                            addedMeal.setCustomizedAmount(userMealAmountValue); // store user-input meal amount double type value in picked Meal object
+                            receivedIntent.putExtra("added meal", addedMeal); // store this picked Meal object and pack it for passing back
+                            setResult(Activity.RESULT_OK, receivedIntent); // pass the picked Meal object back to previous activity for use
+                            finish(); // exit after launching the activity
+                        }
                     }
                 }
             });
@@ -184,22 +189,24 @@ public class AddDailyMealActivity extends AppCompatActivity
                     * After user's double type input for picked recipe type meal's number of servings,
                     * always round up to the closest integer
                     * */
-                    double userMealNumberOfServingsInputDoubleValue = Double.parseDouble(userMealNumberOfServingsInput);
-                    int userMealNumOfServesValue = (int) Math.round(userMealNumberOfServingsInputDoubleValue);
                     // On below part: check for user input's validation
                     if (userMealNumberOfServingsInput.isEmpty()) { // if user doesn't input any value on EditText input field for meal number of servings
                         Toast.makeText(getApplicationContext(), "Please enter a valid number of servings value for this meal.", Toast.LENGTH_LONG).show();
-                    } else if (userMealNumOfServesValue <= 0) { // if user entered non-positive value for meal number of servings
-                        Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's number of servings!!", Toast.LENGTH_LONG).show();
-                    } else { // if user's input is valid
-                        Intent receivedIntent = new Intent(); // initialize an intent for passing the current picked Meal object
+                    } else{
+                        double userMealNumberOfServingsInputDoubleValue = Double.parseDouble(userMealNumberOfServingsInput);
+                        int userMealNumOfServesValue = (int) Math.round(userMealNumberOfServingsInputDoubleValue);
+                        if (userMealNumOfServesValue <= 0) { // if user entered non-positive value for meal number of servings
+                            Toast.makeText(getApplicationContext(), "Please enter a valid positive value for this meal's number of servings!!", Toast.LENGTH_LONG).show();
+                        } else { // if user's input is valid
+                            Intent receivedIntent = new Intent(); // initialize an intent for passing the current picked Meal object
 //                        addedMealNameTextView.setText(clickedRecipe.getTitle());
-                        // On below line: create a new Meal object representing user's current picked recipe type meal
-                        Meal addedMeal = new Meal("Recipe", clickedRecipe.getId(), String.valueOf(new Date()));
-                        addedMeal.setCustomizedNumberOfServings(userMealNumOfServesValue); // stores this meal's number of servings
-                        receivedIntent.putExtra("added meal", addedMeal); // store this picked Meal object and pack it for passing back
-                        setResult(Activity.RESULT_OK, receivedIntent); // pass the picked Meal object back to previous activity for use
-                        finish(); // exit current activity after passing this Meal object back to previous activity for use
+                            // On below line: create a new Meal object representing user's current picked recipe type meal
+                            Meal addedMeal = new Meal("Recipe", clickedRecipe.getId(), String.valueOf(new Date()));
+                            addedMeal.setCustomizedNumberOfServings(userMealNumOfServesValue); // stores this meal's number of servings
+                            receivedIntent.putExtra("added meal", addedMeal); // store this picked Meal object and pack it for passing back
+                            setResult(Activity.RESULT_OK, receivedIntent); // pass the picked Meal object back to previous activity for use
+                            finish(); // exit current activity after passing this Meal object back to previous activity for use
+                        }
                     }
                 }
             });
@@ -208,11 +215,9 @@ public class AddDailyMealActivity extends AppCompatActivity
 
     /**
      * Called when a view has been clicked.
-     *
      * @param v The view that was clicked.
      */
     @Override
     public void onClick(View v) {
-
     }
 }
