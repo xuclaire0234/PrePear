@@ -51,7 +51,7 @@
             android:name=".HomeActivity"
             android:exported="true"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.PrePear.NoActionBar" >
+            android:theme="@style/Theme.PrePear.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

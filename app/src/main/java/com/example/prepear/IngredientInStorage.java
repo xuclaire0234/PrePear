@@ -9,13 +9,15 @@
 
 package com.example.prepear;
 
+import java.io.Serializable;
+
 /**
  * This class defines {@link IngredientInStorage} objects which extends Ingredient class
  * and allows setting and accessing the attributes
  * @author: Shihao Liu, Marafi Mergani
  * @version: 1
  */
-public class IngredientInStorage extends Ingredient {
+public class IngredientInStorage extends Ingredient implements Serializable {
     // initialize class attributes
     private String bestBeforeDate;
     private String location;

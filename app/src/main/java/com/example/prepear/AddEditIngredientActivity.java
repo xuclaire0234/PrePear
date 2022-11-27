@@ -1,12 +1,6 @@
-/**
- * Class Name: AddEditIngredientActivity
- * Version Information: Version 1.0
- * Date: Nov 11th, 2022
- * Author: Marafi Mergani
- * Copyright Notice:
- */
-
 package com.example.prepear;
+
+import static java.security.AccessController.getContext;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,7 +8,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+
+import com.bumptech.glide.Glide;
+import com.example.prepear.ui.Ingredient.IngredientFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,9 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,12 +35,20 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.prepear.databinding.ActivityAddEditIngredientBinding;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.protobuf.Field;
+import com.google.protobuf.StringValue;
 
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,10 +56,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * This class defines the add/edit ingredientInStorage activity that allows user to either add a new ingredient or
- * edit a existing one.
+ * edit a existing recipe.
  */
 public class AddEditIngredientActivity extends AppCompatActivity {
     private Button confirm; // confirm button after addition/edition of a in-storage ingredient
@@ -96,6 +108,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         addIcon = findViewById(R.id.add_icon_button);
 
         // On below part: prompt user to choose an icon from provided icon Activity
+
         addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,8 +126,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 int currentYear = currentDate.get(Calendar.YEAR);
                 int currentMonth = currentDate.get(Calendar.MONTH);
                 int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                dialog = new DatePickerDialog(AddEditIngredientActivity.this,
-                        R.style.activity_date_picker,
+                dialog = new DatePickerDialog(AddEditIngredientActivity.this, R.style.activity_date_picker,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year,
@@ -271,6 +283,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                         }
                         String amount = amountView.getText().toString().trim();
 
+                        if(iconCode == 0){
+                            iconCode = getResources().getIdentifier("ic_baseline_add_photo_alternate_24", "drawable", getPackageName());
+                        }
+
                         if (validateInput()) {  // if user input is valid
                             // key: value pair as a element in HashMap/Map
                             Date dateTimeNow = new Date();
@@ -278,8 +294,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
                                     category, date, location, amount, unit, documentId, iconCode);
                             DatabaseController database = new DatabaseController();
-                            database.addIngredientToIngredientStorage
-                                    (AddEditIngredientActivity.this, ingredientToAdd);
+                            database.addIngredientToIngredientStorage(AddEditIngredientActivity.this, ingredientToAdd);
                             // return the new ingredient to be added to the list adapter
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("IngredientToAdd", ingredientToAdd);
@@ -299,10 +314,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 descriptionView.getEditText().setText(ingredientToEdit.getBriefDescription());
                 String category = ingredientToEdit.getIngredientCategory();  // get ingredient category
                 /**
-                 *  get the list of ingredient categories to check if the ingredient's category is
-                 *  among that list if it's in the list then show the option on the spinner,
-                 *  otherwise set the spinner to display 'Other', and show the category on the edit
-                 *  text instead
+                 *  get the list of ingredient categories to check if the ingredient's category is among that list.
+                 *  If it's in the list then show the option on the spinner,
+                 *  otherwise set the spinner to display 'Other', and show the category on the edit text instead
                  */
                 List<String> categories = new ArrayList<>(Arrays.asList(getResources()
                         .getStringArray(R.array.ingredient_categories)));
@@ -317,10 +331,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 dateView.setText(ingredientToEdit.getBestBeforeDate()); // set the best before date
                 String location = ingredientToEdit.getLocation();
                 /**
-                 *  get the list of ingredient locations to check if the ingredient's location is
-                 *  among that list. If it's in the list then show the option on the spinner,
-                 *  otherwise set the spinner to display 'Other', and show the location on the
-                 *  edit text instead
+                 *  get the list of ingredient locations to check if the ingredient's location is among that list.
+                 *  If it's in the list then show the option on the spinner,
+                 *  otherwise set the spinner to display 'Other', and show the location on the edit text instead
                  */
                 List<String> locations = new ArrayList<>(Arrays.asList(getResources()
                         .getStringArray(R.array.locations)));
@@ -336,8 +349,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 String unit = ingredientToEdit.getUnit();
                 /**
                  *  get the list of ingredient unit to check if the ingredient's unit is among that list.
-                 *  If it's in the list then show the option on the spinner, otherwise set the
-                 *  spinner to display 'Other', and show the unit on the edit text instead
+                 *  If it's in the list then show the option on the spinner,
+                 *  otherwise set the spinner to display 'Other', and show the unit on the edit text instead
                  */
                 List<String> units = new ArrayList<>(Arrays.asList(getResources()
                         .getStringArray(R.array.units)));
@@ -357,8 +370,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         // On below part: delete ingredient from the data base
                         DatabaseController databaseController = new DatabaseController();
-                        databaseController.deleteIngredientFromIngredientStorage
-                                (AddEditIngredientActivity.this, ingredientToEdit);
+                        databaseController.deleteIngredientFromIngredientStorage(AddEditIngredientActivity.this, ingredientToEdit);
                         // On below part: return the ingredient to be deleted from the list adapter
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("IngredientToDelete", ingredientToEdit);
@@ -403,8 +415,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             ingredientToEdit.setIconCode(iconCode);
                             // on below: edit the ingredient in the data base
                             DatabaseController database = new DatabaseController();
-                            database.editIngredientInIngredientStorage(AddEditIngredientActivity.this,
-                                    ingredientToEdit);
+                            database.editIngredientInIngredientStorage(AddEditIngredientActivity.this, ingredientToEdit);
                             // On below part: return ingredient to be edited on the list adapter
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("IngredientToEdit", ingredientToEdit);

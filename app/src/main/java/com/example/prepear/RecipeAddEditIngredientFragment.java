@@ -7,6 +7,8 @@
  */
 package com.example.prepear;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -44,7 +46,10 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
     /* declare variables */
     private ArrayAdapter<CharSequence> unitSpinnerAdapter;
     private ArrayAdapter<CharSequence> categorySpinnerAdapter;
-    private EditText descriptionText;
+    private ArrayAdapter<String> descriptionSpinnerAdapter;
+    private Spinner descriptionText;
+    private LinearLayout newDescriptionLayout;
+    private EditText newBriefDescriptionEditText;
     private EditText amountText;
     private Spinner unitSpinner;
     private EditText unitEditText;
@@ -73,9 +78,18 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
      * @param ingredient {@link IngredientInRecipe} that the user clicked on
      * @return fragment the newly created fragment
      */
-    static RecipeAddEditIngredientFragment newInstance(IngredientInRecipe ingredient) {
+    static RecipeAddEditIngredientFragment newInstance(IngredientInRecipe ingredient, ArrayList<String> briefDescription) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", ingredient);
+        args.putSerializable("briefDescription", briefDescription);
+        RecipeAddEditIngredientFragment fragment = new RecipeAddEditIngredientFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    static RecipeAddEditIngredientFragment newInstance(ArrayList<String> briefDescription) {
+        Bundle args = new Bundle();
+        args.putSerializable("briefDescription", briefDescription);
         RecipeAddEditIngredientFragment fragment = new RecipeAddEditIngredientFragment();
         fragment.setArguments(args);
         return fragment;
@@ -112,7 +126,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
-        descriptionText = view.findViewById(R.id.description_edit_text);
+        descriptionText = view.findViewById(R.id.brief_description_editText);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
         unitEditText = view.findViewById(R.id.new_ingredient_unit_edit_text);
@@ -122,6 +136,8 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         newCategoryLinearLayout = view.findViewById(R.id.new_ingredient_category_linear_layout);
         descriptionWordCount = view.findViewById(R.id.description_word_count);
         amountWordCount = view.findViewById(R.id.amount_word_count);
+        newDescriptionLayout = view.findViewById(R.id.new_brief_description_linear_layout);
+        newBriefDescriptionEditText = view.findViewById(R.id.new_brief_description_edit_text);
 
         /* set up word count for amount and description */
         final TextWatcher descriptionTextEditorWatcher = new TextWatcher() {
@@ -140,7 +156,12 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
 
             }
         };
-        descriptionText.addTextChangedListener(descriptionTextEditorWatcher);
+
+        EditText newBriefDescription = view.findViewById(R.id.new_brief_description_edit_text);
+        EditText newCategory = view.findViewById(R.id.new_ingredient_category_edit_text);
+
+        newBriefDescription.addTextChangedListener(descriptionTextEditorWatcher);
+//        newCategory.addTextChangedListener(descriptionTextEditorWatcher);
         final TextWatcher amountTextEditorWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -162,6 +183,8 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         unitSpinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.units,
                 android.R.layout.simple_spinner_item);
         unitSpinner.setAdapter(unitSpinnerAdapter);
+
+
         unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -202,20 +225,46 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
 
         /* return the added ingredient back to AddEditRecipeActivity */
         Bundle bundle = getArguments();
-        if (bundle != null) {
+        Ingredient newIngredient;
+        List<String> briefDescriptionList;
+        newIngredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
+        briefDescriptionList = (ArrayList<String>) bundle.getSerializable("briefDescription");
+        briefDescriptionList.add("Other");
+
+        descriptionSpinnerAdapter = new ArrayAdapter<String>(this.getContext(),android.R.layout.simple_spinner_item,briefDescriptionList);
+        descriptionText.setAdapter(descriptionSpinnerAdapter);
+        descriptionText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedDescription = descriptionText.getSelectedItem().toString();
+                if (selectedDescription.equals("Other")) {
+                    newDescriptionLayout.setVisibility(View.VISIBLE);
+                } else {
+                    newDescriptionLayout.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        if (newIngredient != null) {
             /* Editing existing ingredient */
             IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
-            descriptionText.setText(ingredient.getBriefDescription());
+            String briefDescription = ingredient.getBriefDescription();
+            if (briefDescriptionList.contains(briefDescription)) {
+                descriptionText.setSelection(descriptionSpinnerAdapter.getPosition(briefDescription));
+            } else {
+                descriptionText.setSelection(descriptionSpinnerAdapter.getPosition("Other"));
+                newDescriptionLayout.setVisibility(View.VISIBLE);
+                newBriefDescriptionEditText.setText(briefDescription);
+            }
             amountText.setText(String.valueOf(ingredient.getAmountString()));
             String unit = ingredient.getUnit();
             List<String> units = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.units)));
-            if (units.contains(unit)) {
-                unitSpinner.setSelection(unitSpinnerAdapter.getPosition(unit));
-            } else {
-                unitSpinner.setSelection(unitSpinnerAdapter.getPosition("Other"));
-                newUnitLinearLayout.setVisibility(View.VISIBLE);
-                unitEditText.setText(unit);
-            }
+            unitSpinner.setSelection(unitSpinnerAdapter.getPosition(unit));
             String ingredientCategory = ingredient.getIngredientCategory();
             List<String> ingredientCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredient_categories)));
             if (ingredientCategories.contains(ingredientCategory)) {
@@ -237,7 +286,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                          */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String description = descriptionText.getText().toString();
+                            String description = descriptionText.getSelectedItem().toString();
                             String amount = amountText.getText().toString();
                             String unit = unitSpinner.getSelectedItem().toString();
                             if (unit.equals("Other")) {
@@ -281,24 +330,30 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
             Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener((View v) -> {
                 Boolean wantToCloseDialog = true;
-                String description = descriptionText.getText().toString();
-                String amount = amountText.getText().toString();
-                String unit = unitSpinner.getSelectedItem().toString();
-                if (unit.equals("Other")) {
-                    unit = unitEditText.getText().toString();
-                }
-                String category = categorySpinner.getSelectedItem().toString();
-                if (category.equals("Other")) {
-                    category = categoryEditText.getText().toString();
-                }
-
-                if (description.equals("") || amount.equals("") || unit.equals("") || category.equals("")) {
+                String description;
+                String amount;
+                String unit;
+                String category;
+                if (descriptionText.getSelectedItem().toString().equals("")
+                        || amountText.getText().toString().equals("")
+                        || unitSpinner.getSelectedItem().toString().equals("")
+                        || categorySpinner.getSelectedItem().toString().equals("")) {
                     Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                             Toast.LENGTH_LONG).show();
                     wantToCloseDialog = false;
                 } else {
                     Bundle bundle = getArguments();
                     if (bundle != null) {
+                        description = descriptionText.getSelectedItem().toString();
+                        amount = amountText.getText().toString();
+                        unit = unitSpinner.getSelectedItem().toString();
+                        if (unit.equals("Other")) {
+                            unit = unitEditText.getText().toString();
+                        }
+                        category = categorySpinner.getSelectedItem().toString();
+                        if (category.equals("Other")) {
+                            category = categoryEditText.getText().toString();
+                        }
                         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
                         ingredient.setBriefDescription(description);
                         ingredient.setAmountValue(Double.parseDouble(amount));
@@ -306,6 +361,16 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                         ingredient.setIngredientCategory(category);
                         listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
                     } else {
+                        description = descriptionText.getSelectedItem().toString();
+                        amount = amountText.getText().toString();
+                        unit = unitSpinner.getSelectedItem().toString();
+                        if (unit.equals("Other")) {
+                            unit = unitEditText.getText().toString();
+                        }
+                        category = categorySpinner.getSelectedItem().toString();
+                        if (category.equals("Other")) {
+                            category = categoryEditText.getText().toString();
+                        }
                         listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
                     }
                 }

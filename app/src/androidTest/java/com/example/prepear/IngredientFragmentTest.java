@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
  used
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewIngredientStorageActivityTest {
+public class IngredientFragmentTest {
     private Solo solo;
     @Rule
     public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
@@ -35,13 +35,13 @@ public class ViewIngredientStorageActivityTest {
      * Test if we sort the existing ingredients shown in the listView after clicking description(ascending)
      */
     public void testSort1(){
-        solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+        solo.clickOnButton("Log In");
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Ingredient");
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("description");
-        /*
-            "Fennel seeds will switch the position with "eggs"
-         */
         solo.sleep(5000);
     }
 
@@ -50,9 +50,11 @@ public class ViewIngredientStorageActivityTest {
      * Test if we sort the existing ingredient shown in the listView after clicking best before (oldest to newest)
      */
     public void testSort2(){
-        solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
-        solo.clickOnView(solo.getView(R.id.sort_spinner));
+        solo.clickOnButton("Log In");
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Ingredient");
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);        solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("best before");
         solo.sleep(5000);
     }
@@ -62,8 +64,11 @@ public class ViewIngredientStorageActivityTest {
      * Test if we can sort the existing ingredient shown in the listView after clicking location(ascending by default)
      */
     public void testSort3(){
-        solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+        solo.clickOnButton("Log In");
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Ingredient");
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("location");
         solo.sleep(5000);
@@ -71,8 +76,11 @@ public class ViewIngredientStorageActivityTest {
 
     @Test
     public void testSort4(){
-        solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
-        solo.assertCurrentActivity("Wrong Activity", ViewIngredientStorageActivity.class);
+        solo.clickOnButton("Log In");
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Ingredient");
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("category");
         solo.sleep(5000);

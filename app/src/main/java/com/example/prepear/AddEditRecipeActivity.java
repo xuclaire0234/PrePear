@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,8 +39,13 @@ import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -84,6 +90,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
     private Integer positionToEditInViewIngredient = -1;
     private ArrayList<String> editDeleteListSaved;
     private String idOfRecipe;
+    private ArrayList<String> briefDescriptionList;
 
     /**
      * This creates the AddEditRecipeActivity.
@@ -258,7 +265,14 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
             @Override
             public void onClick(View v) {
                 positionToEditInViewIngredient = -1;
-                new RecipeAddEditIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                catchBriefDescription();
+                Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new RecipeAddEditIngredientFragment().newInstance(briefDescriptionList).show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                        }
+                    },2000);
             }
         });
 
@@ -267,8 +281,14 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 positionToEditInViewIngredient = position;
-                RecipeAddEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(),
-                        "EDIT_INGREDIENT_IN_RECIPE");
+                catchBriefDescription();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new RecipeAddEditIngredientFragment().newInstance(ingredientInRecipeArrayAdapter.getItem(positionToEditInViewIngredient),briefDescriptionList).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
+                    }
+                },2000);
             }
         });
 
@@ -487,5 +507,26 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void catchBriefDescription() {
+        final String TAG = "Ingredients";
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Ingredient Storage");
+        briefDescriptionList = new ArrayList<>();
+        collectionReference
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            String briefDescription = (String) doc.getData().get("description");
+                            if (briefDescription != null) {
+                                briefDescriptionList.add(briefDescription);
+                            }
+                        }
+                    }
+                });
     }
 }
