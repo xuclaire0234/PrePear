@@ -1,9 +1,11 @@
 package com.example.prepear;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -89,24 +91,27 @@ public class ShoppingListClickboxFragmentTest {
         if (adapter.getCount() != 0) {
             View listElement = view.getChildAt(0);
             solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
+            CheckBox check = listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox);
 
             EditText actualAmount = (EditText) solo.getView(R.id.ingredient_actual_amount);
             EditText bestBeforeDate = (EditText) solo.getView(R.id.best_before_date);
 
             solo.enterText((EditText) solo.getView(R.id.ingredient_actual_amount),"3.0");
             solo.clickOnText("Cancel");
-
+            solo.sleep(3000);
 
             listElement = view.getChildAt(0);
             solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
             solo.clickOnView(solo.getView(R.id.ingredient_location));
             solo.pressMenuItem(0);
             solo.clickOnText("Cancel");
+            solo.sleep(3000);
 
             listElement = view.getChildAt(0);
             solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
             solo.enterText((EditText) solo.getView(R.id.best_before_date),"2023-1-30");
             solo.clickOnText("Cancel");
+            solo.sleep(3000);
         }
     }
 
@@ -129,7 +134,7 @@ public class ShoppingListClickboxFragmentTest {
             View listElement = view.getChildAt(0);
             solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
 
-            
+
 
         }
 

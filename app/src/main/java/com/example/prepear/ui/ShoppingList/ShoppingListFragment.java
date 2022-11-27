@@ -132,6 +132,8 @@ public class ShoppingListFragment extends Fragment {
                 if (i != 0) {
                     ingredientShoppingList.sortIngredient(i-1);
                     ingredientShoppingListAdapter.notifyDataSetChanged();
+                    sortOrderButton.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
                 }
             }
 

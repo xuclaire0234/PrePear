@@ -1,3 +1,10 @@
+/**
+ * Classname: ShoppingListFragmentTest
+ * Version Information: 1.0.0
+ * Date: 11/19/2022
+ * Author: Yingyue Cao
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import static android.system.Os.close;
@@ -35,10 +42,18 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This class test the fragment to view shopping list and choose the start and end date of the fragment.
+ */
 public class ShoppingListFragmentTest {
+
     private Solo solo;
 
+
     @IdRes
+    /**
+     * Set up the theme for the fragment test
+     */
     private final int theme = androidx.appcompat.R.style.Theme_AppCompat_DayNight;
 
     @Before
@@ -51,6 +66,9 @@ public class ShoppingListFragmentTest {
     }
 
     @Rule
+    /**
+     * The
+     */
     public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
 
 
@@ -58,9 +76,9 @@ public class ShoppingListFragmentTest {
     public void testFromDatePicker() {
         solo.clickOnText("Shopping List Time Range");
         solo.clickOnView(solo.getView(R.id.fromDate_textView));
+        solo.clickOnView(solo.getView(R.id.fromDate_textView));
         solo.clickOnText("OK");
-        solo.sleep(3000);
-        solo.clickOnButton(0);
+        solo.sleep(2000);
         TextView fromDateText = (TextView) solo.getView(R.id.fromDate_textView);
         assertFalse(fromDateText.getText().length() > 0);
     }
@@ -69,11 +87,11 @@ public class ShoppingListFragmentTest {
     public void testToDatePicker() {
         solo.clickOnText("Shopping List Time Range");
         solo.clickOnView(solo.getView(R.id.toDate_textView));
+        solo.clickOnView(solo.getView(R.id.toDate_textView));
         solo.clickOnText("OK");
-        solo.sleep(3000);
-        solo.clickOnButton(0);
+        solo.sleep(2000);
         TextView toDateText = (TextView) solo.getView(R.id.toDate_textView);
-        assertTrue(toDateText.getText().length() == 0);
+        assertTrue(toDateText.getText().length() > 0);
     }
 
     @Test
@@ -173,8 +191,6 @@ public class ShoppingListFragmentTest {
             solo.pressMenuItem(0);
             assertEquals(adapter.getCount(),1);
             solo.clickOnView(solo.getView(R.id.sort_spinner));
-            newDrawable = reverseButton.getBackground();
-            assertNotEquals(newDrawable,drawable);
         } else if (adapter.getCount() > 1) {
             View listElement1;
             View listElement2;
@@ -193,7 +209,7 @@ public class ShoppingListFragmentTest {
             solo.sleep(2000);
             compare = Text1.getText().toString().compareTo(Text2.getText().toString());
             solo.sleep(4000);
-            assertTrue(compare >= 0);
+            assertTrue(compare <= 0);
             solo.sleep(2000);
 
             solo.clickOnView(solo.getView(R.id.sort_button));
@@ -203,9 +219,7 @@ public class ShoppingListFragmentTest {
             Text2 = listElement2.findViewById(R.id.brief_description_TextView_shopping);
             solo.sleep(4000);
             compare = Text1.getText().toString().compareTo(Text2.getText().toString());
-            assertTrue(compare <= 0);
-            newDrawable = reverseButton.getBackground();
-            assertNotEquals(newDrawable,drawable);
+            assertTrue(compare >= 0);
             solo.sleep(2000);
 
             solo.clickOnView(solo.getView(R.id.sort_spinner));
@@ -226,20 +240,18 @@ public class ShoppingListFragmentTest {
             Text2 = listElement2.findViewById(R.id.ingredient_category_TextView_shopping);
             solo.sleep(4000);
             compare = Text1.getText().toString().compareTo(Text2.getText().toString());
-            assertTrue(compare <= 0);
-            newDrawable = reverseButton.getBackground();
-            assertNotEquals(newDrawable,drawable);
+            assertTrue(compare >= 0);
             solo.sleep(2000);
 
             solo.clickOnView(solo.getView(R.id.sort_spinner));
-            solo.pressMenuItem(0);
+            solo.clickOnMenuItem("  ----select----  ");
             listElement1 = view.getChildAt(0);
             listElement2 = view.getChildAt(1);
             Text1 = listElement1.findViewById(R.id.ingredient_category_TextView_shopping);
             Text2 = listElement2.findViewById(R.id.ingredient_category_TextView_shopping);
             solo.sleep(4000);
             compare = Text1.getText().toString().compareTo(Text2.getText().toString());
-            assertTrue(compare <= 0);
+            assertTrue(compare >= 0);
             solo.sleep(2000);
 
             solo.clickOnView(solo.getView(R.id.sort_button));
@@ -249,9 +261,7 @@ public class ShoppingListFragmentTest {
             Text2 = listElement2.findViewById(R.id.ingredient_category_TextView_shopping);
             solo.sleep(4000);
             compare = Text1.getText().toString().compareTo(Text2.getText().toString());
-            assertTrue(compare >= 0);
-            newDrawable = reverseButton.getBackground();
-            assertNotEquals(newDrawable,drawable);
+            assertTrue(compare <= 0);
             solo.sleep(2000);
         }
 

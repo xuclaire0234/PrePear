@@ -72,7 +72,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
      * @see
      */
     public interface OnFragmentInteractionListener {
-        void onOkPressed(boolean actualAmountGreaterThanNeeded);
+        void onOkPressed();
     }
 
     /**
@@ -281,10 +281,26 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                         if (ingredientInStorage == false) {
                             Date dateTimeNow = new Date();
                             String documentId = DATEFORMAT.format(dateTimeNow);
+//                            HashMap<String, Object> data = new HashMap<>();
+//                            data.put("document id", documentId);
+//                            data.put("description", description);
+//                            data.put("bestBeforeDate", bestBeforeDate);
+//                            data.put("location", finalLocation);
+//                            data.put("category", ingredient.getIngredientCategory());
+//                            data.put("amount", actualAmount);
+//                            data.put("unit", ingredient.getUnit());
+//                            data.put("icon code", 0);
+//
+//                            db
+//                                    .collection("Ingredient Storage")
+//                                    .document(documentId)
+//                                    .set(data);
                             IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
                                     ingredient.getIngredientCategory(), bestBeforeDate, finalLocation, actualAmount, ingredient.getUnit(), documentId,0);
                             DatabaseController database = new DatabaseController();
                             database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
+
+                            listener.onOkPressed();
                         }
                     }
                 });

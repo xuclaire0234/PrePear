@@ -150,6 +150,8 @@ public class RecipeFragment extends Fragment {
                     sortItemRecipe = i - 1; /* get the index of the item the recipes should be sorted by */
                     recipeDataList.sortRecipe(sortItemRecipe); /* sort the recipes */
                     recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
+                    sortSequence.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
                 }
             }
 

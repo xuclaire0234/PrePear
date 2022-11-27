@@ -102,7 +102,7 @@ public class CustomShoppingList extends ArrayAdapter<IngredientInRecipe> impleme
     }
 
     @Override
-    public void onOkPressed(boolean actualAmountGreaterThanNeeded) {
+    public void onOkPressed() {
         shoppingListCheckBox.setChecked(true);
     }
 }
