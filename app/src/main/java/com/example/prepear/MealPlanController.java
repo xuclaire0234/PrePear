@@ -5,6 +5,7 @@
  * Author: Marafi Mergani
  * Copyright Notice:
  */
+
 package com.example.prepear;
 
 import java.util.ArrayList;
@@ -50,6 +51,17 @@ public class MealPlanController {
      * @param index the {@link Integer} position of the meal plan to remove
      */
     public DailyMealPlan removeMealPlan(int index) {
-        return this.MealPlanDataList.remove(index);
+        if (this.MealPlanDataList.get(index) != null) {
+            return this.MealPlanDataList.remove(index);
+        }
+        return null;
+    }
+
+    /**
+     * This function returns the list of meal plans
+     * @return The return is of type {@link ArrayList}
+     */
+    public ArrayList<DailyMealPlan> getDailyMealPlans() {
+        return this.MealPlanDataList;
     }
 }
