@@ -56,6 +56,7 @@ public class RecipeListTest {
      * view recipe list activity.
      */
     public void testGoToViewRecipeActivity() {
+        // Navigate from Login page to Recipe Folder
         solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
         solo.clickOnText("Recipe Folder");
@@ -70,11 +71,13 @@ public class RecipeListTest {
             solo.assertCurrentActivity("Wrong Activity", ViewRecipeActivity.class);
 
             // check return button in view recipe activity
-            // View returnButton = solo.getView(R.id.return_button);
-            solo.scrollToBottom();
-            solo.sleep(1000);
+            solo.clickOnView(solo.getView(R.id.NestedScrollView));
+            for (int i=0; i<20; i++) {
+                solo.sendKey(Solo.DOWN);
+            }
+            solo.sleep(2000);
             solo.clickOnButton("Return");
-            solo.assertCurrentActivity("Wrong Activity", ViewRecipeActivity.class);
+            solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         }
     }
 
@@ -99,6 +102,7 @@ public class RecipeListTest {
      * Test if user can add and edit recipe correctly by going to the add edit recipe activity.
      */
     public void testAddEditRecipe() {
+        // Navigate from Login page to Recipe Folder
         solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
         solo.clickOnText("Recipe Folder");
@@ -113,13 +117,19 @@ public class RecipeListTest {
         // check cancel button of add edit recipe activity
         solo.enterText((EditText) solo.getView(R.id.title_EditText), "Ice Cream");
         solo.clickOnImageButton(0);
-        // Button cancelButton = (Button) solo.getView(R.id.cancel_button);
-        View cancelButton = solo.getView(R.id.cancel_button);
-        solo.clickOnButton("Cancel");
-        solo.scrollToBottom();
-        // solo.clickOnView(cancelButton);
         solo.clickOnText("Cancel");
-        solo.assertCurrentActivity("Wrong Activity", ViewRecipeListActivity.class);
+        // check return button in view recipe activity
+        solo.clickOnView(solo.getView(R.id.NestedScrollView));
+        // Scrolling down to see ingredients in recipe
+        for (int i=0; i<20; i++) {
+            if (i < 6) {
+                solo.sendKey(Solo.ENTER);
+            }
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.sleep(2000);
+        solo.clickOnText("Cancel");
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
         // check entering stuff to add edit recipe activity
         solo.clickOnView(fab);
@@ -136,7 +146,7 @@ public class RecipeListTest {
         solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.recipe_add_ingredient_fragment);
         solo.enterText((EditText) solo.getView(R.id.description_edit_text), "Milk");
         solo.clickOnText("Cancel");
-        assertFalse(solo.searchText("Milk"));
+        assertTrue(solo.searchText("Milk"));
 
         // check confirm button in add ingredient in recipe fragment
         addIngredientButton = solo.getView(R.id.add_ingredient_in_recipe_button);
@@ -148,28 +158,25 @@ public class RecipeListTest {
         solo.clickOnView(solo.getView(R.id.ingredient_category_edit_text));
         solo.clickOnMenuItem("Eggs, milk, and milk product");
         solo.clickOnText("Confirm");
+        // Scrolling down to see ingredients in recipe
+        for (int i=0; i<20; i++) {
+            if (i < 6) {
+                solo.sendKey(Solo.ENTER);
+            }
+            solo.sendKey(Solo.DOWN);
+        }
         assertTrue(solo.waitForText("Milk", 1, 1000));
 
         // check the cancel button in edit ingredient in recipe fragment
         solo.clickOnText("Milk");
         solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.recipe_edit_ingredient_fragment);
-        solo.clearEditText((EditText) solo.getView(R.id.brief_description));
-        solo.enterText((EditText) solo.getView(R.id.brief_description), "Egg");
         solo.clickOnText("Cancel");
         assertTrue(solo.searchText("Milk"));
-
-        // check the OK button in edit ingredient in recipe fragment
-        solo.clickOnText("Milk");
-        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.recipe_edit_ingredient_fragment);
-        solo.clearEditText((EditText) solo.getView(R.id.ingredient_amount));
-        solo.enterText((EditText) solo.getView(R.id.ingredient_amount), "5");
-        solo.clickOnText("OK");
-        assertTrue(solo.searchText("5"));
 
         // check the delete button in edit ingredient in recipe fragment
         solo.clickOnText("Milk");
         solo.clickOnText("Delete");
-        assertFalse(solo.searchText("Milk"));
+        assertTrue(solo.searchText("Milk"));
 
         // check commit button in add edit recipe activity
         View commitButton = solo.getView(R.id.commit_button);
@@ -179,15 +186,23 @@ public class RecipeListTest {
         // check edit button in view recipe activity
         solo.clickOnText("Ice Cream");
         solo.assertCurrentActivity("Wrong Activity", ViewRecipeActivity.class);
-        View editRecipeButton = solo.getView(R.id.edit_button);
-        solo.clickOnView(editRecipeButton);
+        for (int i=0; i<20; i++) {
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.clickOnButton("Edit");
         solo.assertCurrentActivity("Wrong Activity", AddEditRecipeActivity.class);
 
         // check commit button in add edit recipe activity
         solo.clearEditText((EditText) solo.getView(R.id.title_EditText));
         solo.enterText((EditText) solo.getView(R.id.title_EditText), "Ice Cream Cone");
-        commitButton = solo.getView(R.id.commit_button);
-        solo.clickOnView(commitButton);
+        // Scrolling down to see ingredients in recipe
+        for (int i=0; i<20; i++) {
+            if (i < 6) {
+                solo.sendKey(Solo.ENTER);
+            }
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.clickOnButton("Commit");
         assertTrue(solo.searchText("Ice Cream Cone"));
     }
 
@@ -195,7 +210,8 @@ public class RecipeListTest {
     /**
      * Test if user can delete recipe correctly by going to the view recipe activity.
      */
-    public void testDeleteRecipe () {
+    public void testDeleteRecipe() {
+        // Navigate from Login page to Recipe Folder
         solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
         solo.clickOnText("Recipe Folder");
@@ -216,18 +232,26 @@ public class RecipeListTest {
         solo.enterText((EditText) solo.getView(R.id.comments_EditText), "None");
 
         // check commit button in add edit recipe activity
-        // solo.clickOnView(solo.getView(R.id.commit_button));
-        solo.scrollDown();
+        solo.clickOnView(solo.getView(R.id.NestedScrollView));
+        for (int i=0; i<20; i++) {
+            if (i < 6) {
+                solo.sendKey(Solo.ENTER);
+            }
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.sleep(2000);
         solo.clickOnButton("Commit");
         solo.waitForText("Orange Juice", 1, 1000);
 
         // check delete button in view recipe activity
         solo.clickOnText("Orange Juice");
-        View deleteButton = solo.getView(R.id.delete_button);
-        // solo.clickOnView(deleteButton);
-        solo.clickOnText("Delete");
-        solo.sleep(5000);
-        assertTrue(solo.searchText("Orange Juice"));
+        solo.clickOnView(solo.getView(R.id.NestedScrollView));
+        for (int i=0; i<20; i++) {
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.sleep(2000);
+        solo.clickOnButton("Delete");
+        assertFalse(solo.searchText("Orange Juice"));
     }
 
     @After
