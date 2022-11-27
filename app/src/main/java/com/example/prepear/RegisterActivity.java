@@ -70,10 +70,10 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        if (firebaseAuth.getCurrentUser() != null) { // Check if the user is already registered
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-            finish();
-        }
+//        if (firebaseAuth.getCurrentUser() != null) { // Check if the user is already registered
+//            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+//            finish();
+//        }
 
         // On below part: for the user to login with existing account and password
         loginText.setOnClickListener(v -> {
@@ -128,7 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) { // if user creates the account successfully
                             // On below part: send the verification link to user's email
                             FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                            currentUser.sendEmailVerification().addOnSuccessListener(unused -> Toast.makeText(RegisterActivity.this, "Verification Email has been sent. ",
+                            currentUser.sendEmailVerification().addOnSuccessListener(unused -> Toast.makeText(RegisterActivity.this,
+                                    "Verification Email has been sent. \n Please re-login after success on email verification! ",
                                     Toast.LENGTH_LONG).show()).addOnFailureListener(e -> Log.d(currentUser.getUid(), "On Failure: Email not sent" + e.getMessage()));
 
                             Toast.makeText(RegisterActivity.this,"Successful registered!",

@@ -61,6 +61,12 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        if (firebaseAuth.getCurrentUser() != null) { // Check if the user is already registered
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            finish();
+        }
+
+
         // On below part: the user chooses to register a new account
         registerText.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(),
                 RegisterActivity.class)));
