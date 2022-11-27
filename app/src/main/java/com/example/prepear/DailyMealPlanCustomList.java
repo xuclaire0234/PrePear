@@ -135,12 +135,57 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                             } else {
                                 selectTimeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", meal.getEatHour(), meal.getEatMinute()));
                             }
+                        } else {
+                            for (Meal eachMeal: mealsInOneDailyPlan) {
+                                if (Objects.equals(eachMeal.getMealID(), meal.getMealID())){
+                                    databaseController.deleteMealFromDailyMealPlan(context, clickedDailyMealPlan, meal);
+                                    mealsInOneDailyPlan.remove(eachMeal);
+                                    notifyDataSetChanged();
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
             });
         } else if (Objects.equals(meal.getMealType(), "Recipe")) { // if meal type is a recipe
             mealDocRef = db.collection("Recipes").document(mealDocumentID);
+            mealDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot.exists()) {
+                            String mealName = (String) documentSnapshot.getData().get("Title");
+                            mealTitle.setText(mealName);
+                            mealScale.setText("# of Servings: " + (meal.getCustomizedNumberOfServings()));
+
+                            // displays the current meal item's image/icon based on its meal type
+                            Glide.with(getContext())
+                                    .load((String) documentSnapshot.getData().get("Image URI")).into(mealPicture);
+                            mealPicture.setVisibility(View.VISIBLE);
+
+                            // sets the user defined time to eat current meal to the select time button
+                            if (meal.getEatHour() == 24) {
+                                selectTimeButton.setText("Select Time");
+                            } else {
+                                selectTimeButton.setText(String.format(Locale.getDefault(),
+                                        "%02d:%02d", meal.getEatHour(), meal.getEatMinute()));
+                            }
+                        } else {
+                            for (Meal eachMeal: mealsInOneDailyPlan) {
+                                if (Objects.equals(eachMeal.getMealID(), meal.getMealID())){
+                                    mealsInOneDailyPlan.remove(eachMeal);
+                                    databaseController.deleteMealFromDailyMealPlan(context, clickedDailyMealPlan, meal);
+                                    notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            /*
             mealDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -168,6 +213,8 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                     Log.d(TAG, "onFailure: " + e.getMessage());
                 }
             });
+
+             */
         }
 
         // sets up the select time button for displaying time picker after clicking it
@@ -197,11 +244,17 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                                     Collections.sort(mealsInOneDailyPlan, new Comparator<Meal>() {
                                         @Override
                                         public int compare(Meal meal1, Meal meal2) {
+                                            String time1 = String.format(Locale.getDefault(), "%02d:%02d", meal1.getEatHour(), meal1.getEatMinute());
+                                            String time2 = String.format(Locale.getDefault(), "%02d:%02d", meal2.getEatHour(), meal2.getEatMinute());
+                                            return time1.compareTo(time2);
+                                            /*
                                             if (meal1.getEatHour().equals(meal2.getEatHour())) {
                                                 return meal1.getEatMinute().compareTo(meal2.getEatMinute());
                                             } else {
                                                 return meal1.getEatHour().compareTo(meal2.getEatHour());
                                             }
+
+                                             */
                                         }
                                     });
                                     notifyDataSetChanged();
