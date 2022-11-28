@@ -142,13 +142,14 @@ public class MealPlanDailyIngredientCount {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
                                             DocumentSnapshot doc = task2.getResult();
                                             if (task2.isSuccessful()) {
-                                                // get the description, unit and category
-                                                String briefDescription = (String) doc.getData().get("description");
-                                                String unit = (String) doc.getData().get("unit");
-                                                String ingredientCategory = (String) doc.getData().get("category");
-
-                                                // store the ingredient got from database, changing the scale
-                                                ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(scale),unit,ingredientCategory));
+                                                if (doc.getData() != null) {
+                                                    // get the description, unit and category
+                                                    String briefDescription = (String) doc.getData().get("description");
+                                                    String unit = (String) doc.getData().get("unit");
+                                                    String ingredientCategory = (String) doc.getData().get("category");
+                                                    // store the ingredient got from database, changing the scale
+                                                    ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(scale),unit,ingredientCategory));
+                                                }
                                             }
                                         }
                                     });
@@ -166,40 +167,42 @@ public class MealPlanDailyIngredientCount {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task3) {
                                             DocumentSnapshot doc2 = task3.getResult();
-                                            // get the original number of scaling first
-                                            Number numberOfServings = (Number) doc2.get("Number of Servings");
-                                            scale = numberOfServings.doubleValue();
+                                            if (doc2.getData() != null) {
+                                                // get the original number of scaling first
+                                                Number numberOfServings = (Number) doc2.get("Number of Servings");
+                                                scale = numberOfServings.doubleValue();
 
-                                            // divide to get the scaling number needed to apply to all the ingredients in recipe
-                                            scale = scaleOfThisRecipe/scale;
+                                                // divide to get the scaling number needed to apply to all the ingredients in recipe
+                                                scale = scaleOfThisRecipe/scale;
 
-                                            db
-                                                    .collection("Recipes")
-                                                    .document(idOfThisRecipe)
-                                                    .collection("Ingredient")
-                                                    .get()
-                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<QuerySnapshot> task4) {
-                                                            // gain all the ingredient in recipe from the current recipe
-                                                            for (QueryDocumentSnapshot ingredientDoc : task4.getResult()) {
-                                                                if (task4.isSuccessful()) {
-                                                                    // get brief description, amount, unit and ingredient category information
-                                                                    String briefDescription = (String) ingredientDoc.getData().get("Brief Description");
-                                                                    Number amount = (Number) ingredientDoc.getData().get("Amount");
-                                                                    String unit = (String) ingredientDoc.getData().get("Unit");
-                                                                    String ingredientCategory = (String) ingredientDoc.getData().get("Ingredient Category");
-                                                                    Double amountValue = amount.doubleValue();
+                                                db
+                                                        .collection("Recipes")
+                                                        .document(idOfThisRecipe)
+                                                        .collection("Ingredient")
+                                                        .get()
+                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task4) {
+                                                                // gain all the ingredient in recipe from the current recipe
+                                                                for (QueryDocumentSnapshot ingredientDoc : task4.getResult()) {
+                                                                    if (task4.isSuccessful()) {
+                                                                        // get brief description, amount, unit and ingredient category information
+                                                                        String briefDescription = (String) ingredientDoc.getData().get("Brief Description");
+                                                                        Number amount = (Number) ingredientDoc.getData().get("Amount");
+                                                                        String unit = (String) ingredientDoc.getData().get("Unit");
+                                                                        String ingredientCategory = (String) ingredientDoc.getData().get("Ingredient Category");
+                                                                        Double amountValue = amount.doubleValue();
 
-                                                                    amountValue = amountValue * scale; // scale the amount value
-                                                                    amountValue = Math.round(amountValue * 1000d) / 1000d; // round the amount value
+                                                                        amountValue = amountValue * scale; // scale the amount value
+                                                                        amountValue = Math.round(amountValue * 1000d) / 1000d; // round the amount value
 
-                                                                    // store the ingredient got from database, with the scaled amount
-                                                                    ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(amountValue),unit,ingredientCategory));
+                                                                        // store the ingredient got from database, with the scaled amount
+                                                                        ingredients.add(new IngredientInRecipe(briefDescription,String.valueOf(amountValue),unit,ingredientCategory));
+                                                                    }
                                                                 }
                                                             }
-                                                        }
-                                                    });
+                                                        });
+                                            }
                                         }
                                     });
                         }
