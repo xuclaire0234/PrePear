@@ -337,6 +337,13 @@ public class MealPlanFragment extends Fragment implements
                                                 duplicateDay, duplicateDay.getDailyMealDataList().get(k));
                                         mealAddedToDataList = true;
                                         break;
+                                    } else if (duplicateDay.getDailyMealDataList().get(k).getDocumentID()
+                                            .matches(currentDailyMealPlan.getDailyMealDataList().get(0).getDocumentID())
+                                            && currentDailyMealPlan.getDailyMealDataList().get(0).getMealType().matches("Recipe")) {
+                                        databaseController.addEditMealToDailyMealPlan(getContext(),
+                                                currentDailyMealPlan, currentDailyMealPlan.getDailyMealDataList().get(0));
+                                        mealAddedToDataList = true;
+                                        break;
                                     }
                                 }
                                 /* if daily meal plan isn't added to the list either because

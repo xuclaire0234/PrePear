@@ -167,7 +167,7 @@ public class AddMealPlanActivityTest {
      */
     @Test
     @SuppressWarnings("deprecation")
-    public void testAddingMultiplePlans() throws ParseException {
+    public void testAddingMultiplePlans() {
         // Add a daily meal plan
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate start = LocalDate.now();
@@ -175,10 +175,13 @@ public class AddMealPlanActivityTest {
         View button = solo.getView(R.id.add_meal_plan_button);
         solo.clickOnView(button); // click the add meal plan button
         solo.clickOnView(solo.getView(R.id.start_date));
-        solo.setDatePicker(0,start.getYear() , start.getMonthValue(), start.getDayOfMonth());
+        solo.sleep(2000);
+        solo.setDatePicker(0,start.getYear() , start.getMonthValue()-1, start.getDayOfMonth());
         solo.clickOnText("OK");
+        solo.sleep(2000);
         solo.clickOnView(solo.getView(R.id.end_date));
-        solo.setDatePicker(0,end.getYear() , end.getMonthValue(), end.getDayOfMonth());
+        solo.setDatePicker(0,end.getYear() , end.getMonthValue()-1, end.getDayOfMonth());
+        solo.sleep(2000);
         solo.clickOnText("OK");
         // click on ingredient radio button
         RadioButton rb = (RadioButton) solo.getView(R.id.ingredient_radioButton);
@@ -194,6 +197,8 @@ public class AddMealPlanActivityTest {
         // check that the meal plan was added to the list
         for (LocalDate day = start; day.isBefore(end) || day.isEqual(end);
              day = day.plusDays(1)) {
+            solo.sendKey(Solo.DOWN);
+            solo.sleep(2000);
             assertTrue(solo.searchText(String.valueOf(day)));
             solo.clickLongOnText(String.valueOf(day));
             solo.sleep(2000);
