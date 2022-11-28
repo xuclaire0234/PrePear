@@ -20,6 +20,7 @@
             android:layout_weight="1"
             android:paddingStart="16dp"
             android:text="Start Date:"
+            android:textStyle="bold"
             android:textColor="@color/green_pear"
             android:textSize="20dp" />
 
@@ -47,6 +48,7 @@
             android:layout_weight="1"
             android:paddingStart="16dp"
             android:text="End Date:"
+            android:textStyle="bold"
             android:textColor="@color/green_pear"
             android:textSize="20dp" />
 

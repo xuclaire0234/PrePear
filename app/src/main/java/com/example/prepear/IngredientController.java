@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
-/**
+/*
  * This class is responsible for adding, deleting, and editing ingredients in the
  * ingredientStorageDataList, as well as sorting ingredients based on the user selected option
  * */
@@ -22,38 +22,48 @@ public class IngredientController {
 
     /**
      * This function initializes the ingredient controller.
+     * @param ingredientStorageDataList a {@link ArrayList} store all the ingredient in storage
      */
     public IngredientController(ArrayList<IngredientInStorage> ingredientStorageDataList){
         this.ingredientStorageDataList = ingredientStorageDataList;
     }
 
+    /**
+     * another constructor without parameter
+     */
     public IngredientController(){
         this.ingredientStorageDataList = new ArrayList<IngredientInStorage>();
     }
 
+
     /**
      * This function add a new ingredient to the ingredient data list
+     * @param ingredientToAdd a {@link IngredientInStorage} is needed to be added into ingredientStorageDataList
      */
     public void addIngredient(IngredientInStorage ingredientToAdd) {
         this.ingredientStorageDataList.add(ingredientToAdd);
     }
 
+
     /**
-     * This function replaces an ingredient in the data list with a new ingredient
+     * This function replaces an {@link IngredientInStorage} in the data list with a new {@link IngredientInStorage}
+     * @param index a {@link Integer} as index for ingredientStorageDateList
+     * @param ingredientToEdit a {@link IngredientInStorage} needed to be edited
      */
     public void replaceIngredient(int index, IngredientInStorage ingredientToEdit) {
         this.ingredientStorageDataList.set(index, ingredientToEdit);
     }
 
     /**
-     * This function delete existed ingredient in the ingredient data list
+     * This function delete existed {@link IngredientInStorage} in the ingredientStorageDataList
+     * @param ingredientToDelete a {@link IngredientInStorage} needed to be removed
      */
     public void removeIngredient(IngredientInStorage ingredientToDelete) {
         this.ingredientStorageDataList.remove(ingredientToDelete);
     }
 
     /**
-     * This function returns the list of ingredients
+     * This function returns the list of {@link IngredientInStorage}
      * @return The return is of type {@link ArrayList}
      */
     public ArrayList<IngredientInStorage> getIngredients() {
@@ -62,8 +72,8 @@ public class IngredientController {
 
 
     /**
-     * This method sorts all in-storage ingredients according to the user's selection made for sorting
-     * @param userSelectedSortChoice a String as the user's selection for sorting all in-storage ingredients
+     * This method sorts all {@link IngredientInStorage} according to the user's selection made for sorting
+     * @param userSelectedSortChoice a {@link String} as the user's selection for sorting all {@link IngredientInStorage}
      */
     public void SortInStorageIngredients(String userSelectedSortChoice){
         if (Objects.equals(userSelectedSortChoice, "description(ascending)")) {

@@ -13,14 +13,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test class for AddEditIngredientFragment. All the UI tests are written here. Robotium test framework is
+ * Test class for IngredientFragment. All the UI tests are written here. Robotium test framework is
  used
  */
 @RunWith(AndroidJUnit4.class)
 public class IngredientFragmentTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
 
     @Before
     /**
@@ -32,12 +32,11 @@ public class IngredientFragmentTest {
 
     @Test
     /**
-     * Test if we sort the existing ingredients shown in the listView after clicking description(ascending)
+     * Test if we sort the existing {@link IngredientInStorage} shown in the listView after clicking description(ascending)
      */
     public void testSort1(){
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
@@ -47,26 +46,25 @@ public class IngredientFragmentTest {
 
     @Test
     /**
-     * Test if we sort the existing ingredient shown in the listView after clicking best before (oldest to newest)
+     * Test if we sort the existing {@link IngredientInStorage}  shown in the listView after clicking best before (oldest to newest)
      */
     public void testSort2(){
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.sleep(5000);
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);        solo.clickOnView(solo.getView(R.id.sort_spinner));
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        solo.clickOnView(solo.getView(R.id.sort_spinner));
         solo.clickOnMenuItem("best before");
         solo.sleep(5000);
     }
 
     @Test
     /**
-     * Test if we can sort the existing ingredient shown in the listView after clicking location(ascending by default)
+     * Test if we can sort the existing {@link IngredientInStorage}  shown in the listView after clicking location(ascending by default)
      */
     public void testSort3(){
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));
@@ -74,11 +72,14 @@ public class IngredientFragmentTest {
         solo.sleep(5000);
     }
 
+
     @Test
+    /**
+     * Test if we can sort the existing {@link IngredientInStorage}  shown in the listView after clicking category
+     */
     public void testSort4(){
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.sort_spinner));

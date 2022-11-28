@@ -25,7 +25,8 @@ import com.example.prepear.R;
 
 import java.util.ArrayList;
 
-/* CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
+/**
+ * CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
  * Substitution of IngredientStorageController Class
  * */
 public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorage> {

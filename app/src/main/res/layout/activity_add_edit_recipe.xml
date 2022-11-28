@@ -55,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_header"
+            android:textStyle="bold"
             android:textSize="16sp"/>
 
         <EditText
@@ -64,7 +65,7 @@
             android:layout_marginStart="20dp"
             android:ems="10"
             android:inputType="text"
-            android:maxLength="30"
+            android:maxLength="100"
             android:textSize="16sp"
             android:hint="@string/title_text"
             android:nextFocusDown="@+id/preparation_time_EditText"
@@ -93,15 +94,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/preparation_time_header"
+            android:textStyle="bold"
             android:textSize="16sp"/>
 
         <EditText
             android:id="@+id/preparation_time_EditText"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:ems="10"
-            android:maxLength="10"
+            android:maxLength="50"
             android:inputType="number"
             android:textSize="16sp"
             android:hint="@string/preparation_time_text"
@@ -131,15 +133,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/number_of_servings_header"
+            android:textStyle="bold"
             android:textSize="16sp"/>
 
         <EditText
             android:id="@+id/number_of_servings_EditText"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:maxLength="3"
+            android:maxLength="100"
             android:inputType="number"
             android:textSize="16sp"
             android:hint="@string/number_of_servings_text"
@@ -169,6 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recipe_category_header"
+            android:textStyle="bold"
             android:textSize="16sp"/>
 
         <Spinner
@@ -186,38 +190,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:visibility="gone"
         android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/comments_LinearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout"
-        app:layout_constraintBottom_toTopOf="@id/comments_LinearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/recipe_category_LinearLayout">
 
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:text="@string/new_recipe_category_header"
-            android:textSize="16sp"/>
+            android:textStyle="bold"
+            android:textSize="15sp" />
 
         <EditText
             android:id="@+id/recipe_category_EditText"
-            android:layout_width="wrap_content"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:maxLength="20"
-            android:inputType="text"
-            android:textSize="16sp"
             android:hint="@string/ingredient_category_text"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="200"
             android:nextFocusDown="@+id/comments_EditText"
-            android:importantForAutofill="no"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/recipe_category_word_count"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:textColor="@color/dark_grey"/>
+            android:textColor="@color/dark_grey" />
     </LinearLayout>
 
     <LinearLayout
@@ -236,6 +241,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/comments_header"
+            android:textStyle="bold"
             android:textSize="16sp"/>
 
         <EditText
@@ -244,7 +250,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:maxLength="60"
+            android:maxLength="300"
             android:inputType="text"
             android:textSize="16sp"
             android:hint="@string/comments_text"
@@ -265,6 +271,7 @@
         android:text="@string/ingredient_list_header"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comments_LinearLayout"
         app:layout_constraintBottom_toTopOf="@id/add_ingredient_in_recipe_button"
@@ -290,6 +297,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_ingredient_in_recipe_button"
         app:layout_constraintBottom_toTopOf="@id/ingredient_in_recipe_ListView"
@@ -300,6 +308,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:textStyle="bold"
+            android:gravity="center"
             android:text="@string/brief_description_text"
             android:textSize="16sp"/>
 
@@ -308,6 +318,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/amount_text"
             android:textSize="16sp"/>
 
@@ -316,14 +329,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/unit_text"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/ingredient_category_TextView"
             android:layout_width="0dp"
+            android:layout_marginRight="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:textStyle="bold"
+            android:gravity="center"
             android:text="@string/ingredient_category_text"
             android:textSize="16sp"/>
     </LinearLayout>

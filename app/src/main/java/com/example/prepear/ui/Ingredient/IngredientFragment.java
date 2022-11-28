@@ -2,7 +2,7 @@
  * Class Name: IngredientFragment
  * Version Information: Version 1.0
  * Date:
- * Author: Shihao Liu
+ * Author: Jingyi Xu, Shihao Liu, Marafi Mergani
  * Copyright Notice:
  */
 package com.example.prepear.ui.Ingredient;
@@ -76,14 +76,26 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
             .document(userUID)
             .collection("Ingredient Storage");
 
+    /**
+     * return the info of selected {@link IngredientInStorage} to meal plan
+     */
     public interface IngredientOnCallbackReceived {
         void addIngredientTypeMeal(IngredientInStorage selectedIngredient);
     }
 
+    /**
+     * return the info of selected {@link IngredientInStorage} to meal plan
+     */
     public interface IngredientTypeMealChoiceReceiver{
         void addIngredientTypeMealInDailyMealPlan(IngredientInStorage clickedIngredient);
     }
 
+    /**
+     * This method receives the context from meal plan, checks if the context is of type
+     * {@link AddDailyMealConfirmationFragment.OnFragmentInteractionListener} and if it is, it assigns
+     * the variable listener to the activity, otherwise it raises a runtime error
+     * @param  activity information about the current state of the app received from meal plan
+     */
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
@@ -235,16 +247,16 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
 
     @Override
     /**
-     * This method updates the ingredient list view after the AddEditIngredientActivity concludes
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * This method updates the {@link IngredientInStorage} list view after the AddEditIngredientActivity concludes
+     * @param requestCode a {@link Integer} for request code
+     * @param resultCode a {@link Integer} for result code
+     * @param data a {@link Intent} for transferred data
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LAUNCH_ADD_INGREDIENT_ACTIVITY) { // if user adds a new ingredient
             if(resultCode == Activity.RESULT_OK){
-                /** get the ingredient object from the AddEditIngredient activity and add it to the
+                /* get the ingredient object from the AddEditIngredient activity and add it to the
                  *  ingredientStorageListAdapter
                  */
                 IngredientInStorage ingredientToAdd = (IngredientInStorage) data.getSerializableExtra("IngredientToAdd");

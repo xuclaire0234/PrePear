@@ -90,20 +90,14 @@ public class CustomRecipeList extends ArrayAdapter<Recipe> {
                 (R.id.imageView_in_recipe_list); /* This variable linked to the ImageView to show
          * the image of the recipe */
 
-        /*
-         * Set colors grey to all the textview except for the textview to show the title
-         */
-        recipeNumberOfServings.setTextColor(Color.parseColor("#ACACAC"));
-        recipePreparationTime.setTextColor(Color.parseColor("#ACACAC"));
-        recipeCategory.setTextColor(Color.parseColor("#ACACAC"));
 
         /*
          * Get and set values to title, number of servings, preparation time and recipe category
          */
         recipeTitle.setText(recipe.getTitle());
-        recipeNumberOfServings.setText("Number Of Servings: " + recipe.getNumberOfServings().toString());
-        recipePreparationTime.setText("Preparation Time: "+recipe.getPreparationTime().toString());
-        recipeCategory.setText("Recipe Category: " + recipe.getRecipeCategory());
+        recipeNumberOfServings.setText(recipe.getNumberOfServings().toString());
+        recipePreparationTime.setText(recipe.getPreparationTime().toString());
+        recipeCategory.setText(recipe.getRecipeCategory());
         /* Load and set the image from Firebase storage by URI and set to the imageview */
         Glide.with(getContext())
                 .load(recipe.getImageURI()).into(recipeImageView);

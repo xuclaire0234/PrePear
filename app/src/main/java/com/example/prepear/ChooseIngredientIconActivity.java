@@ -19,7 +19,7 @@ import com.example.prepear.AddEditIngredientActivity;
 import com.example.prepear.R;
 
 /**
- * This class provide icon for ingredient that allows user to choose one of the icon to represent
+ * This class provide icon for {@link IngredientInStorage} that allows user to choose one of the icon to represent
  */
 public class ChooseIngredientIconActivity extends AppCompatActivity {
 
@@ -32,7 +32,7 @@ public class ChooseIngredientIconActivity extends AppCompatActivity {
 
     /**
      * This method will send image tag to AddEditIngredientActivity when user selected one icon
-     * @param view
+     * @param view a {@link View}
      */
     public void PassImage(View view){
         String tag = (String) view.getTag();  // get image name of selected image

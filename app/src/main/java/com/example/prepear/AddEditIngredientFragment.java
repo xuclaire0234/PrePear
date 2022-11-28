@@ -40,7 +40,7 @@ import java.util.Date;
  * This class creates the add/edit ingredient fragment allowing the user to add an ingredient,
  * view it and make changes to its attributes
  * @version: 1.0
- * Author: Jiayin
+ * Author: Jingyi Xu, Shihao Liu, Marafi Mergani
  */
 
 public class AddEditIngredientFragment extends DialogFragment implements
@@ -60,7 +60,7 @@ public class AddEditIngredientFragment extends DialogFragment implements
 
 
     /**
-     * This method defines an interface of methods that the MainActivity needs to implement
+     * This method defines an interface of methods that the IngredientFragment needs to implement
      * in order to respond to the user clicking OK, DELETE, and CANCEL buttons.
      * @see LoginActivity
      */
