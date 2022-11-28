@@ -48,9 +48,10 @@ public class MealPlanControllerTest {
         // check if the controller is empty now
         assertEquals(0, mealPlanController.getSize());
         // add a meal plan
-        mealPlanController.addMealPlan(mockDailyMealPlan());
+        DailyMealPlan mealPlan = mockDailyMealPlan();
+        mealPlanController.addMealPlan(mealPlan);
         // test method
-        //assertEquals(mealPlanController.getMealPlan(0), mockDailyMealPlan());
+        assertEquals(mealPlanController.getMealPlan(0), mealPlan);
         assertEquals(1, mealPlanController.getSize());
     }
 

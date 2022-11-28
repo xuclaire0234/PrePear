@@ -33,6 +33,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -51,33 +54,28 @@ import java.util.HashMap;
 import javax.annotation.Nullable;
 
 public class ShoppingListClickboxFragment extends DialogFragment {
-    // declare variables
-    private ArrayAdapter<CharSequence> locationSpinnerAdapter;
-    private TextView descriptionText;
-    private TextView amountText;
-    private TextView unitText;
-    private TextView categoryText;
-    private LinearLayout newLocationLinearLayout;
-    private TextView descriptionWordCount;
-    private TextView amountWordCount;
-    private EditText actualAmountEditText;
-    private EditText bestBeforeDateEditText;
-    private String bestBeforeDateString;  // best before date string
-    private Spinner locationSpinner;
-    private EditText locationEditText;
-    private DatePickerDialog dialog;      // create datePicker for best before date
-    private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private ShoppingListClickboxFragment.OnFragmentInteractionListener listener;
+    // declare all variables that used to linked to xml objects
+    TextView descriptionText;
+    TextView amountText;
+    TextView unitText;
+    TextView categoryText;
+    LinearLayout newLocationLinearLayout;
+    TextView descriptionWordCount;
+    TextView amountWordCount;
+    EditText actualAmountEditText;
+    EditText bestBeforeDateEditText;
+    String bestBeforeDateString;  // best before date string
+    Spinner locationSpinner;
+    EditText locationEditText;
 
-    /**
-     * This method defines an interface of methods that the ShoppingListViewModel needs to implement
-     * in order to respond to the user clicking Ok buttons.
-     *
-     * @see
-     */
-    public interface OnFragmentInteractionListener {
-        void onOkPressed(boolean actualAmountGreaterThanNeeded);
-    }
+    // declare the adapter for the spinner
+    private ArrayAdapter<CharSequence> locationSpinnerAdapter;
+
+    // define the date picker dialog
+    private DatePickerDialog dialog;      // create datePicker for best before date
+
+    // define the date format
+    private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * This method creates a new instance of ShoppingListClickboxFragment so user can add
@@ -94,6 +92,9 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         return fragment;
     }
 
+    /*
+     * define variables needed to connect database
+     */
     final String TAG = "Ingredient Storage";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -152,6 +153,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                     // if user select other, ask user to dynamically input location
                     newLocationLinearLayout.setVisibility(View.VISIBLE);
                 } else {
+                    // if the user does not select other, dynamically input should be turn off
                     newLocationLinearLayout.setVisibility(View.GONE);
                 }
             }
@@ -162,6 +164,9 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             }
         });
 
+        /*
+         * set up the title style of the dialog fragment
+         */
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Details For Ingredient");
         builder.setView(view);
@@ -204,92 +209,112 @@ public class ShoppingListClickboxFragment extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Cancel", null); // if the user select cancel, nothing happens
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // listener.onOkPressed(new IngredientInStorage(ingredient.getBriefDescription(), ingredient.getIngredientCategory(), bestBeforeDate, location, actualAmount, ingredient.getUnit(), ingredient.getDocumentId(),0));
-                // Loop through all the documents in the collection named "Recipes"
 
-                // set date picker dialog for bestBeforeDate
+                // get the amount, actualBestBeforeDate, location text from the layout
                 String actualAmount = actualAmountEditText.getText().toString();
-                String bestBeforeDate = bestBeforeDateEditText.getText().toString();
+                String actualBestBeforeDate = bestBeforeDateEditText.getText().toString();
                 String location = locationSpinner.getSelectedItem().toString();
 
                 if (location.equals("Other")) {
+                    // if the user select other, take the input new location text as location
                     newLocationLinearLayout.setVisibility(View.VISIBLE);
                     location = locationEditText.getText().toString();
                 }
 
-                if (actualAmount.equals("") || bestBeforeDate.equals("") || location.equals("")) {
+                if (actualAmount.equals("") || actualBestBeforeDate.equals("") || location.equals("")) {
+                    // if any of the blanks were empty, warn the user
                     Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                             Toast.LENGTH_LONG).show();
                 } else {
+
                     if (Double.parseDouble(actualAmount) >= ingredient.getAmountValue()) {
-                        // shoppingListCheckBox.setChecked(true);
+
                     } else {
+                        // if the actual amount is less than the required one, warn the user
                         Toast.makeText(getActivity().getApplicationContext(), "Actual amount is less than needed amount.",
                                 Toast.LENGTH_LONG).show();
                     }
-                }
+                    // add or update input details to database
+                    String finalLocation = location;
 
-                // add or update input details to database
-                String finalLocation = location;
-                collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable
-                            FirebaseFirestoreException error) {
-                        String description = ingredient.getBriefDescription();
-                        boolean ingredientInStorage = true;
-                        // Loop through all the documents in the collection named "Recipes"
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            Log.d(TAG, String.valueOf(doc.getData().get("description"))); // Set an error message
+                    // get all ingredient in storage from the database
+                    collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            String description = ingredient.getBriefDescription(); // get the brief description of the ingredient to add
+                            boolean ingredientInStorage = true; //  set ture if the ingredient to add is not existed in database
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                Log.d(TAG, String.valueOf(doc.getData().get("description"))); // Set an error message
+                                // Get description, unit, amount, location, best before date, category attributes
+                                String descriptionIngredientInStorage = (String) doc.getData().get("description");
+                                int ingredientIconCode = Integer.parseInt(doc.getData().get("icon code").toString());
+                                String ingredientId = (String) doc.getData().get("document id");
+                                String storageIngredientUnit = (String) doc.getData().get("unit");
+                                String storageBestBeforeDate = (String) doc.getData().get("bestBeforeDate");
+                                String storageLocation = (String) doc.getData().get("location");
+                                Number storageAmount = (Number) doc.getData().get("amount");
 
-                            // Get description and category attributes
-                            String descriptionIngredientInStorage = (String) doc.getData().get("description");
-                            int ingredientIconCode = Integer.parseInt(doc.getData().get("icon code").toString());
-                            String ingredientId = (String) doc.getData().get("document id");
-                            double finalActualAmount = Double.parseDouble(actualAmount);
+                                // get the actual amount
+                                double finalActualAmount = Double.parseDouble(actualAmount);
 
-                            // if ingredient is also in Ingredient Storage, update database
-                            if (descriptionIngredientInStorage.equals(description)) {
-                                db
-                                        .collection("Ingredient Storage")
-                                        .document(ingredientId)
-                                        .update("description", description,
-                                                "category", ingredient.getIngredientCategory(),
-                                                "bestBeforeDate", bestBeforeDateString,
-                                                "amount", finalActualAmount + ingredient.getAmountValue(),
-                                                "unit", ingredient.getUnit(),
-                                                "icon code",ingredientIconCode,
-                                                "location", finalLocation);
+                                if (descriptionIngredientInStorage.equals(description)
+                                        && storageBestBeforeDate.equals(actualBestBeforeDate)
+                                        && storageLocation.equals(finalLocation)) {
+                                    /*
+                                     * if the description, best before date, location were the same, we could see this as
+                                     * the ingredient to add is existing in database. So the existing ingredient should be updated
+                                     */
+                                    if (storageIngredientUnit.equals(ingredient.getUnit())) {
+                                        // if the units are the same, update directly
+                                        finalActualAmount = finalActualAmount + storageAmount.doubleValue();
+                                    } else {
+                                        // if the units are not the same, convert to be one
+                                        finalActualAmount = unitConvert(storageIngredientUnit, finalActualAmount) + storageAmount.doubleValue();
+                                    }
+                                    db
+                                            .collection("Users")
+                                            .document(userUID)
+                                            .collection("Ingredient Storage")
+                                            .document(ingredientId)
+                                            .update("description", description,
+                                                    "category", ingredient.getIngredientCategory(),
+                                                    "bestBeforeDate", actualBestBeforeDate,
+                                                    "amount", finalActualAmount,
+                                                    "unit", storageIngredientUnit,
+                                                    "icon code",ingredientIconCode,
+                                                    "location", storageLocation);
 
-                                return;
-                            } else {
-                                ingredientInStorage = false;
+                                    ingredientInStorage = false;
+                                    break;
+                                }
+                            }
+                            // if ingredient is not in ingredient storage database, add to database
+                            if (ingredientInStorage) {
+                                // get the date as the ingredient's id
+                                Date dateTimeNow = new Date();
+                                String documentId = DATEFORMAT.format(dateTimeNow);
+
+                                // set the ingredient's icon code
+//                                int iconCode = getResources().getIdentifier("ic_baseline_add_photo_alternate_24", "drawable", "com.example.prepear");
+                                int iconCode = 0;
+                                // use the database controller to add the ingredient into storage
+                                IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
+                                        ingredient.getIngredientCategory(), actualBestBeforeDate, finalLocation, actualAmount, ingredient.getUnit(), documentId, iconCode);
+                                DatabaseController database = new DatabaseController();
+                                database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
+
                             }
                         }
-                        // if ingredient is not in storage, add to database
-                        if (ingredientInStorage == false) {
-                            Date dateTimeNow = new Date();
-                            String documentId = DATEFORMAT.format(dateTimeNow);
-                            int iconCode = getResources().getIdentifier("ic_baseline_add_photo_alternate_24", "drawable", "com.example.prepear");
-                            IngredientInStorage ingredientToAdd = new IngredientInStorage(description,
-                                    ingredient.getIngredientCategory(), bestBeforeDate, finalLocation, actualAmount, ingredient.getUnit(), documentId, iconCode);
-                            DatabaseController database = new DatabaseController();
-                            database.addIngredientToIngredientStorage(getActivity(), ingredientToAdd);
-                        }
-                    }
-                });
+                    });
+                }
             }
         });
         return builder.create();
     }
-
-//    // onDestroy method may never be called ,
-//    public void onDestroy() {
-//        super.onDestroy();
-//    }
 
     /**
      * This method removes all present soft keyboards and is used when user clicks on one of the spinners
@@ -302,6 +327,31 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         // Hide the soft keyboards associated with description and amount edit text fields
         inputMethodManager.hideSoftInputFromWindow(actualAmountEditText.getWindowToken(), 0);
     }
+
+    /**
+     * This function transferred and unified the unit
+     * @param unit the unit is of type {@link String}
+     * @param amount the amount is of type {@link Double}
+     * @return the return is transferred the amount, which is of type {@link Double}
+     */
+    private Double unitConvert(String unit, Double amount) {
+        /* Since we identify the given unit is solid unit
+         * We should get scaling number according to standard unit (g) and given unit
+         */
+        Double scale = 1.0;
+        if (unit.equals("kg")) {
+            scale = 1000.0;
+        }else if (unit.equals("oz")) {
+            scale = 28.3495;
+        }else if (unit.equals("lb")) {
+            scale = 453.592;
+        }else if (unit.equals("l")) {
+            /* Since we identify the given unit is liquid unit
+             * We should get scaling number according to standard unit (ml) and given unit
+             */
+            scale = 1000.0;
+        }
+        // return the calculated amount by multiply both given amount and scaling number
+        return amount / scale;
+    }
 }
-
-

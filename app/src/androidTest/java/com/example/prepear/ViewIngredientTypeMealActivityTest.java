@@ -139,3 +139,4 @@ public class ViewIngredientTypeMealActivityTest {
         solo.finishOpenedActivities();
     }
 }
+

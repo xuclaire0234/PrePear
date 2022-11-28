@@ -5,9 +5,7 @@
  * Author: Marafi Mergani
  * Copyright Notice:
  */
-
 package com.example.prepear;
-
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import static org.junit.Assert.assertTrue;
 
@@ -16,12 +14,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import java.time.LocalDate;
+
+import androidx.annotation.IdRes;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.example.prepear.ui.MealPlan.MealPlanFragment;
 import com.example.prepear.ui.Recipe.RecipeFragment;
+import com.example.prepear.ui.ShoppingList.ShoppingListFragment;
 import com.robotium.solo.Solo;
 
 import org.checkerframework.checker.units.qual.C;
@@ -42,8 +45,11 @@ import java.util.Objects;
  */
 public class AddMealPlanActivityTest {
     private Solo solo;
+    @IdRes
+    private final int theme = androidx.appcompat.R.style.Theme_AppCompat_DayNight;
+
     @Rule
-    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
 
     /**
      * Run before each test to set up activities.
@@ -51,7 +57,8 @@ public class AddMealPlanActivityTest {
     @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-
+        FragmentScenario<MealPlanFragment> scenario = FragmentScenario.launchInContainer(MealPlanFragment.class,
+                null, theme, Lifecycle.State.STARTED);
     }
 
     /**
@@ -60,15 +67,19 @@ public class AddMealPlanActivityTest {
     @Test
     @SuppressWarnings("deprecation")
     public void TestAddingFromIngredientStorage() {
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
-        View button = solo.getView(R.id.add_meal_plan_button);
-        solo.clickOnView(button); // click the add meal plan button
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());//        // leave start date empty
-        // leave start and end dates empty
+        solo.clickOnView(solo.getView(R.id.add_meal_plan_button)); // click the add meal plan button
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        // leave only start and end dates empty
         solo.sleep(2000);
-        solo.clickOnButton("CONFIRM");
+        solo.clickOnView(solo.getView(R.id.confirm));
+        // leave start date empty
+        solo.enterText((EditText) solo.getView(R.id.end_date), date);
+        solo.clickOnText("OK");
+        solo.clickOnView(solo.getView(R.id.confirm));
+        // leave end date empty
+        solo.enterText((EditText) solo.getView(R.id.start_date), date);
+        solo.clickOnText("OK");
+        solo.clickOnView(solo.getView(R.id.confirm));
         solo.assertCurrentActivity("Wrong Activity", AddMealPlanActivity.class);
         // enter start and end dates
         solo.sleep(2000);
@@ -88,18 +99,18 @@ public class AddMealPlanActivityTest {
         assertTrue(solo.getView(R.id.amount_layout).getVisibility() == View.VISIBLE);
         // enter 0 for amount
         solo.enterText((EditText) solo.getView(R.id.amount), "0");
-        solo.sleep(3000);
-        solo.clickOnButton("CONFIRM");
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
         solo.assertCurrentActivity("Wrong Activity", AddMealPlanActivity.class);
         // leave amount empty
         solo.clearEditText((EditText) solo.getView(R.id.amount));
-        solo.sleep(3000);
-        solo.clickOnButton("CONFIRM");
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
         // enter a valid input for amount
         solo.enterText((EditText) solo.getView(R.id.amount), "2");
-        solo.sleep(3000);
-        solo.clickOnButton("CONFIRM");
-        solo.sleep(3000);
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
+        solo.sleep(2000);
         // check that the meal plan was added to the list
         assertTrue(solo.searchText(date));
         // delete item added
@@ -113,16 +124,8 @@ public class AddMealPlanActivityTest {
     @Test
     @SuppressWarnings("deprecation")
     public void TestAddingFromRecipeFolder(){
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
-        View button = solo.getView(R.id.add_meal_plan_button);
-        solo.clickOnView(button); // click the add meal plan button
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());//        // leave start date empty
-        // leave start and end dates empty
-        solo.sleep(2000);
-        solo.clickOnButton("CONFIRM");
-        solo.assertCurrentActivity("Wrong Activity", AddMealPlanActivity.class);
+        solo.clickOnView(solo.getView(R.id.add_meal_plan_button)); // click the add meal plan button
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         // enter start and end dates
         solo.sleep(2000);
         solo.enterText((EditText) solo.getView(R.id.start_date), date);
@@ -141,18 +144,17 @@ public class AddMealPlanActivityTest {
         assertTrue(solo.getView(R.id.number_of_servings_layout).getVisibility() == View.VISIBLE);
         // enter 0 for amount
         solo.enterText((EditText) solo.getView(R.id.number_of_servings), "0");
-        solo.sleep(3000);
-        solo.clickOnButton("CONFIRM");
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
         solo.assertCurrentActivity("Wrong Activity", AddMealPlanActivity.class);
         // leave amount empty
         solo.clearEditText((EditText) solo.getView(R.id.number_of_servings));
-        solo.sleep(3000);
-        solo.clickOnButton("CONFIRM");
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
         // enter a valid input for amount
         solo.enterText((EditText) solo.getView(R.id.number_of_servings), "2");
-        solo.sleep(3000);
-        solo.clickOnButton("CONFIRM");
-        solo.sleep(3000);
+        solo.clickOnView(solo.getView(R.id.confirm));
+        solo.sleep(2000);
         // check that the meal plan was added to the list
         assertTrue(solo.searchText(date));
         // delete item added
@@ -167,62 +169,36 @@ public class AddMealPlanActivityTest {
     @SuppressWarnings("deprecation")
     public void testAddingMultiplePlans() throws ParseException {
         // Add a daily meal plan
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar startDay = Calendar.getInstance();
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-//        String date = "2022-11-27";
-//        startDay.setTime(Objects.requireNonNull(s.parse(date)));
-//        Log.d(TAG, "testAddingMultiplePlans: " + startDay.getTime());
-//        LocalDate start = s.parse(date);
-//        String startDate = LocalDate.parse(date).toString();
-//        startDay.setTime(start);
-
+        LocalDate start = LocalDate.now();
+        LocalDate end = start.plusDays(3);
         View button = solo.getView(R.id.add_meal_plan_button);
         solo.clickOnView(button); // click the add meal plan button
-        // enter start and end dates
-        solo.enterText((EditText) solo.getView(R.id.start_date), LocalDate.parse(date).toString());
+        solo.clickOnView(solo.getView(R.id.start_date));
+        solo.setDatePicker(0,start.getYear() , start.getMonthValue(), start.getDayOfMonth());
         solo.clickOnText("OK");
-//        startDay.add(Calendar.DATE,1);
-//        startDate = LocalDate.parse(date).plusDays(2).toString();
-        solo.enterText((EditText) solo.getView(R.id.end_date), (LocalDate.parse(date).plusDays(3).toString()));
-        solo.clickOnButton(0);
+        solo.clickOnView(solo.getView(R.id.end_date));
+        solo.setDatePicker(0,end.getYear() , end.getMonthValue(), end.getDayOfMonth());
+        solo.clickOnText("OK");
         // click on ingredient radio button
         RadioButton rb = (RadioButton) solo.getView(R.id.ingredient_radioButton);
         solo.clickOnView(rb);
         // select an ingredient and click confirm button
         solo.clickInList(0);
+        solo.sleep(2000);
         solo.clickOnButton(1);
-
         // enter a valid input for amount
         solo.enterText((EditText) solo.getView(R.id.amount), "2");
-        solo.sleep(3000);
-
-        solo.clickOnButton("CONFIRM");
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
         // check that the meal plan was added to the list
-        assertTrue(solo.searchText("2023-09-10"));
-        assertTrue(solo.searchText("2023-09-11"));
-        assertTrue(solo.searchText("2023-09-12"));
-        assertTrue(solo.searchText("2023-09-13"));
-        assertTrue(solo.searchText("2023-09-14"));
-        assertTrue(solo.searchText("2023-09-15"));
-        // delete the added meal plans
-        // delete item added
-        solo.clickLongOnText("2023-09-11");
-        solo.clickOnText("CONFIRM");
-        solo.clickLongOnText("2023-09-12");
-        solo.clickOnText("CONFIRM");
-        solo.clickLongOnText("2023-09-13");
-        solo.clickOnText("CONFIRM");
-        solo.clickLongOnText("2023-09-14");
-        solo.clickOnText("CONFIRM");
-        solo.clickLongOnText("2023-09-15");
-        solo.clickOnText("CONFIRM");
-        solo.clickLongOnText("2023-09-10");
-        solo.clickOnButton("CONFIRM");
-
+        for (LocalDate day = start; day.isBefore(end) || day.isEqual(end);
+             day = day.plusDays(1)) {
+            assertTrue(solo.searchText(String.valueOf(day)));
+            solo.clickLongOnText(String.valueOf(day));
+            solo.sleep(2000);
+            solo.clickOnButton(1);
+        }
     }
 
     /**
@@ -231,35 +207,33 @@ public class AddMealPlanActivityTest {
     @Test
     @SuppressWarnings("deprecation")
     public void testChoosingMealBeforeDates(){
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         // Add a daily meal plan
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.sleep(3000);
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
-        View button = solo.getView(R.id.add_meal_plan_button);
-        solo.clickOnView(button); // click the add meal plan button
+        solo.clickOnView(solo.getView(R.id.add_meal_plan_button)); // click the add meal plan button
         // click on ingredient radio button
         RadioButton rb = (RadioButton) solo.getView(R.id.ingredient_radioButton);
         solo.clickOnView(rb);
         // select an ingredient and click confirm button
         solo.clickInList(0);
-        solo.clickOnText("CONFIRM");
+        solo.clickOnButton(1);
         // enter a valid input for amount
         solo.enterText((EditText) solo.getView(R.id.amount), "2");
         // enter start and end dates
-        solo.enterText((EditText) solo.getView(R.id.start_date), "2023-09-10");
+        solo.enterText((EditText) solo.getView(R.id.start_date), date);
         solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.end_date), "2023-09-10");
+        solo.enterText((EditText) solo.getView(R.id.end_date), date);
         solo.clickOnText("OK");
-        solo.sleep(3000);
-
-        solo.clickOnButton("CONFIRM");
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.confirm));
         // check that the meal plan was added to the list
-        solo.sleep(3000);
+        solo.sleep(2000);
         // check that the meal plan was added to the list
-        assertTrue(solo.searchText("2023-09-10"));
+        assertTrue(solo.searchText(date));
         // delete item added
-        solo.clickLongOnText("2023-09-10");
-        solo.clickOnButton("CONFIRM");
+        solo.clickLongOnText(date);
+        solo.clickOnButton(1);
     }
+
+
+
 }

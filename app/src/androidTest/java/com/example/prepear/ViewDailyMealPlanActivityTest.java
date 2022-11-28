@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import androidx.annotation.IdRes;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -25,20 +28,29 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * This class test the ViewDailyMealPlanActivity using Robotium
  */
 public class ViewDailyMealPlanActivityTest {
     private Solo solo;
-    @Rule
-    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
+    @IdRes
+    private final int theme = androidx.appcompat.R.style.Theme_AppCompat_DayNight;
 
-    @Before
+    @Rule
+    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
+
     /**
      * Run before each test to set up activities.
      */
+    @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        FragmentScenario<MealPlanFragment> scenario = FragmentScenario.launchInContainer(MealPlanFragment.class, null, theme, Lifecycle.State.STARTED);
+
     }
 
     /**
@@ -48,16 +60,13 @@ public class ViewDailyMealPlanActivityTest {
     @SuppressWarnings("deprecation")
     public void testViewDailyMealPlan(){
         // Add a daily meal plan
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         View button = solo.getView(R.id.add_meal_plan_button);
         solo.clickOnView(button); // click the add meal plan button
-        solo.clickOnImageButton(0);
         // enter start and end dates
-        solo.enterText((EditText) solo.getView(R.id.start_date), "2023-09-10");
+        solo.enterText((EditText) solo.getView(R.id.start_date), date);
         solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.end_date), "2023-09-10");
+        solo.enterText((EditText) solo.getView(R.id.end_date), date);
         solo.clickOnText("OK");
         // click on ingredient radio button
         RadioButton rb = (RadioButton) solo.getView(R.id.ingredient_radioButton);
@@ -65,19 +74,19 @@ public class ViewDailyMealPlanActivityTest {
         // select an ingredient and click confirm button
         solo.clickInList(0);
 
-        solo.clickOnButton("CONFIRM");
+        solo.clickOnButton(1);
         // enter a valid input for amount
-        solo.enterText((EditText) solo.getView(R.id.amount_edit_text), "2");
-        solo.clickOnButton("CONFIRM");
+        solo.enterText((EditText) solo.getView(R.id.amount), "2");
+        solo.clickOnView(solo.getView(R.id.confirm));
         // check that the meal plan was added to the list
-        assertTrue(solo.searchText("2023-09-10"));
+        assertTrue(solo.searchText(date));
         // click on the entered daily meal plan
-        solo.clickOnText("2023-09-10");
+        solo.clickOnText(date);
         solo.assertCurrentActivity("Wrong Activity", ViewDailyMealPlanActivity.class);
         // look for the added meal inside the meal plan
-        assertTrue(solo.searchText("2023-09-10"));
+        assertTrue(solo.searchText(date));
         // click the add meal button
-        solo.clickOnButton("Add A Meal");
+        solo.clickOnView(solo.getView(R.id.add_daily_meal_button));
         solo.assertCurrentActivity("Wrong Activity", AddDailyMealActivity.class);
         solo.goBack();
         // click on the added meal
@@ -85,6 +94,6 @@ public class ViewDailyMealPlanActivityTest {
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientTypeMealActivity.class);
         solo.goBack();
         // click the back button
-        solo.clickOnButton("BACK");
+        solo.clickOnView(solo.getView(R.id.back_button));
     }
 }

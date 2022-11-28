@@ -14,6 +14,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.IdRes;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -26,16 +29,22 @@ import org.junit.Test;
 
 public class MealPlanFragmentTest {
     private Solo solo;
-    @Rule
-    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
+    @IdRes
+    private final int theme = androidx.appcompat.R.style.Theme_AppCompat_DayNight;
 
-    @Before
+    @Rule
+    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
+
     /**
      * Run before each test to set up activities.
      */
+    @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        FragmentScenario<MealPlanFragment> scenario = FragmentScenario.launchInContainer(MealPlanFragment.class, null, theme, Lifecycle.State.STARTED);
+
     }
+
 
     /**
      * Test if there is a pop up DatePicker while clicking the Edittext
@@ -43,13 +52,23 @@ public class MealPlanFragmentTest {
     @Test
     @SuppressWarnings("deprecation")
     public void checkFloatingButton() {
-        solo.sleep(2000);
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", FragmentScenario.EmptyFragmentActivity.class);
         View button = solo.getView(R.id.add_meal_plan_button);
         solo.clickOnView(button); // click the add meal plan button
         solo.assertCurrentActivity("Wrong Activity", AddMealPlanActivity.class);
+        solo.goBack();
+        /*
+         * using a try catch since this case is already tested in AddDailyMealPlanActivityTest
+         * and ViewDailyMealPlanActivityTest
+         */
+        try {
+            solo.clickInList(0);
+            solo.assertCurrentActivity("Wrong Activity", ViewDailyMealPlanActivity.class);
+            solo.goBack();
+        } finally {
+            solo.assertCurrentActivity("Wrong Activity", FragmentScenario.EmptyFragmentActivity.class);
+        }
     }
+
+
 }

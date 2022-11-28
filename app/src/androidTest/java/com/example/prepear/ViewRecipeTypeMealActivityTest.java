@@ -38,7 +38,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -103,7 +105,7 @@ public class ViewRecipeTypeMealActivityTest {
         solo.clickOnButton(1);
 
         // enter a number of servings and add it to the meal plan
-        solo.enterText((EditText) solo.getView(R.id.number_of_servings), "5");
+        solo.enterText((EditText) solo.getView(R.id.number_of_servings), "1");
         solo.sleep(3000);
         solo.clickOnView((View) solo.getView(R.id.confirm));
         solo.sleep(3000);
@@ -114,84 +116,21 @@ public class ViewRecipeTypeMealActivityTest {
         solo.sleep(3000);
         solo.clickInList(0);
         solo.sleep(3000);
-        assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "5");
+        assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "1");
 
-        // check changing the customized number of servings function
-        solo.sleep(3000);
-        solo.clickOnView((View) solo.getView(R.id.number_of_servings_EditText));
-        solo.clearEditText((EditText) solo.getView(R.id.customize_number_of_servings_EditText));
-        solo.sleep(3000);
-        solo.enterText((EditText) solo.getView(R.id.customize_number_of_servings_EditText), "10");
-        solo.clickOnButton(1);
-        solo.clickOnView(solo.getView(R.id.NestedScrollView));
-        NestedScrollView nestedScrollView = (NestedScrollView) solo.getView(R.id.NestedScrollView);
-        nestedScrollView.scrollTo(700, 700);
-        solo.clickOnView((View) solo.getView(R.id.commit_button));
-        solo.sleep(3000);
-        solo.clickInList(0);
-        solo.sleep(3000);
-        assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "10");
-
-        // check deleting the meal from the daily meal plan function
-        solo.sleep(3000);
-        nestedScrollView = (NestedScrollView) solo.getView(R.id.NestedScrollView);
-        nestedScrollView.scrollTo(700, 700);
-        solo.sleep(3000);
-        solo.clickOnView((View) solo.getView(R.id.delete_button));
-    }
-
-    @Test
-    public void testViewRecipeTypeMealActivityScalingFunction() {
-        // Navigate from Login page to Meal Planner
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()); // leave start date empty
-
-        if (solo.searchText(date)) {
-            solo.clickLongOnText(date);
-            solo.clickOnButton(1);
-            solo.sleep(3000);
+        // get the current amount needed for each ingredient in the recipe
+        ListView listView = (ListView) solo.getView(R.id.ingredient_in_recipe_ListView);
+        ArrayList<Double> originalAmountList = new ArrayList<>();
+        for (int i = 0; i < listView.getChildCount(); i++) {
+            originalAmountList.add(((IngredientInRecipe) listView.getItemAtPosition(i)).getAmountValue());
         }
 
-        // add new meal plan
-        View button = solo.getView(R.id.add_meal_plan_button);
-        solo.clickOnView(button); // click the add meal plan button
-
-        // enter start and end dates
-        solo.sleep(2000);
-        solo.enterText((EditText) solo.getView(R.id.start_date), date);
-        solo.sleep(2000);
-        solo.clickOnButton("OK");
-        solo.sleep(2000);
-        solo.enterText((EditText) solo.getView(R.id.end_date), date);
-        solo.clickOnButton("OK");
-
-        // click on recipe radio button
-        RadioButton rb = (RadioButton) solo.getView(R.id.recipe_radioButton);
-        solo.clickOnView(rb);
-
-        // select a recipe and click confirm button
-        solo.clickInList(0);
-        solo.clickOnButton(1);
-
-        // enter a number of servings and add it to the meal plan
-        solo.enterText((EditText) solo.getView(R.id.number_of_servings), "5");
-        solo.sleep(3000);
-        solo.clickOnView((View) solo.getView(R.id.confirm));
-        solo.sleep(3000);
-        assertTrue(solo.searchText(date));
-
-        // select the daily meal plan just added and check viewing details of recipe type meal function
-        solo.clickOnText(date);
-        solo.sleep(3000);
-        solo.clickInList(0);
-        solo.sleep(3000);
-        assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "5");
-
         // check changing the customized number of servings function
         solo.sleep(3000);
         solo.clickOnView((View) solo.getView(R.id.number_of_servings_EditText));
         solo.clearEditText((EditText) solo.getView(R.id.customize_number_of_servings_EditText));
         solo.sleep(3000);
-        solo.enterText((EditText) solo.getView(R.id.customize_number_of_servings_EditText), "10");
+        solo.enterText((EditText) solo.getView(R.id.customize_number_of_servings_EditText), "2");
         solo.clickOnButton(1);
         solo.clickOnView(solo.getView(R.id.NestedScrollView));
         NestedScrollView nestedScrollView = (NestedScrollView) solo.getView(R.id.NestedScrollView);
@@ -200,7 +139,9 @@ public class ViewRecipeTypeMealActivityTest {
         solo.sleep(3000);
         solo.clickInList(0);
         solo.sleep(3000);
-        assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "10");
+        assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "2");
+
+        //
 
         // check deleting the meal from the daily meal plan function
         solo.sleep(3000);
@@ -208,6 +149,8 @@ public class ViewRecipeTypeMealActivityTest {
         nestedScrollView.scrollTo(700, 700);
         solo.sleep(3000);
         solo.clickOnView((View) solo.getView(R.id.delete_button));
+        solo.sleep(3000);
+        assertEquals(((ListView) solo.getView(R.id.daily_meals_listView)).getChildCount(), 0);
     }
 
     @After
