@@ -1,3 +1,11 @@
+/**
+ * Class Name: Ingredient
+ * Version: 1.0
+ * Create Date: Oct 25th, 2022
+ * Last Edit Date: Nov 3rd, 2022
+ * Author: Jingyi Xu
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -46,7 +54,7 @@ public class IngredientFragmentTest {
 
     @Test
     /**
-     * Test if we sort the existing {@link IngredientInStorage}  shown in the listView after clicking best before (oldest to newest)
+     * Test if we sort the existing {@link IngredientInStorage}  shown in the listView after clicking best before date (oldest to newest)
      */
     public void testSort2(){
         solo.clickOnImageButton(0);

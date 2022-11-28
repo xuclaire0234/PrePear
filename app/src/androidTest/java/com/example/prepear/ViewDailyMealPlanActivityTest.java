@@ -64,20 +64,25 @@ public class ViewDailyMealPlanActivityTest {
         View button = solo.getView(R.id.add_meal_plan_button);
         solo.clickOnView(button); // click the add meal plan button
         // enter start and end dates
+        solo.sleep(2000);
         solo.enterText((EditText) solo.getView(R.id.start_date), date);
+        solo.sleep(2000);
         solo.clickOnText("OK");
+        solo.sleep(2000);
         solo.enterText((EditText) solo.getView(R.id.end_date), date);
+        solo.sleep(2000);
         solo.clickOnText("OK");
         // click on ingredient radio button
         RadioButton rb = (RadioButton) solo.getView(R.id.ingredient_radioButton);
         solo.clickOnView(rb);
         // select an ingredient and click confirm button
         solo.clickInList(0);
-
         solo.clickOnButton(1);
         // enter a valid input for amount
+        solo.sleep(2000);
         solo.enterText((EditText) solo.getView(R.id.amount), "2");
         solo.clickOnView(solo.getView(R.id.confirm));
+        solo.sleep(2000);
         // check that the meal plan was added to the list
         assertTrue(solo.searchText(date));
         // click on the entered daily meal plan
@@ -87,13 +92,17 @@ public class ViewDailyMealPlanActivityTest {
         assertTrue(solo.searchText(date));
         // click the add meal button
         solo.clickOnView(solo.getView(R.id.add_daily_meal_button));
+        solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", AddDailyMealActivity.class);
         solo.goBack();
         // click on the added meal
         solo.clickInList(0);
+        solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", ViewIngredientTypeMealActivity.class);
         solo.goBack();
         // click the back button
         solo.clickOnView(solo.getView(R.id.back_button));
+        solo.sleep(2000);
+        solo.assertCurrentActivity("Wrong Activity", FragmentScenario.EmptyFragmentActivity.class);
     }
 }

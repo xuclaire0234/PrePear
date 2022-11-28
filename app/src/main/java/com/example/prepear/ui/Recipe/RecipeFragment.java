@@ -1,3 +1,10 @@
+/**
+ * Classname: AddEditRecipeActivity
+ * Version Information: 1.0.0
+ * Date: 11/2/2022
+ * Author: Jiayin He, Yingyue Cao
+ * Copyright Notice:
+ */
 package com.example.prepear.ui.Recipe;
 
 import android.app.Activity;
@@ -43,7 +50,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/**
+ * This class define the view and the function of recipe fragment
+ */
 public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener{
+
+    // declare all the variables here
     private RecipeOnCallbackReceived callback;
     private RecipeTypeMealChoiceReceiver recipeTypeMealChoiceReceiver;
     int positionOfItemClicked;
@@ -59,11 +71,16 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
     Recipe newRecipe;
     Boolean reverse = Boolean.FALSE;
 
-
+    /**
+     * This interface is used when the view recipe fragment is called by the meal plan function
+     */
     public interface RecipeOnCallbackReceived {
         public void addRecipeTypeMeal(Recipe selectedRecipe);
     }
 
+    /**
+     * This interface is used when the view recipe fragment is called by the meal plan function
+     */
     public interface RecipeTypeMealChoiceReceiver{
         public void addRecipeTypeMealInDailyMealPlan(Recipe clickedRecipe);
     }
@@ -83,6 +100,9 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         }
     }
 
+    /**
+     * This function connect the fragment with its xml
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_recipe, container, false);
@@ -217,6 +237,7 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
             }
         });
 
+        // set adapter for the spinner to choose the sort item
         ArrayAdapter<String> ad = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortItemSpinner.setAdapter(ad);
@@ -325,6 +346,10 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
             }
         });
     }
+
+    /**
+     * This function is used to sent data back to meal plan when a recipe type meal is added
+     */
     @Override
     public void onConfirmPressed() {
         Object clickedItem = recipeList.getItemAtPosition(positionOfItemClicked);
@@ -333,17 +358,18 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         callback.addRecipeTypeMeal(clickedFood);
     }
 
-    /*@Override
-   public void onCancelPressed() {
-       callback.addRecipeTypeMeal(null);
-   }
-*/
+    /**
+     * This function is used return to meal plan when no recipe type meal is added
+     */
     @Override
     public void onBackPressed() {
         getActivity().finish();
         startActivity(new Intent(getActivity(), AddDailyMealActivity.class));
     }
 
+    /**
+     * This function is used to sent data back to meal plan when a recipe type meal is added
+     */
     @Override
     public void onOkPressed() {
         Object clickedItem = recipeList.getItemAtPosition(positionOfItemClicked);

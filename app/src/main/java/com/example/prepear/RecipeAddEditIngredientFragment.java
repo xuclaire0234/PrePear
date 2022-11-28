@@ -73,9 +73,10 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
     }
 
     /**
-     * This method creates a new instance of RecipeAddIngredientFragment so user can add
+     * This method creates a new instance of RecipeAddEditIngredientFragment so user can add
      * the ingredient to certain recipe by clicking on it in the AddEditRecipe activity
      * @param ingredient {@link IngredientInRecipe} that the user clicked on
+     * @param briefDescription {@link ArrayList} that collects all the briefDescription from the ingredient in storage
      * @return fragment the newly created fragment
      */
     static RecipeAddEditIngredientFragment newInstance(IngredientInRecipe ingredient, ArrayList<String> briefDescription) {
@@ -87,6 +88,11 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         return fragment;
     }
 
+    /**
+     * This method creates a new instance of RecipeAddEditIngredientFragment with briefDescription list
+     * @param briefDescription {@link ArrayList} that collects all the briefDescription from the ingredient in storage
+     * @return
+     */
     static RecipeAddEditIngredientFragment newInstance(ArrayList<String> briefDescription) {
         Bundle args = new Bundle();
         args.putSerializable("briefDescription", briefDescription);
@@ -231,6 +237,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
         briefDescriptionList = (ArrayList<String>) bundle.getSerializable("briefDescription");
         briefDescriptionList.add("Other");
 
+        // set up the description spinner
         descriptionSpinnerAdapter = new ArrayAdapter<String>(this.getContext(),android.R.layout.simple_spinner_item,briefDescriptionList);
         descriptionText.setAdapter(descriptionSpinnerAdapter);
         descriptionText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -238,8 +245,10 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedDescription = descriptionText.getSelectedItem().toString();
                 if (selectedDescription.equals("Other")) {
+                    // if the user choose to input his own description and not use the ingredient in storage, new edit text showed up
                     newDescriptionLayout.setVisibility(View.VISIBLE);
                 } else {
+                    // if the user choose to use the ingredient in storage, new edit text did not show up
                     newDescriptionLayout.setVisibility(View.GONE);
                 }
             }
@@ -254,22 +263,30 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
             /* Editing existing ingredient */
             IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
             String briefDescription = ingredient.getBriefDescription();
+            // set the brief description
             if (briefDescriptionList.contains(briefDescription)) {
+                // if not Other, set the spinner
                 descriptionText.setSelection(descriptionSpinnerAdapter.getPosition(briefDescription));
             } else {
+                // if it is Other, set the linearLayout and the Spinner
                 descriptionText.setSelection(descriptionSpinnerAdapter.getPosition("Other"));
                 newDescriptionLayout.setVisibility(View.VISIBLE);
                 newBriefDescriptionEditText.setText(briefDescription);
             }
+            // set the amount text
             amountText.setText(String.valueOf(ingredient.getAmountString()));
+            // set the unit text
             String unit = ingredient.getUnit();
             List<String> units = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.units)));
             unitSpinner.setSelection(unitSpinnerAdapter.getPosition(unit));
+            // set the cateory text
             String ingredientCategory = ingredient.getIngredientCategory();
             List<String> ingredientCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredient_categories)));
             if (ingredientCategories.contains(ingredientCategory)) {
+                // if not Other, set the spinner
                 categorySpinner.setSelection(categorySpinnerAdapter.getPosition(ingredientCategory));
             } else {
+                // if it is Other, set the linearLayout and the Spinner
                 categorySpinner.setSelection(categorySpinnerAdapter.getPosition("Other"));
                 newCategoryLinearLayout.setVisibility(View.VISIBLE);
                 categoryEditText.setText(ingredientCategory);
@@ -293,10 +310,12 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                             String amount = amountText.getText().toString();
                             String unit = unitSpinner.getSelectedItem().toString();
                             if (unit.equals("Other")) {
+                                // if it is Other, get from the linearLayout
                                 unit = unitEditText.getText().toString();
                             }
                             String category = categorySpinner.getSelectedItem().toString();
                             if (category.equals("Other")) {
+                                // if it is Other, get from the linearLayout
                                 category = categoryEditText.getText().toString();
                             }
                             listener.onDeletePressed(new IngredientInRecipe(description, amount, unit, category));
@@ -341,83 +360,108 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                         || amountText.getText().toString().equals("")
                         || unitSpinner.getSelectedItem().toString().equals("")
                         || categorySpinner.getSelectedItem().toString().equals("")) {
+                    // if any filed is missing, not updating anything
                     Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                             Toast.LENGTH_LONG).show();
                     wantToCloseDialog = false;
                 } else {
                     Bundle bundle = getArguments();
                     if (bundle.getSerializable("ingredient") != null) {
+                        // get the description text
                         description = descriptionText.getSelectedItem().toString();
                         if (description.equals("Other")) {
+                            // if is other, get the text from linearLayout
                             description = newBriefDescriptionEditText.getText().toString();
                             if (description.equals("")) {
+                                // if the linear layout is empty, the fragment should prompt the user to fill that filed
                                 Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                         Toast.LENGTH_LONG).show();
                                 wantToCloseDialog = false;
                             }
                         }
+                        // get the amount text
                         amount = amountText.getText().toString();
+                        // get the unit text
                         unit = unitSpinner.getSelectedItem().toString();
                         if (unit.equals("Other")) {
+                            // if is other, get the text from linearLayout
                             unit = unitEditText.getText().toString();
                             if (unit.equals("")) {
+                                // if the linear layout is empty, the fragment should prompt the user to fill that filed
                                 Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                         Toast.LENGTH_LONG).show();
                                 wantToCloseDialog = false;
                             }
                         }
+                        // get the category text
                         category = categorySpinner.getSelectedItem().toString();
                         if (category.equals("Other")) {
+                            // if is other, get the text from linearLayout
                             category = categoryEditText.getText().toString();
                             if (category.equals("")) {
+                                // if the linear layout is empty, the fragment should prompt the user to fill that filed
                                 Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                         Toast.LENGTH_LONG).show();
                                 wantToCloseDialog = false;
                             }
                         }
+                        // set the new ingredient with all the information got
                         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
                         ingredient.setBriefDescription(description);
                         ingredient.setAmountValue(Double.parseDouble(amount));
                         ingredient.setUnit(unit);
                         ingredient.setIngredientCategory(category);
                         if (wantToCloseDialog) {
+                            // if it is ready to update, call the listener
                             listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
                         }
                     } else {
+                        // get the description text
                         description = descriptionText.getSelectedItem().toString();
                         if (description.equals("Other")) {
+                            // if is other, get the text from linearLayout
                             description = newBriefDescriptionEditText.getText().toString();
                             if (description.equals("")) {
+                                // if the linear layout is empty, the fragment should prompt the user to fill that filed
                                 Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                         Toast.LENGTH_LONG).show();
                                 wantToCloseDialog = false;
                             }
                         }
+                        // get the amount text
                         amount = amountText.getText().toString();
+                        // get the unit text
                         unit = unitSpinner.getSelectedItem().toString();
                         if (unit.equals("Other")) {
+                            // if is other, get the text from linearLayout
                             unit = unitEditText.getText().toString();
                             if (unit.equals("")) {
+                                // if the linear layout is empty, the fragment should prompt the user to fill that filed
                                 Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                         Toast.LENGTH_LONG).show();
                                 wantToCloseDialog = false;
                             }
                         }
+                        // get the category text
                         category = categorySpinner.getSelectedItem().toString();
                         if (category.equals("Other")) {
+                            // if is other, get the text from linearLayout
                             category = categoryEditText.getText().toString();
                             if (category.equals("")) {
+                                // if the linear layout is empty, the fragment should prompt the user to fill that filed
                                 Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
                                         Toast.LENGTH_LONG).show();
                                 wantToCloseDialog = false;
                             }
                         }
                         if (wantToCloseDialog) {
+                            // if it is ready to update, call the listener
                             listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
                         }
                     }
                 }
                 if (wantToCloseDialog) {
+                    // if already update, dismiss the dialog fragment
                     d.dismiss();
                 }
             });

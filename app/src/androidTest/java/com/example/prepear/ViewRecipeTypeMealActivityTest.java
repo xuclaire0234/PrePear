@@ -13,6 +13,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import static java.lang.Double.compare;
+
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -76,8 +78,9 @@ public class ViewRecipeTypeMealActivityTest {
     public void testViewRecipeTypeActivity() {
         // Navigate from Login page to Meal Planner
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()); // leave start date empty
+        solo.sleep(12000);  // loads information
 
-        // initializ
+        // initializes
         if (solo.searchText(date)) {
             solo.clickLongOnText(date);
             solo.clickOnButton(1);
@@ -147,7 +150,7 @@ public class ViewRecipeTypeMealActivityTest {
         Double currentAmount;
         for (int i = 0; i < listView.getChildCount(); i++) {
             currentAmount = ((IngredientInRecipe) listView.getItemAtPosition(i)).getAmountValue();
-            assertEquals(originalAmountList.get(i).doubleValue(), Math.round(currentAmount  * 2 * 100.0) / 100.0);
+            assertEquals(compare(Math.round(originalAmountList.get(i).doubleValue() * 2 * 100.0) / 100.0 , Math.round(currentAmount * 100.0) / 100.0), 0);
         }
 
         // check deleting the meal from the daily meal plan function
@@ -168,4 +171,3 @@ public class ViewRecipeTypeMealActivityTest {
         solo.finishOpenedActivities();
     }
 }
-

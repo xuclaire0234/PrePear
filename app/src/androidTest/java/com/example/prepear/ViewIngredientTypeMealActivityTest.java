@@ -72,6 +72,7 @@ public class ViewIngredientTypeMealActivityTest {
     public void testViewRecipeTypeActivity() {
         // Navigate from Login page to Meal Planner
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()); // leave start date empty
+        solo.sleep(12000);  // loads information
 
         if (solo.searchText(date)) {
             solo.clickLongOnText(date);
@@ -139,4 +140,3 @@ public class ViewIngredientTypeMealActivityTest {
         solo.finishOpenedActivities();
     }
 }
-
