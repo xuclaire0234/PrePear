@@ -50,7 +50,7 @@ public class ShoppingListViewIngredientFragmentTest {
     }
 
     @Rule
-    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
 
     /**
      * This function test the view of the view detail fragment

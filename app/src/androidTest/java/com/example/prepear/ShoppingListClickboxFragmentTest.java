@@ -52,7 +52,7 @@ public class ShoppingListClickboxFragmentTest {
     }
 
     @Rule
-    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
 
     /**
      * This test is to test if the view of the click box is right
