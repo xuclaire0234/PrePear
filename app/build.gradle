@@ -209,12 +209,13 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    def fragment_version = "1.5.4"
-
-    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
     androidTestImplementation "androidx.navigation:navigation-testing:2.3.5"
     implementation "androidx.navigation:navigation-fragment:2.3.5"
     implementation "androidx.navigation:navigation-runtime:2.3.5"
+
+    def fragment_version = "1.5.4"
+
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 }

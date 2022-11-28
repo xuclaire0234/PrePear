@@ -287,6 +287,9 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String description = descriptionText.getSelectedItem().toString();
+                            if (description.equals("Other")) {
+                                description = newBriefDescriptionEditText.getText().toString();
+                            }
                             String amount = amountText.getText().toString();
                             String unit = unitSpinner.getSelectedItem().toString();
                             if (unit.equals("Other")) {
@@ -345,33 +348,73 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                     Bundle bundle = getArguments();
                     if (bundle.getSerializable("ingredient") != null) {
                         description = descriptionText.getSelectedItem().toString();
+                        if (description.equals("Other")) {
+                            description = newBriefDescriptionEditText.getText().toString();
+                            if (description.equals("")) {
+                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                        Toast.LENGTH_LONG).show();
+                                wantToCloseDialog = false;
+                            }
+                        }
                         amount = amountText.getText().toString();
                         unit = unitSpinner.getSelectedItem().toString();
                         if (unit.equals("Other")) {
                             unit = unitEditText.getText().toString();
+                            if (unit.equals("")) {
+                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                        Toast.LENGTH_LONG).show();
+                                wantToCloseDialog = false;
+                            }
                         }
                         category = categorySpinner.getSelectedItem().toString();
                         if (category.equals("Other")) {
                             category = categoryEditText.getText().toString();
+                            if (category.equals("")) {
+                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                        Toast.LENGTH_LONG).show();
+                                wantToCloseDialog = false;
+                            }
                         }
                         IngredientInRecipe ingredient = (IngredientInRecipe) bundle.getSerializable("ingredient");
                         ingredient.setBriefDescription(description);
                         ingredient.setAmountValue(Double.parseDouble(amount));
                         ingredient.setUnit(unit);
                         ingredient.setIngredientCategory(category);
-                        listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
+                        if (wantToCloseDialog) {
+                            listener.onOkPressed(new IngredientInRecipe(description, amount, unit, category));
+                        }
                     } else {
                         description = descriptionText.getSelectedItem().toString();
+                        if (description.equals("Other")) {
+                            description = newBriefDescriptionEditText.getText().toString();
+                            if (description.equals("")) {
+                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                        Toast.LENGTH_LONG).show();
+                                wantToCloseDialog = false;
+                            }
+                        }
                         amount = amountText.getText().toString();
                         unit = unitSpinner.getSelectedItem().toString();
                         if (unit.equals("Other")) {
                             unit = unitEditText.getText().toString();
+                            if (unit.equals("")) {
+                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                        Toast.LENGTH_LONG).show();
+                                wantToCloseDialog = false;
+                            }
                         }
                         category = categorySpinner.getSelectedItem().toString();
                         if (category.equals("Other")) {
                             category = categoryEditText.getText().toString();
+                            if (category.equals("")) {
+                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter full information.",
+                                        Toast.LENGTH_LONG).show();
+                                wantToCloseDialog = false;
+                            }
                         }
-                        listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
+                        if (wantToCloseDialog) {
+                            listener.onConfirmPressed(new IngredientInRecipe(description, amount, unit, category));
+                        }
                     }
                 }
                 if (wantToCloseDialog) {
