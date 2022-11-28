@@ -198,7 +198,7 @@ public class ShoppingListControllerTest {
         // check before added ingredients
         assertEquals(0,shoppingListController.countIngredients());
 
-        // create to mock ingredients
+        // create two mock ingredients
         IngredientInRecipe ingredient1 = mockIngredient1();
         IngredientInRecipe ingredient2 = mockIngredient2();
 
@@ -219,45 +219,55 @@ public class ShoppingListControllerTest {
         shoppingListController.add(ingredient2);
         assertEquals(2,shoppingListController.countIngredients());
 
+        // delete one ingredient and check if the delete is successful
         assertTrue(shoppingListController.getIngredients().contains(ingredient1));
         shoppingListController.deleteIngredient(ingredient1);
         assertEquals(1,shoppingListController.countIngredients());
         assertFalse(shoppingListController.getIngredients().contains(ingredient1));
 
-
+        // try to delete the not existing ingredient into the controller and check if it could be deleted
         shoppingListController.deleteIngredient(ingredient1);
         assertEquals(1,shoppingListController.countIngredients());
 
+        // delete one ingredient and check if the delete is successful
         assertTrue(shoppingListController.getIngredients().contains(ingredient2));
         shoppingListController.deleteIngredient(ingredient2);
         assertFalse(shoppingListController.getIngredients().contains(ingredient2));
 
+        // try to delete the not existing ingredient into the controller and check if it could be deleted
         assertEquals(0,shoppingListController.countIngredients());
         shoppingListController.deleteIngredient(ingredient2);
         assertEquals(0,shoppingListController.countIngredients());
     }
 
+    /**
+     * This test is for testing sort function
+     */
     @Test
     @DisplayName("This function is for testing test sort")
     void TestSort() {
+        // check before added ingredients
         assertEquals(0,shoppingListController.countIngredients());
         shoppingListController.sortIngredient(0);
 
+        // create two mock ingredients and add into controller
         IngredientInRecipe ingredient1 = mockIngredient1();
         IngredientInRecipe ingredient2 = mockIngredient2();
 
         shoppingListController.add(ingredient1);
         shoppingListController.add(ingredient2);
 
+        // sort by description and check the sort sequence
         shoppingListController.sortIngredient(1);
         assertEquals(shoppingListController.getIngredientAt(0), ingredient2);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient1);
 
-
+        // sort by nothing and check the sort sequence
         shoppingListController.sortIngredient(0);
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient2);
 
+        // sort by category and check the sort sequence
         shoppingListController.sortIngredient(3);
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient2);
@@ -266,34 +276,48 @@ public class ShoppingListControllerTest {
     @Test
     @DisplayName("This function is for testing test reverse")
     void testReverse() {
+        // create two mock ingredients to be added into the controller
         IngredientInRecipe ingredient1 = mockIngredient1();
         IngredientInRecipe ingredient2 = mockIngredient2();
 
+        // add the first ingredient and test the reverse
         shoppingListController.add(ingredient1);
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
         shoppingListController.reverseOrder();
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
 
 
+        // add the second ingredient
         shoppingListController.add(ingredient2);
 
+        // test the sequence
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient2);
+        // reverse
         shoppingListController.reverseOrder();
+        // test the sequence
         assertEquals(shoppingListController.getIngredientAt(0), ingredient2);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient1);
 
+        // sort by description
         shoppingListController.sortIngredient(0);
+
+        // test the sequence
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient2);
+
+        // reverse and test the sequence
         shoppingListController.reverseOrder();
         assertEquals(shoppingListController.getIngredientAt(0), ingredient2);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient1);
         shoppingListController.reverseOrder();
 
+        // sort by category and test the sequence
         shoppingListController.sortIngredient(1);
         assertEquals(shoppingListController.getIngredientAt(0), ingredient2);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient1);
+
+        // reverse and test the sequence
         shoppingListController.reverseOrder();
         assertEquals(shoppingListController.getIngredientAt(0), ingredient1);
         assertEquals(shoppingListController.getIngredientAt(1), ingredient2);
