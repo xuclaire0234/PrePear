@@ -91,7 +91,7 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
         String userUID = user.getUid();
         DocumentReference docRef =
                 db
-                        .collection("User")
+                        .collection("Users")
                         .document(userUID)
                         .collection("Ingredient Storage")
                         .document(viewedMeal.getDocumentID());

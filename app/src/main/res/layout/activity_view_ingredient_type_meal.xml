@@ -56,7 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="@string/brief_description_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -82,7 +81,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="@string/best_before_date_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -108,7 +106,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="@string/location_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -187,7 +184,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="@string/unit_text"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -213,7 +209,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ems="10"
-            android:text="@string/ingredient_category_text"
             android:textSize="16sp" />
     </LinearLayout>
 

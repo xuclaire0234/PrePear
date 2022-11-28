@@ -70,8 +70,8 @@ public class DatabaseController {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // On below part: will get executed when the task is succeeded
-                        Toast.makeText(context, "Ingredient has been successfully uploaded",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Ingredient has been successfully uploaded",
+//                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
