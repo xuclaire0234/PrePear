@@ -16,10 +16,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import androidx.annotation.IdRes;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.prepear.ui.Ingredient.IngredientFragment;
+import com.example.prepear.ui.MealPlan.MealPlanFragment;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -27,13 +31,20 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * This class test AddDailyMealConfirmationFragment class using Robotium
  */
 public class AddDailyMealConfirmationFragmentTest {
     private Solo solo;
+    @IdRes
+    private final int theme = androidx.appcompat.R.style.Theme_AppCompat_DayNight;
+
     @Rule
-    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
 
     /**
      * Run before each test to set up activities.
@@ -41,6 +52,9 @@ public class AddDailyMealConfirmationFragmentTest {
     @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        FragmentScenario<MealPlanFragment> scenario = FragmentScenario.launchInContainer(MealPlanFragment.class,
+                null, theme, Lifecycle.State.STARTED);
+
     }
 
     /**
@@ -50,42 +64,40 @@ public class AddDailyMealConfirmationFragmentTest {
     @SuppressWarnings("deprecation")
     public void CheckDailyMealConfirmationFragment(){
         // Add a daily meal plan
-        solo.clickOnButton("Log In"); // click log in Button
-        solo.clickOnImageButton(0);  // click the navigation button
-        solo.clickOnText("MealPlan");
         View button = solo.getView(R.id.add_meal_plan_button);
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         solo.clickOnView(button); // click the add meal plan button
         // enter start and end dates
-        solo.enterText((EditText) solo.getView(R.id.start_date), "2023-09-10");
+        solo.enterText((EditText) solo.getView(R.id.start_date), date);
         solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.end_date), "2023-09-10");
+        solo.enterText((EditText) solo.getView(R.id.end_date), date);
         solo.clickOnText("OK");
         // click on ingredient radio button
         RadioButton rb = (RadioButton) solo.getView(R.id.ingredient_radioButton);
         solo.clickOnView(rb);
         // select an ingredient and click confirm button
         solo.clickInList(0);
-        solo.clickOnText("CONFIRM");
+        solo.clickOnButton(1);
         // enter a valid input for amount
         solo.enterText((EditText) solo.getView(R.id.amount), "2");
-        solo.clickOnButton("CONFIRM");
+        solo.clickOnView(solo.getView(R.id.confirm));
         // click on the entered daily meal plan
-        solo.clickOnText("2023-09-10");
+        solo.clickOnText(date);
         // click the add meal button
-        solo.clickOnButton("Add A Meal");
+        solo.clickOnView(solo.getView(R.id.add_daily_meal_button));
         // check if the amount edit text is invisible, and the add meal button is disabled
         assertEquals(View.INVISIBLE, solo.getView(R.id.meal_amount_input).getVisibility());
         assertFalse(solo.getView(R.id.add_meal_in_plan_button).isEnabled());
         // click add meal from ingredient storage button
-        solo.clickOnButton("Pick a meal from Ingredient Storage");
+        solo.clickOnView(solo.getView(R.id.pick_in_storage_meal_button));
         solo.clickInList(1);
-        // check cancel button
-        solo.clickOnButton("CANCEL");
+        // check back button
+        solo.clickOnButton("BACK");
         solo.assertCurrentActivity("Wrong Activity", AddDailyMealActivity.class);
-        solo.clickOnButton("Pick a meal from Ingredient Storage");
+        solo.clickOnView(solo.getView(R.id.pick_in_storage_meal_button));
         // check confirm button
         solo.clickInList(0);
-        solo.clickOnButton("CONFIRM");
-        solo.assertCurrentActivity("Wrong Activity", ViewDailyMealPlanActivity.class);
+        solo.clickOnButton(1);
+        solo.assertCurrentActivity("Wrong Activity", AddDailyMealActivity.class);
     }
 }
