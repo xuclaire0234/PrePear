@@ -48,13 +48,14 @@ import java.util.ArrayList;
 /**
  * This class is an Fragment Class for displaying the all in-storage ingredients with its detailed info on a ListView
  */
-public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener {
+public class IngredientFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener,
+        AddDailyMealConfirmationFragment.OnFragmentInteractionListener {
     private int positionOfItemClicked;
     private int clickedItemPosition;
     private IngredientOnCallbackReceived callback;
     private IngredientTypeMealChoiceReceiver ingredientTypeMealChoiceReceiver;
-    int LAUNCH_ADD_INGREDIENT_ACTIVITY = 1;
-    int LAUNCH_EDIT_INGREDIENT_ACTIVITY = 2;
+    final int LAUNCH_ADD_INGREDIENT_ACTIVITY = 1;
+    final int LAUNCH_EDIT_INGREDIENT_ACTIVITY = 2;
     private ListView ingredientStorageList; // for displaying all added in-storage ingredients
     private ArrayAdapter<IngredientInStorage> ingredientStorageListAdapter;
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>(); // store in-storage ingredient entries

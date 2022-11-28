@@ -262,7 +262,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
     }
 
     /**
-     * This method updates the information of a meal.
+     * This method updates the information of a meal after editing.
      * @param updatedMeal the meal to be updated
      */
     public void updateMealInfo(Meal updatedMeal) {
