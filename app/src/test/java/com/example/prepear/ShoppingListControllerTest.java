@@ -190,23 +190,31 @@ public class ShoppingListControllerTest {
     }
 
     /**
-     * This function test the 
+     * This function test the delete function of the controller
      */
     @Test
     @DisplayName("This function is for testing test delete")
     void deleteTest() {
+        // check before added ingredients
         assertEquals(0,shoppingListController.countIngredients());
 
+        // create to mock ingredients
         IngredientInRecipe ingredient1 = mockIngredient1();
         IngredientInRecipe ingredient2 = mockIngredient2();
 
+        // add the first ingredient into the controller and check if the add is successful
         shoppingListController.add(ingredient1);
         assertEquals(1,shoppingListController.countIngredients());
+
+        // try to delete the not existing ingredient into the controller and check if it could be deleted
         shoppingListController.deleteIngredient(ingredient2);
         assertEquals(1,shoppingListController.countIngredients());
+
+        // delete the first ingredient into the controller and check if the delete is successful
         shoppingListController.deleteIngredient(ingredient1);
         assertEquals(0,shoppingListController.countIngredients());
 
+        // add the two ingredients into the controller and check if they were added successfully
         shoppingListController.add(ingredient1);
         shoppingListController.add(ingredient2);
         assertEquals(2,shoppingListController.countIngredients());

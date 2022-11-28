@@ -474,6 +474,9 @@ public class ShoppingListFragment extends Fragment {
                                  */
                                 if (updateKey) {
                                     Log.d("get",String.valueOf(targetIngredient.getAmountValue()));
+                                    double roundedAmount = Math.round(targetIngredient.getAmountValue()*100d)/100d;
+                                    targetIngredient.setAmountValue(roundedAmount);
+
                                     ingredientShoppingList.add(targetIngredient);
                                     updateKey = false;
                                     ingredientShoppingListAdapter.notifyDataSetChanged();

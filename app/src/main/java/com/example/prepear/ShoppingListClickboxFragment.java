@@ -265,7 +265,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                         finalActualAmount = finalActualAmount + storageAmount.doubleValue();
                                     } else {
                                         // if the units are not the same, convert to be one
-                                        finalActualAmount = finalActualAmount + unitConvert(storageIngredientUnit, storageAmount.doubleValue());
+                                        finalActualAmount = unitConvert(storageIngredientUnit, finalActualAmount) + storageAmount.doubleValue();
                                     }
                                     db
                                             .collection("Ingredient Storage")
@@ -274,7 +274,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
                                                     "category", ingredient.getIngredientCategory(),
                                                     "bestBeforeDate", actualBestBeforeDate,
                                                     "amount", finalActualAmount,
-                                                    "unit", ingredient.getUnit(),
+                                                    "unit", storageIngredientUnit,
                                                     "icon code",ingredientIconCode,
                                                     "location", storageLocation);
 
@@ -343,7 +343,7 @@ public class ShoppingListClickboxFragment extends DialogFragment {
         }
 
         // return the calculated amount by multiply both given amount and scaling number
-        return amount * scale;
+        return amount / scale;
     }
 }
 
