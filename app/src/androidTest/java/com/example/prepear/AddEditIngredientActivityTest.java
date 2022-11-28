@@ -1,3 +1,11 @@
+/**
+ * Class Name: Ingredient
+ * Version: 1.0
+ * Create Date: Oct 25th, 2022
+ * Last Edit Date: Nov 3rd, 2022
+ * Author: Marafi Mergani,Jingyi Xu
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import static org.junit.Assert.assertTrue;
@@ -40,6 +48,9 @@ public class AddEditIngredientActivityTest {
         IngredientController ingredientController = new IngredientController();
     }
 
+    /**
+     * This method is to test adding a {@link IngredientInStorage} in ingredient storage
+     */
     public void mockIngredient(){
         // Add a new ingredient first
         solo.sleep(2000);
@@ -62,7 +73,7 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if there is a pop up DatePicker while clicking the Edittext
+     * Test if there is a pop up {@link android.widget.DatePicker} while clicking the Edittext
      */
     public void checkDatePickerInActivity() {
         solo.sleep(2000);
@@ -78,9 +89,9 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can view the ingredient shown in the listView
-     * Adding a new ingredient will also add it into the database
-     * Result: all the info of the new ingredient will be shown on the screen
+     * Test if we can view the {@link IngredientInStorage} shown in the listView
+     * Adding a new {@link IngredientInStorage} will also add it into the database
+     * Result: all the info of the new {@link IngredientInStorage} will be shown on the screen
      */
     public void testViewIngredientDetail(){
         mockIngredient();
@@ -97,9 +108,9 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can edit the content of an existing ingredient shown in the listView
-     * Adding a new ingredient will also add it into the database
-     * Result: some info of the new ingredient will be edited to different content
+     * Test if we can edit the content of an existing {@link IngredientInStorage} shown in the listView
+     * Adding a new {@link IngredientInStorage} will also add it into the database
+     * Result: some info of the new {@link IngredientInStorage} will be edited to different content
      */
     public void testEditIngredientDetail(){
         // Add a new ingredient first
@@ -122,9 +133,9 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can delete any existing ingredient shown in the listView
-     * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will be deleted from both screen and database
+     * Test if we can delete any existing {@link IngredientInStorage} shown in the listView
+     * Adding a new {@link IngredientInStorage} will also add it into the database
+     * Result: the new {@link IngredientInStorage} will be deleted from both screen and database
      */
     public void testDelete(){
         // Add a new ingredient first
@@ -138,7 +149,7 @@ public class AddEditIngredientActivityTest {
     }
 
     /**
-     * Test if we want to add a new ingredient but leave the spinners empty
+     * Test if we want to add a new {@link IngredientInStorage} but leave the spinners empty
      * there will be a Toast message shown on the screen
      * the program will treat this behaviour as an illegal action
      * Result: Toast message pops up
@@ -146,7 +157,7 @@ public class AddEditIngredientActivityTest {
     @Test
     public void testOneSpinnerEmpty(){
         // test if leave only one spinner empty
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
@@ -163,9 +174,17 @@ public class AddEditIngredientActivityTest {
 
 
     }
+
+    /**
+     * Test if we want to add a new {@link IngredientInStorage} but leave the spinners empty
+     * there will be a Toast message shown on the screen
+     * the program will treat this behaviour as an illegal action
+     * Result: Toast message pops up
+     */
+
     @Test
     public void testTwoSpinnerEmpty(){
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
@@ -180,9 +199,15 @@ public class AddEditIngredientActivityTest {
         solo.sleep(4000);
     }
 
+    /**
+     * Test if we want to add a new {@link IngredientInStorage} but leave the spinners empty
+     * there will be a Toast message shown on the screen
+     * the program will treat this behaviour as an illegal action
+     * Result: Toast message pops up
+     */
     @Test
     public void testThreeSpinnerEmpty(){
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
@@ -272,13 +297,13 @@ public class AddEditIngredientActivityTest {
     }
     @Test
     /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Test if we can add an {@link IngredientInStorage} in AddEditIngredientActivity
+     * and Test if it is directed to IngredientFragment class after clicking CONFIRM button
      * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
+     * Result: the new {@link IngredientInStorage} will show on the screen and the database get updated
      */
     public void testAddingWithOutCustomAttributes(){
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
@@ -300,13 +325,13 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Test if we can add an {@link IngredientInStorage} in AddEditIngredientActivity
+     * and Test if it is directed to IngredientFragment class after clicking CONFIRM button
      * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
+     * Result: the new {@link IngredientInStorage} will show on the screen and the database get updated
      */
     public void testAddingWithCustomLocation(){
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
@@ -334,13 +359,13 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Test if we can add an {@link IngredientInStorage} in AddEditIngredientActivity
+     * and Test if it is directed to IngredientFragment class after clicking CONFIRM button
      * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
+     * Result: the new {@link IngredientInStorage} will show on the screen and the database get updated
      */
     public void testAddingWithCustomCategory(){
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
@@ -366,13 +391,13 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Test if we can add an {@link IngredientInStorage} in AddEditIngredientActivity
+     * and Test if it is directed to IngredientFragment class after clicking CONFIRM button
      * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
+     * Result: the new {@link IngredientInStorage} will show on the screen and the database get updated
      */
     public void testAddingWithCustomAttributes(){
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(0);
         solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
