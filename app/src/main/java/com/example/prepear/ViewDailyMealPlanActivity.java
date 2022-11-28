@@ -142,7 +142,7 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
                 }
 
             }
-        } else { // if the child activity was ViewRecipeTypeMealActivity or ViewIngredientTypeMealActivity
+        } else if (requestCode == LAUNCH_VIEW_INGREDIENT_TYPE_MEAL_ACTIVITY || requestCode == LAUNCH_VIEW_RECIPE_TYPE_MEAL_ACTIVITY ){ // if the child activity was ViewRecipeTypeMealActivity or ViewIngredientTypeMealActivity
             if (resultCode == Activity.RESULT_OK) { // if the child activity sent a result
                 String action = data.getStringExtra("action");
                 if (action.equals("delete meal")) { // if the user wants to delete the current meal

@@ -134,13 +134,8 @@ public class AddMealPlanActivity extends AppCompatActivity implements View.OnCli
                 transaction.addToBackStack(null);
                 transaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
-
             }
         });
-
-
-
-
     }
 
     /**

@@ -38,6 +38,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,6 +67,9 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
     private ArrayList<Meal> mealsInOneDailyPlan;
     private Context context;
     private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private String userUID;
     private DailyMealPlan clickedDailyMealPlan;
 
     /**
@@ -78,7 +83,10 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         super(contextParameter, 0, mealsParameter);
         this.context = contextParameter;
         this.mealsInOneDailyPlan = mealsParameter;
-        db = FirebaseFirestore.getInstance();
+        this.db = FirebaseFirestore.getInstance();
+        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.user = firebaseAuth.getCurrentUser();
+        this.userUID = user.getUid();
         this.clickedDailyMealPlan = clickedDailyMealPlan;
     }
 
@@ -112,7 +120,11 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
         String mealDocumentID = meal.getDocumentID();
         DocumentReference mealDocRef;
         if (Objects.equals(meal.getMealType(), "IngredientInStorage")) { // if meal type is an in-storage ingredient
-            mealDocRef = db.collection("Ingredient Storage").document(mealDocumentID);
+            mealDocRef = db
+                    .collection("Users")
+                    .document(userUID)
+                    .collection("Ingredient Storage")
+                    .document(mealDocumentID);
             // On below part: retrieve the data (detailed information) of a Meal object
             mealDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -149,7 +161,11 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
                 }
             });
         } else if (Objects.equals(meal.getMealType(), "Recipe")) { // if meal type is a recipe
-            mealDocRef = db.collection("Recipes").document(mealDocumentID);
+            mealDocRef = db
+                    .collection("Users")
+                    .document(userUID)
+                    .collection("Recipes")
+                    .document(mealDocumentID);
             mealDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
