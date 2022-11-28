@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import com.example.prepear.ui.ShoppingList.MealPlanDailyIngredientCount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -29,7 +32,13 @@ import java.util.List;
 public class ComputeShoppingList {
     private ArrayList<IngredientInStorage> allIngredientsInStorage;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference=db.collection("Ingredient Storage");
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = firebaseAuth.getCurrentUser();
+    private String userUID = user.getUid();
+    private CollectionReference collectionReference= db
+            .collection("Users")
+            .document(userUID)
+            .collection("Ingredient Storage");
 
     /**
      * This constructor of ComputeShoppingList Class

@@ -33,6 +33,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -94,7 +96,13 @@ public class ShoppingListClickboxFragment extends DialogFragment {
 
     final String TAG = "Ingredient Storage";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    final CollectionReference collectionReference = db.collection("Ingredient Storage");
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+    String userUID = firebaseUser.getUid();
+    final CollectionReference collectionReference = db
+            .collection("Users")
+            .document(userUID)
+            .collection("Ingredient Storage");
 
     /**
      * This method creates the add ingredient fragment if the user input is valid

@@ -37,6 +37,8 @@ import com.example.prepear.databinding.FragmentIngredientBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -58,14 +60,20 @@ public class IngredientFragment extends Fragment implements ConfirmationDialog.O
     private ArrayList<IngredientInStorage> ingredientStorageDataList = new ArrayList<>(); // store in-storage ingredient entries
     // On below: a String array containing all sort by choices used on sort-by Spinner for user selection
     private String[] userSortChoices = {"                 ---- Select  ---- ",
-            "description(ascending)", "description(descending)",
             "best before (oldest to newest)", "best before (newest to oldest)",
-            "location(ascending)", "category(ascending)",
-            "location(descending)", "category(descending)"};
+            "category(ascending)", "category(descending)",
+            "description(ascending)", "description(descending)",
+            "location(ascending)", "location(descending)" };
     private String userSelectedSortChoice; // Store the current sort-by selection made by user
     private final String IN_STORAGE_INGREDIENTS_COLLECTION_NAME = "Ingredient Storage";
     private FirebaseFirestore dbForInStorageIngredients = FirebaseFirestore.getInstance();
-    private CollectionReference inStorageIngredientCollection = dbForInStorageIngredients.collection("Ingredient Storage");
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+    private String userUID = currentUser.getUid();
+    private CollectionReference inStorageIngredientCollection = dbForInStorageIngredients
+            .collection("Users")
+            .document(userUID)
+            .collection("Ingredient Storage");
 
     public interface IngredientOnCallbackReceived {
         void addIngredientTypeMeal(IngredientInStorage selectedIngredient);

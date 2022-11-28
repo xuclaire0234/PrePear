@@ -47,6 +47,8 @@ import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -79,7 +81,14 @@ public class MealPlanFragment extends Fragment implements
     private int positionOfPlanToRemove;
     private DatabaseController databaseController;
     private FirebaseFirestore dbMealPlanPart = FirebaseFirestore.getInstance();
-    private CollectionReference dailyMealPlansCollection = dbMealPlanPart.collection("Daily Meal Plans");
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+    private String userUID = currentUser.getUid();
+    private CollectionReference dailyMealPlansCollection =
+            dbMealPlanPart
+                    .collection("Users")
+                    .document(userUID)
+                    .collection("Daily Meal Plans");
     private final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
@@ -121,7 +130,12 @@ public class MealPlanFragment extends Fragment implements
         mealPlanAdapter = new MealPlanCustomList(this.getContext(), mealPlanDataList);
         // On below: build a connection between the meal plan data list and the ArrayAdapter
         mealPlanList.setAdapter(mealPlanAdapter);
-        dailyMealPlansCollection
+//        dailyMealPlansCollection
+//                .get()
+        dbMealPlanPart
+                .collection("Users")
+                .document(userUID)
+                .collection("Daily Meal Plans")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -151,7 +165,10 @@ public class MealPlanFragment extends Fragment implements
                                 }
                             }
                             for (DailyMealPlan dailyMealPlan: mealPlanDataList) {
-                                dailyMealPlansCollection
+                                dbMealPlanPart
+                                        .collection("Users")
+                                        .document(userUID)
+                                        .collection("Daily Meal Plans")
                                         // get the document and collection from data base
                                         .document(dailyMealPlan.getCurrentDailyMealPlanDate())
                                         .collection("Meals")
@@ -337,7 +354,7 @@ public class MealPlanFragment extends Fragment implements
                             }
                         }
                         // if the meal plan date does not match any date in the list
-                        if (!mealAddedToDataList){
+                        if (! mealAddedToDataList){
                             // add meal plan to the list, database and update the adapter
                             databaseController.addDailyMealPlanToMealPlan(getContext(), currentDailyMealPlan);
                             mealPlanController.addMealPlan(currentDailyMealPlan);

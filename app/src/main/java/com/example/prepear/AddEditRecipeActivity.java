@@ -42,6 +42,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -513,7 +515,13 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
         final String TAG = "Ingredients";
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Ingredient Storage");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userUID = user.getUid();
+        final CollectionReference collectionReference = db
+                .collection("Users")
+                .document(userUID)
+                .collection("Ingredient Storage");
         briefDescriptionList = new ArrayList<>();
         collectionReference
                 .get()

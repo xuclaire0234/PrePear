@@ -87,8 +87,8 @@ public class ViewDailyMealPlanActivity extends AppCompatActivity{
         });
 
         /* sets up the daily meal list view to direct to either ViewRecipeTypeMealActivity
-        or ViewIngredientTypeMealActivity depending on the meal type for displaying detailed
-        information once being clicked */
+        * or ViewIngredientTypeMealActivity depending on the meal type for displaying detailed information once being clicked
+        * */
         dailyMealListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

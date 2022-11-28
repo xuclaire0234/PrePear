@@ -34,6 +34,8 @@ import com.example.prepear.ViewRecipeActivity;
 import com.example.prepear.databinding.FragmentRecipeBinding;
 import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -112,7 +114,11 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         final String TAG = "Recipes";
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Recipes");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        String userUID = firebaseUser.getUid();
+        final CollectionReference collectionReference =
+                db.collection("User").document(userUID).collection("Recipes");
 
         /*
          * The arraylist and adapter for the recipes are assigned and linked to each other here
@@ -215,7 +221,11 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortItemSpinner.setAdapter(ad);
 
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db
+                .collection("Users")
+                .document(userUID)
+                .collection("Recipes")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -267,7 +277,10 @@ public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFra
                     /*
                      * Get information of all the ingredients needed by the recipe at certain index
                      */
-                    db.collection("Recipes")
+                    db
+                            .collection("Users")
+                            .document(userUID)
+                            .collection("Recipes")
                             .document(recipeDataList.getRecipeAt(indexOfRecipe).getId())
                             .collection("Ingredient")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {

@@ -146,9 +146,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnSuccessListener(unused -> Log.d(userName, "registered information is stored successfully"))
                                     .addOnFailureListener(e -> Log.d(userName, "info adding failure on:" + e));
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                            userDocumentReference.collection("Ingredient Storage");
-                            userDocumentReference.collection("Recipe Folder");
-                            userDocumentReference.collection("Daily Meal Plans");
                         } else {
                             Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getMessage(),
                                     Toast.LENGTH_LONG).show();

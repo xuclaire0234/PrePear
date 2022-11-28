@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import com.example.prepear.IngredientInRecipe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -54,6 +56,9 @@ public class MealPlanDailyIngredientCount {
      * This variable is private and stores the database information, which is of type {@link FirebaseFirestore}
      */
     private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private String userUID = user.getUid();
 
     /**
      * This variable is private and stores the scale calculation result, which is of type {@link Double}
@@ -67,6 +72,8 @@ public class MealPlanDailyIngredientCount {
     public MealPlanDailyIngredientCount(String date){
         this.date = date; // assign value to the attributes date
         this.connectToDB(); // connect to the database
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
         /*
          initialize all the arraylist attributes
@@ -106,6 +113,8 @@ public class MealPlanDailyIngredientCount {
          get data from the database
          */
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Daily Meal Plans")
                 .document(date)
                 .collection("Meals")
@@ -135,6 +144,8 @@ public class MealPlanDailyIngredientCount {
                         for (int i = 0; i < ingredientIdsCollection.size(); i++) {
                             scale = ingredientScaleCollection.get(i);
                             db
+                                    .collection("Users")
+                                    .document(userUID)
                                     .collection("Ingredient Storage")
                                     .document(ingredientIdsCollection.get(i)).get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -159,6 +170,8 @@ public class MealPlanDailyIngredientCount {
                             final Double scaleOfThisRecipe = recipeScaleCollection.get(i);
                             final String idOfThisRecipe = recipeIdsCollection.get(i);
                             db
+                                    .collection("Users")
+                                    .document(userUID)
                                     .collection("Recipes")
                                     .document(recipeIdsCollection.get(i))
                                     .get()
@@ -174,6 +187,8 @@ public class MealPlanDailyIngredientCount {
                                             scale = scaleOfThisRecipe/scale;
 
                                             db
+                                                    .collection("Users")
+                                                    .document(userUID)
                                                     .collection("Recipes")
                                                     .document(idOfThisRecipe)
                                                     .collection("Ingredient")

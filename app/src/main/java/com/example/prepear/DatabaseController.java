@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -26,7 +28,18 @@ import java.util.Map;
  * elements from database.
  */
 public class DatabaseController {
-    private FirebaseFirestore db = FirebaseFirestore.getInstance(); // connects to the database
+    // On below: initialize class attributes
+    private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private String userUID;
+
+    public DatabaseController(){
+        this.db = FirebaseFirestore.getInstance(); // connect to the Firebase Firestore Cloud Database
+        this.firebaseAuth = FirebaseAuth.getInstance(); // instantiate FirebaseAuthentication
+        this.firebaseUser = firebaseAuth.getCurrentUser(); // get the current user
+        this.userUID = firebaseUser.getUid(); // get current user's User UID
+    }
 
     /**
      * This function adds a ingredient to the database to ingredient storage.
@@ -34,7 +47,7 @@ public class DatabaseController {
      * @param ingredientToAdd ingredient that is going to be added to the database
      */
     public void addIngredientToIngredientStorage(Context context, IngredientInStorage ingredientToAdd) {
-        /* sets detailed information of ingredient to the ingredient document */
+        // On below part: sets detailed information of ingredient to the ingredient document
         HashMap<String, Object> data = new HashMap<>();
         String documentId = ingredientToAdd.getDocumentId();
         data.put("document id", documentId);
@@ -46,15 +59,17 @@ public class DatabaseController {
         data.put("unit", ingredientToAdd.getUnit());
         data.put("icon code",ingredientToAdd.getIconCode());
 
-        /* adds the ingredient document to the ingredient storage collection */
+        // On below part: adds the ingredient's document to the Ingredient Storage Collection
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Ingredient Storage")
                 .document(documentId)
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // These are a method which gets executed when the task is succeeded
+                        // On below part: will get executed when the task is succeeded
                         Toast.makeText(context, "Ingredient has been successfully uploaded",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -62,7 +77,7 @@ public class DatabaseController {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // These are a method which gets executed if there’s any problem
+                        // On below line: gets executed if there’s any problem
                         Toast.makeText(context, "Error uploading ingredient", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -74,8 +89,10 @@ public class DatabaseController {
      * @param ingredientToEdit  ingredient that is going to be edited
      */
     public void editIngredientInIngredientStorage (Context context, IngredientInStorage ingredientToEdit) {
-        /* edit the ingredient document inside ingredient storage collection */
+        // On below part: update the ingredient's document inside Ingredient Storage Collection
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Ingredient Storage")
                 .document(ingredientToEdit.getDocumentId())
                 .update("description", ingredientToEdit.getBriefDescription(),
@@ -106,8 +123,10 @@ public class DatabaseController {
      * @param ingredientToDelete ingredient that is going to be deleted
      */
     public void deleteIngredientFromIngredientStorage (Context context, IngredientInStorage ingredientToDelete) {
-        /* delete the ingredient document from ingredient storage collection */
+        // On below part: delete the ingredient's document from Ingredient Storage Collection
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Ingredient Storage")
                 .document(ingredientToDelete.getDocumentId())
                 .delete()
@@ -150,6 +169,8 @@ public class DatabaseController {
 
         /* add recipe document to the recipe list collection */
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Recipes")
                 .document(recipeId)
                 .set(data)
@@ -169,8 +190,11 @@ public class DatabaseController {
         /* delete the old version of ingredient list inside the recipe ? */
         for (String id : editDeleteListSaved){
             db
+                    .collection("Users")
+                    .document(userUID)
                     .collection("Recipes")
-                    .document(recipeId).collection("Ingredient")
+                    .document(recipeId)
+                    .collection("Ingredient")
                     .document(id)
                     .delete();
         }
@@ -186,6 +210,8 @@ public class DatabaseController {
             data.put("Ingredient Category", ingredient.getIngredientCategory());
 
             db
+                    .collection("Users")
+                    .document(userUID)
                     .collection("Recipes")
                     .document(recipeId)
                     .collection("Ingredient")
@@ -217,6 +243,8 @@ public class DatabaseController {
         ArrayList<IngredientInRecipe> IngredientListToBeDeleted = recipeToDelete.getListOfIngredients();
         for (IngredientInRecipe ingredient: IngredientListToBeDeleted) {
             db
+                    .collection("Users")
+                    .document(userUID)
                     .collection("Recipes")
                     .document(recipeToDelete.getId())
                     .collection("Ingredient")
@@ -224,8 +252,10 @@ public class DatabaseController {
                     .delete();
         }
 
-        /* delete the recipe document from the recipe list collection*/
+        // On below part: delete the recipe document from the recipe list collection
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Recipes")
                 .document(recipeToDelete.getId())
                 .delete()
@@ -268,6 +298,8 @@ public class DatabaseController {
             data.put("Customized Scaling Number", mealToUpdate.getCustomizedAmount());
         }
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Daily Meal Plans")
                 .document(dailyMealPlan.getCurrentDailyMealPlanDate())
                 .collection("Meals")
@@ -296,6 +328,8 @@ public class DatabaseController {
      */
     public void deleteMealFromDailyMealPlan(Context context, DailyMealPlan dailyMealPlan, Meal mealToDelete) {
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Daily Meal Plans")
                 .document(dailyMealPlan.getCurrentDailyMealPlanDate())
                 .collection("Meals")
@@ -327,6 +361,8 @@ public class DatabaseController {
         String date = dailyMealPlanToAdd.getCurrentDailyMealPlanDate();
         data.put("Date", date);
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Daily Meal Plans")
                 .document(date)
                 .set(data)
@@ -363,6 +399,8 @@ public class DatabaseController {
 
         // deletes daily meal plan from daily meal plans database
         db
+                .collection("Users")
+                .document(userUID)
                 .collection("Daily Meal Plans")
                 .document(dailyMealPlanToDelete.getCurrentDailyMealPlanDate())
                 .delete()

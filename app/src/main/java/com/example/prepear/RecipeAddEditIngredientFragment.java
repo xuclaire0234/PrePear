@@ -343,7 +343,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
                     wantToCloseDialog = false;
                 } else {
                     Bundle bundle = getArguments();
-                    if (bundle != null) {
+                    if (bundle.getSerializable("ingredient") != null) {
                         description = descriptionText.getSelectedItem().toString();
                         amount = amountText.getText().toString();
                         unit = unitSpinner.getSelectedItem().toString();
