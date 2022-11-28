@@ -41,8 +41,8 @@
     <string name="original_amount_hint_header">Amount currently stored in ingredient storage:</string>
     <string name="original_amount_hint_text">Amount currently stored in ingredient storage</string>
     <string name="edit_time_button_text">Select Time</string>
-    <string name="ingredients_needed"/>
-    <string name="confirm"/>
+    <string name="ingredients_needed" />
+    <string name="confirm" />
     <string-array name="ingredient_categories">
         <item></item>
         <item>Eggs, milk, and milk product</item>

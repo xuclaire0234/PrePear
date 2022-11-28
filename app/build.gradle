@@ -218,4 +218,7 @@ dependencies {
     def fragment_version = "1.5.4"
 
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+    // splash screen
+    implementation "androidx.core:core-splashscreen:1.0.0"
 }
