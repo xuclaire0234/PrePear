@@ -21,10 +21,6 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 /**
  * This is a class that keeps track of a list of {@link Recipe} object and set the way Recipe shown
  * on the ViewRecipeListActivity

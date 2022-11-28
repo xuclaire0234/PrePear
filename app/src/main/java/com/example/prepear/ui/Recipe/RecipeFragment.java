@@ -1,5 +1,6 @@
 package com.example.prepear.ui.Recipe;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,22 +12,27 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.example.prepear.AddDailyMealActivity;
+import com.example.prepear.AddDailyMealConfirmationFragment;
 import com.example.prepear.AddEditRecipeActivity;
+import com.example.prepear.AddMealPlanActivity;
+import com.example.prepear.ConfirmationDialog;
 import com.example.prepear.CustomRecipeList;
 import com.example.prepear.IngredientInRecipe;
+import com.example.prepear.IngredientInStorage;
 import com.example.prepear.R;
 import com.example.prepear.Recipe;
 import com.example.prepear.RecipeController;
 import com.example.prepear.ViewRecipeActivity;
-import com.example.prepear.ViewRecipeListActivity;
 import com.example.prepear.databinding.FragmentRecipeBinding;
+import com.example.prepear.ui.Ingredient.IngredientFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -35,19 +41,45 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class RecipeFragment extends Fragment {
-
+public class RecipeFragment extends Fragment implements ConfirmationDialog.OnFragmentInteractionListener, AddDailyMealConfirmationFragment.OnFragmentInteractionListener{
+    private RecipeOnCallbackReceived callback;
+    private RecipeTypeMealChoiceReceiver recipeTypeMealChoiceReceiver;
+    int positionOfItemClicked;
     private FragmentRecipeBinding binding;
     ListView recipeList;
     CustomRecipeList recipeAdapter;
     RecipeController recipeDataList;
-    Integer sortItemRecipe = 0;
-    Integer recipePosition = -1;
+    int sortItemRecipe = 0;
+    int recipePosition = -1;
     int LAUNCH_ADD_RECIPE_ACTIVITY = 1;
     int LAUNCH_VIEW_RECIPE_ACTIVITY = 2;
     final String[] sortItemSpinnerContent = {"  ","Title", "Preparation Time", "Number Of Serving", "Recipe Category"};
     Recipe newRecipe;
     Boolean reverse = Boolean.FALSE;
+
+
+    public interface RecipeOnCallbackReceived {
+        public void addRecipeTypeMeal(Recipe selectedRecipe);
+    }
+
+    public interface RecipeTypeMealChoiceReceiver{
+        public void addRecipeTypeMealInDailyMealPlan(Recipe clickedRecipe);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            callback = (RecipeOnCallbackReceived) activity;
+        } catch (ClassCastException e) {
+
+        }
+        try {
+            recipeTypeMealChoiceReceiver = (RecipeTypeMealChoiceReceiver) activity;
+        } catch (ClassCastException e) {
+
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -115,10 +147,15 @@ public class RecipeFragment extends Fragment {
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recipePosition = -1;
-                Intent intent = new Intent(getActivity(), AddEditRecipeActivity.class);
-                intent.putExtra("calling activity", "1");
-                startActivityForResult(intent, LAUNCH_ADD_RECIPE_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity || getActivity() instanceof AddDailyMealActivity) {
+                    CharSequence text = "Error, Please Click On a Recipe From The List!";
+                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+                }else {
+                    recipePosition = -1;
+                    Intent intent = new Intent(getActivity(), AddEditRecipeActivity.class);
+                    intent.putExtra("calling activity", "1");
+                    startActivityForResult(intent, LAUNCH_ADD_RECIPE_ACTIVITY);
+                }
             }
         });
 
@@ -129,11 +166,24 @@ public class RecipeFragment extends Fragment {
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                recipePosition = i;
-                Recipe viewedRecipe = recipeAdapter.getItem(i);
-                Intent intent = new Intent(getActivity(), ViewRecipeActivity.class);
-                intent.putExtra("viewed recipe", viewedRecipe);
-                startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
+                if (getActivity() instanceof AddMealPlanActivity) {
+                    // Grab the clicked item out of the ListView
+                    positionOfItemClicked = i;
+                    DialogFragment confirmationDialog = new ConfirmationDialog();
+                    confirmationDialog.setTargetFragment(RecipeFragment.this, 0);
+                    confirmationDialog.show(getFragmentManager(), "confirm selection");
+                } else if (getActivity() instanceof AddDailyMealActivity) {
+                    positionOfItemClicked = i;
+                    DialogFragment confirmationFragment = new AddDailyMealConfirmationFragment();
+                    confirmationFragment.setTargetFragment(RecipeFragment.this, 0);
+                    confirmationFragment.show(getFragmentManager(), "Recipe Type Meal Addition Confirmation");
+                } else {
+                    recipePosition = i;
+                    Recipe viewedRecipe = recipeAdapter.getItem(i);
+                    Intent intent = new Intent(getActivity(), ViewRecipeActivity.class);
+                    intent.putExtra("viewed recipe", viewedRecipe);
+                    startActivityForResult(intent, LAUNCH_VIEW_RECIPE_ACTIVITY);
+                }
             }
         });
 
@@ -161,7 +211,7 @@ public class RecipeFragment extends Fragment {
             }
         });
 
-        ArrayAdapter<String> ad = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, sortItemSpinnerContent);
+        ArrayAdapter<String> ad = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, sortItemSpinnerContent);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortItemSpinner.setAdapter(ad);
 
@@ -217,7 +267,9 @@ public class RecipeFragment extends Fragment {
                     /*
                      * Get information of all the ingredients needed by the recipe at certain index
                      */
-                    db.collection("Recipes").document(recipeDataList.getRecipeAt(indexOfRecipe).getId()).collection("Ingredient")
+                    db.collection("Recipes")
+                            .document(recipeDataList.getRecipeAt(indexOfRecipe).getId())
+                            .collection("Ingredient")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -259,9 +311,31 @@ public class RecipeFragment extends Fragment {
                 recipeAdapter.notifyDataSetChanged(); /* Notifying the adapter to render any new data fetched from the cloud */
             }
         });
+    }
+    @Override
+    public void onConfirmPressed() {
+        Object clickedItem = recipeList.getItemAtPosition(positionOfItemClicked);
+        // Casting this clicked item to IngredientInStorage type from Object type
+        Recipe clickedFood = (Recipe) clickedItem;
+        callback.addRecipeTypeMeal(clickedFood);
+    }
 
+    /*@Override
+   public void onCancelPressed() {
+       callback.addRecipeTypeMeal(null);
+   }
+*/
+    @Override
+    public void onBackPressed() {
+        getActivity().finish();
+        startActivity(new Intent(getActivity(), AddDailyMealActivity.class));
+    }
 
-
+    @Override
+    public void onOkPressed() {
+        Object clickedItem = recipeList.getItemAtPosition(positionOfItemClicked);
+        Recipe clickedRecipe = (Recipe) clickedItem;
+        recipeTypeMealChoiceReceiver.addRecipeTypeMealInDailyMealPlan(clickedRecipe);
     }
 
     @Override

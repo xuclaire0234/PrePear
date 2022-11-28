@@ -1,5 +1,5 @@
 /**
- * Class Name: ViewIngredientStorage
+ * Class Name: AddEditIngredientFragment
  * Version Information: Version 1.0
  * Create Date: Oct 25th, 2022
  * Authors: Shihao Liu, Marafi Mergani, Jingyi Xu

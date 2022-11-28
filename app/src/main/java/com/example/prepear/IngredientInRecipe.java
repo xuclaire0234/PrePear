@@ -7,9 +7,9 @@
  */
 package com.example.prepear;
 
-import java.io.Serializable;
+import com.example.prepear.Ingredient;
 
-import io.grpc.internal.DnsNameResolver;
+import java.io.Serializable;
 
 /**
  * This Class creates an object to represent an ingredient used in recipe with its brief description
@@ -24,7 +24,7 @@ public class IngredientInRecipe extends Ingredient implements Serializable {
     private String id;
 
     /**
-     * This constructor creates an {@link Ingredient} object with the given attributes
+     * This constructor creates an {@link IngredientInRecipe} object with the given attributes
      * using the Ingredient class constructor
      *
      * @param description a String for the description entered

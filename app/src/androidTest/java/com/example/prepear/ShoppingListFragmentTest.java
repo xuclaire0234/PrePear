@@ -71,7 +71,6 @@ public class ShoppingListFragmentTest {
      */
     public ActivityTestRule<HomeActivity> rule = new ActivityTestRule<>(HomeActivity.class, true, true);
 
-
     @Test
     public void testFromDatePicker() {
         solo.clickOnText("Shopping List Time Range");
@@ -80,7 +79,7 @@ public class ShoppingListFragmentTest {
         solo.clickOnText("OK");
         solo.sleep(2000);
         TextView fromDateText = (TextView) solo.getView(R.id.fromDate_textView);
-        assertFalse(fromDateText.getText().length() > 0);
+        assertTrue(fromDateText.getText().length() > 0);
     }
 
     @Test

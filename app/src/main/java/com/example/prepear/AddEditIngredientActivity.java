@@ -108,6 +108,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         addIcon = findViewById(R.id.add_icon_button);
 
         // On below part: prompt user to choose an icon from provided icon Activity
+
         addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,6 +282,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                             unit = otherUnit.getEditText().getText().toString().trim();
                         }
                         String amount = amountView.getText().toString().trim();
+
+                        if(iconCode == 0){
+                            iconCode = getResources().getIdentifier("ic_baseline_add_photo_alternate_24", "drawable", getPackageName());
+                        }
 
                         if (validateInput()) {  // if user input is valid
                             // key: value pair as a element in HashMap/Map

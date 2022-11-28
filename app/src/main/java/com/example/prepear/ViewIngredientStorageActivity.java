@@ -10,7 +10,6 @@ package com.example.prepear;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,9 +30,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * This class is an Activity Class for displaying the all in-storage ingredients with its detailed info on a ListView
@@ -64,7 +60,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
 
         // On below: Grab the ListView object for use
         ingredientStorageList = findViewById(R.id.ingredients_in_storage_listview);
-        // On below: initialize the used-defined ArrayAdapter for use
+        // On below: initialize the defined ArrayAdapter for use
         ingredientStorageListAdapter = new IngredientStorageCustomList(this,
                 ingredientStorageDataList);
         // On below: build a connection between the in-storage ingredients data list and the ArrayAdapter
@@ -90,11 +86,7 @@ public class ViewIngredientStorageActivity extends AppCompatActivity
                 // Casting this clicked item to IngredientInStorage type from Object type
                 IngredientInStorage clickedFood = (IngredientInStorage) clickedItem;
                 // call activity to edit ingredient
-                Intent intent = new Intent(ViewIngredientStorageActivity.this, AddEditIngredientActivity.class);
-                intent.putExtra("Add or Edit", "2");
-                intent.putExtra("ingredientInStorage", clickedFood);
-                intent.putExtra("index", ingredientStorageDataList.indexOf(clickedFood));
-                startActivityForResult(intent, LAUNCH_EDIT_INGREDIENT_ACTIVITY);
+
             }
         });
 

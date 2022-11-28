@@ -10,11 +10,8 @@ package com.example.prepear;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
 
 /**
  * Test class for recipe part. All the unit tests are written here.

@@ -133,9 +133,35 @@ public class ShoppingListClickboxFragmentTest {
         if (adapter.getCount() != 0) {
             View listElement = view.getChildAt(0);
             solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
+            solo.enterText((EditText) solo.getView(R.id.ingredient_actual_amount),"3.0");
+            solo.clickOnText("OK");
+            solo.sleep(3000);
 
+            listElement = view.getChildAt(0);
+            solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
+            solo.clickOnView(solo.getView(R.id.ingredient_location));
+            solo.clickOnMenuItem("Bin");
+            solo.clickOnText("OK");
+            solo.sleep(3000);
 
+            listElement = view.getChildAt(0);
+            solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
+            solo.enterText((EditText) solo.getView(R.id.best_before_date),"2023-1-30");
+            solo.goBack();
+            solo.sleep(1000);
+            solo.clickOnText("OK");
+            solo.sleep(3000);
 
+            listElement = view.getChildAt(0);
+            solo.clickOnView(listElement.findViewById(R.id.ingredient_in_shopping_list_CheckBox));
+            solo.enterText((EditText) solo.getView(R.id.ingredient_actual_amount),"3.0");
+            solo.enterText((EditText) solo.getView(R.id.best_before_date),"2023-1-30");
+            solo.goBack();
+            solo.clickOnView(solo.getView(R.id.ingredient_location));
+            solo.clickOnMenuItem("Bin");
+            solo.sleep(1000);
+            solo.clickOnText("OK");
+            solo.sleep(3000);
         }
 
     }
