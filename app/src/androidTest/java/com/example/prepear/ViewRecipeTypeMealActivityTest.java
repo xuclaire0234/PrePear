@@ -70,6 +70,7 @@ public class ViewRecipeTypeMealActivityTest {
     /**
      * Test viewing the details of recipe type meal activity.
      * Test editing the customized number of servings of the specific ingredient type meal activity.
+     * Test the scaling function.
      * Test deleting a recipe type meal from the daily meal plan.
      */
     public void testViewRecipeTypeActivity() {
@@ -141,7 +142,13 @@ public class ViewRecipeTypeMealActivityTest {
         solo.sleep(3000);
         assertEquals(((EditText) solo.getView(R.id.number_of_servings_EditText)).getText().toString(), "2");
 
-        //
+        // check the scaled of amount needed for each ingredient in the recipe according to the customized number of servings
+        listView = (ListView) solo.getView(R.id.ingredient_in_recipe_ListView);
+        Double currentAmount;
+        for (int i = 0; i < listView.getChildCount(); i++) {
+            currentAmount = ((IngredientInRecipe) listView.getItemAtPosition(i)).getAmountValue();
+            assertEquals(originalAmountList.get(i).doubleValue(), Math.round(currentAmount  * 2 * 100.0) / 100.0);
+        }
 
         // check deleting the meal from the daily meal plan function
         solo.sleep(3000);
