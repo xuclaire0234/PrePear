@@ -240,5 +240,18 @@
             android:layout_toStartOf="@id/delete_button"
             android:layout_marginEnd="20dp"
             android:text="@string/commit_button_text" />
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="153dp"
+            android:layout_marginEnd="42dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toStartOf="@+id/commit_button"
+            android:text="Back" />
+
     </RelativeLayout>
 </LinearLayout>

@@ -48,6 +48,7 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
     private TextView ingredientCategoryTextView;
     private Button deleteButton;
     private Button commitButton;
+    private Button backButton;
     private Meal viewedMeal;
     private Double originalAmount;
     private Double originalCustomizedAmount;
@@ -72,6 +73,14 @@ public class ViewIngredientTypeMealActivity extends AppCompatActivity {
         ingredientCategoryTextView = findViewById(R.id.ingredient_category_text_view);
         deleteButton = findViewById(R.id.delete_button);
         commitButton = findViewById(R.id.commit_button);
+        backButton = findViewById(R.id.back_btn);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         /* gets the information of the specific ingredient being clicked inside ViewDailyMealPlanActivity
         and display them on the screen */
