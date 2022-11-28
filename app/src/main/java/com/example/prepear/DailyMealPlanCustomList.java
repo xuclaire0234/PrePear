@@ -73,6 +73,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
     private DailyMealPlan clickedDailyMealPlan;
 
     /**
+     * class constructor
      * This method constructs the new daily meal plan custom list.
      * @param contextParameter the context of the custom list
      * @param mealsParameter the list of meals in the clicked daily meal plan
@@ -81,6 +82,7 @@ public class DailyMealPlanCustomList extends ArrayAdapter<Meal> {
     public DailyMealPlanCustomList(Context contextParameter,
                                    ArrayList<Meal> mealsParameter, DailyMealPlan clickedDailyMealPlan) {
         super(contextParameter, 0, mealsParameter);
+        // instantiate class attributes
         this.context = contextParameter;
         this.mealsInOneDailyPlan = mealsParameter;
         this.db = FirebaseFirestore.getInstance();
