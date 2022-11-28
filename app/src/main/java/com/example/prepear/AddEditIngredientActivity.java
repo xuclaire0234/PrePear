@@ -1,3 +1,10 @@
+/**
+ * Class Name: AddEditIngredientActivity
+ * Version Information: Version 1.0
+ * Date:
+ * Author: Jingyi Xu, Shihao Liu, Marafi Mergani
+ * Copyright Notice:
+ */
 package com.example.prepear;
 
 import static java.security.AccessController.getContext;
@@ -313,7 +320,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 ingredientIcon.setImageResource(iconCodeEdit);
                 descriptionView.getEditText().setText(ingredientToEdit.getBriefDescription());
                 String category = ingredientToEdit.getIngredientCategory();  // get ingredient category
-                /**
+                /*
                  *  get the list of ingredient categories to check if the ingredient's category is among that list.
                  *  If it's in the list then show the option on the spinner,
                  *  otherwise set the spinner to display 'Other', and show the category on the edit text instead
@@ -330,7 +337,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 }
                 dateView.setText(ingredientToEdit.getBestBeforeDate()); // set the best before date
                 String location = ingredientToEdit.getLocation();
-                /**
+                /*
                  *  get the list of ingredient locations to check if the ingredient's location is among that list.
                  *  If it's in the list then show the option on the spinner,
                  *  otherwise set the spinner to display 'Other', and show the location on the edit text instead
@@ -347,7 +354,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 }
                 amountView.setText(String.valueOf(ingredientToEdit.getAmountValue())); // set the amount
                 String unit = ingredientToEdit.getUnit();
-                /**
+                /*
                  *  get the list of ingredient unit to check if the ingredient's unit is among that list.
                  *  If it's in the list then show the option on the spinner,
                  *  otherwise set the spinner to display 'Other', and show the unit on the edit text instead
@@ -540,9 +547,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     /**
      * This gets the icon for ingredient being selected by the user and display it on ImageView.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode a {@link Integer} for request code
+     * @param resultCode a {@link Integer} for result code
+     * @param data a {@link Intent} for transferred data
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -561,7 +568,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     /**
      * This method will enable the back function to the button on press
-     * @param item
+     * @param item a {@link MenuItem} for the item that is selected
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -592,7 +599,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     /**
      * This method validates user input, checking for empty fields or input that is too long
-     * @return valid  a boolean value indicating if the user input is accepted or not
+     * @return  a {@link Boolean} value indicating if the user input is accepted or not
      */
     public boolean validateInput() {
         Boolean valid = true;  // input is valid initially

@@ -1,67 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+
+    >
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
         android:background="@drawable/custom_layout_recipe_folder">
         <ImageView
             android:id="@+id/imageView_in_recipe_list"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:cropToPadding="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/below"
-            tools:srcCompat="@drawable/ic_baseline_add_photo_alternate_24">
-        </ImageView>
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@drawable/ic_baseline_add_photo_alternate_24"></ImageView>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="120dp"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/recipe_text"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:text="Recipe Title"
-                android:textSize="35sp"
-                android:textColor="@color/black">
-            </TextView>
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"></TextView>
+
             <TextView
-                android:id="@+id/preparation_time_texts_view_recipe_list"
+                android:id="@+id/p"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="9dp"
                 android:text="Preparation Time: "
-                android:textColor="@color/dark_grey">
-            </TextView>
+                android:textColor="#656565"
+                android:textSize="18sp"></TextView>
+
             <TextView
-                android:id="@+id/number_of_servings_texts_view_recipe_list"
+                android:id="@+id/n"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:text="Number Of Servings: "
-                android:textColor="@color/dark_grey">
-            </TextView>
+                android:textColor="#656565"
+                android:textSize="18sp"></TextView>
+
+
             <TextView
-                android:id="@+id/recipe_category_texts_view_recipe_list"
+                android:id="@+id/r"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="9dp"
                 android:text="Recipe Category: "
-                android:textColor="@color/dark_grey">
-            </TextView>
+                android:textColor="#656565"
+                android:textSize="18sp"></TextView>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/preparation_time_texts_view_recipe_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="65dp"
+            android:layout_marginEnd="20dp"
+            android:text="text time"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"></TextView>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/number_of_servings_texts_view_recipe_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="95dp"
+            android:layout_marginEnd="20dp"
+            android:text="number"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"></TextView>
+
+        <TextView
+            android:id="@+id/recipe_category_texts_view_recipe_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="157dp"
+            android:layout_marginEnd="20dp"
+            android:inputType="textMultiLine"
+            android:text="Category"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold"></TextView>
+
+    </RelativeLayout>
+</RelativeLayout>

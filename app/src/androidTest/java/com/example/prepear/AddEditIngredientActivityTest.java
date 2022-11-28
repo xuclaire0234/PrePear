@@ -43,9 +43,8 @@ public class AddEditIngredientActivityTest {
     public void mockIngredient(){
         // Add a new ingredient first
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
         solo.clickOnView(solo.getView(R.id.ingredient_location));
@@ -67,10 +66,8 @@ public class AddEditIngredientActivityTest {
      */
     public void checkDatePickerInActivity() {
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        //solo.sendKey(KeyEvent.KEYCODE_0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button));
         solo.clickOnText("select date:");
         solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-13");
@@ -81,201 +78,6 @@ public class AddEditIngredientActivityTest {
 
     @Test
     /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
-     * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
-     */
-    public void testAddingWithOutCustomAttributes(){
-        solo.sleep(2000);
-        solo.clickOnButton("Log In");
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
-        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
-        solo.clickOnView(solo.getView(R.id.ingredient_location));
-        solo.clickOnMenuItem("Freezer");
-        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-        solo.clickOnMenuItem("kg");
-        solo.clickOnView(solo.getView(R.id.ingredient_category));
-        solo.clickOnMenuItem("Fats and oils");
-        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-        solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-        solo.clickOnButton("CONFIRM");
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-        solo.clickOnText("testIngredient");
-        solo.clickOnButton("DELETE");
-    }
-
-    @Test
-    /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
-     * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
-     */
-    public void testAddingWithCustomLocation(){
-        solo.sleep(2000);
-        solo.clickOnButton("Log In");
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
-        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
-        solo.clickOnView(solo.getView(R.id.ingredient_location));
-        solo.clickOnMenuItem("Other");
-        solo.sleep(3000);
-        assertTrue(solo.getView(R.id.other_location).getVisibility() == View.VISIBLE);
-        solo.enterText((EditText) solo.getView(R.id.other_location_editText), "testLocation");
-        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-        solo.clickOnMenuItem("kg");
-        solo.clickOnView(solo.getView(R.id.ingredient_category));
-        solo.clickOnMenuItem("Fats and oils");
-        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-        solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-        solo.clickOnButton("CONFIRM");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-        solo.clickOnText("testIngredient");
-        solo.clickOnButton("DELETE");
-
-    }
-
-//    @Test
-//    /**      needed to be deleted
-//     * Test if we can add an ingredient in Add Ingredient activity
-//     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
-//     * Adding a new ingredient will also add it into the database
-//     * Result: the new ingredient will show on the screen and the database get updated
-//     */
-//    public void testAddingWithCustomUnit(){
-//        solo.clickOnButton("Log In");
-//        solo.clickOnImageButton(0);
-//        solo.clickOnText("Ingredient");
-//        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-//        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
-//        solo.clickOnView(solo.getView(R.id.ingredient_location));
-//        solo.clickOnMenuItem("Freezer");
-//        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-//        solo.clickOnMenuItem("Other");
-//        solo.sleep(3000);
-//        assertTrue(solo.getView(R.id.other_unit).getVisibility() == View.VISIBLE);
-//        solo.enterText((EditText) solo.getView(R.id.other_unit_editText), "testUnit");
-//        solo.clickOnView(solo.getView(R.id.ingredient_category));
-//        solo.clickOnMenuItem("Fats and oils");
-//        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-//        solo.clickOnText("OK");
-//        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-//        solo.clickOnButton("CONFIRM");
-//        solo.sleep(3000);
-//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-//        solo.clickOnText("testIngredient");
-//        solo.clickOnButton("DELETE");
-//    }
-
-    @Test
-    /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
-     * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
-     */
-    public void testAddingWithCustomCategory(){
-        solo.sleep(2000);
-        solo.clickOnButton("Log In");
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
-        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
-        solo.clickOnView(solo.getView(R.id.ingredient_location));
-        solo.clickOnMenuItem("Freezer");
-        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-        solo.clickOnMenuItem("kg");
-        solo.clickOnView(solo.getView(R.id.ingredient_category));
-        solo.clickOnMenuItem("Other");
-        solo.sleep(3000);
-        assertTrue(solo.getView(R.id.other_category).getVisibility() == View.VISIBLE);
-        solo.enterText((EditText) solo.getView(R.id.other_category_editText), "testCategory");
-        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-        solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-        solo.clickOnButton("CONFIRM");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-        solo.clickOnText("testIngredient");
-        solo.clickOnButton("DELETE");
-    }
-
-    @Test
-    /**
-     * Test if we can add an ingredient in Add Ingredient activity
-     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
-     * Adding a new ingredient will also add it into the database
-     * Result: the new ingredient will show on the screen and the database get updated
-     */
-    public void testAddingWithCustomAttributes(){
-        solo.sleep(2000);
-        solo.clickOnButton("Log In");
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
-        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
-        solo.clickOnView(solo.getView(R.id.ingredient_location));
-        solo.clickOnMenuItem("Other");
-        solo.sleep(3000);
-        assertTrue(solo.getView(R.id.other_location).getVisibility() == View.VISIBLE);
-        solo.enterText((EditText) solo.getView(R.id.other_location_editText), "testLocation");
-        solo.clickOnView(solo.getView(R.id.ingredient_category));
-        solo.clickOnMenuItem("Other");
-        solo.sleep(3000);
-        solo.enterText((EditText) solo.getView(R.id.other_category_editText), "testCategory");
-        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-        solo.clickOnMenuItem("kg");
-        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-        solo.clickOnText("OK");
-        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-        solo.clickOnButton("CONFIRM");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-        solo.clickOnText("testIngredient");
-        solo.clickOnButton("DELETE");    }
-
-//    @Test
-//    /**
-//     * Test if we can add an ingredient in Add Ingredient activity
-//     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
-//     * Adding a new ingredient will also add it into the database
-//     * Result: the new ingredient will show on the screen and the database get updated
-//     */
-//    public void testAddingWith2CustomAttributes(){
-//        solo.clickOnButton("Log In");
-//        solo.clickOnImageButton(0);
-//        solo.clickOnText("Ingredient");
-//        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-//        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
-//        solo.clickOnView(solo.getView(R.id.ingredient_location));
-//        solo.clickOnMenuItem("Other");
-//        solo.sleep(3000);
-//        assertTrue(solo.getView(R.id.other_location).getVisibility() == View.VISIBLE);
-//        solo.enterText((EditText) solo.getView(R.id.other_location_editText), "testLocation");
-//        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-//        solo.clickOnMenuItem("Other");
-//        solo.sleep(3000);
-//        solo.enterText((EditText) solo.getView(R.id.other_unit_editText), "testUnit");
-//        solo.clickOnView(solo.getView(R.id.ingredient_category));
-//        solo.clickOnMenuItem("Fruits");
-//        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
-//        solo.clickOnText("OK");
-//        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
-//        solo.clickOnButton("CONFIRM");
-//        solo.sleep(3000);
-//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-//        solo.clickOnText("testIngredient");
-//        solo.clickOnButton("DELETE");   }
-
-    @Test
-    /**
      * Test if we can view the ingredient shown in the listView
      * Adding a new ingredient will also add it into the database
      * Result: all the info of the new ingredient will be shown on the screen
@@ -283,6 +85,7 @@ public class AddEditIngredientActivityTest {
     public void testViewIngredientDetail(){
         mockIngredient();
         // Try to click the ingredient just added in the listView and have a look about the detail
+        solo.sleep(3000);
         solo.clickOnText("testIngredient");
         solo.sleep(3000);
         solo.clickOnButton("CONFIRM");
@@ -344,9 +147,8 @@ public class AddEditIngredientActivityTest {
     public void testOneSpinnerEmpty(){
         // test if leave only one spinner empty
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "test");
         solo.clickOnView(solo.getView(R.id.ingredient_location));
@@ -358,37 +160,14 @@ public class AddEditIngredientActivityTest {
         solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"27.89");
         solo.clickOnButton("CONFIRM");
         solo.assertCurrentActivity("Wrong Activity", AddEditIngredientActivity.class); //test if activity successfully transfers.
-        //solo.goBackToActivity("ViewIngredientStorageActivity");
 
-        // test if leave two spinners empty
-//        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-//        solo.enterText((EditText) solo.getView(R.id.brief_description), "test");
-//        solo.clickOnView(solo.getView(R.id.ingredient_unit));
-//        solo.clickOnMenuItem("g");
-//        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-23");
-//        solo.clickOnText("OK");
-//        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"27.89");
-//        solo.clickOnButton("CONFIRM");
-//        solo.assertCurrentActivity("Wrong Activity", AddEditIngredientActivity.class);        //
-        // solo.goBackToActivity("ViewIngredientStorageActivity");
-
-        // test if leave three spinners empty
-//        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
-//        solo.enterText((EditText) solo.getView(R.id.brief_description), "test");
-//        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-23");
-//        solo.clickOnText("OK");
-//        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"27.89");
-//        solo.clickOnButton("CONFIRM");
-//        solo.assertCurrentActivity("Wrong Activity", AddEditIngredientActivity.class);
-//        //solo.goBackToActivity("ViewIngredientStorageActivity");
 
     }
     @Test
     public void testTwoSpinnerEmpty(){
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "test");
         solo.clickOnView(solo.getView(R.id.ingredient_unit));
@@ -404,9 +183,8 @@ public class AddEditIngredientActivityTest {
     @Test
     public void testThreeSpinnerEmpty(){
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "test");
         solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-23");
@@ -423,9 +201,8 @@ public class AddEditIngredientActivityTest {
     @Test
     public void testZeroAmount(){
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testForAmount");
         solo.clickOnView(solo.getView(R.id.ingredient_location));
@@ -448,9 +225,8 @@ public class AddEditIngredientActivityTest {
     @Test
     public void testEmptyIngredient(){
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.clickOnButton("CONFIRM");
         solo.assertCurrentActivity("Wrong Activity", AddEditIngredientActivity.class);
@@ -463,9 +239,8 @@ public class AddEditIngredientActivityTest {
     public void testEmptyEditText(){
         // test if we leave only 2 edit text fields empty
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.clickOnView(solo.getView(R.id.ingredient_location));
         solo.clickOnMenuItem("Freezer");
@@ -495,6 +270,134 @@ public class AddEditIngredientActivityTest {
         solo.assertCurrentActivity("Wrong Activity", AddEditIngredientActivity.class);
 
     }
+    @Test
+    /**
+     * Test if we can add an ingredient in Add Ingredient activity
+     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Adding a new ingredient will also add it into the database
+     * Result: the new ingredient will show on the screen and the database get updated
+     */
+    public void testAddingWithOutCustomAttributes(){
+        solo.sleep(2000);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("IngredientStorage");
+        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
+        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Freezer");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.clickOnMenuItem("kg");
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Fats and oils");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.clickOnText("OK");
+        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
+        solo.clickOnButton("CONFIRM");
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        solo.clickOnText("testIngredient");
+        solo.clickOnButton("DELETE");
+    }
+
+    @Test
+    /**
+     * Test if we can add an ingredient in Add Ingredient activity
+     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Adding a new ingredient will also add it into the database
+     * Result: the new ingredient will show on the screen and the database get updated
+     */
+    public void testAddingWithCustomLocation(){
+        solo.sleep(2000);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("IngredientStorage");
+        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
+        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Other");
+        solo.sleep(3000);
+        assertTrue(solo.getView(R.id.other_location).getVisibility() == View.VISIBLE);
+        solo.enterText((EditText) solo.getView(R.id.other_location_editText), "testLocation");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.clickOnMenuItem("kg");
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Fats and oils");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.clickOnText("OK");
+        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
+        solo.clickOnButton("CONFIRM");
+        solo.sleep(3000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        solo.clickOnText("testIngredient");
+        solo.clickOnButton("DELETE");
+
+    }
+
+
+    @Test
+    /**
+     * Test if we can add an ingredient in Add Ingredient activity
+     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Adding a new ingredient will also add it into the database
+     * Result: the new ingredient will show on the screen and the database get updated
+     */
+    public void testAddingWithCustomCategory(){
+        solo.sleep(2000);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("IngredientStorage");
+        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
+        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Freezer");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.clickOnMenuItem("kg");
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Other");
+        solo.sleep(3000);
+        assertTrue(solo.getView(R.id.other_category).getVisibility() == View.VISIBLE);
+        solo.enterText((EditText) solo.getView(R.id.other_category_editText), "testCategory");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.clickOnText("OK");
+        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
+        solo.clickOnButton("CONFIRM");
+        solo.sleep(3000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        solo.clickOnText("testIngredient");
+        solo.clickOnButton("DELETE");
+    }
+
+    @Test
+    /**
+     * Test if we can add an ingredient in Add Ingredient activity
+     * and Test if it is directed to ViewIngredientStorage class after clicking CONFIRM button
+     * Adding a new ingredient will also add it into the database
+     * Result: the new ingredient will show on the screen and the database get updated
+     */
+    public void testAddingWithCustomAttributes(){
+        solo.sleep(2000);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("IngredientStorage");
+        solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
+        solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
+        solo.clickOnView(solo.getView(R.id.ingredient_location));
+        solo.clickOnMenuItem("Other");
+        solo.sleep(3000);
+        assertTrue(solo.getView(R.id.other_location).getVisibility() == View.VISIBLE);
+        solo.enterText((EditText) solo.getView(R.id.other_location_editText), "testLocation");
+        solo.clickOnView(solo.getView(R.id.ingredient_category));
+        solo.clickOnMenuItem("Other");
+        solo.sleep(3000);
+        solo.enterText((EditText) solo.getView(R.id.other_category_editText), "testCategory");
+        solo.clickOnView(solo.getView(R.id.ingredient_unit));
+        solo.clickOnMenuItem("kg");
+        solo.enterText((EditText) solo.getView(R.id.bestBeforeDate),"2022-11-03");
+        solo.clickOnText("OK");
+        solo.enterText((EditText) solo.getView(R.id.ingredient_amount),"1.2");
+        solo.clickOnButton("CONFIRM");
+        solo.sleep(3000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        solo.clickOnText("testIngredient");
+        solo.clickOnButton("DELETE");    }
+
+
 
     /**
      * This method tests if user can choose icon
@@ -502,13 +405,12 @@ public class AddEditIngredientActivityTest {
     @Test
     public void testAddIcon(){
         solo.sleep(2000);
-        solo.clickOnButton("Log In");
         solo.clickOnImageButton(0);
-        solo.clickOnText("Ingredient");
+        solo.clickOnText("IngredientStorage");
         solo.clickOnView(solo.getView(R.id.add_ingredient_button)); //click floating button
         solo.sleep(2000);
         solo.clickOnButton("Choose");
-        solo.assertCurrentActivity("wrong Activity",ChooseIngredientIconActivity.class);
+        solo.assertCurrentActivity("wrong Activity", ChooseIngredientIconActivity.class);
         solo.clickOnView(solo.getView(R.id.banana));
         solo.enterText((EditText) solo.getView(R.id.brief_description_editText), "testIngredient");
         solo.clickOnView(solo.getView(R.id.ingredient_location));

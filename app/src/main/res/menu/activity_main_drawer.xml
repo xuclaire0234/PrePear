@@ -11,7 +11,7 @@
         <item
             android:id="@+id/nav_ingredient"
             android:icon="@drawable/ingredient"
-            android:title="@string/menu_ingredient" />
+            android:title="@string/menu_ingredient_storage" />
         <item
             android:id="@+id/nav_recipe"
             android:icon="@drawable/recipe"
@@ -24,5 +24,6 @@
             android:id="@+id/nav_shopping_list"
             android:icon="@drawable/shopping_list_icon"
             android:title="@string/menu_ShoppingList" />
+        
     </group>
 </menu>

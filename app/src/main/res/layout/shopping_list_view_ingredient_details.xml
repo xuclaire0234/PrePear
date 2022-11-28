@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="16dp"
+            android:textStyle="bold"
             android:textColor="@color/green_pear"
             android:text="Description:" />
 
@@ -28,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:ems="10"
@@ -51,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Amount:"
+            android:textStyle="bold"
             android:textColor="@color/green_pear"
             android:textSize="16dp"
             />
@@ -82,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Unit:"
+            android:textStyle="bold"
             android:textColor="@color/green_pear"
             android:textSize="16dp"
             />
@@ -114,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Category:"
+            android:textStyle="bold"
             android:textColor="@color/green_pear"
             android:textSize="16dp"
             />

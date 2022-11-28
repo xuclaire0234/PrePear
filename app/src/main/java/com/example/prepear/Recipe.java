@@ -8,7 +8,8 @@
 
 package com.example.prepear;
 
-import android.net.Uri;
+import com.example.prepear.IngredientInRecipe;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

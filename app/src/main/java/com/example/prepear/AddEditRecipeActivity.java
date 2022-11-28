@@ -131,7 +131,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showTitleWordCount.setText(String.valueOf(30 - charSequence.length()));
+                showTitleWordCount.setText(String.valueOf(100 - charSequence.length()));
             }
 
             @Override
@@ -146,7 +146,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showPreparationTimeWordCount.setText(String.valueOf(10 - charSequence.length()));
+                showPreparationTimeWordCount.setText(String.valueOf(50 - charSequence.length()));
             }
 
             @Override
@@ -161,7 +161,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showNumberOfServingsWordCount.setText(String.valueOf(3 - charSequence.length()));
+                showNumberOfServingsWordCount.setText(String.valueOf(100 - charSequence.length()));
             }
 
             @Override
@@ -176,7 +176,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showRecipeCategoryWordCount.setText(String.valueOf(20 - charSequence.length()));
+                showRecipeCategoryWordCount.setText(String.valueOf(200 - charSequence.length()));
             }
 
             @Override
@@ -192,7 +192,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showCommentWordCount.setText(String.valueOf(60 - charSequence.length()));
+                showCommentWordCount.setText(String.valueOf(300 - charSequence.length()));
             }
 
             @Override

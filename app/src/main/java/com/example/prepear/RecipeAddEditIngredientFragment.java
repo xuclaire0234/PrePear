@@ -148,7 +148,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                descriptionWordCount.setText(String.valueOf(30 - charSequence.length()));
+                descriptionWordCount.setText(String.valueOf(100 - charSequence.length()));
             }
 
             @Override
@@ -169,7 +169,7 @@ public class RecipeAddEditIngredientFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                amountWordCount.setText(String.valueOf(10 - charSequence.length()));
+                amountWordCount.setText(String.valueOf(50 - charSequence.length()));
             }
 
             @Override

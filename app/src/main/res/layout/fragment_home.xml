@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/goodpear"
     tools:context=".LoginActivity">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/ingredient_storage_button"
         android:layout_width="293dp"
         android:layout_height="70dp"
-        android:layout_marginTop="176dp"
+        android:layout_marginTop="320dp"
         android:layout_marginBottom="50dp"
         android:backgroundTint="@color/dark_brown"
         android:text="Ingredient Storage"
@@ -24,11 +25,9 @@
         android:id="@+id/recipe_folder_button"
         android:layout_width="293dp"
         android:layout_height="70dp"
-        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/light_brown"
         android:text="Recipes Folder"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/meal_planner_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_storage_button" />
@@ -50,14 +49,46 @@
         android:id="@+id/shopping_list_button"
         android:layout_width="293dp"
         android:layout_height="70dp"
-        android:layout_marginBottom="164dp"
         android:backgroundTint="@color/green_pear"
         android:text="Shopping List"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/meal_planner_button" />
+
+    <Button
+        android:id="@+id/verifylink_resend_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:backgroundTint="@color/black"
+        android:text="Resend Verify Link "
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/useremailverification_TextView"
+        tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/useremailverification_TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:gravity="center"
+        android:text="Please Verify Your Email First !!"
+        android:textAllCaps="true"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

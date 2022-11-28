@@ -4,16 +4,27 @@
     <string name="preparation_time_header">Preparation Time (/min):</string>
     <string name="number_of_servings_header">Number of Servings:</string>
     <string name="recipe_category_header">Recipe Category:</string>
-    <string name="new_recipe_category_header">Enter New Recipe Category:</string>
+    <string name="new_recipe_category_header">New Category:</string>
     <string name="comments_header">Comments:</string>
     <string name="ingredient_list_header">Ingredients:</string>
+    <string name="ingredient_icon_header">Ingredient Icon:</string>
+    <string name="brief_description_header">Brief Description:</string>
+    <string name="best_before_date_header">Best Before Date:</string>
+    <string name="location_header">Location:</string>
+    <string name="amount_header">Amount:</string>
+    <string name="unit_header">Unit:</string>
+    <string name="ingredient_category_header">Ingredient Category:</string>
     <string name="title_text">Title</string>
     <string name="preparation_time_text">Preparation Time</string>
     <string name="number_of_servings_text">Number of Servings</string>
     <string name="recipe_category_text">Recipe Category</string>
     <string name="comments_text">Comments</string>
+    <string name="ingredient_icon_text">Ingredient Icon</string>
     <string name="brief_description_text">Brief Description</string>
+    <string name="best_before_date_text">Best Before Date</string>
+    <string name="location_text">Location</string>
     <string name="amount_text">Amount</string>
+    <string name="customized_amount_text">Customized Amount</string>
     <string name="unit_text">Unit</string>
     <string name="ingredient_category_text">Ingredient Category</string>
     <string name="edit_button_text">Edit</string>
@@ -21,9 +32,15 @@
     <string name="return_button_text">Return</string>
     <string name="add_ingredient_button_text">Add Ingredient</string>
     <string name="edit_image_button_text">Edit Image Button</string>
-    <string name="commit_button_text">Commit</string>
+    <string name="commit_button_text">Confirm</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="recipe_image_text">Recipe Image</string>
+    <string name="customize_number_of_servings_header">Enter number of servings to prepare for:</string>
+    <string name="original_number_of_servings_hint_header">Original number of servings in recipe:</string>
+    <string name="original_number_of_servings_hint_text">Original Number of Servings</string>
+    <string name="original_amount_hint_header">Amount currently stored in ingredient storage:</string>
+    <string name="original_amount_hint_text">Amount currently stored in ingredient storage</string>
+    <string name="edit_time_button_text">Select Time</string>
     <string name="ingredients_needed"/>
     <string name="confirm"/>
     <string-array name="ingredient_categories">
@@ -83,7 +100,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_ingredient">Ingredient</string>
+    <string name="menu_ingredient_storage">IngredientStorage</string>
     <string name="menu_Recipe">Recipe Folder</string>
     <string name="menu_MealPlan">Meal Plan</string>
     <string name="menu_ShoppingList">Shopping List</string>
@@ -96,4 +113,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_add_daily_meal">AddDailyMealActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

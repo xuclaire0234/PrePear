@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -52,34 +53,27 @@ import java.util.Date;
 
 public class ShoppingListFragment extends Fragment {
 
-    private ShoppingListViewModel mViewModel;
-    private FragmentRecipeBinding binding;
     private String startDate, endDate, newDate;
     final String[] sortItemSpinnerContent = {"  ----select----  ", "Description", "Category"};
     private ShoppingListController ingredientShoppingList;  // store all the ingredients needed to show in the listView
     private ArrayAdapter<IngredientInRecipe> ingredientShoppingListAdapter;
     private DatePickerDialog dialog;
-    private IngredientInRecipe ingre;
 
-    TextView fromDateText, toDateText;
+    EditText fromDateText, toDateText;
     Spinner sortItemSpinner;
     ImageButton sortOrderButton;
     Button confirmButton;
     ListView shoppingListView;
 
-    private ArrayList<IngredientInRecipe> ingredients;
-    private String date;
-    private String TAG = "Meal Plan";
-    private ArrayList<String> recipeIdsCollection, ingredientIdsCollection;
-    private ArrayList<Double> recipeScaleCollection, ingredientScaleCollection;
     private ArrayList<IngredientInStorage> allIngredientInStorage = new ArrayList<>();
+    private Boolean reverse = Boolean.FALSE;
     private ArrayList<String> checkList = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Double scale;
     private IngredientInRecipe recipe;
     private ProgressBar progressBarShopping;
 
-    private CollectionReference collectionReference = db.collection("Ingredient Storage");
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -104,6 +98,7 @@ public class ShoppingListFragment extends Fragment {
         toDateText = view.findViewById(R.id.toDate_textView);
         sortItemSpinner = view.findViewById(R.id.sort_spinner);
         sortOrderButton = view.findViewById(R.id.sort_button);
+        sortOrderButton.setImageResource(R.drawable.ic_sort);
         confirmButton = view.findViewById(R.id.confirm_button);
         shoppingListView = view.findViewById(R.id.ingredient_listview);
         progressBarShopping = view.findViewById(R.id.progressBar_shopping);
@@ -123,6 +118,13 @@ public class ShoppingListFragment extends Fragment {
         sortOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (reverse) {
+                    sortOrderButton.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
+                } else {
+                    reverse = Boolean.TRUE;
+                    sortOrderButton.setImageResource(R.drawable.ic_sort_reverse);
+                }
                 ingredientShoppingList.reverseOrder();
                 ingredientShoppingListAdapter.notifyDataSetChanged();
             }
@@ -138,6 +140,8 @@ public class ShoppingListFragment extends Fragment {
                 if (i != 0) {
                     ingredientShoppingList.sortIngredient(i-1);
                     ingredientShoppingListAdapter.notifyDataSetChanged();
+                    sortOrderButton.setImageResource(R.drawable.ic_sort);
+                    reverse = Boolean.FALSE;
                 }
             }
 
@@ -222,11 +226,7 @@ public class ShoppingListFragment extends Fragment {
                                     Date targetDay = startDay.getTime(); // current date
                                     calculateShoppingList(targetDay);
                                     startDay.add(Calendar.DATE, 1);  // date + 1 to get ingredients for the next day
-                                    //progressBarShopping.setVisibility(View.INVISIBLE);
                                 }
-
-                                // progressBarShopping.setVisibility(View.INVISIBLE);
-
                             }catch (ParseException ex) {
                                 ex.printStackTrace();
                             }
@@ -236,7 +236,6 @@ public class ShoppingListFragment extends Fragment {
                 }
             }
         });
-
 
 
     }
@@ -253,7 +252,7 @@ public class ShoppingListFragment extends Fragment {
         String newFromDate = fromDateText.getText().toString();
         String newToDate = toDateText.getText().toString();
 
-        if (newFromDate == "" || newToDate == "") {   // if both dates are empty
+        if (newFromDate.isEmpty() || newToDate.isEmpty()) {   // if both dates are empty
             check = Boolean.FALSE;
 
         } else {   // since both dates are not empty
@@ -367,7 +366,7 @@ public class ShoppingListFragment extends Fragment {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                if (bestBeforeDate.compareTo(targetDay) > 0 || bestBeforeDate.compareTo(targetDay) == 0) {
+                                if (bestBeforeDate.compareTo(targetDay) >= 0) {
 
                                     /* bestBeforeDate occurs after targetDate
                                      * now, need to compare the amount to check if we need to buy extra ingredient
@@ -377,19 +376,32 @@ public class ShoppingListFragment extends Fragment {
 
                                     double targetAmount = unitConvert(targetIngredient.getUnit(), targetIngredient.getAmountValue());
                                     double storageAmount = unitConvert(targetIngredientStorage.getUnit(), targetIngredientStorage.getAmountValue());
+//                                    Log.d("targetAmount", String.valueOf(targetAmount));
+//                                    Log.d("storageAmount", String.valueOf(storageAmount));
                                     if (storageAmount > targetAmount) {  // update storage amount since it is enough to use ingredient in storage
                                         // do not need to prepare this ingredient
                                         double difference = storageAmount - targetAmount;
+                                        double roundDifference = Math.round(difference*10000d)/10000d;
                                         String updatedUnit = chooseUnit(targetIngredient.getUnit(),targetIngredientStorage.getUnit());
-                                        targetIngredientStorage.setUnit(updatedUnit);
-                                        targetIngredientStorage.setAmountValue(difference);
+                                        allIngredientInStorage.get(j).setAmountValue(roundDifference);
+                                        allIngredientInStorage.get(j).setUnit(updatedUnit);
+//                                        targetIngredientStorage.setUnit(updatedUnit);
+//                                        targetIngredientStorage.setAmountValue(difference);
+                                        Log.d("bigger", String.valueOf(roundDifference));
+                                        dailyKey = false;
+                                        break;
 
-                                    } else if (storageAmount == targetAmount) {
+
+                                    } else if (Double.compare(storageAmount,targetAmount)== 0) {
 
                                         /* remove this ingredient in storage
                                          * ingredient in storage can totally cover the ingredient user needs
                                          */
-                                        allIngredientInStorage.remove(targetIngredientStorage);
+                                        allIngredientInStorage.get(j).setAmountValue(0);
+                                        Log.d("equal","0");
+                                        dailyKey = false;
+                                        break;
+
 
                                     } else if (storageAmount < targetAmount) {
                                         /* remove this ingredient in allIngredientInStorage
@@ -398,38 +410,43 @@ public class ShoppingListFragment extends Fragment {
                                          * otherwise, just update amount for that ingredient
                                          */
 
-                                        allIngredientInStorage.remove(targetIngredientStorage);
-                                        double differenceCart = targetAmount - storageAmount;
-                                        double roundedDifferenceCart = Math.round(differenceCart*100d)/100d;
-                                        String targetCategory = targetIngredient.getIngredientCategory();
-                                        String targetUnit = chooseUnit(targetIngredient.getUnit(), targetIngredientStorage.getUnit());
+                                        allIngredientInStorage.get(j).setAmountValue(0);
+                                        targetAmount -= storageAmount;
+                                        String targetUnit = chooseUnit(targetIngredient.getUnit(),targetIngredientStorage.getUnit());
+                                        targetIngredient.setUnit(targetUnit);
+                                        targetIngredient.setAmountValue(targetAmount);
+                                        Log.d("update", String.valueOf(targetIngredient.getAmountValue()));
+//                                        double differenceCart = targetAmount - storageAmount;
+//                                        double roundedDifferenceCart = Math.round(differenceCart*100d)/100d;
+//                                        String targetCategory = targetIngredient.getIngredientCategory();
+//                                        String targetUnit = chooseUnit(targetIngredient.getUnit(), targetIngredientStorage.getUnit());
+////
+//                                        boolean key = true;
+//                                        while (key) {
+//                                            /* This for loop will deal with the situation, which there is an existing ingredient in ingredientInShoppingList
+//                                             * We should consider to update amount for that existing ingredient
+//                                             */
 //
-                                        boolean key = true;
-                                        while (key) {
-                                            /* This for loop will deal with the situation, which there is an existing ingredient in ingredientInShoppingList
-                                             * We should consider to update amount for that existing ingredient
-                                             */
-
-                                            for (int k = 0; k < ingredientShoppingList.countIngredients(); k++) {
-                                                IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(k);
-
-                                                if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
-                                                    double exitingAmount = ingredientForShopping.getAmountValue();
-                                                    double updateAmount = exitingAmount + differenceCart;
-                                                    double roundedUpdate = Math.round(updateAmount*100d)/100d;
-                                                    ingredientForShopping.setAmountValue(roundedUpdate);  // only update amount
-                                                    key = false;
-                                                }
-                                            }
-                                            /* After iterating ingredientInShoppingList
-                                             * Since there is no exiting ingredient in ingredientInShoppingList
-                                             * we should add new one into it
-                                             */
-                                            if (key) {
-                                                ingredientShoppingList.add(new IngredientInRecipe(targetDescription, String.valueOf(roundedDifferenceCart), targetUnit, targetCategory));
-                                                key = false;
-                                            }
-                                        }
+//                                            for (int k = 0; k < ingredientShoppingList.countIngredients(); k++) {
+//                                                IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(k);
+//
+//                                                if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
+//                                                    double exitingAmount = ingredientForShopping.getAmountValue();
+//                                                    double updateAmount = exitingAmount + differenceCart;
+//                                                    double roundedUpdate = Math.round(updateAmount*100d)/100d;
+//                                                    ingredientForShopping.setAmountValue(roundedUpdate);  // only update amount
+//                                                    key = false;
+//                                                }
+//                                            }
+//                                            /* After iterating ingredientInShoppingList
+//                                             * Since there is no exiting ingredient in ingredientInShoppingList
+//                                             * we should add new one into it
+//                                             */
+//                                            if (key) {
+//                                                ingredientShoppingList.add(new IngredientInRecipe(targetDescription, String.valueOf(roundedDifferenceCart), targetUnit, targetCategory));
+//                                                key = false;
+//                                            }
+//                                        }
                                     }
 
                                 } else if (bestBeforeDate.compareTo(targetDay) < 0) {
@@ -439,35 +456,37 @@ public class ShoppingListFragment extends Fragment {
                                      * otherwise, update amount for that ingredient
                                      */
 
-                                    boolean anotherKey = true;
-                                    while (anotherKey) {
-                                        /* This for loop will deal with the situation, which there is an existing ingredient in ingredientInShoppingList
-                                         * We should consider to update amount for that existing ingredient
-                                         */
-
-                                        for (int p = 0; p < ingredientShoppingList.countIngredients(); p++) {
-                                            IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(p);
-                                            if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
-                                                double exitingAmount = ingredientForShopping.getAmountValue();
-                                                double updateAmount = exitingAmount + targetIngredient.getAmountValue();
-                                                double roundUpdateAmount = Math.round(updateAmount*100d)/100d;
-                                                ingredientForShopping.setAmountValue(roundUpdateAmount);
-                                                anotherKey = false;
-                                            }
-                                        }
-
-                                        /* After iterating ingredientInShoppingList
-                                         * Since there is no exiting ingredient in ingredientInShoppingList
-                                         * we should add new one into it
-                                         */
-                                        if (anotherKey) {
-                                            ingredientShoppingList.add(targetIngredient);
-                                            anotherKey = false;
-                                        }
-                                    }
+//                                    boolean anotherKey = true;
+//                                    while (anotherKey) {
+//                                        /* This for loop will deal with the situation, which there is an existing ingredient in ingredientInShoppingList
+//                                         * We should consider to update amount for that existing ingredient
+//                                         */
+//
+//                                        for (int p = 0; p < ingredientShoppingList.countIngredients(); p++) {
+//                                            IngredientInRecipe ingredientForShopping = ingredientShoppingList.getIngredientAt(p);
+//                                            if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
+//                                                double exitingAmount = ingredientForShopping.getAmountValue();
+//                                                double updateAmount = exitingAmount + targetIngredient.getAmountValue();
+//                                                double roundUpdateAmount = Math.round(updateAmount*100d)/100d;
+//                                                ingredientForShopping.setAmountValue(roundUpdateAmount);
+//                                                anotherKey = false;
+//                                                dailyKey = false;
+//                                            }
+//                                        }
+//
+//                                        /* After iterating ingredientInShoppingList
+//                                         * Since there is no exiting ingredient in ingredientInShoppingList
+//                                         * we should add new one into it
+//                                         */
+//                                        if (anotherKey) {
+//                                            ingredientShoppingList.add(targetIngredient);
+//                                            anotherKey = false;
+//                                            dailyKey = false;
+//                                        }
+//                                    }
 
                                 }
-                                dailyKey = false;
+//                                dailyKey = false;
                             }
 
                             ingredientShoppingListAdapter.notifyDataSetChanged();
@@ -500,6 +519,7 @@ public class ShoppingListFragment extends Fragment {
                                  * we should add new one into it
                                  */
                                 if (updateKey) {
+                                    Log.d("get",String.valueOf(targetIngredient.getAmountValue()));
                                     ingredientShoppingList.add(targetIngredient);
                                     updateKey = false;
                                     ingredientShoppingListAdapter.notifyDataSetChanged();
@@ -570,4 +590,3 @@ public class ShoppingListFragment extends Fragment {
     }
 
 }
-

@@ -22,7 +22,8 @@
 
         <Spinner
             android:id="@+id/brief_description_editText"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
+            android:layout_marginRight="15dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
@@ -55,7 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:maxLength="30"
+            android:maxLength="100"
+            android:layout_marginRight="20dp"
             android:importantForAutofill="no"
             android:inputType= "textPersonName"
             android:minHeight="48dp"/>
@@ -63,6 +65,7 @@
             android:id="@+id/description_word_count"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:layout_marginRight="7dp"
             android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
@@ -83,11 +86,12 @@
 
         <EditText
             android:id="@+id/ingredient_amount_edit_text"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:maxLength="10"
+            android:maxLength="50"
+            android:layout_marginRight="30dp"
             android:inputType="numberDecimal"
             android:minHeight="48dp"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -95,6 +99,7 @@
             android:id="@+id/amount_word_count"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:layout_marginRight="7dp"
             android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
@@ -120,6 +125,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:importantForAutofill="no"
+            android:layout_marginRight="20dp"
             android:inputType= "textPersonName"
             android:minHeight="48dp"
             android:background="@drawable/spinner_background" />
@@ -170,11 +176,12 @@
 
         <Spinner
             android:id="@+id/ingredient_category_edit_text"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:importantForAutofill="no"
             android:ems="10"
+            android:layout_marginRight="15dp"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:background="@drawable/spinner_background"/>
@@ -211,7 +218,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:textSize="25dp"
+        android:textSize="19dp"
         android:textAlignment="center"
         android:textColor="@color/dark_grey"
         android:layout_width="match_parent"
