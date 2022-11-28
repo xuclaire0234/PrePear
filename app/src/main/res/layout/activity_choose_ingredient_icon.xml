@@ -1,0 +1,1152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChooseIngredientIconActivity">
+
+    <TextView
+        android:id="@+id/hints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="Please choose one icon:">
+    </TextView>
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/category1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Egg, milk, and milk products" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/eggs"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="eggs"
+                    android:clickable="true"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/eggs" />
+
+                <ImageView
+                    android:id="@+id/fried_egg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="fried_egg"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/fried_egg" />
+
+                <ImageView
+                    android:id="@+id/raw_egg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="raw_egg"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/raw_egg" />
+
+                <ImageView
+                    android:id="@+id/cooked_egg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cooked_egg"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cooked_egg" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/milk"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="milk"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/milk" />
+
+                <ImageView
+                    android:id="@+id/cheese_slice"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cheese_slice"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cheese_slice" />
+
+                <ImageView
+                    android:id="@+id/cheese"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cheese"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cheese" />
+
+                <ImageView
+                    android:id="@+id/butter"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="butter"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/butter" />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Fruits" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/apple"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="apple"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/apple" />
+
+                <ImageView
+                    android:id="@+id/banana"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="banana"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/banana" />
+
+                <ImageView
+                    android:id="@+id/blueberry"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="blueberry"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/blueberry" />
+
+                <ImageView
+                    android:id="@+id/watermelon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="watermelon"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/watermelon" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/raspberry"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="raspberry"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/raspberry" />
+
+                <ImageView
+                    android:id="@+id/strawberry"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="strawberry"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/strawberry" />
+
+                <ImageView
+                    android:id="@+id/cherry"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cherry"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cherry" />
+
+                <ImageView
+                    android:id="@+id/kiwi"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="kiwi"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/kiwi" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/mango"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="mango"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/mango" />
+
+                <ImageView
+                    android:id="@+id/lemon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="lemon"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/lemon" />
+
+                <ImageView
+                    android:id="@+id/pineapple"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pineapple"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pineapple" />
+
+                <ImageView
+                    android:id="@+id/orange"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="orange"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/orange" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="PassImage"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/pear"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pear"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pear" />
+
+                <ImageView
+                    android:id="@+id/pomegranate"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pomegranate"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pomegranate" />
+
+                <ImageView
+                    android:id="@+id/avocado"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="avocado"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/avocado" />
+
+                <ImageView
+                    android:id="@+id/other_fruit"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="other_fruit"
+                    android:onClick="PassImage"
+                    android:src="@drawable/other_fruit" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Herbs and Spices" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/cinnamon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cinnamon"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cinnamon" />
+
+                <ImageView
+                    android:id="@+id/basil"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="basil"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/basil" />
+
+                <ImageView
+                    android:id="@+id/chili"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="chili"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/chili" />
+
+                <ImageView
+                    android:id="@+id/garlic"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="garlic"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/garlic" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/gingers"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="gingers"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/gingers" />
+
+                <ImageView
+                    android:id="@+id/lemongrass"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="lemongrass"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/lemongrass" />
+
+                <ImageView
+                    android:id="@+id/nettle"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="nettle"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/nettle" />
+
+                <ImageView
+                    android:id="@+id/olive"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="olive"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/olive" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/parsley"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="parsley"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/parsley" />
+
+                <ImageView
+                    android:id="@+id/rosemary"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="rosemary"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/rosemary" />
+
+                <ImageView
+                    android:id="@+id/star_anise"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="star_anise"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/star_anise" />
+
+                <ImageView
+                    android:id="@+id/mint"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="mint"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/mint" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Meat, Sausages, and fish" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/bacon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="bacon"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/bacon" />
+
+                <ImageView
+                    android:id="@+id/clam"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="clam"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/clam" />
+
+                <ImageView
+                    android:id="@+id/chicken_leg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="chicken_leg"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/chicken_leg" />
+
+                <ImageView
+                    android:id="@+id/fish"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="fish"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/fish" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ham"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="ham"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/ham" />
+
+                <ImageView
+                    android:id="@+id/meat"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="meat"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/meat" />
+
+                <ImageView
+                    android:id="@+id/salami"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="salami"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/salami" />
+
+                <ImageView
+                    android:id="@+id/salmon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="salmon"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/salmon" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/sausage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="sausage"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/sausage" />
+
+                <ImageView
+                    android:id="@+id/shrimp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="shrimp"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/shrimp" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Grain, Nuts, and Baking products" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/almond"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="almond"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/almond" />
+
+                <ImageView
+                    android:id="@+id/brazilian_nut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="brazilian_nut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/brazilian_nut" />
+
+                <ImageView
+                    android:id="@+id/cashew"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cashew"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cashew" />
+
+                <ImageView
+                    android:id="@+id/bean"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="bean"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/bean" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/chestnut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="chestnut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/chestnut" />
+
+                <ImageView
+                    android:id="@+id/hazelnut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="hazelnut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/hazelnut" />
+
+                <ImageView
+                    android:id="@+id/macadamia"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="macadamia"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/macadamia" />
+
+                <ImageView
+                    android:id="@+id/peanut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="peanut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/peanut" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/pecan_nut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pecan_nut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pecan_nut" />
+
+                <ImageView
+                    android:id="@+id/pine_nut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pine_nut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pine_nut" />
+
+                <ImageView
+                    android:id="@+id/pistachios"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pistachios"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pistachios" />
+
+                <ImageView
+                    android:id="@+id/walnut"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="walnut"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/walnut" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/flour"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="flour"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/flour" />
+
+                <ImageView
+                    android:id="@+id/bread"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="bread"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/bread" />
+
+                <ImageView
+                    android:id="@+id/brown_rice"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="brown_rice"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/brown_rice" />
+
+                <ImageView
+                    android:id="@+id/rice"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="rice"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/rice" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/oat"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="oat"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/oat" />
+
+                <ImageView
+                    android:id="@+id/potato"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="potato"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/potato" />
+
+                <ImageView
+                    android:id="@+id/pasta"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pasta"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pasta" />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Vegetables" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/bean_seedling"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="bean_seedling"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/bean_seedling" />
+                <ImageView
+                    android:id="@+id/broccoli"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="broccoli"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/broccoli" />
+
+                <ImageView
+                    android:id="@+id/corn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="corn"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/corn" />
+
+                <ImageView
+                    android:id="@+id/carrot"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="carrot"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/carrot" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/cucumber"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cucumber"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cucumber" />
+
+                <ImageView
+                    android:id="@+id/eggplant"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="eggplant"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/eggplant" />
+
+                <ImageView
+                    android:id="@+id/legume"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="legume"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/legume" />
+
+                <ImageView
+                    android:id="@+id/mushroom"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="mushroom"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/mushroom" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/onion"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="onion"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/onion" />
+
+                <ImageView
+                    android:id="@+id/pea_seed"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pea_seed"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pea_seed" />
+
+                <ImageView
+                    android:id="@+id/red_pepper"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="red_pepper"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/red_pepper" />
+
+                <ImageView
+                    android:id="@+id/seed"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="seed"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/seed" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/tomato"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="tomato"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/tomato" />
+
+                <ImageView
+                    android:id="@+id/vege"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="vege"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/vege" />
+
+                <ImageView
+                    android:id="@+id/white_radish"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="white_radish"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/white_radish" />
+
+                <ImageView
+                    android:id="@+id/other_ingredient"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="other_ingredient"
+                    android:onClick="PassImage"
+                    android:src="@drawable/other_ingredient" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Seasoning" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/black_pepper"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="black_pepper"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/black_pepper" />
+
+                <ImageView
+                    android:id="@+id/honey"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="honey"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/honey" />
+
+                <ImageView
+                    android:id="@+id/oil"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="oil"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/oil" />
+
+                <ImageView
+                    android:id="@+id/salt"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="salt"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/salt" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/seasoner"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="seasoner"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/seasoner" />
+
+                <ImageView
+                    android:id="@+id/sugar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="sugar"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/sugar" />
+
+                <ImageView
+                    android:id="@+id/soy_source"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="soy_source"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/soy_source" />
+
+                <ImageView
+                    android:id="@+id/vinegar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="vinegar"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/vinegar" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="* Others" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/barrels_wine"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="barrels_wine"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/barrels_wine" />
+
+                <ImageView
+                    android:id="@+id/can"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="can"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/can" />
+
+                <ImageView
+                    android:id="@+id/chocolate_paste"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="chocolate_paste"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/chocolate_paste" />
+
+                <ImageView
+                    android:id="@+id/cooked_olive"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="cooked_olive"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/cooked_olive" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/flagon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="flagon"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/flagon" />
+
+                <ImageView
+                    android:id="@+id/jam"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="jam"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/jam" />
+
+                <ImageView
+                    android:id="@+id/ketchup"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="ketchup"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/ketchup" />
+
+                <ImageView
+                    android:id="@+id/peanut_butter"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="peanut_butter"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/peanut_butter" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/pickle"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="pickle"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/pickle" />
+
+                <ImageView
+                    android:id="@+id/vege_soup"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="vege_soup"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/vege_soup" />
+
+                <ImageView
+                    android:id="@+id/wine"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="wine"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/wine" />
+
+                <ImageView
+                    android:id="@+id/yellow_mustard"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:tag="yellow_mustard"
+                    android:onClick="PassImage"
+                    app:srcCompat="@drawable/yellow_mustard" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</RelativeLayout>

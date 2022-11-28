@@ -10,9 +10,6 @@ package com.example.prepear;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import android.app.Dialog;
-import android.os.Bundle;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +27,7 @@ public class IngredientInStorageTest {
      */
     private void createIngredient() {
         ingredient = new IngredientInStorage("Tomato", "Vegetables",
-                "2022-11-03", "Fridge", "4", "g", null);
+                "2022-11-03", "Fridge", "4", "g", null,0);
     }
 
     @Test

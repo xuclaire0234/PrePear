@@ -9,22 +9,19 @@ import androidx.test.rule.ActivityTestRule;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-
 /**
- * Test class for AddEditIngredientFragment. All the UI tests are written here. Robotium test framework is used
+ * Test class for IngredientFragment. All the UI tests are written here. Robotium test framework is used
  */
 @RunWith(AndroidJUnit4.class)
 public class AddEditIngredientFragmentTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
 
     @Before
     /**
@@ -36,7 +33,7 @@ public class AddEditIngredientFragmentTest {
 
     @Test
     /**
-     * Test if there is a pop up DatePicker while clicking the Edittext
+     * Test if there is a pop up DatePicker {@link android.widget.DatePicker} while clicking the Edittext
      */
     public void checkDatePickerInFragment() {
         solo.clickOnButton("Ingredient Storage"); //Click Ingredient Storage Button
@@ -53,7 +50,7 @@ public class AddEditIngredientFragmentTest {
 
     @Test
     /**
-     * Test if we can add an ingredient in Add Ingredient fragment
+     * Test if we can add an {@link IngredientInStorage} in IngredientFragment
      * and Test if it is directed to ViewIngredientStorage class after clicking OK button in fragment
      * Adding a new ingredient will also add it into the database
      * Result: the new ingredient will show on the screen and the database get updated

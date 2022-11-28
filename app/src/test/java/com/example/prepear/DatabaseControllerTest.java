@@ -12,7 +12,6 @@ import android.content.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Test class for Database controller
@@ -50,7 +49,7 @@ public class DatabaseControllerTest {
      * @return the return is of type {@link IngredientInStorage}
      */
     private IngredientInStorage mockIngredientInStorage() {
-        return new IngredientInStorage("Egg","egg","2022-11-24","box","3","quantities","2022-11-04 02:26:44");
+        return new IngredientInStorage("Egg","egg","2022-11-24","box","3","quantities","2022-11-04 02:26:44",0);
     }
 
     /**

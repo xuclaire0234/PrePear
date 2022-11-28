@@ -20,14 +20,53 @@
             android:textColor="@color/green_pear"
             android:text="Description:" />
 
+        <Spinner
+            android:id="@+id/brief_description_editText"
+            android:layout_width="120dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType= "textPersonName"
+            android:minHeight="48dp"
+            android:background="@drawable/spinner_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_brief_description_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/description1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="12dp"
+            android:textStyle="bold"
+            android:text="Enter New Brief Description:"
+            android:textColor="@color/green_pear" />
+
         <EditText
-            android:id="@+id/description_edit_text"
+            android:id="@+id/new_brief_description_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:minHeight="48dp" />
+            android:maxLength="100"
+            android:layout_marginRight="20dp"
+            android:importantForAutofill="no"
+            android:inputType= "textPersonName"
+            android:minHeight="48dp"/>
+        <TextView
+            android:id="@+id/description_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginRight="7dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -47,13 +86,21 @@
 
         <EditText
             android:id="@+id/ingredient_amount_edit_text"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:maxLength="50"
+            android:layout_marginRight="30dp"
             android:inputType="numberDecimal"
             android:minHeight="48dp"
             tools:ignore="SpeakableTextPresentCheck" />
+        <TextView
+            android:id="@+id/amount_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginRight="7dp"
+            android:textColor="@color/dark_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -78,9 +125,38 @@
             android:layout_weight="1"
             android:ems="10"
             android:importantForAutofill="no"
+            android:layout_marginRight="20dp"
             android:inputType= "textPersonName"
             android:minHeight="48dp"
             android:background="@drawable/spinner_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_unit_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/unit1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="12dp"
+            android:textStyle="bold"
+            android:text="Enter New Unit:"
+            android:textColor="@color/green_pear" />
+
+        <EditText
+            android:id="@+id/new_ingredient_unit_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType= "textPersonName"
+            android:minHeight="48dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -100,19 +176,49 @@
 
         <Spinner
             android:id="@+id/ingredient_category_edit_text"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:importantForAutofill="no"
             android:ems="10"
+            android:layout_marginRight="15dp"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:background="@drawable/spinner_background"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/new_ingredient_category_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/category1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="12dp"
+            android:textStyle="bold"
+            android:text="Enter New Category:"
+            android:textColor="@color/green_pear" />
+
+        <EditText
+            android:id="@+id/new_ingredient_category_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType= "textPersonName"
+            android:minHeight="48dp"
+            android:maxLength="30"/>
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textView2"
-        android:textSize="25dp"
+        android:textSize="19dp"
         android:textAlignment="center"
         android:textColor="@color/dark_grey"
         android:layout_width="match_parent"

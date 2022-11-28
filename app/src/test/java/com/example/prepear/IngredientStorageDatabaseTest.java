@@ -29,10 +29,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +62,7 @@ public class IngredientStorageDatabaseTest {
     public void setMockIngredient() {
         String mockIngredientDocumentId = DATEFORMAT.format(new Date()); // get the current date&time as the mock ingredient's document id
         mockIngredient = new IngredientInStorage("Orange", "Fruits", "2022-11-10",
-                "Fridge","1.234556789","quantities",mockIngredientDocumentId);
+                "Fridge","1.234556789","quantities",mockIngredientDocumentId,0);
     }
 
     @Test

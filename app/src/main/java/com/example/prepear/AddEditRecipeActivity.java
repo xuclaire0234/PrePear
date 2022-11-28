@@ -14,7 +14,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -22,8 +25,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,32 +36,49 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * This class defines the add/edit recipe activity that allows user to either add a new recipe or
  * edit a existing recipe.
  */
-public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEditIngredientFragment.OnFragmentInteractionListener,
-        RecipeAddIngredientFragment.OnFragmentInteractionListener{
+public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAddEditIngredientFragment.OnFragmentInteractionListener {
+    // all reference variables connected to the xml is defined here
     private ArrayAdapter<CharSequence> recipeCategorySpinnerAdapter;
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
     private EditText titleEditText;
+    private TextView showTitleWordCount;
     private EditText preparationTimeEditText;
+    private TextView showPreparationTimeWordCount;
     private EditText numberOfServingsEditText;
+    private TextView showNumberOfServingsWordCount;
     private Spinner recipeCategorySpinner;
+    private EditText recipeCategoryEditText;
+    private TextView showRecipeCategoryWordCount;
+    private LinearLayout newRecipeCategoryLinearLayout;
     private EditText commentsEditText;
+    private TextView showCommentWordCount;
     private Button addIngredientInRecipeButton;
     private ListView ingredientInRecipeListView;
     private Button commitButton;
@@ -66,13 +88,12 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     private Recipe viewedRecipe;
     private String linkOfImage;
     private StorageReference storageReference;
-    private final int IMAGE_REQUEST = 1;
     private Uri imageLocationPath;
     private boolean pictureSelected;
     private Integer positionToEditInViewIngredient = -1;
     private ArrayList<String> editDeleteListSaved;
     private String idOfRecipe;
-    private Boolean isEditedRecipe;
+    private ArrayList<String> briefDescriptionList;
 
     /**
      * This creates the AddEditRecipeActivity.
@@ -87,14 +108,100 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         editImageButton = findViewById(R.id.edit_image_button);
         imageImageView = findViewById(R.id.imageView);
         titleEditText = findViewById(R.id.title_EditText);
+        showTitleWordCount = findViewById(R.id.title_word_count);
         preparationTimeEditText = findViewById(R.id.preparation_time_EditText);
+        showPreparationTimeWordCount = findViewById(R.id.preparation_time_word_count);
         numberOfServingsEditText = findViewById(R.id.number_of_servings_EditText);
+        showNumberOfServingsWordCount = findViewById(R.id.number_of_servings_word_count);
         recipeCategorySpinner = findViewById(R.id.recipe_category_Spinner);
+        recipeCategoryEditText = findViewById(R.id.recipe_category_EditText);
+        showRecipeCategoryWordCount = findViewById(R.id.recipe_category_word_count);
+        newRecipeCategoryLinearLayout = findViewById(R.id.new_recipe_category_LinearLayout);
         commentsEditText = findViewById(R.id.comments_EditText);
+        showCommentWordCount = findViewById(R.id.comments_word_count);
         addIngredientInRecipeButton = findViewById(R.id.add_ingredient_in_recipe_button);
         ingredientInRecipeListView = findViewById(R.id.ingredient_in_recipe_ListView);
         commitButton = findViewById(R.id.commit_button);
         cancelButton = findViewById(R.id.cancel_button);
+
+        /* connects to firebase storage */
+        storageReference = FirebaseStorage.getInstance().getReference("imageFolder");
+
+        /* sets up filter to control the length of the title text */
+        final TextWatcher titleTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showTitleWordCount.setText(String.valueOf(100 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        titleEditText.addTextChangedListener(titleTextEditorWatcher);
+
+        /* sets up filter to control the length of the preparation time text */
+        final TextWatcher preparationTimeTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showPreparationTimeWordCount.setText(String.valueOf(50 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        preparationTimeEditText.addTextChangedListener(preparationTimeTextEditorWatcher);
+
+        /* sets up filter to control the length of the number of servings text */
+        final TextWatcher numberOfServingsTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showNumberOfServingsWordCount.setText(String.valueOf(100 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        numberOfServingsEditText.addTextChangedListener(numberOfServingsTextEditorWatcher);
+
+        /* sets up filter to control the length of the recipe category text */
+        final TextWatcher recipeCategoryTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showRecipeCategoryWordCount.setText(String.valueOf(200 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        recipeCategoryEditText.addTextChangedListener(recipeCategoryTextEditorWatcher);
+
+
+        /* sets up filter to control the length of the comment text */
+        final TextWatcher commentsTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showCommentWordCount.setText(String.valueOf(300 - charSequence.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        commentsEditText.addTextChangedListener(commentsTextEditorWatcher);
 
         /* sets up recipe category spinner */
         recipeCategorySpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.recipe_category,
@@ -103,7 +210,14 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
         recipeCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                String selectedRecipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+                if (selectedRecipeCategory.equals("Other")) {
+                    // if the Other is selected by the user, ask them to input their user defined category
+                    newRecipeCategoryLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    // if the user selects the existing category, no user defined category should be input in
+                    newRecipeCategoryLinearLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -112,50 +226,82 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
             }
         });
 
-        /* connects to firebase storage */
-        storageReference = FirebaseStorage.getInstance().getReference("imageFolder");
-
-        editDeleteListSaved = new ArrayList<String>();
+        /* sets up image picker*/
+        editImageButton.setOnClickListener((View v) -> {
+            ImagePicker.Companion.with(this)
+                    .crop() // crop image (optional)
+                    .compress(1024) // final image size will be less than 1 MB (optional)
+                    .maxResultSize(1000, 1000) // final image resolution will be less than 1080 x 1080 (optional)
+                    .start();
+        });
 
         if (getIntent().getStringExtra("calling activity").equals("2")) {
             /* If the calling activity is ViewRecipeActivity, display the information of the viewing recipe. */
-            isEditedRecipe = Boolean.TRUE;
             viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
-            idOfRecipe = viewedRecipe.getId();
-            linkOfImage = viewedRecipe.getImageURI();
+            idOfRecipe = viewedRecipe.getId(); // get the ingredient id
+            linkOfImage = viewedRecipe.getImageURI(); // get the image uri
             Glide.with(AddEditRecipeActivity.this)
-                    .load(linkOfImage).into(imageImageView);
-            titleEditText.setText(viewedRecipe.getTitle());
-            preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString());
-            numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
-            recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition(viewedRecipe.getRecipeCategory()));
-            commentsEditText.setText(viewedRecipe.getComments());
+                    .load(linkOfImage).into(imageImageView); // load the image
+            titleEditText.setText(viewedRecipe.getTitle()); // set the title bar
+            preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString()); // set the preparation time bar
+            numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());// set the number of servings bar
+            String recipeCategory = viewedRecipe.getRecipeCategory(); // set the category bar
+            List<String> recipeCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.recipe_category)));
+            if (recipeCategories.contains(recipeCategory)) {
+                // if the category spinner adapter contains the user selected category, not user input category field should be shown
+                recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition(recipeCategory));
+            } else {
+                // if the category spinner adapter dose not contain the user selected category, user input category field should be shown
+                recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition("Other"));
+                newRecipeCategoryLinearLayout.setVisibility(View.VISIBLE);
+                recipeCategoryEditText.setText(recipeCategory);
+            }
+            commentsEditText.setText(viewedRecipe.getComments()); // set the text for comment bar
             ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
             /* If the calling activity is ViewRecipeListActivity, prompt user to add a new recipe */
-            isEditedRecipe = Boolean.FALSE;
             ingredientInRecipeDataList = new ArrayList<>();
             idOfRecipe = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         }
         ingredientInRecipeArrayAdapter = new CustomIngredientInRecipeList(this, ingredientInRecipeDataList);
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
+        editDeleteListSaved = new ArrayList<String>();
 
-        /* sets add ingredient button to direct to RecipeAddIngredientFragment */
+        /* sets add ingredient button to direct to RecipeAddEditIngredientFragment */
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 positionToEditInViewIngredient = -1;
-                new RecipeAddIngredientFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                // gain the brief description of all ingredient in storage
+                catchBriefDescription();
+                // wait for the database listener to fetch the data
+                Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // after 2 sec, direct to the RecipeAddEditIngredientFragment with description list given
+                            new RecipeAddEditIngredientFragment().newInstance(briefDescriptionList).show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
+                        }
+                    },2000);
             }
         });
 
-        /* sets each ingredient object on listview to direct to RecipeEditIngredientFragment */
+        /* sets each ingredient object on listview to direct to RecipeAddEditIngredientFragment */
         ingredientInRecipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                positionToEditInViewIngredient = position;
-                RecipeEditIngredientFragment.newInstance(ingredientInRecipeArrayAdapter.getItem(position)).show(getSupportFragmentManager(),
-                        "EDIT_INGREDIENT_IN_RECIPE");
+                positionToEditInViewIngredient = position; // get the position being clicked on the listView
+                // gain the brief description of all ingredient in storage
+                catchBriefDescription();
+                // wait for the database listener to fetch the data
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // after 2 sec, direct to the RecipeAddEditIngredientFragment with description list and ingredient information given
+                        new RecipeAddEditIngredientFragment().newInstance(ingredientInRecipeArrayAdapter.getItem(positionToEditInViewIngredient),briefDescriptionList).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
+                    }
+                },2000);
             }
         });
 
@@ -219,34 +365,27 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     }
 
     /**
-     * This allows user to select a picture from local storage.
-     * @param view
-     *      This represents the current view.
-     */
-    public void selectImage(View view) {
-        Intent objectIntent = new Intent();
-        objectIntent.setType("image/*");
-
-        objectIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(objectIntent,IMAGE_REQUEST);
-    }
-
-    /**
      * This gets the picture being selected by the user and display it on ImageView.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode is of type{@link Integer}
+     * @param resultCode is of type {@link Integer}
+     * @param data is of type {@link Intent}
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            if (resultCode == Activity.RESULT_OK) {
+                /* gets the image selected by user */
                 imageLocationPath = data.getData();
-                Bitmap objectBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageLocationPath);
+                Bitmap objectBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageLocationPath);
 
+                /* displays image */
                 imageImageView.setImageBitmap(objectBitmap);
                 pictureSelected = true;
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -254,7 +393,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
     }
 
     /**
-     * This returns the part of the path to the image.
+     * This gets the extension of image being selected.
      * @param uri
      *      This is the uri of the image of type {@link Uri}
      * @return
@@ -279,23 +418,32 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
      */
     public void uploadRecipe (View view) {
         if (pictureSelected == false) {
-            // if no new picture being selected
-            // gets the information of recipe being edited/added
+            /* if no new picture being selected */
+
+            /* gets the information of recipe being edited/added */
             final String title = titleEditText.getText().toString();
-            final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
-            final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
-            final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+            final String preparationTime = preparationTimeEditText.getText().toString();
+            final String numberOfServings = numberOfServingsEditText.getText().toString();
+            String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+            if (recipeCategory.equals("Other")) {
+                recipeCategory = recipeCategoryEditText.getText().toString();
+            }
             final String comments = commentsEditText.getText().toString();
             final String imageURI = linkOfImage;
 
             /* checks if there is any necessary information missing */
             if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                     || recipeCategory.equals("")) {
-                Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        "You did not enter the full information, commit failed. " +
+                                "Please make sure that all necessary fields " +
+                                "(title, preparation time, number of servings, recipe category) " +
+                                "has been filled.",
+                        Toast.LENGTH_LONG).show();
             } else {
                 /* add to database */
-                Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
-                        numberOfServings.intValue(), recipeCategory, comments);
+                Recipe newRecipe = new Recipe(imageURI, title, Integer.parseInt(preparationTime),
+                        (Integer.parseInt(numberOfServings)), recipeCategory, comments);
                 DatabaseController databaseController = new DatabaseController();
                 databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
@@ -327,22 +475,30 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                /* gets the detailed information being entered by user */
+                                /* gets the information of recipe being edited/added */
                                 final String title = titleEditText.getText().toString();
-                                final Number preparationTime = Integer.parseInt(preparationTimeEditText.getText().toString());
-                                final Number numberOfServings = Integer.parseInt(numberOfServingsEditText.getText().toString());
-                                final String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+                                final String preparationTime = preparationTimeEditText.getText().toString();
+                                final String numberOfServings = numberOfServingsEditText.getText().toString();
+                                String recipeCategory = recipeCategorySpinner.getSelectedItem().toString();
+                                if (recipeCategory.equals("Other")) {
+                                    recipeCategory = recipeCategoryEditText.getText().toString();
+                                }
                                 final String comments = commentsEditText.getText().toString();
                                 final String imageURI = task.getResult().toString();
 
-                                /* check to see if there is any necessary information not been entered */
+                                /* checks if there is any necessary information missing */
                                 if (title.equals("") || preparationTime.equals("") || numberOfServings.equals("")
                                         || recipeCategory.equals("")) {
-                                    Toast.makeText(getApplicationContext(), "You did not enter the full information, add/edit failed.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),
+                                            "You did not enter the full information, commit failed. " +
+                                                    "Please make sure that all necessary fields " +
+                                                    "(title, preparation time, number of servings, recipe category) " +
+                                                    "has been filled.",
+                                            Toast.LENGTH_LONG).show();
                                 } else {
                                     /* add to database */
-                                    Recipe newRecipe = new Recipe(imageURI, title, preparationTime.intValue(),
-                                            numberOfServings.intValue(), recipeCategory, comments);
+                                    Recipe newRecipe = new Recipe(imageURI, title, Integer.parseInt(preparationTime),
+                                            (Integer.parseInt(numberOfServings)), recipeCategory, comments);
                                     DatabaseController databaseController = new DatabaseController();
                                     databaseController.addEditRecipeToRecipeList(AddEditRecipeActivity.this, newRecipe, ingredientInRecipeDataList, editDeleteListSaved, idOfRecipe);
 
@@ -352,8 +508,6 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                                     setResult(Activity.RESULT_OK, returnIntent);
                                     finish();
                                 }
-
-
                             } else if (!task.isSuccessful()) {
                                 Toast.makeText(AddEditRecipeActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                             }
@@ -366,5 +520,39 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeEd
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     * This function fetch brief descriptions of all the ingreident in storage
+     */
+    public void catchBriefDescription() {
+        final String TAG = "Ingredients";
+        // define variables that needed to connect to database
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userUID = user.getUid();
+        final CollectionReference collectionReference = db
+                .collection("Users")
+                .document(userUID)
+                .collection("Ingredient Storage");
+
+        // initialize the list for briefDescription
+        briefDescriptionList = new ArrayList<>();
+        collectionReference
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            // fetch every ingredient in storage and get their description
+                            String briefDescription = (String) doc.getData().get("description");
+                            if (briefDescription != null) {
+                                briefDescriptionList.add(briefDescription);
+                            }
+                        }
+                    }
+                });
     }
 }

@@ -7,8 +7,6 @@
  */
 package com.example.prepear;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -98,7 +96,7 @@ public class RecipeAddIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_add_ingredient_fragment, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_fragments_custom_title, null);
         TextView title = titleView.findViewById(R.id.exemptionSubHeading);
-        descriptionText = view.findViewById(R.id.description_edit_text);
+        descriptionText = view.findViewById(R.id.brief_description_editText);
         amountText = view.findViewById(R.id.ingredient_amount_edit_text);
         unitSpinner = view.findViewById(R.id.ingredient_unit_edit_text);
         categorySpinner = view.findViewById(R.id.ingredient_category_edit_text);
@@ -139,18 +137,13 @@ public class RecipeAddIngredientFragment extends DialogFragment {
         Bundle bundle = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setCustomTitle(titleView);
         title.setText("Add Ingredient");
+
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    /* set listener for the Confirm button, get user input,
-                    and call oncConfirmPressed method to add ingredient item
-                     */
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        /* get user input
-                         * and make sure that no text field is left empty
-                         * */
                         String description;
                         String amount;
                         String unit;

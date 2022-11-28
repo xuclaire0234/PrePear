@@ -120,7 +120,7 @@ android {
     }
     defaultConfig {
         applicationId "com.example.prepear"
-        minSdkVersion 19
+        minSdkVersion 26
         multiDexEnabled true
         targetSdkVersion 33
         versionCode 1
@@ -138,6 +138,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -160,10 +161,19 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
@@ -195,4 +205,20 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.4.0'
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
+
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    androidTestImplementation "androidx.navigation:navigation-testing:2.3.5"
+    implementation "androidx.navigation:navigation-fragment:2.3.5"
+    implementation "androidx.navigation:navigation-runtime:2.3.5"
+
+    def fragment_version = "1.5.4"
+
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+    // splash screen
+    implementation "androidx.core:core-splashscreen:1.0.0"
 }

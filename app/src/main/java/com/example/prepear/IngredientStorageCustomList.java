@@ -14,16 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
+import com.example.prepear.IngredientInStorage;
+import com.example.prepear.R;
 
 import java.util.ArrayList;
 
-/* CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
+/**
+ * CustomList class extends from ArrayAdapter class in order to customize the ArrayAdapter based on our application's needs
  * Substitution of IngredientStorageController Class
  * */
 public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorage> {
@@ -50,8 +53,8 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
             // if the convertView holds nothing, then inflate the ingredient_info.xml
             view = LayoutInflater.from(context).inflate(R.layout.ingredient_info, parent, false);
         }
-        // on below line get the current in-storage ingredient entry,
-        // and extract its information from the in-storage ingredients list
+        /* on below line get the current in-storage ingredient entry,
+        and extract its information from the in-storage ingredients list */
         IngredientInStorage ingredientEntry = ingredientsInStorage.get(position);
         // and set this in-storage ingredient's description,
         // best before date and unit count to the corresponding Textview object for displaying on the activity
@@ -59,11 +62,17 @@ public class IngredientStorageCustomList extends ArrayAdapter<IngredientInStorag
         TextView ingredientBestBeforeDate = view.findViewById(R.id.bestBeforeDateText);
         TextView ingredientUnit = view.findViewById(R.id.unitNumberText);
         TextView ingredientAmount = view.findViewById(R.id.amountText);
+        ImageView ingredientIconView = view.findViewById(R.id.ingredient_icon_view);
+        int code = ingredientEntry.getIconCode();
 
+
+        ingredientIconView.setImageResource(code);
         ingredientDescription.setText(ingredientEntry.getBriefDescription());
         ingredientBestBeforeDate.setText(ingredientEntry.getBestBeforeDate());
         ingredientUnit.setText(ingredientEntry.getUnit());
-        ingredientAmount.setText(String.valueOf(ingredientEntry.getAmountValue()));
+        String ingredientAmountString = String.valueOf(ingredientEntry.getAmountValue());
+        ingredientAmount.setText(ingredientAmountString);
+
 
         return view; // return this view
     }

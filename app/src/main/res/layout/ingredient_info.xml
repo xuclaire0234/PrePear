@@ -1,49 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="130dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ingredient_icon_view"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="36dp" />
+
+        <TextView
+            android:id="@+id/descriptionText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="105dp"
+            android:layout_marginTop="15dp"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:textColor="#8F8F8F"
+            android:text="Description:"
+
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/descriptionText"
-            android:layout_width="52dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:text="Description"
-            android:singleLine="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="242dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:text="Description text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bestBeforeDateText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="105dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="158dp"
+            android:text="Best Before Date:"
+            android:textSize="16sp"
+            android:textColor="#8F8F8F"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/bestBeforeDateText"
-            android:layout_width="61dp"
-            android:textSize="15sp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Best Before Date" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:text="date"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/amountText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="105dp"
+            android:layout_marginBottom="23dp"
+            android:singleLine="true"
+            android:text="Amount:"
+            android:textSize="16sp"
+            android:textColor="#8F8F8F"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/amountText"
-            android:layout_width="12dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="15sp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="245dp"
+            android:layout_marginBottom="23dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
             android:text="Amount"
-            android:singleLine="true"/>
+            android:gravity="right"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/unitNumberText"
-            android:textSize="15sp"
-            android:layout_width="6dp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Units" />
-    </LinearLayout>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="340dp"
+            android:layout_marginTop="87dp"
+            android:text="Units"
+            android:gravity="right"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+
+    </RelativeLayout>
 </LinearLayout>

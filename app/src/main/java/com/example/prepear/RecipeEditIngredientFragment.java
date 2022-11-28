@@ -7,8 +7,6 @@
  */
 package com.example.prepear;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
