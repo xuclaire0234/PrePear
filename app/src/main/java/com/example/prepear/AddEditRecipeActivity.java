@@ -63,6 +63,7 @@ import java.util.List;
  * edit a existing recipe.
  */
 public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAddEditIngredientFragment.OnFragmentInteractionListener {
+    // all reference variables connected to the xml is defined here
     private ArrayAdapter<CharSequence> recipeCategorySpinnerAdapter;
     private ImageView imageImageView;
     private FloatingActionButton editImageButton;
@@ -211,8 +212,10 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedRecipeCategory = recipeCategorySpinner.getSelectedItem().toString();
                 if (selectedRecipeCategory.equals("Other")) {
+                    // if the Other is selected by the user, ask them to input their user defined category
                     newRecipeCategoryLinearLayout.setVisibility(View.VISIBLE);
                 } else {
+                    // if the user selects the existing category, no user defined category should be input in
                     newRecipeCategoryLinearLayout.setVisibility(View.GONE);
                 }
             }
@@ -235,23 +238,25 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
         if (getIntent().getStringExtra("calling activity").equals("2")) {
             /* If the calling activity is ViewRecipeActivity, display the information of the viewing recipe. */
             viewedRecipe = (Recipe) getIntent().getSerializableExtra("viewed recipe");
-            idOfRecipe = viewedRecipe.getId();
-            linkOfImage = viewedRecipe.getImageURI();
+            idOfRecipe = viewedRecipe.getId(); // get the ingredient id
+            linkOfImage = viewedRecipe.getImageURI(); // get the image uri
             Glide.with(AddEditRecipeActivity.this)
-                    .load(linkOfImage).into(imageImageView);
-            titleEditText.setText(viewedRecipe.getTitle());
-            preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString());
-            numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());
-            String recipeCategory = viewedRecipe.getRecipeCategory();
+                    .load(linkOfImage).into(imageImageView); // load the image
+            titleEditText.setText(viewedRecipe.getTitle()); // set the title bar
+            preparationTimeEditText.setText(viewedRecipe.getPreparationTime().toString()); // set the preparation time bar
+            numberOfServingsEditText.setText(viewedRecipe.getNumberOfServings().toString());// set the number of servings bar
+            String recipeCategory = viewedRecipe.getRecipeCategory(); // set the category bar
             List<String> recipeCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.recipe_category)));
             if (recipeCategories.contains(recipeCategory)) {
+                // if the category spinner adapter contains the user selected category, not user input category field should be shown
                 recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition(recipeCategory));
             } else {
+                // if the category spinner adapter dose not contain the user selected category, user input category field should be shown
                 recipeCategorySpinner.setSelection(recipeCategorySpinnerAdapter.getPosition("Other"));
                 newRecipeCategoryLinearLayout.setVisibility(View.VISIBLE);
                 recipeCategoryEditText.setText(recipeCategory);
             }
-            commentsEditText.setText(viewedRecipe.getComments());
+            commentsEditText.setText(viewedRecipe.getComments()); // set the text for comment bar
             ingredientInRecipeDataList = viewedRecipe.getListOfIngredients();
         } else {
             /* If the calling activity is ViewRecipeListActivity, prompt user to add a new recipe */
@@ -262,32 +267,38 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
         ingredientInRecipeListView.setAdapter(ingredientInRecipeArrayAdapter);
         editDeleteListSaved = new ArrayList<String>();
 
-        /* sets add ingredient button to direct to RecipeAddIngredientFragment */
+        /* sets add ingredient button to direct to RecipeAddEditIngredientFragment */
         addIngredientInRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 positionToEditInViewIngredient = -1;
+                // gain the brief description of all ingredient in storage
                 catchBriefDescription();
+                // wait for the database listener to fetch the data
                 Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            // after 2 sec, direct to the RecipeAddEditIngredientFragment with description list given
                             new RecipeAddEditIngredientFragment().newInstance(briefDescriptionList).show(getSupportFragmentManager(), "ADD_INGREDIENT_IN_RECIPE");
                         }
                     },2000);
             }
         });
 
-        /* sets each ingredient object on listview to direct to RecipeEditIngredientFragment */
+        /* sets each ingredient object on listview to direct to RecipeAddEditIngredientFragment */
         ingredientInRecipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                positionToEditInViewIngredient = position;
+                positionToEditInViewIngredient = position; // get the position being clicked on the listView
+                // gain the brief description of all ingredient in storage
                 catchBriefDescription();
+                // wait for the database listener to fetch the data
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        // after 2 sec, direct to the RecipeAddEditIngredientFragment with description list and ingredient information given
                         new RecipeAddEditIngredientFragment().newInstance(ingredientInRecipeArrayAdapter.getItem(positionToEditInViewIngredient),briefDescriptionList).show(getSupportFragmentManager(), "EDIT_INGREDIENT_IN_RECIPE");
                     }
                 },2000);
@@ -355,9 +366,9 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
 
     /**
      * This gets the picture being selected by the user and display it on ImageView.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode is of type{@link Integer}
+     * @param resultCode is of type {@link Integer}
+     * @param data is of type {@link Intent}
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -511,8 +522,12 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
         }
     }
 
+    /**
+     * This function fetch brief descriptions of all the ingreident in storage
+     */
     public void catchBriefDescription() {
         final String TAG = "Ingredients";
+        // define variables that needed to connect to database
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -522,6 +537,8 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
                 .collection("Users")
                 .document(userUID)
                 .collection("Ingredient Storage");
+
+        // initialize the list for briefDescription
         briefDescriptionList = new ArrayList<>();
         collectionReference
                 .get()
@@ -529,6 +546,7 @@ public class AddEditRecipeActivity extends AppCompatActivity implements RecipeAd
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            // fetch every ingredient in storage and get their description
                             String briefDescription = (String) doc.getData().get("description");
                             if (briefDescription != null) {
                                 briefDescriptionList.add(briefDescription);
