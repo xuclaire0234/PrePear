@@ -461,7 +461,7 @@ public class ShoppingListFragment extends Fragment {
                                     if (targetDescription.equals(ingredientForShopping.getBriefDescription())) {
                                         double exitingAmount = ingredientForShopping.getAmountValue();
                                         double updateAmount = exitingAmount + unitConvert(targetIngredient.getUnit(),targetIngredient.getAmountValue());
-                                        double roundedAmount = Math.round(updateAmount*100d)/100d;
+                                        double roundedAmount = Math.round(updateAmount * 100.0) / 100.0;
                                         Log.d("df", String.valueOf(updateAmount));
                                         ingredientForShopping.setAmountValue(roundedAmount);
                                         updateKey = false;
@@ -474,6 +474,8 @@ public class ShoppingListFragment extends Fragment {
                                  */
                                 if (updateKey) {
                                     Log.d("get",String.valueOf(targetIngredient.getAmountValue()));
+                                    double roundedAmount = Math.round(targetIngredient.getAmountValue() * 100d) / 100d;
+                                    targetIngredient.setAmountValue(roundedAmount);
                                     ingredientShoppingList.add(targetIngredient);
                                     updateKey = false;
                                     ingredientShoppingListAdapter.notifyDataSetChanged();
