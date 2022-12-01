@@ -189,6 +189,8 @@ public class MealPlanDailyIngredientCount {
                                                 scale = scaleOfThisRecipe/scale;
 
                                                 db
+                                                         .collection("Users")
+                                                        .document(userUID)
                                                         .collection("Recipes")
                                                         .document(idOfThisRecipe)
                                                         .collection("Ingredient")
